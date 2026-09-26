@@ -1,1161 +1,2229 @@
 ---
+const year = 2026;
+
+const systems = [
+  {
+    number: "01",
+    title: "CYN-X",
+    category: "INTELLIGENT SYSTEMS",
+    description:
+      "A connecting layer between intelligent systems, interfaces, services, software, and physical devices.",
+    tags: ["AI", "LOCAL INFERENCE", "HUMAN-AI"],
+  },
+  {
+    number: "02",
+    title: "VISION",
+    category: "COMPUTER VISION",
+    description:
+      "Computer vision built around transparency, privacy, responsible use, and human oversight.",
+    tags: ["VISION", "PRIVACY", "OVERSIGHT"],
+  },
+  {
+    number: "03",
+    title: "PAWBOARD",
+    category: "HUMAN INTERFACES",
+    description:
+      "Interfaces designed to make complex systems easier for people to understand and interact with.",
+    tags: ["UX", "ACCESSIBILITY", "SYSTEMS"],
+  },
+  {
+    number: "04",
+    title: "EMBEDDED",
+    category: "HARDWARE",
+    description:
+      "Experiments connecting software, sensors, devices, edge computing, and physical systems.",
+    tags: ["IOT", "SENSORS", "EDGE"],
+  },
+];
+
+const disciplines = [
+  "AI",
+  "SOFTWARE ENGINEERING",
+  "EMBEDDED SYSTEMS",
+  "COMPUTER VISION",
+  "CREATIVE TECHNOLOGY",
+  "HARDWARE & ROBOTICS",
+  "MEDIA & STREAMING",
+  "COMMUNITY & EDUCATION",
+];
+
+const lifecycle = [
+  ["01", "IDEA", "A problem, question, experiment, or creative concept."],
+  ["02", "RESEARCH", "Understand the problem, constraints, people, and possibilities."],
+  ["03", "EXPERIMENT", "Try ideas quickly and learn from what happens."],
+  ["04", "PROTOTYPE", "Turn an idea into something people can actually interact with."],
+  ["05", "COMMUNITY TESTING", "Learn from real people and real use."],
+  ["06", "ENGINEERING", "Build the systems, infrastructure, hardware, and software."],
+  ["07", "RELEASE", "Put the work into the world and keep learning from it."],
+];
+
+const principles = [
+  {
+    title: "HUMANS ARE NOT MACHINES",
+    text: "Technology should support people rather than forcing people to adapt themselves to machines.",
+  },
+  {
+    title: "ACCESSIBILITY IS FOUNDATIONAL",
+    text: "Accessibility is part of the technology itself, not something added after the fact.",
+  },
+  {
+    title: "MAKE IT UNDERSTANDABLE",
+    text: "Complex systems should remain understandable enough for people to use, question, and improve them.",
+  },
+  {
+    title: "EXPAND HUMAN CAPABILITY",
+    text: "Technology should expand what people can create and accomplish, not replace human value.",
+  },
+];
+
+const ethics = [
+  "PRIVACY",
+  "SECURITY",
+  "CONSENT",
+  "ACCESSIBILITY",
+  "TRANSPARENCY",
+  "RESPONSIBLE AI",
+  "HUMAN OVERSIGHT",
+  "DATA MINIMIZATION",
+];
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>BARKLY LABS — Technology Should Adapt to Humans</title>
+
     <meta
       name="description"
-      content="Barkly Labs — human-centered technology, open systems, and creative engineering."
+      content="Barkly Labs is a human-centered creative technology laboratory exploring AI, software, hardware, robotics, computer vision, creative technology, education, and community."
     />
-    <title>Barkly Labs</title>
+
+    <meta
+      name="theme-color"
+      content="#050505"
+    />
   </head>
 
   <body>
-    <!-- ==================================================
-         CINEMATIC ENTRY
-         ================================================== -->
+    <!-- =========================================================
+         CINEMATIC INTRO
+         ========================================================= -->
 
-    <div id="intro">
+    <section id="intro" aria-label="Barkly Labs introduction">
+      <div class="intro-grid"></div>
       <div class="scanlines"></div>
       <div class="intro-noise"></div>
 
-      <div class="boot">
-        <div class="boot-status">
-          <span>&gt; BARKLY LABS</span>
-          <span>&gt; INITIALIZING</span>
-          <span>&gt; HUMAN INTERFACE READY</span>
+      <div class="intro-content">
+        <div class="boot">
+          <span>[ BARKLY SYSTEM INITIALIZING ]</span>
+          <span>LOADING HUMAN-CENTERED TECHNOLOGY...</span>
+          <span>ACCESSIBILITY............... OK</span>
+          <span>CREATIVE SYSTEMS............ OK</span>
+          <span>COMMUNITY................... OK</span>
+          <span>DETROIT..................... ONLINE</span>
         </div>
 
-        <div class="barkly-logo">
-          <div class="logo-slice logo-top">BARKLY</div>
-          <div class="logo-slice logo-bottom">BARKLY</div>
+        <div class="intro-mark">
+          <div class="slice slice-a">BARKLY</div>
+          <div class="slice slice-b">BARKLY</div>
+          <div class="slice slice-c">BARKLY</div>
+          <div class="slice slice-main">BARKLY</div>
         </div>
 
-        <div class="labs-word">LABS</div>
+        <div class="intro-labs">LABS</div>
 
-        <div class="welcome">
+        <div class="intro-welcome">
           <span>WELCOME TO</span>
           <strong>BARKLY LABS</strong>
         </div>
 
-        <div class="tagline">
-          HUMAN-CENTERED TECHNOLOGY
-        </div>
+        <p class="intro-tagline">
+          TECHNOLOGY SHOULD ADAPT TO HUMANS.
+        </p>
 
         <button id="enter" type="button">
-          ENTER BARKLY LABS
+          ENTER THE LAB
+          <span>→</span>
         </button>
       </div>
-    </div>
+    </section>
 
-    <!-- ==================================================
+    <!-- =========================================================
          MAIN SITE
-         ================================================== -->
+         ========================================================= -->
 
     <main id="site">
       <!-- NAVIGATION -->
 
-      <nav>
-        <a class="brand" href="/">BARKLY LABS</a>
+      <nav class="nav">
+        <a href="#" class="brand" aria-label="Barkly Labs home">
+          <span class="brand-symbol">◆</span>
+          <span>BARKLY LABS</span>
+        </a>
 
         <div class="nav-links">
+          <a href="#principles">PHILOSOPHY</a>
           <a href="#systems">SYSTEMS</a>
-          <a href="#projects">PROJECTS</a>
           <a href="#lab">THE LAB</a>
-          <a href="#about">ABOUT</a>
+          <a href="#process">PROCESS</a>
+          <a href="#community">COMMUNITY</a>
+          <a href="#detroit">DETROIT</a>
         </div>
+
+        <a href="#about" class="nav-status">
+          <span class="status-dot"></span>
+          HUMAN-FIRST
+        </a>
       </nav>
 
-      <!-- ==================================================
+      <!-- =======================================================
            HERO
-           ================================================== -->
+           ======================================================= -->
 
       <section class="hero">
-        <div class="eyebrow">
-          BARKLY LABS // OPEN TECHNOLOGY
+        <div class="hero-background">
+          <div class="hero-orbit orbit-one"></div>
+          <div class="hero-orbit orbit-two"></div>
+          <div class="hero-orbit orbit-three"></div>
         </div>
 
-        <h1>
-          TECHNOLOGY
-          <span>SHOULD ADAPT</span>
-          TO HUMANS.
-        </h1>
+        <div class="hero-content">
+          <div class="eyebrow">
+            <span>01</span>
+            HUMAN-CENTERED CREATIVE TECHNOLOGY
+          </div>
 
-        <p>
-          Barkly Labs builds human-centered software,
-          artificial intelligence, hardware, creative
-          technology, and experimental systems.
-        </p>
+          <h1>
+            TECHNOLOGY
+            <span>SHOULD ADAPT</span>
+            TO HUMANS.
+          </h1>
 
-        <div class="hero-actions">
-          <a href="#projects" class="button primary">
-            EXPLORE THE LAB
-          </a>
+          <p class="hero-copy">
+            Barkly Labs explores AI, software, hardware, robotics,
+            computer vision, creative technology, education, and community
+            through a human-centered approach.
+          </p>
 
-          <a href="#about" class="button secondary">
-            ABOUT BARKLY LABS
-          </a>
+          <div class="hero-actions">
+            <a href="#systems" class="button button-primary">
+              EXPLORE THE SYSTEMS
+              <span>↗</span>
+            </a>
+
+            <a href="#principles" class="button button-secondary">
+              OUR PRINCIPLES
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <span>DETROIT, MICHIGAN</span>
+          <span>HUMAN-CENTERED</span>
+          <span>CREATIVE TECHNOLOGY</span>
+        </div>
+
+        <div class="hero-bottom">
+          <span>SCROLL TO EXPLORE</span>
+          <span class="scroll-line"></span>
         </div>
       </section>
 
-      <!-- ==================================================
-           CYN-X FEATURE
-           ================================================== -->
+      <!-- =======================================================
+           PRINCIPLES
+           ======================================================= -->
 
-      <section id="systems" class="feature">
-        <div class="feature-label">
-          FLAGSHIP SYSTEM // 001
+      <section id="principles" class="section principles">
+        <div class="section-heading">
+          <div class="section-number">02</div>
+
+          <div>
+            <span class="section-kicker">THE FOUNDATION</span>
+            <h2>
+              BUILD FOR
+              <span>PEOPLE.</span>
+            </h2>
+          </div>
         </div>
 
-        <div class="feature-content">
+        <div class="principles-intro">
+          <p>
+            Human-centered technology is the foundation of Barkly Labs.
+            The goal isn't simply to make technology more powerful.
+            It is to make technology more useful, accessible, creative,
+            understandable, and human.
+          </p>
+
+          <span class="principles-mark">HUMAN<br />FIRST</span>
+        </div>
+
+        <div class="principles-grid">
+          {principles.map((principle, index) => (
+            <article class="principle-card">
+              <span class="card-number">0{index + 1}</span>
+              <h3>{principle.title}</h3>
+              <p>{principle.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- =======================================================
+           CYN-X
+           ======================================================= -->
+
+      <section id="systems" class="section cynx-section">
+        <div class="cynx-glow"></div>
+
+        <div class="section-heading">
+          <div class="section-number">03</div>
+
           <div>
-            <h2>CYN-X</h2>
+            <span class="section-kicker">FLAGSHIP SYSTEM</span>
+            <h2>
+              CYN-X
+              <span>CORE.</span>
+            </h2>
+          </div>
+        </div>
+
+        <div class="cynx-layout">
+          <div class="cynx-copy">
+            <div class="system-label">
+              <span class="status-dot"></span>
+              INTELLIGENT ECOSYSTEM
+            </div>
+
+            <p class="large-copy">
+              One intelligent ecosystem.
+              <br />
+              Many interfaces.
+            </p>
 
             <p>
-              A human-first intelligence system designed
-              to connect AI, software, interfaces, and
-              future hardware into one ecosystem.
+              CYN-X is designed as a connecting layer between intelligent
+              systems, interfaces, services, software, and physical devices.
+              Computers, phones, displays, speakers, cameras, sensors,
+              wearables, robotics, and custom hardware can become part of
+              one ecosystem.
             </p>
 
             <a href="/cyn-x" class="text-link">
-              EXPLORE CYN-X →
+              EXPLORE CYN-X
+              <span>→</span>
             </a>
           </div>
 
-          <div class="system-terminal">
-            <div class="terminal-header">
-              <span>CYN-X CORE</span>
-              <span>● ONLINE</span>
+          <div class="cynx-diagram" aria-hidden="true">
+            <div class="diagram-ring ring-one"></div>
+            <div class="diagram-ring ring-two"></div>
+            <div class="diagram-ring ring-three"></div>
+
+            <div class="diagram-core">
+              <span>CYN-X</span>
+              <small>CORE</small>
             </div>
 
-            <div class="terminal-body">
-              <p>&gt; CORE INITIALIZED</p>
-              <p>&gt; PERSONALITY MATRIX ONLINE</p>
-              <p>&gt; VISION SUBSYSTEM READY</p>
-              <p>&gt; HUMAN INTERFACE READY</p>
+            <span class="node node-one">AI</span>
+            <span class="node node-two">VISION</span>
+            <span class="node node-three">DEVICES</span>
+            <span class="node node-four">SERVICES</span>
+            <span class="node node-five">PEOPLE</span>
+          </div>
+        </div>
+      </section>
 
-              <div class="terminal-cursor">_</div>
+      <!-- =======================================================
+           SYSTEMS
+           ======================================================= -->
+
+      <section id="lab" class="section systems-section">
+        <div class="section-heading">
+          <div class="section-number">04</div>
+
+          <div>
+            <span class="section-kicker">THE LAB</span>
+            <h2>
+              MANY FIELDS.
+              <span>ONE ECOSYSTEM.</span>
+            </h2>
+          </div>
+        </div>
+
+        <div class="systems-grid">
+          {systems.map((system) => (
+            <article class="system-card">
+              <div class="system-top">
+                <span>{system.number}</span>
+                <span>{system.category}</span>
+              </div>
+
+              <h3>{system.title}</h3>
+
+              <p>{system.description}</p>
+
+              <div class="tag-list">
+                {system.tags.map((tag) => (
+                  <span>{tag}</span>
+                ))}
+              </div>
+
+              <div class="system-arrow">↗</div>
+            </article>
+          ))}
+        </div>
+
+        <div class="discipline-strip">
+          {disciplines.map((discipline) => (
+            <span>{discipline}</span>
+          ))}
+        </div>
+      </section>
+
+      <!-- =======================================================
+           DEVELOPMENT PROCESS
+           ======================================================= -->
+
+      <section id="process" class="section process-section">
+        <div class="section-heading">
+          <div class="section-number">05</div>
+
+          <div>
+            <span class="section-kicker">HOW WE BUILD</span>
+            <h2>
+              IDEA →
+              <span>REALITY.</span>
+            </h2>
+          </div>
+        </div>
+
+        <p class="section-lead">
+          Ideas don't have to arrive finished. Barkly Labs provides a path
+          from experimentation to real-world technology.
+        </p>
+
+        <div class="lifecycle">
+          {lifecycle.map((step) => (
+            <article class="lifecycle-step">
+              <span class="lifecycle-number">{step[0]}</span>
+
+              <div>
+                <h3>{step[1]}</h3>
+                <p>{step[2]}</p>
+              </div>
+
+              <span class="lifecycle-arrow">→</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- =======================================================
+           CREATOR OWNERSHIP
+           ======================================================= -->
+
+      <section class="section creator-section">
+        <div class="creator-panel">
+          <div class="creator-side">
+            <span class="section-number">06</span>
+            <span class="section-kicker">CREATOR LAB</span>
+          </div>
+
+          <div class="creator-content">
+            <h2>
+              BUILD WITH PEOPLE.
+              <span>NOT FOR THEM.</span>
+            </h2>
+
+            <p>
+              Barkly Labs can provide technical planning, programming,
+              development, design feedback, prototyping, testing,
+              debugging, documentation, marketing, content support,
+              release preparation, and infrastructure.
+            </p>
+
+            <p>
+              The creator remains the owner whenever possible. Ownership,
+              licensing, revenue, responsibilities, maintenance, and
+              distribution should be explicitly understood before work begins.
+            </p>
+
+            <div class="creator-values">
+              <span>OWNERSHIP</span>
+              <span>TRANSPARENCY</span>
+              <span>COLLABORATION</span>
+              <span>SUPPORT</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ==================================================
-           PROJECTS
-           ================================================== -->
+      <!-- =======================================================
+           COMMUNITY
+           ======================================================= -->
 
-      <section id="projects" class="projects">
-        <div class="eyebrow">
-          BARKLY LABS // PROJECTS
+      <section id="community" class="section community-section">
+        <div class="section-heading">
+          <div class="section-number">07</div>
+
+          <div>
+            <span class="section-kicker">COMMUNITY</span>
+            <h2>
+              LEARN BY
+              <span>BUILDING.</span>
+            </h2>
+          </div>
         </div>
 
-        <h2>
-          BUILT IN
-          <span>THE LAB.</span>
-        </h2>
-
-        <div class="project-grid">
-          <article class="project-card">
-            <div class="project-number">01</div>
-
-            <h3>CYN-X</h3>
-
-            <p>
-              Human-first AI and local intelligence
-              infrastructure.
+        <div class="community-layout">
+          <div class="community-copy">
+            <p class="large-copy">
+              You don't have to already be an expert.
             </p>
 
-            <a href="/cyn-x">VIEW SYSTEM →</a>
-          </article>
-
-          <article class="project-card">
-            <div class="project-number">02</div>
-
-            <h3>CYN-X VISION</h3>
-
             <p>
-              Computer vision experiments and perception
-              systems.
+              Barkly Labs is intended to bring together programmers,
+              engineers, artists, musicians, streamers, gamers, designers,
+              hardware enthusiasts, students, researchers, creators,
+              entrepreneurs, and hobbyists.
             </p>
 
-            <a href="/vision">VIEW SYSTEM →</a>
-          </article>
-
-          <article class="project-card">
-            <div class="project-number">03</div>
-
-            <h3>PAWBOARD</h3>
-
             <p>
-              Human-centered interfaces for complicated
-              systems and information.
+              Real projects become learning environments for coding,
+              electronics, AI, robotics, 3D printing, computer vision,
+              game development, hardware, software architecture,
+              documentation, and project management.
             </p>
+          </div>
 
-            <a href="/pawboard">VIEW PROJECT →</a>
-          </article>
+          <div class="community-environment">
+            <span>ENGINEERING LAB</span>
+            <span>MAKER SPACE</span>
+            <span>AI LAB</span>
+            <span>CREATOR STUDIO</span>
+            <span>COLLABORATION SPACE</span>
+            <span>COMMUNITY SPACE</span>
+            <span>RECOVERY / QUIET SPACE</span>
+          </div>
+        </div>
 
-          <article class="project-card">
-            <div class="project-number">04</div>
-
-            <h3>EMBEDDED</h3>
-
-            <p>
-              Hardware, sensors, IoT, robotics, and
-              experimental computing.
-            </p>
-
-            <a href="/embedded">VIEW LAB →</a>
-          </article>
-
-          <article class="project-card">
-            <div class="project-number">05</div>
-
-            <h3>CREATIVE TECH</h3>
-
-            <p>
-              Tools and technology for creators, media,
-              and digital communities.
-            </p>
-
-            <a href="/creative">VIEW PROJECTS →</a>
-          </article>
-
-          <article class="project-card">
-            <div class="project-number">06</div>
-
-            <h3>COMMUNITY</h3>
-
-            <p>
-              Open learning, collaboration, workshops,
-              and community technology.
-            </p>
-
-            <a href="/community">EXPLORE →</a>
-          </article>
+        <div class="quiet-note">
+          <span>✦</span>
+          A place to create — not a place that pressures people to
+          constantly produce.
         </div>
       </section>
 
-      <!-- ==================================================
-           LAB
-           ================================================== -->
+      <!-- =======================================================
+           RESPONSIBLE TECHNOLOGY
+           ======================================================= -->
 
-      <section id="lab" class="lab">
-        <div class="eyebrow">
-          BARKLY LABS // EXPERIMENTATION
+      <section class="section ethics-section">
+        <div class="section-heading">
+          <div class="section-number">08</div>
+
+          <div>
+            <span class="section-kicker">RESPONSIBLE TECHNOLOGY</span>
+            <h2>
+              POWER WITH
+              <span>RESPONSIBILITY.</span>
+            </h2>
+          </div>
         </div>
 
-        <h2>
-          IDEAS BECOME
-          <span>SYSTEMS.</span>
-        </h2>
-
-        <p>
-          The Lab is where prototypes become experiments,
-          experiments become systems, and systems evolve
-          through real-world feedback.
-        </p>
-
-        <div class="process">
-          <div>
-            <span>01</span>
-            IDEA
+        <div class="ethics-layout">
+          <div class="ethics-copy">
+            <p>
+              Advanced technology requires more than technical capability.
+              Barkly Labs treats privacy, security, consent, accessibility,
+              transparency, responsible AI, human oversight, data
+              minimization, creator ownership, and fair compensation as
+              important parts of the ecosystem.
+            </p>
           </div>
 
-          <div>
-            <span>02</span>
-            RESEARCH
-          </div>
-
-          <div>
-            <span>03</span>
-            PROTOTYPE
-          </div>
-
-          <div>
-            <span>04</span>
-            TEST
-          </div>
-
-          <div>
-            <span>05</span>
-            BUILD
-          </div>
-
-          <div>
-            <span>06</span>
-            RELEASE
+          <div class="ethics-grid">
+            {ethics.map((item, index) => (
+              <div class="ethics-item">
+                <span>0{index + 1}</span>
+                <strong>{item}</strong>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <!-- ==================================================
-           ABOUT
-           ================================================== -->
+      <!-- =======================================================
+           DETROIT
+           ======================================================= -->
 
-      <section id="about" class="about">
-        <div class="eyebrow">
-          ABOUT BARKLY LABS
+      <section id="detroit" class="section detroit-section">
+        <div class="detroit-background">
+          <div class="detroit-grid"></div>
         </div>
 
-        <h2>
-          PEOPLE
-          <span>FIRST.</span>
-        </h2>
+        <div class="detroit-content">
+          <span class="section-kicker">09 / DETROIT</span>
 
-        <p>
-          Barkly Labs is a nonprofit technology
-          organization focused on building open,
-          accessible, and human-centered technology.
-        </p>
+          <h2>
+            BUILT IN
+            <span>DETROIT.</span>
+          </h2>
 
-        <p>
-          We explore artificial intelligence, software
-          engineering, hardware, computer vision,
-          creative technology, education, and
-          community-driven experimentation.
-        </p>
+          <p>
+            Barkly Labs is fundamentally Detroit-based.
+            The long-term goal is not simply to use Detroit as a label,
+            but to contribute to a local technology ecosystem.
+          </p>
+
+          <div class="detroit-points">
+            <span>LOCAL EDUCATION</span>
+            <span>CREATOR SUPPORT</span>
+            <span>MAKER ACTIVITIES</span>
+            <span>TECHNOLOGY EVENTS</span>
+            <span>PARTNERSHIPS</span>
+            <span>ENTREPRENEURSHIP</span>
+            <span>EMPLOYMENT & CONTRACTING</span>
+            <span>COMMUNITY DEMOS</span>
+          </div>
+        </div>
       </section>
 
-      <!-- ==================================================
+      <!-- =======================================================
+           ABOUT / FINAL PROMISE
+           ======================================================= -->
+
+      <section id="about" class="section about-section">
+        <div class="about-mark">B</div>
+
+        <div class="about-content">
+          <span class="section-kicker">10 / THE PROMISE</span>
+
+          <h2>
+            WHAT COULD
+            <span>YOU CREATE?</span>
+          </h2>
+
+          <p>
+            What could this person create if we gave them the tools,
+            support, time, and environment to do it?
+          </p>
+
+          <div class="loop">
+            <span>PEOPLE</span>
+            <b>→</b>
+            <span>IDEAS</span>
+            <b>→</b>
+            <span>EXPERIMENTS</span>
+            <b>→</b>
+            <span>TECHNOLOGY</span>
+            <b>→</b>
+            <span>COMMUNITY</span>
+            <b>→</b>
+            <span>PRODUCTS</span>
+            <b>→</b>
+            <span>REINVESTMENT</span>
+            <b>→</b>
+            <span>MORE IDEAS</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
            FOOTER
-           ================================================== -->
+           ======================================================= -->
 
-      <footer>
-        <div>BARKLY LABS</div>
+      <footer class="footer">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <div class="footer-logo">BARKLY</div>
+            <div class="footer-labs">LABS</div>
+          </div>
 
-        <div>HUMAN-CENTERED TECHNOLOGY</div>
+          <div class="footer-tagline">
+            WHERE IMAGINATION
+            <br />
+            BECOMES ENGINEERING.
+          </div>
+        </div>
 
-        <div>© 2026 BARKLY LABS</div>
+        <div class="footer-bottom">
+          <span>© {year} BARKLY LABS</span>
+          <span>DETROIT, MICHIGAN</span>
+          <span>TECHNOLOGY SHOULD ADAPT TO HUMANS.</span>
+        </div>
       </footer>
     </main>
 
-    <!-- ==================================================
-         INTRO SCRIPT
-         ================================================== -->
+    <!-- =========================================================
+         SCRIPT
+         ========================================================= -->
 
     <script>
-      const enterButton =
-        document.querySelector("#enter");
-
-      const intro =
-        document.querySelector("#intro");
+      const enterButton = document.querySelector("#enter");
+      const intro = document.querySelector("#intro");
 
       if (enterButton && intro) {
         enterButton.addEventListener("click", () => {
-          intro.classList.add("leave");
+          intro.classList.add("intro-exit");
 
           window.setTimeout(() => {
             intro.remove();
-          }, 1100);
+            document.body.classList.add("site-ready");
+          }, 1000);
         });
       }
+
+      const revealElements = document.querySelectorAll(
+        ".section, .system-card, .principle-card, .lifecycle-step"
+      );
+
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.08,
+        }
+      );
+
+      revealElements.forEach((element) => {
+        revealObserver.observe(element);
+      });
     </script>
+
+    <!-- =========================================================
+         STYLES
+         ========================================================= -->
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        background: #050505;
+      }
+
+      body {
+        margin: 0;
+        background: #050505;
+        color: #f2f2f2;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        overflow-x: hidden;
+      }
+
+      body,
+      button,
+      a {
+        cursor: default;
+      }
+
+      a,
+      button {
+        cursor: pointer;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      ::selection {
+        background: #f2f2f2;
+        color: #050505;
+      }
+
+      /* =========================================================
+         INTRO
+         ========================================================= */
+
+      #intro {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #030303;
+        overflow: hidden;
+      }
+
+      #intro.intro-exit {
+        animation: introExit 1s forwards;
+      }
+
+      .intro-grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.16;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+        background-size: 50px 50px;
+        transform: perspective(500px) rotateX(58deg) scale(2);
+        transform-origin: center bottom;
+      }
+
+      .scanlines {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.08;
+        background: repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 3px,
+          #fff 4px
+        );
+      }
+
+      .intro-noise {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+      }
+
+      .intro-content {
+        position: relative;
+        z-index: 2;
+        width: min(1200px, 90vw);
+        text-align: center;
+      }
+
+      .boot {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: max-content;
+        margin: 0 auto 55px;
+        color: rgba(255, 255, 255, 0.42);
+        font-family: "Courier New", monospace;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-align: left;
+        animation: bootIn 1s ease both;
+      }
+
+      .intro-mark {
+        position: relative;
+        display: inline-block;
+        font-size: clamp(70px, 13vw, 190px);
+        font-weight: 900;
+        line-height: 0.8;
+        letter-spacing: -0.09em;
+        animation: markIn 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+
+      .intro-mark .slice {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .slice-a {
+        transform: translate(-7px, -4px);
+        clip-path: inset(0 0 68% 0);
+        opacity: 0.4;
+      }
+
+      .slice-b {
+        transform: translate(9px, 3px);
+        clip-path: inset(68% 0 0 0);
+        opacity: 0.3;
+      }
+
+      .slice-c {
+        transform: translate(4px, -1px);
+        clip-path: inset(40% 0 35% 0);
+        opacity: 0.25;
+      }
+
+      .slice-main {
+        position: relative !important;
+      }
+
+      .intro-labs {
+        margin-top: 20px;
+        font-family: "Courier New", monospace;
+        font-size: clamp(14px, 2vw, 25px);
+        letter-spacing: 0.65em;
+        padding-left: 0.65em;
+        color: rgba(255, 255, 255, 0.5);
+        animation: fadeUp 1s 0.5s both;
+      }
+
+      .intro-welcome {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 70px;
+        font-family: "Courier New", monospace;
+        font-size: 11px;
+        letter-spacing: 0.3em;
+        animation: fadeUp 1s 0.7s both;
+      }
+
+      .intro-welcome strong {
+        font-size: 15px;
+        letter-spacing: 0.4em;
+      }
+
+      .intro-tagline {
+        margin: 35px 0;
+        font-size: 12px;
+        letter-spacing: 0.3em;
+        color: rgba(255, 255, 255, 0.5);
+        animation: fadeUp 1s 0.9s both;
+      }
+
+      #enter {
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        padding: 14px 20px;
+        background: transparent;
+        color: white;
+        font-family: "Courier New", monospace;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        transition:
+          background 0.25s,
+          color 0.25s,
+          border-color 0.25s,
+          transform 0.25s;
+        animation: fadeUp 1s 1.1s both;
+      }
+
+      #enter span {
+        margin-left: 15px;
+      }
+
+      #enter:hover {
+        background: #fff;
+        color: #000;
+        border-color: #fff;
+        transform: translateY(-3px);
+      }
+
+      /* =========================================================
+         NAV
+         ========================================================= */
+
+      .nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 28px 5vw;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "Courier New", monospace;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+      }
+
+      .brand-symbol {
+        font-size: 8px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 28px;
+      }
+
+      .nav-links a,
+      .nav-status {
+        font-family: "Courier New", monospace;
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        color: rgba(255, 255, 255, 0.5);
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: #fff;
+      }
+
+      .nav-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .status-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+      }
+
+      /* =========================================================
+         HERO
+         ========================================================= */
+
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 160px 10vw 100px;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .hero-background {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .hero-background::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 72% 50%, rgba(255, 255, 255, 0.07), transparent 28%),
+          linear-gradient(90deg, #050505 20%, transparent 100%);
+      }
+
+      .hero-orbit {
+        position: absolute;
+        top: 50%;
+        left: 70%;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .orbit-one {
+        width: 500px;
+        height: 500px;
+      }
+
+      .orbit-two {
+        width: 760px;
+        height: 300px;
+        transform: translate(-50%, -50%) rotate(-30deg);
+      }
+
+      .orbit-three {
+        width: 900px;
+        height: 900px;
+        opacity: 0.4;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+      }
+
+      .eyebrow,
+      .section-kicker {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: rgba(255, 255, 255, 0.42);
+        font-family: "Courier New", monospace;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+      }
+
+      .eyebrow span {
+        color: #fff;
+      }
+
+      .hero h1 {
+        margin: 35px 0;
+        max-width: 900px;
+        font-size: clamp(60px, 9vw, 140px);
+        line-height: 0.83;
+        letter-spacing: -0.075em;
+        font-weight: 900;
+      }
+
+      .hero h1 span {
+        display: block;
+        padding-left: 10vw;
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      .hero-copy {
+        max-width: 600px;
+        margin: 0 0 40px;
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 25px;
+        padding: 15px 19px;
+        font-family: "Courier New", monospace;
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        transition: all 0.25s;
+      }
+
+      .button-primary {
+        background: #fff;
+        color: #000;
+      }
+
+      .button-primary:hover {
+        transform: translateY(-3px);
+      }
+
+      .button-secondary {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.65);
+      }
+
+      .button-secondary:hover {
+        border-color: #fff;
+        color: #fff;
+      }
+
+      .hero-side {
+        position: absolute;
+        right: 30px;
+        bottom: 120px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        writing-mode: vertical-rl;
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        letter-spacing: 0.15em;
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      .hero-bottom {
+        position: absolute;
+        bottom: 35px;
+        left: 10vw;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: rgba(255, 255, 255, 0.3);
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        letter-spacing: 0.15em;
+      }
+
+      .scroll-line {
+        width: 70px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      /* =========================================================
+         GENERAL SECTIONS
+         ========================================================= */
+
+      .section {
+        position: relative;
+        padding: 150px 10vw;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+
+      .section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        gap: 40px;
+        margin-bottom: 90px;
+      }
+
+      .section-number {
+        font-family: "Courier New", monospace;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .section-heading h2 {
+        margin: 18px 0 0;
+        max-width: 950px;
+        font-size: clamp(45px, 7vw, 100px);
+        line-height: 0.88;
+        letter-spacing: -0.06em;
+      }
+
+      .section-heading h2 span {
+        display: block;
+        color: rgba(255, 255, 255, 0.32);
+      }
+
+      /* =========================================================
+         PRINCIPLES
+         ========================================================= */
+
+      .principles {
+        background: #070707;
+      }
+
+      .principles-intro {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 80px;
+        align-items: center;
+        margin-left: 140px;
+        margin-bottom: 100px;
+      }
+
+      .principles-intro p {
+        max-width: 800px;
+        margin: 0;
+        font-size: 25px;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .principles-mark {
+        font-size: 35px;
+        line-height: 0.85;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        color: rgba(255, 255, 255, 0.12);
+      }
+
+      .principles-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .principle-card {
+        position: relative;
+        min-height: 280px;
+        padding: 35px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        transition: background 0.3s;
+      }
+
+      .principle-card:nth-child(odd) {
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .principle-card:hover {
+        background: rgba(255, 255, 255, 0.025);
+      }
+
+      .card-number {
+        font-family: "Courier New", monospace;
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      .principle-card h3 {
+        max-width: 400px;
+        margin: 65px 0 20px;
+        font-size: 25px;
+        letter-spacing: -0.04em;
+      }
+
+      .principle-card p {
+        max-width: 500px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.48);
+        line-height: 1.7;
+      }
+
+      /* =========================================================
+         CYN-X
+         ========================================================= */
+
+      .cynx-section {
+        overflow: hidden;
+        background: #030303;
+      }
+
+      .cynx-glow {
+        position: absolute;
+        top: 15%;
+        right: 5%;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.07),
+          transparent 65%
+        );
+        pointer-events: none;
+      }
+
+      .cynx-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 100px;
+        align-items: center;
+        margin-left: 140px;
+      }
+
+      .system-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 35px;
+        font-family: "Courier New", monospace;
+        font-size: 9px;
+        letter-spacing: 0.15em;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .large-copy {
+        font-size: clamp(35px, 4vw, 60px);
+        line-height: 1;
+        letter-spacing: -0.05em;
+        color: #fff !important;
+      }
+
+      .cynx-copy > p:not(.large-copy) {
+        max-width: 560px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.8;
+      }
+
+      .text-link {
+        display: inline-flex;
+        gap: 25px;
+        margin-top: 25px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        font-family: "Courier New", monospace;
+        font-size: 9px;
+        letter-spacing: 0.12em;
+      }
+
+      .cynx-diagram {
+        position: relative;
+        width: min(550px, 45vw);
+        aspect-ratio: 1;
+        margin: auto;
+      }
+
+      .diagram-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .ring-one {
+        width: 30%;
+        height: 30%;
+      }
+
+      .ring-two {
+        width: 60%;
+        height: 60%;
+      }
+
+      .ring-three {
+        width: 90%;
+        height: 90%;
+      }
+
+      .diagram-core {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 130px;
+        height: 130px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        background: #050505;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 60px rgba(255, 255, 255, 0.08);
+      }
+
+      .diagram-core span {
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+
+      .diagram-core small {
+        margin-top: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 7px;
+        letter-spacing: 0.2em;
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      .node {
+        position: absolute;
+        padding: 7px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: #050505;
+        font-family: "Courier New", monospace;
+        font-size: 7px;
+        letter-spacing: 0.1em;
+      }
+
+      .node-one {
+        top: 12%;
+        left: 48%;
+      }
+
+      .node-two {
+        top: 47%;
+        right: 0;
+      }
+
+      .node-three {
+        right: 15%;
+        bottom: 12%;
+      }
+
+      .node-four {
+        bottom: 14%;
+        left: 12%;
+      }
+
+      .node-five {
+        top: 47%;
+        left: 0;
+      }
+
+      /* =========================================================
+         SYSTEMS
+         ========================================================= */
+
+      .systems-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .system-card {
+        position: relative;
+        min-height: 390px;
+        padding: 35px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        transition:
+          background 0.3s,
+          transform 0.3s;
+      }
+
+      .system-card:nth-child(odd) {
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .system-card:hover {
+        background: rgba(255, 255, 255, 0.025);
+      }
+
+      .system-top {
+        display: flex;
+        justify-content: space-between;
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        letter-spacing: 0.12em;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .system-card h3 {
+        margin: 85px 0 20px;
+        font-size: clamp(40px, 5vw, 75px);
+        line-height: 0.9;
+        letter-spacing: -0.06em;
+      }
+
+      .system-card p {
+        max-width: 500px;
+        margin-bottom: 35px;
+        color: rgba(255, 255, 255, 0.45);
+        line-height: 1.7;
+      }
+
+      .tag-list {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+
+      .tag-list span {
+        padding: 5px 7px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        font-family: "Courier New", monospace;
+        font-size: 7px;
+        letter-spacing: 0.08em;
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      .system-arrow {
+        position: absolute;
+        right: 35px;
+        bottom: 35px;
+        font-size: 25px;
+        color: rgba(255, 255, 255, 0.3);
+        transition:
+          transform 0.3s,
+          color 0.3s;
+      }
+
+      .system-card:hover .system-arrow {
+        color: #fff;
+        transform: translate(4px, -4px);
+      }
+
+      .discipline-strip {
+        display: flex;
+        gap: 25px;
+        flex-wrap: wrap;
+        padding-top: 35px;
+        color: rgba(255, 255, 255, 0.25);
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        letter-spacing: 0.1em;
+      }
+
+      .discipline-strip span::after {
+        content: " /";
+        margin-left: 25px;
+      }
+
+      /* =========================================================
+         PROCESS
+         ========================================================= */
+
+      .process-section {
+        background: #070707;
+      }
+
+      .section-lead {
+        max-width: 650px;
+        margin: -45px 0 75px 140px;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      .lifecycle {
+        margin-left: 140px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .lifecycle-step {
+        display: grid;
+        grid-template-columns: 80px 1fr 50px;
+        gap: 30px;
+        align-items: center;
+        padding: 28px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        transition: padding 0.3s;
+      }
+
+      .lifecycle-step:hover {
+        padding-left: 15px;
+      }
+
+      .lifecycle-number {
+        font-family: "Courier New", monospace;
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      .lifecycle-step h3 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        letter-spacing: 0.02em;
+      }
+
+      .lifecycle-step p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .lifecycle-arrow {
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      /* =========================================================
+         CREATOR
+         ========================================================= */
+
+      .creator-section {
+        padding-top: 100px;
+        padding-bottom: 100px;
+      }
+
+      .creator-panel {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 80px;
+        padding: 70px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.04),
+          transparent
+        );
+      }
+
+      .creator-side {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .creator-content h2 {
+        max-width: 900px;
+        margin: 0 0 40px;
+        font-size: clamp(45px, 6vw, 90px);
+        line-height: 0.88;
+        letter-spacing: -0.06em;
+      }
+
+      .creator-content h2 span {
+        display: block;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .creator-content p {
+        max-width: 750px;
+        color: rgba(255, 255, 255, 0.52);
+        line-height: 1.8;
+      }
+
+      .creator-values {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 45px;
+      }
+
+      .creator-values span {
+        padding: 8px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        letter-spacing: 0.1em;
+      }
+
+      /* =========================================================
+         COMMUNITY
+         ========================================================= */
+
+      .community-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 120px;
+        margin-left: 140px;
+      }
+
+      .community-copy p:not(.large-copy) {
+        max-width: 650px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.8;
+      }
+
+      .community-environment {
+        display: flex;
+        flex-direction: column;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .community-environment span {
+        padding: 17px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        font-family: "Courier New", monospace;
+        font-size: 9px;
+        letter-spacing: 0.15em;
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .quiet-note {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin: 100px 0 0 140px;
+        padding: 20px;
+        border-left: 1px solid rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 13px;
+      }
+
+      .quiet-note span {
+        color: #fff;
+      }
+
+      /* =========================================================
+         ETHICS
+         ========================================================= */
+
+      .ethics-section {
+        background: #070707;
+      }
+
+      .ethics-layout {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: 100px;
+        margin-left: 140px;
+      }
+
+      .ethics-copy p {
+        max-width: 550px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 19px;
+        line-height: 1.8;
+      }
+
+      .ethics-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        border-left: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .ethics-item {
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+        padding: 25px;
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .ethics-item span {
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      .ethics-item strong {
+        font-size: 13px;
+        letter-spacing: 0.08em;
+      }
+
+      /* =========================================================
+         DETROIT
+         ========================================================= */
+
+      .detroit-section {
+        min-height: 800px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .detroit-background {
+        position: absolute;
+        inset: 0;
+      }
+
+      .detroit-grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.15;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+        background-size: 80px 80px;
+        transform: perspective(500px) rotateX(60deg) scale(1.5);
+        transform-origin: center bottom;
+      }
+
+      .detroit-section::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 50% 50%, transparent, #050505 70%);
+        pointer-events: none;
+      }
+
+      .detroit-content {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+      }
+
+      .detroit-content h2 {
+        margin: 30px 0;
+        font-size: clamp(70px, 11vw, 160px);
+        line-height: 0.8;
+        letter-spacing: -0.08em;
+      }
+
+      .detroit-content h2 span {
+        display: block;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .detroit-content > p {
+        max-width: 650px;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 18px;
+        line-height: 1.8;
+      }
+
+      .detroit-points {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        max-width: 800px;
+        margin-top: 45px;
+      }
+
+      .detroit-points span {
+        padding: 9px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* =========================================================
+         ABOUT
+         ========================================================= */
+
+      .about-section {
+        min-height: 850px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .about-mark {
+        position: absolute;
+        right: 4vw;
+        bottom: -10vw;
+        font-size: 60vw;
+        font-weight: 900;
+        line-height: 0.6;
+        letter-spacing: -0.12em;
+        color: rgba(255, 255, 255, 0.025);
+        pointer-events: none;
+      }
+
+      .about-content {
+        position: relative;
+        z-index: 2;
+        max-width: 1000px;
+      }
+
+      .about-content h2 {
+        margin: 30px 0;
+        font-size: clamp(65px, 10vw, 150px);
+        line-height: 0.8;
+        letter-spacing: -0.08em;
+      }
+
+      .about-content h2 span {
+        display: block;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .about-content > p {
+        max-width: 700px;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 22px;
+        line-height: 1.6;
+      }
+
+      .loop {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        max-width: 950px;
+        margin-top: 60px;
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        letter-spacing: 0.08em;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .loop b {
+        color: rgba(255, 255, 255, 0.18);
+      }
+
+      /* =========================================================
+         FOOTER
+         ========================================================= */
+
+      .footer {
+        padding: 100px 5vw 30px;
+        background: #030303;
+      }
+
+      .footer-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 50px;
+        padding-bottom: 100px;
+      }
+
+      .footer-brand {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .footer-logo {
+        font-size: clamp(60px, 9vw, 130px);
+        font-weight: 900;
+        line-height: 0.75;
+        letter-spacing: -0.08em;
+      }
+
+      .footer-labs {
+        margin-top: 20px;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        letter-spacing: 0.6em;
+        padding-left: 0.6em;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .footer-tagline {
+        font-family: "Courier New", monospace;
+        font-size: 10px;
+        line-height: 1.6;
+        letter-spacing: 0.15em;
+        color: rgba(255, 255, 255, 0.35);
+        text-align: right;
+      }
+
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-family: "Courier New", monospace;
+        font-size: 8px;
+        letter-spacing: 0.12em;
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      /* =========================================================
+         ANIMATIONS
+         ========================================================= */
+
+      @keyframes bootIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes markIn {
+        from {
+          opacity: 0;
+          transform: scaleX(1.3);
+          filter: blur(12px);
+        }
+
+        to {
+          opacity: 1;
+          transform: scaleX(1);
+          filter: blur(0);
+        }
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes introExit {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        40% {
+          opacity: 1;
+          transform: translateY(-5%);
+        }
+
+        100% {
+          opacity: 0;
+          transform: translateY(-100%);
+          visibility: hidden;
+        }
+      }
+
+      /* =========================================================
+         MOBILE
+         ========================================================= */
+
+      @media (max-width: 900px) {
+        .nav-links {
+          display: none;
+        }
+
+        .nav {
+          padding: 22px 5vw;
+        }
+
+        .hero {
+          padding: 150px 7vw 100px;
+        }
+
+        .hero h1 {
+          font-size: clamp(55px, 15vw, 100px);
+        }
+
+        .hero h1 span {
+          padding-left: 5vw;
+        }
+
+        .hero-side {
+          display: none;
+        }
+
+        .section {
+          padding: 100px 7vw;
+        }
+
+        .section-heading {
+          grid-template-columns: 45px 1fr;
+          gap: 20px;
+          margin-bottom: 60px;
+        }
+
+        .principles-intro,
+        .cynx-layout,
+        .community-layout,
+        .ethics-layout {
+          grid-template-columns: 1fr;
+          margin-left: 0;
+          gap: 50px;
+        }
+
+        .principles-intro {
+          margin-bottom: 60px;
+        }
+
+        .principles-grid,
+        .systems-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .principle-card:nth-child(odd),
+        .system-card:nth-child(odd) {
+          border-right: 0;
+        }
+
+        .cynx-diagram {
+          width: min(500px, 85vw);
+        }
+
+        .section-lead,
+        .lifecycle {
+          margin-left: 0;
+        }
+
+        .creator-panel {
+          grid-template-columns: 1fr;
+          gap: 40px;
+          padding: 35px;
+        }
+
+        .community-environment {
+          margin-top: 20px;
+        }
+
+        .quiet-note {
+          margin-left: 0;
+        }
+
+        .ethics-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .footer-main,
+        .footer-bottom {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .footer-tagline {
+          text-align: left;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .intro-content {
+          width: 88vw;
+        }
+
+        .boot {
+          font-size: 8px;
+          margin-bottom: 45px;
+        }
+
+        .intro-mark {
+          font-size: 20vw;
+        }
+
+        .intro-welcome {
+          margin-top: 55px;
+        }
+
+        .hero {
+          min-height: 850px;
+        }
+
+        .hero h1 {
+          font-size: 17vw;
+        }
+
+        .hero-copy {
+          font-size: 14px;
+        }
+
+        .section-heading h2 {
+          font-size: 15vw;
+        }
+
+        .principles-intro p {
+          font-size: 20px;
+        }
+
+        .principle-card {
+          min-height: auto;
+        }
+
+        .principle-card h3 {
+          margin-top: 50px;
+        }
+
+        .cynx-layout {
+          gap: 70px;
+        }
+
+        .cynx-diagram {
+          width: 85vw;
+        }
+
+        .diagram-core {
+          width: 100px;
+          height: 100px;
+        }
+
+        .system-card {
+          min-height: 340px;
+        }
+
+        .lifecycle-step {
+          grid-template-columns: 35px 1fr;
+          gap: 15px;
+        }
+
+        .lifecycle-arrow {
+          display: none;
+        }
+
+        .ethics-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .detroit-section {
+          min-height: 700px;
+        }
+
+        .about-section {
+          min-height: 700px;
+        }
+
+        .loop {
+          gap: 7px;
+          line-height: 2;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
   </body>
 </html>
-
-<style>
-  /* ==================================================
-     RESET
-     ================================================== */
-
-  * {
-    box-sizing: border-box;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    margin: 0;
-    background: #050507;
-    color: #f5f2fa;
-    font-family: "Courier New", monospace;
-  }
-
-  /* ==================================================
-     INTRO
-     ================================================== */
-
-  #intro {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    overflow: hidden;
-    background: #050507;
-
-    transition:
-      transform 1.1s cubic-bezier(.77, 0, .175, 1),
-      opacity 1.1s ease;
-  }
-
-  #intro.leave {
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .boot {
-    min-height: 100vh;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-    padding: 30px;
-  }
-
-  .scanlines {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 5;
-
-    background:
-      repeating-linear-gradient(
-        to bottom,
-        transparent 0,
-        transparent 3px,
-        rgba(255, 255, 255, .025) 4px
-      );
-  }
-
-  .intro-noise {
-    position: absolute;
-    inset: -50%;
-
-    opacity: .055;
-    pointer-events: none;
-
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-
-    animation: noise .15s steps(2) infinite;
-  }
-
-  @keyframes noise {
-    0% {
-      transform: translate(0, 0);
-    }
-
-    25% {
-      transform: translate(2%, -1%);
-    }
-
-    50% {
-      transform: translate(-1%, 2%);
-    }
-
-    75% {
-      transform: translate(1%, 1%);
-    }
-
-    100% {
-      transform: translate(0, 0);
-    }
-  }
-
-  .boot-status {
-    position: absolute;
-    top: 30px;
-    left: 30px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-
-    color: #a855f7;
-    font-size: 11px;
-    opacity: .8;
-  }
-
-  /* ==================================================
-     SLICING LOGO
-     ================================================== */
-
-  .barkly-logo {
-    position: relative;
-
-    font-family: Arial, sans-serif;
-    font-size: clamp(70px, 16vw, 200px);
-    font-weight: 950;
-    line-height: .8;
-    letter-spacing: -10px;
-  }
-
-  .logo-slice {
-    color: white;
-
-    text-shadow:
-      0 0 20px rgba(168, 85, 247, .8),
-      0 0 80px rgba(168, 85, 247, .35);
-  }
-
-  .logo-top {
-    clip-path: inset(0 0 51% 0);
-
-    animation:
-      topSlice 1.3s
-      cubic-bezier(.16, 1, .3, 1)
-      forwards;
-  }
-
-  .logo-bottom {
-    position: absolute;
-    inset: 0;
-
-    clip-path: inset(51% 0 0 0);
-
-    color: #c084fc;
-
-    transform: translateX(-20px);
-
-    animation:
-      bottomSlice 1.3s
-      cubic-bezier(.16, 1, .3, 1)
-      forwards;
-  }
-
-  @keyframes topSlice {
-    0% {
-      transform: translateX(-120vw);
-      opacity: 0;
-    }
-
-    45% {
-      transform: translateX(40px);
-    }
-
-    70% {
-      transform: translateX(-8px);
-    }
-
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes bottomSlice {
-    0% {
-      transform: translateX(120vw);
-      opacity: 0;
-    }
-
-    45% {
-      transform: translateX(-40px);
-    }
-
-    70% {
-      transform: translateX(0);
-    }
-
-    100% {
-      transform: translateX(-20px);
-      opacity: 1;
-    }
-  }
-
-  .labs-word {
-    margin-top: 35px;
-    padding-left: 20px;
-
-    color: #c084fc;
-
-    font-size: clamp(20px, 3vw, 36px);
-    letter-spacing: 20px;
-
-    animation:
-      labsIn 1s ease .45s both;
-  }
-
-  @keyframes labsIn {
-    from {
-      opacity: 0;
-      transform: scaleX(2);
-      letter-spacing: 50px;
-    }
-
-    to {
-      opacity: 1;
-      transform: scaleX(1);
-      letter-spacing: 20px;
-    }
-  }
-
-  .welcome {
-    margin-top: 60px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-
-    font-size: clamp(18px, 4vw, 40px);
-    letter-spacing: 5px;
-
-    animation:
-      welcomeIn 1s ease .8s both;
-  }
-
-  .welcome strong {
-    color: #c084fc;
-  }
-
-  @keyframes welcomeIn {
-    from {
-      opacity: 0;
-      transform: translateY(25px);
-      letter-spacing: 18px;
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-      letter-spacing: 5px;
-    }
-  }
-
-  .tagline {
-    margin-top: 22px;
-
-    color: #777;
-    font-size: 11px;
-    letter-spacing: 4px;
-
-    animation:
-      fadeIn 1s ease 1.1s both;
-  }
-
-  #enter {
-    margin-top: 50px;
-    padding: 16px 30px;
-
-    border: 1px solid #a855f7;
-    background: transparent;
-
-    color: white;
-
-    font-family: inherit;
-    font-size: 11px;
-    letter-spacing: 2px;
-
-    cursor: pointer;
-
-    animation:
-      fadeIn 1s ease 1.4s both;
-
-    transition: .2s ease;
-  }
-
-  #enter:hover {
-    background: #a855f7;
-
-    box-shadow:
-      0 0 35px rgba(168, 85, 247, .5);
-
-    transform: translateY(-2px);
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  /* ==================================================
-     SITE
-     ================================================== */
-
-  #site {
-    min-height: 100vh;
-
-    background:
-      radial-gradient(
-        circle at 50% 0%,
-        rgba(168, 85, 247, .12),
-        transparent 35%
-      ),
-      #050507;
-  }
-
-  nav {
-    height: 76px;
-    padding: 0 5vw;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    border-bottom: 1px solid #1c1821;
-  }
-
-  .brand {
-    color: #c084fc;
-
-    text-decoration: none;
-
-    font-weight: bold;
-    letter-spacing: 3px;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 30px;
-  }
-
-  .nav-links a {
-    color: #777;
-    text-decoration: none;
-
-    font-size: 11px;
-    letter-spacing: 1px;
-
-    transition: .2s ease;
-  }
-
-  .nav-links a:hover {
-    color: #c084fc;
-  }
-
-  /* ==================================================
-     HERO
-     ================================================== */
-
-  .hero {
-    max-width: 1150px;
-    margin: auto;
-    padding: 18vh 5vw;
-  }
-
-  .eyebrow {
-    color: #a855f7;
-
-    font-size: 11px;
-    letter-spacing: 3px;
-  }
-
-  .hero h1 {
-    max-width: 1000px;
-    margin: 30px 0;
-
-    font-family: Arial, sans-serif;
-
-    font-size: clamp(55px, 9vw, 120px);
-    line-height: .88;
-    letter-spacing: -6px;
-  }
-
-  .hero h1 span {
-    display: block;
-    color: #c084fc;
-  }
-
-  .hero > p {
-    max-width: 680px;
-
-    color: #999;
-
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-    line-height: 1.7;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 15px;
-
-    margin-top: 40px;
-
-    flex-wrap: wrap;
-  }
-
-  .button {
-    display: inline-block;
-
-    padding: 14px 22px;
-
-    text-decoration: none;
-
-    font-size: 11px;
-    letter-spacing: 2px;
-  }
-
-  .button.primary {
-    background: #a855f7;
-    color: white;
-  }
-
-  .button.secondary {
-    border: 1px solid #29232f;
-    color: #999;
-  }
-
-  /* ==================================================
-     FEATURE
-     ================================================== */
-
-  .feature {
-    max-width: 1150px;
-    margin: auto;
-
-    padding: 120px 5vw;
-
-    border-top: 1px solid #1c1821;
-  }
-
-  .feature-label {
-    color: #a855f7;
-
-    font-size: 11px;
-    letter-spacing: 3px;
-  }
-
-  .feature-content {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 80px;
-
-    margin-top: 50px;
-
-    align-items: center;
-  }
-
-  .feature h2 {
-    margin: 0;
-
-    font-family: Arial, sans-serif;
-
-    font-size: clamp(65px, 9vw, 120px);
-
-    letter-spacing: -7px;
-  }
-
-  .feature p {
-    max-width: 560px;
-
-    color: #999;
-
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-    line-height: 1.7;
-  }
-
-  .text-link {
-    display: inline-block;
-
-    margin-top: 20px;
-
-    color: #c084fc;
-
-    text-decoration: none;
-
-    font-size: 11px;
-    letter-spacing: 2px;
-  }
-
-  /* ==================================================
-     TERMINAL
-     ================================================== */
-
-  .system-terminal {
-    border: 1px solid #302438;
-
-    background: #09070d;
-
-    box-shadow:
-      0 0 50px rgba(168, 85, 247, .08);
-  }
-
-  .terminal-header {
-    display: flex;
-    justify-content: space-between;
-
-    padding: 13px 16px;
-
-    border-bottom: 1px solid #302438;
-
-    color: #c084fc;
-
-    font-size: 11px;
-  }
-
-  .terminal-header span:last-child {
-    color: #7ee2a8;
-  }
-
-  .terminal-body {
-    padding: 25px;
-
-    min-height: 260px;
-
-    color: #777;
-
-    font-size: 12px;
-    line-height: 1.8;
-  }
-
-  .terminal-body p:first-child {
-    color: #c084fc;
-  }
-
-  .terminal-body p:nth-child(4) {
-    color: #7ee2a8;
-  }
-
-  .terminal-cursor {
-    color: #c084fc;
-
-    animation:
-      blink 1s steps(2) infinite;
-  }
-
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
-  }
-
-  /* ==================================================
-     PROJECTS
-     ================================================== */
-
-  .projects {
-    max-width: 1150px;
-    margin: auto;
-
-    padding: 120px 5vw;
-  }
-
-  .projects h2,
-  .lab h2,
-  .about h2 {
-    max-width: 900px;
-
-    margin: 25px 0 60px;
-
-    font-family: Arial, sans-serif;
-
-    font-size: clamp(50px, 8vw, 100px);
-
-    line-height: .9;
-    letter-spacing: -6px;
-  }
-
-  .projects h2 span,
-  .lab h2 span,
-  .about h2 span {
-    color: #c084fc;
-  }
-
-  .project-grid {
-    display: grid;
-
-    grid-template-columns:
-      repeat(3, 1fr);
-
-    gap: 15px;
-  }
-
-  .project-card {
-    min-height: 300px;
-
-    padding: 30px;
-
-    border: 1px solid #1d1922;
-
-    background:
-      rgba(255, 255, 255, .015);
-
-    transition:
-      transform .25s ease,
-      border-color .25s ease,
-      background .25s ease;
-  }
-
-  .project-card:hover {
-    transform: translateY(-6px);
-
-    border-color: #a855f7;
-
-    background:
-      rgba(168, 85, 247, .04);
-  }
-
-  .project-number {
-    color: #555;
-    font-size: 11px;
-  }
-
-  .project-card h3 {
-    margin-top: 70px;
-
-    font-family: Arial, sans-serif;
-    font-size: 28px;
-  }
-
-  .project-card p {
-    color: #888;
-    line-height: 1.6;
-  }
-
-  .project-card a {
-    display: inline-block;
-
-    margin-top: 20px;
-
-    color: #c084fc;
-
-    text-decoration: none;
-
-    font-size: 10px;
-    letter-spacing: 1px;
-  }
-
-  /* ==================================================
-     LAB
-     ================================================== */
-
-  .lab {
-    padding: 140px 5vw;
-
-    border-top: 1px solid #1c1821;
-    border-bottom: 1px solid #1c1821;
-  }
-
-  .lab > * {
-    max-width: 1150px;
-
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .lab > p {
-    max-width: 650px;
-
-    color: #999;
-
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-    line-height: 1.7;
-  }
-
-  .process {
-    margin-top: 60px;
-
-    display: grid;
-
-    grid-template-columns:
-      repeat(6, 1fr);
-
-    border: 1px solid #1d1922;
-  }
-
-  .process div {
-    min-height: 120px;
-
-    padding: 20px;
-
-    border-right: 1px solid #1d1922;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    font-size: 11px;
-  }
-
-  .process div:last-child {
-    border-right: 0;
-  }
-
-  .process span {
-    color: #a855f7;
-  }
-
-  /* ==================================================
-     ABOUT
-     ================================================== */
-
-  .about {
-    max-width: 1150px;
-    margin: auto;
-
-    padding: 140px 5vw;
-  }
-
-  .about p {
-    max-width: 700px;
-
-    color: #999;
-
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-    line-height: 1.8;
-  }
-
-  /* ==================================================
-     FOOTER
-     ================================================== */
-
-  footer {
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 20px;
-
-    padding: 30px 5vw;
-
-    border-top: 1px solid #1c1821;
-
-    color: #555;
-
-    font-size: 10px;
-    letter-spacing: 2px;
-  }
-
-  /* ==================================================
-     MOBILE
-     ================================================== */
-
-  @media (max-width: 800px) {
-    .nav-links {
-      display: none;
-    }
-
-    .feature-content {
-      grid-template-columns: 1fr;
-    }
-
-    .project-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .process {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .process div:nth-child(2n) {
-      border-right: 0;
-    }
-
-    .process div {
-      border-bottom: 1px solid #1d1922;
-    }
-
-    footer {
-      flex-direction: column;
-    }
-  }
-</style>
