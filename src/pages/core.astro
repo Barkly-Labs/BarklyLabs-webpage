@@ -1,2082 +1,1784 @@
 ---
-const systems = [
+const layers = [
   {
     number: "01",
-    name: "CYN-X CORE",
-    tag: "INTELLIGENCE LAYER",
+    name: "INTELLIGENCE",
+    tag: "REASONING LAYER",
     description:
-      "A shared layer connecting intelligent systems, interfaces, services, and physical devices.",
+      "The intelligence layer responsible for understanding context, reasoning through problems, generating responses, and coordinating capabilities.",
     items: [
-      "Computers",
-      "Phones",
-      "Displays",
-      "Speakers",
-      "Cameras",
-      "Sensors",
-      "Wearables",
-      "Robotics",
-      "Custom hardware",
-      "Software services",
+      "Language models",
+      "Reasoning",
+      "Context",
+      "Planning",
+      "Problem solving",
+      "Decision support",
     ],
   },
   {
     number: "02",
-    name: "LOCAL AI",
-    tag: "PRIVATE INFERENCE",
+    name: "MEMORY",
+    tag: "CONTINUITY LAYER",
     description:
-      "AI designed to run locally where practical, keeping intelligence closer to the people and systems using it.",
+      "Memory gives CYN-X continuity across interactions, projects, preferences, and long-running work.",
     items: [
-      "Local models",
-      "Private inference",
-      "Personal assistants",
-      "Adaptive intelligence",
-      "Memory systems",
-      "Personality systems",
+      "Short-term context",
+      "Long-term memory",
+      "Project context",
+      "User preferences",
+      "Knowledge",
+      "State",
     ],
   },
   {
     number: "03",
-    name: "MULTIMODAL",
-    tag: "MANY WAYS TO INTERACT",
+    name: "TOOLS",
+    tag: "ACTION LAYER",
     description:
-      "CYN-X explores interaction across text, vision, devices, environments, and physical computing.",
+      "Tools allow intelligence to interact with software, services, files, systems, and the physical world.",
     items: [
-      "Computer vision",
-      "AI interfaces",
-      "Visual understanding",
-      "Environmental awareness",
-      "Robotics integration",
-      "Human-AI collaboration",
+      "APIs",
+      "Code execution",
+      "Automation",
+      "File systems",
+      "Developer tools",
+      "External services",
     ],
   },
   {
     number: "04",
-    name: "TOOLS + SYSTEMS",
-    tag: "BUILD WITH IT",
+    name: "INTERFACES",
+    tag: "HUMAN LAYER",
     description:
-      "CYN-X is designed to work alongside projects rather than exist as an isolated chatbot.",
+      "Interfaces are how people and environments communicate with the Core.",
     items: [
-      "Software development",
-      "APIs",
-      "Automation",
-      "Developer tools",
-      "Dashboards",
-      "Infrastructure",
+      "Desktop",
+      "Web",
+      "Mobile",
+      "Voice",
+      "Vision",
+      "Hardware",
     ],
   },
 ];
 
-const capabilities = [
-  "Local AI",
-  "Personal Assistants",
-  "Adaptive Intelligence",
-  "Memory",
-  "Personality",
-  "Multimodal Interaction",
-  "Computer Vision",
-  "Robotics",
-  "AI Interfaces",
-  "AI-Assisted Development",
-  "Human-AI Collaboration",
-  "Private Inference",
+const subsystems = [
+  "MODEL RUNTIME",
+  "CONTEXT ENGINE",
+  "MEMORY",
+  "PERSONALITY",
+  "TOOL ROUTER",
+  "VISION",
+  "AUTOMATION",
+  "EVENT BUS",
+  "DEVICE BRIDGE",
+  "PERMISSIONS",
+  "LOCAL SERVICES",
+  "INTERFACE LAYER",
 ];
 
-const lifecycle = [
-  "Idea",
-  "Research",
-  "Experiment",
-  "Prototype",
-  "Community Testing",
-  "Engineering",
-  "Productization",
-  "Release",
-  "Feedback",
-  "Continued Development",
+const signals = [
+  "TEXT",
+  "VOICE",
+  "VISION",
+  "FILES",
+  "DEVICES",
+  "SENSORS",
+  "EVENTS",
+  "APPLICATIONS",
+];
+
+const outputs = [
+  "RESPONSES",
+  "ACTIONS",
+  "AUTOMATION",
+  "CODE",
+  "VISUAL OUTPUT",
+  "DEVICE CONTROL",
+  "KNOWLEDGE",
+  "ASSISTANCE",
 ];
 
 const principles = [
   {
     number: "01",
-    title: "HUMAN FIRST",
+    title: "ONE CORE",
     text:
-      "CYN-X should support people instead of forcing people to reorganize their lives around technology.",
+      "Different interfaces and applications should be able to share the same underlying intelligence instead of recreating the system from scratch.",
   },
   {
     number: "02",
-    title: "UNDERSTANDABLE",
+    title: "MODULAR",
     text:
-      "Systems should remain understandable. Documentation is part of the engineering, not an afterthought.",
+      "CYN-X Core is designed as a collection of replaceable and extensible components rather than one inseparable application.",
   },
   {
     number: "03",
-    title: "PRIVATE WHERE PRACTICAL",
+    title: "LOCAL WHERE PRACTICAL",
     text:
-      "Local and private infrastructure can keep intelligence closer to the people, projects, and environments using it.",
+      "The architecture can place models, memory, tools, and services close to the user when local infrastructure makes sense.",
   },
   {
     number: "04",
-    title: "EXPERIMENTAL",
+    title: "HUMAN CONTROL",
     text:
-      "Prototypes, strange ideas, failures, and unfinished experiments are allowed to contribute to the system.",
+      "The Core exists to assist people. Access, actions, automation, and system behavior should remain understandable and controllable.",
   },
 ];
 
-const interfaces = [
-  "DESKTOP",
-  "MOBILE",
-  "WEB",
-  "VOICE",
-  "VISION",
-  "HARDWARE",
-  "ROBOTICS",
-  "SENSORS",
+const lifecycle = [
+  "INPUT",
+  "CONTEXT",
+  "UNDERSTANDING",
+  "REASONING",
+  "TOOL SELECTION",
+  "ACTION",
+  "RESULT",
+  "MEMORY",
+  "FEEDBACK",
 ];
+
+const year = 2026;
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <meta
       name="description"
-      content="CYN-X — a human-centered intelligent system developed by BARKLY LABS."
+      content="CYN-X Core — the intelligence and coordination layer of the CYN-X ecosystem."
     />
-
-    <title>CYN-X — ABOUT</title>
+    <title>CYN-X CORE — BARKLY LABS</title>
   </head>
 
   <body>
-    <div class="site">
+    <!-- NAVIGATION -->
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span>BARKLY</span>
+        <span>LABS</span>
+      </a>
 
-      <!-- HEADER -->
+      <nav>
+        <a href="#about">CORE</a>
+        <a href="#architecture">ARCHITECTURE</a>
+        <a href="#layers">LAYERS</a>
+        <a href="#flow">FLOW</a>
+        <a href="#principles">PRINCIPLES</a>
+      </nav>
 
-      <header class="site-header">
-        <a href="/" class="brand">
-          <span>BARKLY</span>
-          <span>LABS</span>
-        </a>
+      <div class="status">
+        <span class="status-dot"></span>
+        CYN-X // CORE
+      </div>
+    </header>
 
-        <nav>
-          <a href="/">HOME</a>
-          <a href="/projects">PROJECTS</a>
-          <a href="/docs">DOCS</a>
-        </nav>
+    <main>
+      <!-- HERO -->
+      <section class="hero section" id="about">
+        <div class="hero-grid"></div>
 
-        <div class="status">
-          <span class="status-dot"></span>
-          CYN-X // ONLINE
+        <div class="eyebrow reveal">
+          BARKLY LABS // CYN-X // CORE
         </div>
-      </header>
 
+        <h1 class="hero-title reveal">
+          THE CORE<br />
+          <span>BEHIND CYN-X.</span>
+        </h1>
 
-      <main>
+        <div class="hero-bottom reveal">
+          <p class="hero-description">
+            CYN-X Core is the central intelligence and coordination layer
+            connecting models, memory, tools, interfaces, devices, and the
+            systems built around them.
+          </p>
 
-        <!-- HERO -->
+          <div class="hero-mark">
+            <span>C</span>
+            <span class="x">X</span>
+          </div>
+        </div>
+      </section>
 
-        <section class="hero section" id="about">
+      <!-- STATEMENT -->
+      <section class="statement section reveal">
+        <div class="section-number">01 / THE CORE IDEA</div>
 
-          <div class="hero-grid"></div>
+        <div class="statement-content">
+          <p class="statement-large">
+            ONE CORE.<br />
+            <span>MANY SYSTEMS.</span>
+          </p>
 
-          <div class="eyebrow reveal">
-            BARKLY LABS // CYN-X
+          <p class="statement-small">
+            INTELLIGENCE SHOULD BE CONNECTABLE.
+          </p>
+        </div>
+      </section>
+
+      <!-- CORE ARCHITECTURE -->
+      <section class="architecture section" id="architecture">
+        <div class="section-heading reveal">
+          <div>
+            <div class="section-number">02 / ARCHITECTURE</div>
+            <h2>THE INTELLIGENCE LAYER</h2>
           </div>
 
-          <h1 class="hero-title reveal">
-            INTELLIGENCE<br />
-            <span>THAT ADAPTS.</span>
-          </h1>
+          <p>
+            CYN-X Core provides a shared foundation that allows intelligence,
+            memory, tools, interfaces, and devices to operate as parts of one
+            larger system.
+          </p>
+        </div>
 
-          <div class="hero-bottom reveal">
+        <div class="architecture-diagram reveal">
+          <div class="architecture-line line-one"></div>
+          <div class="architecture-line line-two"></div>
+          <div class="architecture-line line-three"></div>
+          <div class="architecture-line line-four"></div>
 
-            <p class="hero-description">
-              CYN-X is a human-centered intelligent system exploring what AI
-              can become when it is designed around an ongoing relationship
-              with its user, environment, tools, and projects.
-            </p>
-
-            <div class="hero-mark">
-              <span>CYN</span>
-              <span class="x">X</span>
-            </div>
-
+          <div class="architecture-node input-node">
+            <span>01</span>
+            INPUT
           </div>
 
-        </section>
-
-
-        <!-- 01 / THE IDEA -->
-
-        <section class="statement section reveal">
-
-          <div class="section-number">
-            01 / THE IDEA
+          <div class="architecture-node context-node">
+            <span>02</span>
+            CONTEXT
           </div>
 
-          <div class="statement-content">
-
-            <p class="statement-large">
-              ONE INTELLIGENT<br />
-              <span>ECOSYSTEM.</span>
-            </p>
-
-            <p class="statement-small">
-              MANY INTERFACES.
-            </p>
-
-          </div>
-
-        </section>
-
-
-        <!-- 02 / CORE -->
-
-        <section class="core section" id="core">
-
-          <div class="section-heading reveal">
-
-            <div>
-              <div class="section-number">
-                02 / CYN-X CORE
-              </div>
-
-              <h2>
-                THE<br />
-                INTELLIGENCE<br />
-                LAYER
-              </h2>
-            </div>
-
-            <p>
-              CYN-X Core is the connecting layer between intelligent systems,
-              interfaces, services, and physical devices.
-            </p>
-
-          </div>
-
-
-          <div class="core-visual reveal">
-
-            <div class="core-ring ring-one"></div>
-            <div class="core-ring ring-two"></div>
-            <div class="core-ring ring-three"></div>
-
-            <div class="core-center">
-              <span>CYN-X</span>
-              <small>CORE</small>
-            </div>
-
-            <div class="orbit orbit-one">AI</div>
-            <div class="orbit orbit-two">VISION</div>
-            <div class="orbit orbit-three">TOOLS</div>
-            <div class="orbit orbit-four">DEVICES</div>
-            <div class="orbit orbit-five">DATA</div>
-            <div class="orbit orbit-six">PEOPLE</div>
-
-          </div>
-
-
-          <div class="interface-grid reveal">
-
-            {interfaces.map((item, index) => (
-              <div class="interface-item">
-                <span>
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-
-                <strong>{item}</strong>
-              </div>
-            ))}
-
-          </div>
-
-        </section>
-
-
-        <!-- 03 / SYSTEMS -->
-
-        <section class="systems section" id="systems">
-
-          <div class="section-heading reveal">
-
-            <div>
-
-              <div class="section-number">
-                03 / SYSTEMS
-              </div>
-
-              <h2>
-                BUILT AS<br />
-                A SYSTEM
-              </h2>
-
-            </div>
-
-            <p>
-              CYN-X is not intended to be one isolated application. It is an
-              ecosystem of connected capabilities.
-            </p>
-
-          </div>
-
-
-          <div class="system-list">
-
-            {systems.map((system) => (
-
-              <article class="system-card reveal">
-
-                <div class="system-top">
-
-                  <span class="system-number">
-                    {system.number}
-                  </span>
-
-                  <span class="system-tag">
-                    {system.tag}
-                  </span>
-
-                </div>
-
-                <h3>
-                  {system.name}
-                </h3>
-
-                <p>
-                  {system.description}
-                </p>
-
-                <div class="system-items">
-
-                  {system.items.map((item) => (
-                    <span>{item}</span>
-                  ))}
-
-                </div>
-
-              </article>
-
-            ))}
-
-          </div>
-
-        </section>
-
-
-        <!-- 04 / CAPABILITIES -->
-
-        <section
-          class="capabilities section"
-          id="capabilities"
-        >
-
-          <div class="section-number reveal">
-            04 / CAPABILITIES
-          </div>
-
-
-          <div class="capability-heading reveal">
-
-            <h2>
-              MORE THAN<br />
-              <span>A CHATBOT.</span>
-            </h2>
-
-            <p>
-              CYN-X explores intelligent systems that can participate in real
-              projects, understand different forms of input, work with tools,
-              and connect with the environments around them.
-            </p>
-
-          </div>
-
-
-          <div class="capability-cloud reveal">
-
-            {capabilities.map((capability, index) => (
-
-              <div class="capability">
-
-                <span>
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-
-                {capability}
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </section>
-
-
-        <!-- THE QUESTION -->
-
-        <section class="relationship section reveal">
-
-          <div class="relationship-label">
-            THE QUESTION
-          </div>
-
-          <blockquote>
-            “What can an AI system become when it is designed around an
-            ongoing relationship with its user, environment, tools, and
-            projects?”
-          </blockquote>
-
-          <div class="relationship-footer">
-
-            <span>
-              CYN-X / RESEARCH DIRECTION
-            </span>
-
-            <span>
-              01 — 04
-            </span>
-
-          </div>
-
-        </section>
-
-
-        <!-- 05 / DEVELOPMENT -->
-
-        <section class="lifecycle section">
-
-          <div class="section-heading reveal">
-
-            <div>
-
-              <div class="section-number">
-                05 / DEVELOPMENT
-              </div>
-
-              <h2>
-                BUILD.<br />
-                LEARN.<br />
-                ITERATE.
-              </h2>
-
-            </div>
-
-            <p>
-              CYN-X follows an iterative development philosophy where
-              research, experimentation, documentation, testing, and feedback
-              remain part of the system.
-            </p>
-
-          </div>
-
-
-          <div class="lifecycle-grid reveal">
-
-            {lifecycle.map((stage, index) => (
-
-              <div class="lifecycle-step">
-
-                <span>
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-
-                <strong>
-                  {stage}
-                </strong>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </section>
-
-
-        <!-- 06 / DESIGN PRINCIPLES -->
-
-        <section
-          class="principles section"
-          id="principles"
-        >
-
-          <div class="section-number reveal">
-            06 / DESIGN PRINCIPLES
-          </div>
-
-
-          <div class="principles-list">
-
-            {principles.map((principle) => (
-
-              <article class="principle reveal">
-
-                <div class="principle-number">
-                  {principle.number}
-                </div>
-
-                <div>
-
-                  <h3>
-                    {principle.title}
-                  </h3>
-
-                  <p>
-                    {principle.text}
-                  </p>
-
-                </div>
-
-              </article>
-
-            ))}
-
-          </div>
-
-        </section>
-
-
-        <!-- 07 / RESPONSIBLE TECHNOLOGY -->
-
-        <section class="ethics section reveal">
-
-          <div class="section-number">
-            07 / RESPONSIBLE TECHNOLOGY
-          </div>
-
-
-          <div class="ethics-layout">
-
-            <div>
-
-              <h2>
-                INTELLIGENCE<br />
-                WITH <span>CONTEXT.</span>
-              </h2>
-
-            </div>
-
-
-            <div class="ethics-copy">
-
-              <p>
-                CYN-X is intended to consider the consequences of technology
-                throughout development.
-              </p>
-
-
-              <div class="ethics-grid">
-
-                <span>PRIVACY</span>
-                <span>SECURITY</span>
-                <span>CONSENT</span>
-                <span>ACCESSIBILITY</span>
-                <span>TRANSPARENCY</span>
-                <span>RESPONSIBLE AI</span>
-                <span>HUMAN OVERSIGHT</span>
-                <span>DATA MINIMIZATION</span>
-                <span>CREATOR OWNERSHIP</span>
-                <span>FAIR COMPENSATION</span>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <!-- 08 / HUMAN CENTERED -->
-
-        <section class="human section reveal">
-
-          <div class="human-grid"></div>
-
-          <div class="section-number">
-            08 / HUMAN-CENTERED
-          </div>
-
-
-          <div class="human-content">
-
-            <p class="human-kicker">
-              THE CORE PRINCIPLE
-            </p>
-
-            <h2>
-              TECHNOLOGY<br />
-              SHOULD ADAPT<br />
-              <span>TO HUMANS.</span>
-            </h2>
-
-
-            <p class="human-description">
-              People have different energy levels, abilities, interests,
-              working styles, and needs. CYN-X is designed around the idea
-              that technology should reduce unnecessary effort rather than
-              create additional burdens.
-            </p>
-
-          </div>
-
-        </section>
-
-
-        <!-- 09 / ECOSYSTEM -->
-
-        <section class="ecosystem section">
-
-          <div class="section-heading reveal">
-
-            <div>
-
-              <div class="section-number">
-                09 / ECOSYSTEM
-              </div>
-
-              <h2>
-                CONNECTED<br />
-                PROJECTS
-              </h2>
-
-            </div>
-
-            <p>
-              CYN-X exists inside a broader technology ecosystem spanning
-              software, vision, embedded systems, hardware, and creative
-              tools.
-            </p>
-
-          </div>
-
-
-          <div class="ecosystem-grid reveal">
-
-            <a class="ecosystem-card" href="/projects">
-
-              <span>01</span>
-
+          <div class="architecture-core">
+            <div class="core-inner">
               <strong>CYN-X</strong>
-
-              <small>
-                INTELLIGENT SYSTEM
-              </small>
-
-            </a>
-
-
-            <a class="ecosystem-card" href="/projects">
-
-              <span>02</span>
-
-              <strong>SECUSERVE</strong>
-
-              <small>
-                COMPUTER VISION
-              </small>
-
-            </a>
-
-
-            <a class="ecosystem-card" href="/projects">
-
-              <span>03</span>
-
-              <strong>SMART GARDEN</strong>
-
-              <small>
-                EMBEDDED SYSTEMS
-              </small>
-
-            </a>
-
-
-            <a class="ecosystem-card" href="/projects">
-
-              <span>04</span>
-
-              <strong>PAWBOARD</strong>
-
-              <small>
-                MOUDLAR SOCIAL-COMPUTING PlATFORM
-              </small>
-
-            </a>
-
+              <span>CORE</span>
+            </div>
           </div>
 
-        </section>
-
-
-        <!-- 10 / FUTURE -->
-
-        <section class="future section reveal">
-
-          <div class="section-number">
-            10 / THE FUTURE
+          <div class="architecture-node tools-node">
+            <span>03</span>
+            TOOLS
           </div>
 
+          <div class="architecture-node memory-node">
+            <span>04</span>
+            MEMORY
+          </div>
 
-          <div class="future-content">
+          <div class="architecture-node output-node">
+            <span>05</span>
+            OUTPUT
+          </div>
+        </div>
 
+        <div class="architecture-caption reveal">
+          <span>INPUT</span>
+          <i></i>
+          <span>CORE</span>
+          <i></i>
+          <span>ACTION</span>
+        </div>
+      </section>
+
+      <!-- CORE LAYERS -->
+      <section class="layers section" id="layers">
+        <div class="section-heading reveal">
+          <div>
+            <div class="section-number">03 / CORE LAYERS</div>
+            <h2>BUILT IN LAYERS</h2>
+          </div>
+
+          <p>
+            CYN-X Core separates intelligence from the interfaces and systems
+            surrounding it so individual components can evolve independently.
+          </p>
+        </div>
+
+        <div class="layer-list">
+          {layers.map((layer) => (
+            <article class="layer-card reveal">
+              <div class="layer-top">
+                <span class="layer-number">{layer.number}</span>
+                <span class="layer-tag">{layer.tag}</span>
+              </div>
+
+              <h3>{layer.name}</h3>
+
+              <p>{layer.description}</p>
+
+              <div class="layer-items">
+                {layer.items.map((item) => (
+                  <span>{item}</span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- SUBSYSTEMS -->
+      <section class="subsystems section reveal">
+        <div class="section-number">04 / SUBSYSTEMS</div>
+
+        <div class="subsystem-heading">
+          <h2>
+            THE PIECES<br />
+            <span>INSIDE.</span>
+          </h2>
+
+          <p>
+            The Core is not a single model. It is an architecture made from
+            multiple services and subsystems that cooperate around intelligence.
+          </p>
+        </div>
+
+        <div class="subsystem-grid">
+          {subsystems.map((system, index) => (
+            <div class="subsystem">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{system}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- INPUT / OUTPUT -->
+      <section class="signals section">
+        <div class="section-heading reveal">
+          <div>
+            <div class="section-number">05 / INTERACTION</div>
+            <h2>EVERYTHING CAN BE A SIGNAL</h2>
+          </div>
+
+          <p>
+            CYN-X Core is designed to accept information from many different
+            interfaces and return useful results through many different outputs.
+          </p>
+        </div>
+
+        <div class="signal-layout reveal">
+          <div class="signal-column">
+            <div class="signal-label">INPUTS</div>
+
+            {signals.map((signal, index) => (
+              <div class="signal-item">
+                <span>0{index + 1}</span>
+                {signal}
+              </div>
+            ))}
+          </div>
+
+          <div class="signal-core">
+            <div class="signal-core-ring"></div>
+            <div class="signal-core-center">
+              <strong>CYN-X</strong>
+              <small>PROCESS</small>
+            </div>
+          </div>
+
+          <div class="signal-column">
+            <div class="signal-label">OUTPUTS</div>
+
+            {outputs.map((output, index) => (
+              <div class="signal-item">
+                <span>0{index + 1}</span>
+                {output}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- PROCESS -->
+      <section class="flow section" id="flow">
+        <div class="section-heading reveal">
+          <div>
+            <div class="section-number">06 / PROCESS</div>
+            <h2>FROM SIGNAL TO ACTION</h2>
+          </div>
+
+          <p>
+            A request does not have to stop at a generated response. CYN-X Core
+            can interpret context, select capabilities, use tools, and preserve
+            useful state for future interactions.
+          </p>
+        </div>
+
+        <div class="flow-grid reveal">
+          {lifecycle.map((stage, index) => (
+            <div class="flow-step">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{stage}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- MEMORY -->
+      <section class="memory section reveal">
+        <div class="section-number">07 / CONTINUITY</div>
+
+        <div class="memory-layout">
+          <div>
             <h2>
-              ONE SYSTEM.<br />
-              <span>MANY POSSIBILITIES.</span>
+              INTELLIGENCE<br />
+              WITH <span>MEMORY.</span>
             </h2>
+          </div>
 
+          <div class="memory-copy">
             <p>
-              CYN-X can grow from software into an ecosystem connecting AI,
-              hardware, interfaces, robotics, creative technology, and the
-              people building with it.
+              A useful intelligent system needs more than a model. It needs
+              context that can persist across projects, interactions, tools,
+              and environments.
             </p>
 
+            <div class="memory-grid">
+              <span>USER</span>
+              <span>PROJECT</span>
+              <span>CONTEXT</span>
+              <span>HISTORY</span>
+              <span>PREFERENCES</span>
+              <span>STATE</span>
+              <span>KNOWLEDGE</span>
+              <span>ENVIRONMENT</span>
+            </div>
           </div>
+        </div>
+      </section>
 
+      <!-- LOCAL -->
+      <section class="local section reveal">
+        <div class="section-number">08 / LOCAL INTELLIGENCE</div>
 
-          <div class="future-line">
-
-            <span>AI</span>
-            <i></i>
-
-            <span>SOFTWARE</span>
-            <i></i>
-
-            <span>HARDWARE</span>
-            <i></i>
-
-            <span>PEOPLE</span>
-            <i></i>
-
-            <span>COMMUNITY</span>
-
-          </div>
-
-        </section>
-
-
-        <!-- CTA -->
-
-        <section class="cta section reveal">
-
-          <div class="cta-eyebrow">
-            BARKLY LABS // CYN-X
+        <div class="local-content">
+          <div class="local-label">
+            <span>01</span>
+            WHERE PRACTICAL
           </div>
 
           <h2>
-            BUILD WITH<br />
-            <span>INTELLIGENCE.</span>
+            KEEP THE<br />
+            <span>CORE CLOSE.</span>
           </h2>
 
+          <p>
+            CYN-X can use local models, local services, and local infrastructure
+            where practical. The goal is not that everything must run locally,
+            but that local computing remains a first-class architectural option.
+          </p>
+        </div>
 
-          <div class="cta-actions">
-
-            <a href="/docs" class="button primary">
-              READ THE DOCUMENTATION
-              <span>→</span>
-            </a>
-
-            <a href="/projects" class="button">
-              EXPLORE CYN-X
-              <span>→</span>
-            </a>
-
+        <div class="local-specs">
+          <div>
+            <span>INFERENCE</span>
+            <strong>LOCAL / REMOTE</strong>
           </div>
 
-        </section>
+          <div>
+            <span>MEMORY</span>
+            <strong>USER CONTROLLED</strong>
+          </div>
 
-      </main>
+          <div>
+            <span>TOOLS</span>
+            <strong>MODULAR</strong>
+          </div>
 
+          <div>
+            <span>INTERFACES</span>
+            <strong>MANY</strong>
+          </div>
+        </div>
+      </section>
 
-      <!-- FOOTER -->
-
-      <footer>
-
-        <div>
-          BARKLY LABS / CYN-X
+      <!-- PRINCIPLES -->
+      <section class="principles section" id="principles">
+        <div class="section-number reveal">
+          09 / CORE PRINCIPLES
         </div>
 
-        <div>
-          HUMAN-CENTERED INTELLIGENCE
+        <div class="principles-list">
+          {principles.map((principle) => (
+            <article class="principle reveal">
+              <div class="principle-number">
+                {principle.number}
+              </div>
+
+              <div>
+                <h3>{principle.title}</h3>
+                <p>{principle.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- RELATIONSHIP -->
+      <section class="relationship section reveal">
+        <div class="relationship-label">
+          THE CENTRAL QUESTION
         </div>
 
-        <div>
-          © 2026
+        <blockquote>
+          “What happens when intelligence becomes infrastructure instead of
+          just an application?”
+        </blockquote>
+
+        <div class="relationship-footer">
+          <span>CYN-X CORE / ARCHITECTURE</span>
+          <span>01 — 09</span>
+        </div>
+      </section>
+
+      <!-- FUTURE -->
+      <section class="future section reveal">
+        <div class="section-number">10 / THE FUTURE</div>
+
+        <div class="future-content">
+          <h2>
+            ONE CORE.<br />
+            <span>ENDLESS INTERFACES.</span>
+          </h2>
+
+          <p>
+            CYN-X Core can become the shared intelligence layer behind desktop
+            applications, mobile interfaces, creative tools, hardware,
+            robotics, accessibility systems, developer tools, and future
+            Barkly Labs projects.
+          </p>
         </div>
 
-      </footer>
-
-    </div>
-
-
-    <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("visible");
-            }
-          });
-        },
-        {
-          threshold: 0.08,
-        }
-      );
-
-      document
-        .querySelectorAll(".reveal")
-        .forEach((element) => observer.observe(element));
-    </script>
-
-
-    <style>
-
-      :global(*) {
-        box-sizing: border-box;
-      }
-
-      :global(html) {
-        scroll-behavior: smooth;
-      }
-
-      :global(body) {
-        margin: 0;
-        background: #050505;
-        color: #f5f5f5;
-        font-family:
-          "IBM Plex Mono",
-          "SFMono-Regular",
-          Consolas,
-          "Liberation Mono",
-          monospace;
-      }
-
-      :global(a) {
-        color: inherit;
-        text-decoration: none;
-      }
-
-
-      .site {
-        min-height: 100vh;
-        overflow: hidden;
-
-        background:
-          linear-gradient(
-            rgba(255, 255, 255, 0.018) 1px,
-            transparent 1px
-          ),
-          linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.018) 1px,
-            transparent 1px
-          );
-
-        background-size: 40px 40px;
-      }
-
-
-      /* HEADER */
-
-      .site-header {
-        height: 72px;
-
-        border-bottom: 1px solid #262626;
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        padding: 0 5vw;
-
-        position: sticky;
-        top: 0;
-
-        z-index: 50;
-
-        background: rgba(5, 5, 5, 0.94);
-
-        backdrop-filter: blur(12px);
-      }
-
-      .brand {
-        display: flex;
-        flex-direction: column;
-
-        font-weight: 900;
-
-        letter-spacing: -0.08em;
-
-        font-size: 0.9rem;
-
-        line-height: 0.8;
-      }
-
-      .brand span:last-child {
-        opacity: 0.4;
-      }
-
-      nav {
-        display: flex;
-        gap: 28px;
-
-        font-size: 0.65rem;
-
-        letter-spacing: 0.12em;
-      }
-
-      nav a {
-        opacity: 0.45;
-
-        transition:
-          opacity 0.2s ease;
-      }
-
-      nav a:hover,
-      nav a.active {
-        opacity: 1;
-      }
-
-      .status {
-        font-size: 0.6rem;
-        letter-spacing: 0.1em;
-        opacity: 0.5;
-      }
-
-      .status-dot {
-        display: inline-block;
-
-        width: 6px;
-        height: 6px;
-
-        border-radius: 50%;
-
-        background: #fff;
-
-        margin-right: 7px;
-
-        box-shadow: 0 0 10px #fff;
-      }
-
-
-      /* GENERAL */
-
-      .section {
-        position: relative;
-
-        padding: 10vw 5vw;
-
-        border-bottom: 1px solid #262626;
-      }
-
-      .reveal {
-        opacity: 0;
-
-        transform: translateY(30px);
-
-        transition:
-          opacity 0.8s ease,
-          transform 0.8s ease;
-      }
-
-      .reveal.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .section-number {
-        font-size: 0.6rem;
-
-        letter-spacing: 0.14em;
-
-        opacity: 0.4;
-      }
-
-      .eyebrow {
-        font-size: 0.65rem;
-
-        letter-spacing: 0.16em;
-
-        opacity: 0.45;
-      }
-
-
-      /* HERO */
-
-      .hero {
-        min-height: 92vh;
-
-        padding-top: 12vw;
-        padding-bottom: 8vw;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
-      .hero-grid {
-        position: absolute;
-        inset: 0;
-
-        pointer-events: none;
-
-        background:
-          linear-gradient(
-            90deg,
-            transparent 49.95%,
-            rgba(255,255,255,0.05) 50%,
-            transparent 50.05%
-          );
-      }
-
-      .hero-title {
-        position: relative;
-
-        z-index: 2;
-
-        margin: 8vh 0;
-
-        font-size: clamp(4rem, 11vw, 12rem);
-
-        line-height: 0.78;
-
-        letter-spacing: -0.09em;
-
-        font-weight: 900;
-      }
-
-      .hero-title span {
-        color: transparent;
-
-        -webkit-text-stroke: 1px #fff;
-      }
-
-      .hero-bottom {
-        display: grid;
-
-        grid-template-columns: 1fr auto;
-
-        align-items: end;
-
-        gap: 8vw;
-      }
-
-      .hero-description {
-        max-width: 650px;
-
-        color: #999;
-
-        line-height: 1.8;
-
-        font-size: 0.85rem;
-      }
-
-      .hero-mark {
-        font-size: 5rem;
-
-        font-weight: 900;
-
-        letter-spacing: -0.1em;
-
-        line-height: 0.7;
-      }
-
-      .hero-mark .x {
-        color: transparent;
-
-        -webkit-text-stroke: 1px #fff;
-      }
-
-
-      /* STATEMENT */
-
-      .statement {
-        min-height: 70vh;
-
-        display: grid;
-
-        grid-template-columns: 15% 85%;
-
-        align-items: center;
-      }
-
-      .statement-content {
-        max-width: 1000px;
-      }
-
-      .statement-large {
-        margin: 0;
-
-        font-size: clamp(4rem, 10vw, 11rem);
-
-        line-height: 0.8;
-
-        letter-spacing: -0.09em;
-
-        font-weight: 900;
-      }
-
-      .statement-large span {
-        color: transparent;
-
-        -webkit-text-stroke: 1px #fff;
-      }
-
-      .statement-small {
-        margin: 50px 0 0;
-
-        font-size: 0.7rem;
-
-        letter-spacing: 0.2em;
-
-        opacity: 0.45;
-      }
-
-
-      /* SECTION HEADING */
-
-      .section-heading {
-        display: grid;
-
-        grid-template-columns: 1fr 0.65fr;
-
-        gap: 8vw;
-
-        align-items: end;
-
-        margin-bottom: 7vw;
-      }
-
-      .section-heading h2 {
-        margin: 25px 0 0;
-
-        font-size: clamp(3rem, 7vw, 8rem);
-
-        line-height: 0.8;
-
-        letter-spacing: -0.08em;
-      }
-
-      .section-heading > p {
-        color: #888;
-
-        line-height: 1.8;
-
-        font-size: 0.8rem;
-
-        max-width: 500px;
-      }
-
-
-      /* CORE */
-
-      .core-visual {
-        min-height: 650px;
-
-        position: relative;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        margin-bottom: 7vw;
-
-        overflow: hidden;
-
-        border: 1px solid #222;
-      }
-
-      .core-ring {
-        position: absolute;
-
-        border: 1px solid #333;
-
-        border-radius: 50%;
-      }
-
-      .ring-one {
-        width: 250px;
-        height: 250px;
-      }
-
-      .ring-two {
-        width: 420px;
-        height: 420px;
-      }
-
-      .ring-three {
-        width: 600px;
-        height: 600px;
-      }
-
-      .core-center {
-        width: 130px;
-        height: 130px;
-
-        border: 1px solid #fff;
-
-        border-radius: 50%;
-
-        display: flex;
-
-        align-items: center;
-        justify-content: center;
-
-        flex-direction: column;
-
-        position: relative;
-
-        z-index: 5;
-
-        background: #050505;
-      }
-
-      .core-center span {
-        font-weight: 900;
-
-        letter-spacing: -0.05em;
-      }
-
-      .core-center small {
-        margin-top: 8px;
-
-        font-size: 0.5rem;
-
-        opacity: 0.4;
-
-        letter-spacing: 0.15em;
-      }
-
-      .orbit {
-        position: absolute;
-
-        padding: 10px 14px;
-
-        border: 1px solid #333;
-
-        background: #050505;
-
-        font-size: 0.55rem;
-
-        letter-spacing: 0.1em;
-
-        z-index: 6;
-      }
-
-      .orbit-one {
-        top: 18%;
-        left: 34%;
-      }
-
-      .orbit-two {
-        top: 25%;
-        right: 24%;
-      }
-
-      .orbit-three {
-        bottom: 27%;
-        right: 30%;
-      }
-
-      .orbit-four {
-        bottom: 18%;
-        left: 27%;
-      }
-
-      .orbit-five {
-        top: 45%;
-        left: 10%;
-      }
-
-      .orbit-six {
-        top: 48%;
-        right: 9%;
-      }
-
-      .interface-grid {
-        display: grid;
-
-        grid-template-columns: repeat(4, 1fr);
-
-        border-top: 1px solid #333;
-
-        border-left: 1px solid #333;
-      }
-
-      .interface-item {
-        min-height: 130px;
-
-        padding: 25px;
-
-        border-right: 1px solid #333;
-
-        border-bottom: 1px solid #333;
-
-        display: flex;
-
-        flex-direction: column;
-
-        justify-content: space-between;
-      }
-
-      .interface-item span {
-        font-size: 0.55rem;
-
-        opacity: 0.3;
-      }
-
-      .interface-item strong {
-        font-size: 0.8rem;
-      }
-
-
-      /* SYSTEMS */
-
-      .system-list {
-        display: grid;
-
-        grid-template-columns: repeat(2, 1fr);
-
-        gap: 1px;
-
-        background: #333;
-      }
-
-      .system-card {
-        min-height: 430px;
-
-        padding: 30px;
-
-        background: #050505;
-
-        display: flex;
-
-        flex-direction: column;
-
-        justify-content: space-between;
-      }
-
-      .system-top {
-        display: flex;
-
-        justify-content: space-between;
-
-        gap: 20px;
-      }
-
-      .system-number,
-      .system-tag {
-        font-size: 0.55rem;
-
-        letter-spacing: 0.1em;
-
-        opacity: 0.4;
-      }
-
-      .system-card h3 {
-        margin: 50px 0 25px;
-
-        font-size: clamp(2.5rem, 5vw, 5rem);
-
-        line-height: 0.8;
-
-        letter-spacing: -0.08em;
-      }
-
-      .system-card > p {
-        color: #888;
-
-        line-height: 1.7;
-
-        font-size: 0.75rem;
-
-        max-width: 550px;
-      }
-
-      .system-items {
-        display: flex;
-
-        flex-wrap: wrap;
-
-        gap: 6px;
-
-        margin-top: 30px;
-      }
-
-      .system-items span {
-        border: 1px solid #333;
-
-        padding: 7px 9px;
-
-        font-size: 0.5rem;
-      }
-
-
-      /* CAPABILITIES */
-
-      .capability-heading {
-        display: grid;
-
-        grid-template-columns: 1fr 0.65fr;
-
-        gap: 8vw;
-
-        align-items: end;
-
-        margin: 6vw 0;
-      }
-
-      .capability-heading h2 {
-        margin: 0;
-
-        font-size: clamp(4rem, 9vw, 10rem);
-
-        line-height: 0.78;
-
-        letter-spacing: -0.09em;
-      }
-
-      .capability-heading h2 span {
-        color: transparent;
-
-        -webkit-text-stroke: 1px #fff;
-      }
-
-      .capability-heading p {
-        color: #888;
-
-        line-height: 1.8;
-
-        font-size: 0.8rem;
-      }
-
-      .capability-cloud {
-        display: grid;
-
-        grid-template-columns: repeat(3, 1fr);
-
-        border-top: 1px solid #333;
-
-        border-left: 1px solid #333;
-      }
-
-      .capability {
-        min-height: 140px;
-
-        padding: 25px;
-
-        border-right: 1px solid #333;
-
-        border-bottom: 1px solid #333;
-
-        display: flex;
-
-        flex-direction: column;
-
-        justify-content: space-between;
-
-        font-size: 0.8rem;
-      }
-
-      .capability span {
-        font-size: 0.55rem;
-
-        opacity: 0.3;
-      }
-
-
-      /* QUESTION */
-
-      .relationship {
-        min-height: 75vh;
-
-        display: flex;
-
-        flex-direction: column;
-
-        justify-content: center;
-      }
-
-      .relationship-label {
-        font-size: 0.6rem;
-
-        letter-spacing: 0.15em;
-
-        opacity: 0.4;
-
-        margin-bottom: 8vh;
-      }
-
-      blockquote {
-        max-width: 1200px;
-
-        margin: 0;
-
-        font-size: clamp(2.5rem, 6vw, 7rem);
-
-        line-height: 0.95;
-
-        letter-spacing: -0.07em;
-      }
-
-      .relationship-footer {
-        margin-top: 8vh;
-
-        padding-top: 20px;
-
-        border-top: 1px solid #333;
-
-        display: flex;
-
-        justify-content: space-between;
-
-        font-size: 0.55rem;
-
-        opacity: 0.4;
-      }
-
-
-      /* DEVELOPMENT */
-
-      .lifecycle-grid {
-        display: grid;
-
-        grid-template-columns: repeat(5, 1fr);
-
-        border-top: 1px solid #333;
-
-        border-left: 1px solid #333;
-      }
-
-      .lifecycle-step {
-        min-height: 180px;
-
-        padding: 25px;
-
-        border-right: 1px solid #333;
-
-        border-bottom: 1px solid #333;
-
-        display: flex;
-
-        flex-direction: column;
-
-        justify-content: space-between;
-      }
-
-      .lifecycle-step span {
-        font-size: 0.55rem;
-
-        opacity: 0.3;
-      }
-
-      .lifecycle-step strong {
-        font-size: 0.7rem;
-
-        letter-spacing: 0.08em;
-      }
-
-
-      /* PRINCIPLES */
-
-      .principles {
-        display: grid;
-
-        grid-template-columns: 15% 85%;
-      }
-
-      .principles-list {
-        display: grid;
-
-        grid-template-columns: repeat(2, 1fr);
-
-        border-top: 1px solid #333;
-
-        border-left: 1px solid #333;
-      }
-
-      .principle {
-        min-height: 300px;
-
-        padding: 30px;
-
-        border-right: 1px solid #333;
-
-        border-bottom: 1px solid #333;
-
-        display: grid;
-
-        grid-template-columns: 50px 1fr;
-
-        gap: 25px;
-      }
-
-      .principle-number {
-        font-size: 0.55rem;
-
-        opacity: 0.3;
-      }
-
-      .principle h3 {
-        margin: 0;
-
-        font-size: 1rem;
-      }
-
-      .principle p {
-        color: #888;
-
-        line-height: 1.7;
-
-        font-size: 0.7rem;
-      }
-
-
-      /* ETHICS */
-
-      .ethics-layout {
-        display: grid;
-
-        grid-template-columns: 1fr 0.7fr;
-
-        gap: 8vw;
-
-        margin-top: 7vw;
-      }
-
-      .ethics h2 {
-        margin: 0;
-
-        font-size: clamp(4rem, 8vw, 9rem);
-
-        line-height: 0.78;
-
-        letter-spacing: -0.09em;
-      }
-
-      .ethics h2 span {
-        color: transparent;
-
-        -webkit-text-stroke: 1px #fff;
-      }
-
-      .ethics-copy > p {
-        color: #888;
-
-        line-height: 1.8;
-
-        font-size: 0.8rem;
-      }
-
-      .ethics-grid {
-        display: grid;
-
-        grid-template-columns: repeat(2, 1fr);
-
-        margin-top: 40px;
-
-        border-top: 1px solid #333;
-
-        border-left: 1px solid #333;
-      }
-
-      .ethics-grid span {
-        padding: 18px;
-
-        border-right: 1px solid #333;
-
-        border-bottom: 1px solid #333;
-
-        font-size: 0.55rem;
-
-        letter-spacing: 0.08em;
-      }
-
-
-      /* HUMAN */
-
-      .human {
-        min-height: 90vh;
-
-        display: grid;
-
-        grid-template-columns: 15% 85%;
-
-        align-items: center;
-
-        overflow: hidden;
-      }
-
-      .human-grid {
-        position: absolute;
-
-        inset: 0;
-
-        pointer-events: none;
-
-        opacity: 0.6;
-
-        background:
-          linear-gradient(
-            90deg,
-            transparent 49.9%,
-            #222 50%,
-            transparent 50.1%
-          );
-      }
-
-      .human-content {
-        position: relative;
-
-        z-index: 2;
-      }
-
-      .human-kicker {
-        font-size: 0.6rem;
-
-        letter-spacing: 0.15em;
-
-        opacity: 0.4;
-      }
-
-      .human h2 {
-        margin: 40px 0;
-
-        font-size: clamp(4rem, 9vw, 11rem);
-
-        line-height: 0.78;
-
-        letter-spacing: -0.09em;
-      }
-
-      .human h2 span {
-        color: transparent;
-
-        -webkit-text-stroke: 1px #fff;
-      }
-
-      .human-description {
-        max-width: 650px;
-
-        color: #888;
-
-        font-size: 0.85rem;
-
-        line-height: 1.8;
-      }
-
-
-      /* ECOSYSTEM */
-
-      .ecosystem-grid {
-        display: grid;
-
-        grid-template-columns: repeat(4, 1fr);
-
-        gap: 1px;
-
-        background: #333;
-      }
-
-      .ecosystem-card {
-        min-height: 260px;
-
-        background: #050505;
-
-        padding: 25px;
-
-        display: flex;
-
-        flex-direction: column;
-
-        justify-content: space-between;
-
-        transition:
-          background 0.25s ease;
-      }
-
-      .ecosystem-card:hover {
-        background: #0c0c0c;
-      }
-
-      .ecosystem-card span {
-        font-size: 0.55rem;
-
-        opacity: 0.3;
-      }
-
-      .ecosystem-card strong {
-        font-size: 1.5rem;
-
-        letter-spacing: -0.05em;
-      }
-
-      .ecosystem-card small {
-        font-size: 0.5rem;
-
-        opacity: 0.4;
-      }
-
-
-      /* FUTURE */
-
-      .future {
-        min-height: 90vh;
-
-        display: flex;
-
-        flex-direction: column;
-
-        justify-content: space-between;
-      }
-
-      .future-content {
-        max-width: 1100px;
-      }
-
-      .future h2 {
-        margin: 8vh 0;
-
-        font-size: clamp(4rem, 10vw, 12rem);
-
-        line-height: 0.78;
-
-        letter-spacing: -0.09em;
-      }
-
-      .future h2 span {
-        color: transparent;
-
-        -webkit-text-stroke: 1px #fff;
-      }
-
-      .future-content p {
-        max-width: 650px;
-
-        color: #888;
-
-        line-height: 1.8;
-
-        font-size: 0.85rem;
-      }
-
-      .future-line {
-        display: flex;
-
-        align-items: center;
-
-        gap: 20px;
-
-        flex-wrap: wrap;
-
-        padding-top: 25px;
-
-        border-top: 1px solid #333;
-
-        font-size: 0.55rem;
-
-        letter-spacing: 0.1em;
-
-        opacity: 0.45;
-      }
-
-      .future-line i {
-        width: 30px;
-
-        height: 1px;
-
-        background: #555;
-      }
-
-
-      /* CTA */
-
-      .cta {
-        min-height: 70vh;
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: center;
-
-        justify-content: center;
-
-        text-align: center;
-      }
-
-      .cta-eyebrow {
-        font-size: 0.6rem;
-
-        letter-spacing: 0.15em;
-
-        opacity: 0.4;
-      }
-
-      .cta h2 {
-        margin: 60px 0;
-
-        font-size: clamp(4rem, 10vw, 12rem);
-
-        line-height: 0.78;
-
-        letter-spacing: -0.09em;
-      }
-
-      .cta h2 span {
-        color: transparent;
-
-        -webkit-text-stroke: 1px #fff;
-      }
-
-      .cta-actions {
-        display: flex;
-
-        gap: 10px;
-
-        flex-wrap: wrap;
-
-        justify-content: center;
-      }
-
-      .button {
-        border: 1px solid #444;
-
-        padding: 16px 24px;
-
-        font-size: 0.6rem;
-
-        letter-spacing: 0.08em;
-
-        transition:
-          background 0.2s ease,
-          color 0.2s ease;
-      }
-
-      .button:hover,
-      .button.primary {
-        background: #fff;
-
-        color: #000;
-      }
-
-      .button span {
-        margin-left: 15px;
-      }
-
-
-      /* FOOTER */
-
-      footer {
-        display: flex;
-
-        justify-content: space-between;
-
-        padding: 25px 5vw;
-
-        font-size: 0.55rem;
-
-        letter-spacing: 0.08em;
-
-        opacity: 0.35;
-      }
-
-
-      /* MOBILE */
-
-      @media (max-width: 800px) {
-
-        nav {
-          display: none;
-        }
-
-        .status {
-          display: none;
-        }
-
-        .site-header {
-          height: 60px;
-        }
-
-        .hero {
-          min-height: 80vh;
-        }
-
-        .hero-title {
-          font-size: 18vw;
-        }
-
-        .hero-bottom,
-        .section-heading,
-        .capability-heading,
-        .ethics-layout {
-          grid-template-columns: 1fr;
-        }
-
-        .hero-bottom {
-          gap: 30px;
-        }
-
-        .hero-mark {
-          font-size: 3rem;
-        }
-
-        .statement,
-        .principles {
-          grid-template-columns: 1fr;
-
-          gap: 40px;
-        }
-
-        .statement-large {
-          font-size: 16vw;
-        }
-
-        .interface-grid,
-        .capability-cloud,
-        .system-list,
-        .ecosystem-grid,
-        .lifecycle-grid,
-        .principles-list {
-          grid-template-columns: 1fr;
-        }
-
-        .core-visual {
-          min-height: 500px;
-        }
-
-        .ring-three {
-          width: 450px;
-          height: 450px;
-        }
-
-        .orbit {
-          display: none;
-        }
-
-        .human {
-          grid-template-columns: 1fr;
-
-          min-height: 80vh;
-        }
-
-        .human h2,
-        .future h2,
-        .cta h2 {
-          font-size: 17vw;
-        }
-
-        footer {
-          flex-direction: column;
-
-          gap: 10px;
-        }
-
-      }
-
-    </style>
-
+        <div class="future-line">
+          <span>MODEL</span>
+          <i></i>
+          <span>MEMORY</span>
+          <i></i>
+          <span>TOOLS</span>
+          <i></i>
+          <span>DEVICES</span>
+          <i></i>
+          <span>PEOPLE</span>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cta section reveal">
+        <div class="cta-eyebrow">
+          BARKLY LABS // CYN-X CORE
+        </div>
+
+        <h2>
+          BUILD THE<br />
+          <span>INTELLIGENCE LAYER.</span>
+        </h2>
+
+        <div class="cta-actions">
+          <a href="/docs" class="button primary">
+            READ THE DOCUMENTATION
+            <span>→</span>
+          </a>
+
+          <a href="/projects" class="button secondary">
+            EXPLORE CYN-X
+            <span>↗</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <strong>BARKLY LABS</strong>
+        <span>CYN-X // CORE</span>
+      </div>
+
+      <div class="footer-center">
+        INTELLIGENCE SHOULD BE CONNECTABLE.
+      </div>
+
+      <div class="footer-meta">
+        <span>DETROIT, MICHIGAN</span>
+        <span>© {year}</span>
+      </div>
+    </footer>
   </body>
 </html>
+
+<style>
+  :root {
+    --bg: #050505;
+    --surface: #0b0b0b;
+    --surface-2: #101010;
+    --line: rgba(255, 255, 255, 0.12);
+    --line-strong: rgba(255, 255, 255, 0.25);
+    --text: #f4f4f4;
+    --muted: #8c8c8c;
+    --max: 1400px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--bg);
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .section {
+    width: min(calc(100% - 48px), var(--max));
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .site-header {
+    position: fixed;
+    z-index: 50;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    background: rgba(5, 5, 5, 0.8);
+    backdrop-filter: blur(14px);
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  .site-header nav {
+    display: flex;
+    gap: 25px;
+  }
+
+  .site-header nav a,
+  .status {
+    font-family: monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .site-header nav a:hover {
+    color: var(--text);
+  }
+
+  .status {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px #fff;
+  }
+
+  /* HERO */
+
+  .hero {
+    min-height: 100vh;
+    padding-top: 190px;
+    padding-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.16;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: linear-gradient(to bottom, #000, transparent);
+  }
+
+  .eyebrow,
+  .section-number {
+    font-family: monospace;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+
+  .hero-title {
+    position: relative;
+    z-index: 1;
+    margin: 60px 0;
+    font-size: clamp(4rem, 10vw, 10rem);
+    line-height: 0.82;
+    letter-spacing: -0.085em;
+    font-weight: 900;
+  }
+
+  .hero-title span {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: end;
+  }
+
+  .hero-description {
+    max-width: 560px;
+    color: #aaa;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .hero-mark {
+    justify-self: end;
+    font-size: clamp(6rem, 13vw, 13rem);
+    font-weight: 900;
+    line-height: 0.7;
+    letter-spacing: -0.1em;
+  }
+
+  .hero-mark .x {
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+  }
+
+  /* STATEMENT */
+
+  .statement {
+    min-height: 80vh;
+    padding: 150px 0;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .statement-content {
+    padding-left: 20%;
+  }
+
+  .statement-large {
+    margin: 0;
+    font-size: clamp(4rem, 9vw, 9rem);
+    font-weight: 900;
+    line-height: 0.82;
+    letter-spacing: -0.08em;
+  }
+
+  .statement-large span {
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+  }
+
+  .statement-small {
+    margin: 35px 0 0;
+    font-family: monospace;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+  }
+
+  /* HEADINGS */
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-heading h2 {
+    margin: 20px 0 0;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+  }
+
+  .section-heading p {
+    max-width: 500px;
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ARCHITECTURE */
+
+  .architecture {
+    padding: 150px 0;
+  }
+
+  .architecture-diagram {
+    position: relative;
+    width: min(900px, 90vw);
+    aspect-ratio: 1.7;
+    margin: 100px auto 30px;
+  }
+
+  .architecture-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 220px;
+    height: 220px;
+    transform: translate(-50%, -50%);
+    border: 1px solid #fff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #050505;
+    z-index: 3;
+  }
+
+  .architecture-core::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+  }
+
+  .core-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .core-inner strong {
+    font-size: 34px;
+    letter-spacing: -0.06em;
+  }
+
+  .core-inner span {
+    margin-top: 7px;
+    font-family: monospace;
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+  }
+
+  .architecture-node {
+    position: absolute;
+    z-index: 4;
+    min-width: 105px;
+    padding: 12px 15px;
+    border: 1px solid var(--line-strong);
+    background: var(--bg);
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .architecture-node span {
+    display: block;
+    margin-bottom: 6px;
+    color: #555;
+    font-size: 8px;
+  }
+
+  .input-node {
+    left: 2%;
+    top: 20%;
+  }
+
+  .context-node {
+    left: 2%;
+    bottom: 20%;
+  }
+
+  .tools-node {
+    right: 2%;
+    top: 20%;
+  }
+
+  .memory-node {
+    right: 2%;
+    bottom: 20%;
+  }
+
+  .output-node {
+    left: 50%;
+    bottom: -3%;
+    transform: translateX(-50%);
+  }
+
+  .architecture-line {
+    position: absolute;
+    height: 1px;
+    background: var(--line-strong);
+    z-index: 1;
+    transform-origin: left center;
+  }
+
+  .line-one {
+    left: 14%;
+    top: 32%;
+    width: 32%;
+  }
+
+  .line-two {
+    left: 14%;
+    bottom: 32%;
+    width: 32%;
+  }
+
+  .line-three {
+    left: 54%;
+    top: 32%;
+    width: 32%;
+  }
+
+  .line-four {
+    left: 54%;
+    bottom: 32%;
+    width: 32%;
+  }
+
+  .architecture-caption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-family: monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+
+  .architecture-caption i {
+    width: 80px;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* LAYERS */
+
+  .layers {
+    padding: 150px 0;
+  }
+
+  .layer-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-left: 1px solid var(--line);
+    border-top: 1px solid var(--line);
+  }
+
+  .layer-card {
+    min-height: 450px;
+    padding: 35px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    transition: background 0.25s ease;
+  }
+
+  .layer-card:hover {
+    background: var(--surface-2);
+  }
+
+  .layer-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    font-family: monospace;
+    font-size: 9px;
+  }
+
+  .layer-number {
+    color: #666;
+  }
+
+  .layer-tag {
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .layer-card h3 {
+    margin: 100px 0 20px;
+    font-size: clamp(2rem, 4vw, 4rem);
+    letter-spacing: -0.06em;
+  }
+
+  .layer-card p {
+    max-width: 470px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .layer-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 35px;
+  }
+
+  .layer-items span {
+    padding: 7px 9px;
+    border: 1px solid var(--line);
+    font-family: monospace;
+    color: #999;
+    font-size: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* SUBSYSTEMS */
+
+  .subsystems {
+    padding: 150px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .subsystem-heading {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    margin-top: 70px;
+  }
+
+  .subsystem-heading h2 {
+    margin: 0;
+    font-size: clamp(4rem, 8vw, 8rem);
+    line-height: 0.8;
+    letter-spacing: -0.08em;
+  }
+
+  .subsystem-heading h2 span {
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+  }
+
+  .subsystem-heading p {
+    max-width: 500px;
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .subsystem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 90px;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .subsystem {
+    min-height: 150px;
+    padding: 25px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .subsystem span {
+    font-family: monospace;
+    color: #555;
+    font-size: 8px;
+  }
+
+  .subsystem strong {
+    font-size: 14px;
+    letter-spacing: 0.03em;
+  }
+
+  /* SIGNALS */
+
+  .signals {
+    padding: 150px 0;
+  }
+
+  .signal-layout {
+    display: grid;
+    grid-template-columns: 1fr 240px 1fr;
+    gap: 70px;
+    align-items: center;
+    margin-top: 100px;
+  }
+
+  .signal-label {
+    margin-bottom: 20px;
+    font-family: monospace;
+    color: #666;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+  }
+
+  .signal-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 17px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+
+  .signal-item span {
+    width: 20px;
+    font-family: monospace;
+    color: #555;
+    font-size: 8px;
+  }
+
+  .signal-core {
+    width: 220px;
+    height: 220px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+  }
+
+  .signal-core-ring {
+    position: absolute;
+    inset: 18px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+  }
+
+  .signal-core-center {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .signal-core-center strong {
+    font-size: 25px;
+  }
+
+  .signal-core-center small {
+    margin-top: 6px;
+    font-family: monospace;
+    color: var(--muted);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+  }
+
+  /* FLOW */
+
+  .flow {
+    padding: 150px 0;
+  }
+
+  .flow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 80px;
+    border-left: 1px solid var(--line);
+    border-top: 1px solid var(--line);
+  }
+
+  .flow-step {
+    min-height: 170px;
+    padding: 25px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .flow-step span {
+    font-family: monospace;
+    color: #555;
+    font-size: 9px;
+  }
+
+  .flow-step strong {
+    font-size: 15px;
+    letter-spacing: 0.04em;
+  }
+
+  /* MEMORY */
+
+  .memory {
+    padding: 150px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .memory-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    margin-top: 80px;
+  }
+
+  .memory-layout h2 {
+    margin: 0;
+    font-size: clamp(4rem, 8vw, 8rem);
+    line-height: 0.8;
+    letter-spacing: -0.08em;
+  }
+
+  .memory-layout h2 span {
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+  }
+
+  .memory-copy {
+    align-self: end;
+  }
+
+  .memory-copy p {
+    max-width: 500px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .memory-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 45px;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .memory-grid span {
+    padding: 15px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    font-family: monospace;
+    color: #888;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  /* LOCAL */
+
+  .local {
+    padding: 150px 0;
+  }
+
+  .local-content {
+    margin-top: 90px;
+    max-width: 900px;
+  }
+
+  .local-label {
+    display: flex;
+    gap: 15px;
+    font-family: monospace;
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+  }
+
+  .local-label span {
+    color: #555;
+  }
+
+  .local h2 {
+    margin: 45px 0;
+    font-size: clamp(4rem, 9vw, 9rem);
+    line-height: 0.8;
+    letter-spacing: -0.08em;
+  }
+
+  .local h2 span {
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+  }
+
+  .local-content > p {
+    max-width: 600px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .local-specs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 90px;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .local-specs div {
+    padding: 25px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .local-specs span,
+  .local-specs strong {
+    display: block;
+  }
+
+  .local-specs span {
+    margin-bottom: 18px;
+    font-family: monospace;
+    color: #555;
+    font-size: 8px;
+  }
+
+  .local-specs strong {
+    font-size: 11px;
+  }
+
+  /* PRINCIPLES */
+
+  .principles {
+    padding: 150px 0;
+  }
+
+  .principles-list {
+    margin-top: 70px;
+  }
+
+  .principle {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 50px;
+    padding: 45px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .principle:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .principle-number {
+    font-family: monospace;
+    color: #555;
+    font-size: 11px;
+  }
+
+  .principle h3 {
+    margin: 0 0 15px;
+    font-size: clamp(1.5rem, 3vw, 3rem);
+    letter-spacing: -0.04em;
+  }
+
+  .principle p {
+    max-width: 650px;
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* RELATIONSHIP */
+
+  .relationship {
+    min-height: 70vh;
+    padding: 150px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .relationship-label {
+    font-family: monospace;
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+  }
+
+  .relationship blockquote {
+    max-width: 1100px;
+    margin: 80px 0;
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+    font-weight: 800;
+  }
+
+  .relationship-footer {
+    display: flex;
+    justify-content: space-between;
+    font-family: monospace;
+    color: #555;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  /* FUTURE */
+
+  .future {
+    padding: 180px 0;
+  }
+
+  .future-content {
+    margin-top: 100px;
+  }
+
+  .future h2 {
+    margin: 0;
+    font-size: clamp(4rem, 9vw, 9rem);
+    line-height: 0.8;
+    letter-spacing: -0.08em;
+  }
+
+  .future h2 span {
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+  }
+
+  .future p {
+    max-width: 600px;
+    margin: 60px 0 0;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .future-line {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 100px;
+    font-family: monospace;
+    color: #666;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  .future-line i {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* CTA */
+
+  .cta {
+    padding: 150px 0;
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+
+  .cta-eyebrow {
+    font-family: monospace;
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+  }
+
+  .cta h2 {
+    margin: 50px 0 70px;
+    font-size: clamp(4rem, 9vw, 9rem);
+    line-height: 0.8;
+    letter-spacing: -0.08em;
+  }
+
+  .cta h2 span {
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 16px 20px;
+    border: 1px solid var(--line-strong);
+    font-family: monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .button.primary {
+    background: #fff;
+    color: #000;
+  }
+
+  .button.primary:hover {
+    background: #ddd;
+  }
+
+  .button.secondary:hover {
+    background: #fff;
+    color: #000;
+  }
+
+  /* FOOTER */
+
+  .site-footer {
+    width: 100%;
+    padding: 30px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    border-top: 1px solid var(--line);
+    font-family: monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: #666;
+  }
+
+  .footer-brand strong,
+  .footer-brand span {
+    display: block;
+  }
+
+  .footer-brand strong {
+    color: #ddd;
+    margin-bottom: 6px;
+  }
+
+  .footer-center {
+    text-align: center;
+    align-self: center;
+  }
+
+  .footer-meta {
+    justify-self: end;
+    display: flex;
+    gap: 25px;
+  }
+
+  /* REVEAL */
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(25px);
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 850px) {
+    .site-header {
+      grid-template-columns: 1fr auto;
+    }
+
+    .site-header nav {
+      display: none;
+    }
+
+    .hero-bottom,
+    .section-heading,
+    .subsystem-heading,
+    .memory-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-mark {
+      justify-self: start;
+    }
+
+    .statement-content {
+      padding-left: 0;
+    }
+
+    .layer-list {
+      grid-template-columns: 1fr;
+    }
+
+    .subsystem-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .signal-layout {
+      grid-template-columns: 1fr;
+      gap: 50px;
+    }
+
+    .signal-core {
+      margin: 20px auto;
+    }
+
+    .flow-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .local-specs {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .site-footer {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-center {
+      text-align: left;
+    }
+
+    .footer-meta {
+      justify-self: start;
+    }
+
+    .architecture-diagram {
+      width: 100%;
+    }
+
+    .architecture-node {
+      min-width: 75px;
+      font-size: 8px;
+    }
+
+    .architecture-core {
+      width: 150px;
+      height: 150px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .section {
+      width: min(calc(100% - 30px), var(--max));
+    }
+
+    .hero {
+      padding-top: 150px;
+    }
+
+    .hero-title {
+      font-size: clamp(3.5rem, 17vw, 6rem);
+    }
+
+    .statement,
+    .architecture,
+    .layers,
+    .subsystems,
+    .signals,
+    .flow,
+    .memory,
+    .local,
+    .principles,
+    .future,
+    .cta {
+      padding: 100px 0;
+    }
+
+    .subsystem-grid,
+    .flow-grid,
+    .local-specs {
+      grid-template-columns: 1fr;
+    }
+
+    .principle {
+      grid-template-columns: 45px 1fr;
+      gap: 20px;
+    }
+
+    .relationship {
+      min-height: 60vh;
+    }
+
+    .relationship blockquote {
+      font-size: 2.7rem;
+    }
+
+    .future-line {
+      flex-wrap: wrap;
+    }
+
+    .future-line i {
+      min-width: 30px;
+    }
+
+    .architecture-diagram {
+      aspect-ratio: 1;
+      margin-top: 60px;
+    }
+
+    .architecture-core {
+      width: 125px;
+      height: 125px;
+    }
+
+    .core-inner strong {
+      font-size: 24px;
+    }
+
+    .input-node {
+      left: 0;
+      top: 10%;
+    }
+
+    .context-node {
+      left: 0;
+      bottom: 10%;
+    }
+
+    .tools-node {
+      right: 0;
+      top: 10%;
+    }
+
+    .memory-node {
+      right: 0;
+      bottom: 10%;
+    }
+
+    .output-node {
+      bottom: 0;
+    }
+  }
+</style>
+
+<script>
+  const revealElements = document.querySelectorAll(".reveal");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    },
+    {
+      threshold: 0.08,
+    }
+  );
+
+  revealElements.forEach((element) => observer.observe(element));
+</script>
