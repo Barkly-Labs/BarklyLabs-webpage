@@ -1,0 +1,2181 @@
+---
+const sections = [
+  ["01", "Scope and Objectives"],
+  ["02", "Principles"],
+  ["03", "Definitions"],
+  ["04", "System and Stakeholder Context"],
+  ["05", "Human Needs and Participation"],
+  ["06", "Accessibility and Disability Inclusion"],
+  ["07", "Cognitive Load and Usability"],
+  ["08", "Human Autonomy and Control"],
+  ["09", "Safety and Risk"],
+  ["10", "Transparency and Explainability"],
+  ["11", "Privacy and Data Governance"],
+  ["12", "Security"],
+  ["13", "Non-Manipulative Interaction"],
+  ["14", "Personalization and Memory"],
+  ["15", "Human-AI Communication"],
+  ["16", "Fairness and Impact Assessment"],
+  ["17", "Open Development and Interoperability"],
+  ["18", "Reproducibility and Evaluation"],
+  ["19", "Human Testing and Accessibility Testing"],
+  ["20", "Vulnerable-Context Safeguards"],
+  ["21", "Environmental and Compute Responsibility"],
+  ["22", "Organizational Governance"],
+  ["23", "Pre-Deployment Review"],
+  ["24", "Deployment and Monitoring"],
+  ["25", "Incident Response"],
+  ["26", "Change Management"],
+  ["27", "Documentation and Public Transparency"],
+  ["28", "Conformance Levels"],
+  ["29", "Audit and Evidence"],
+  ["30", "Community Governance"],
+  ["31", "Reference Implementation"],
+  ["32", "Conformance Declaration"],
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>PAW-HC 0.1 — Barkly Labs</title>
+
+    <meta
+      name="description"
+      content="PAW-HC 0.1 — People Are Worth Designing For. Human-Centered AI Engineering Standard."
+    />
+
+    <style>
+      :global(*) {
+        box-sizing: border-box;
+      }
+
+      :global(html) {
+        scroll-behavior: smooth;
+      }
+
+      :global(body) {
+        margin: 0;
+        background: #090909;
+        color: #e9e9e9;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.65;
+      }
+
+      :global(a) {
+        color: inherit;
+      }
+
+      .page {
+        min-height: 100vh;
+      }
+
+      /* =========================================================
+         HERO
+         ========================================================= */
+
+      .hero {
+        padding: 7rem 2rem 5rem;
+        border-bottom: 1px solid #292929;
+        background:
+          radial-gradient(
+            circle at 75% 20%,
+            rgba(255, 255, 255, 0.055),
+            transparent 35%
+          ),
+          #090909;
+      }
+
+      .hero-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 1.5rem;
+        color: #999;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 28px;
+        height: 1px;
+        background: #777;
+      }
+
+      .hero h1 {
+        max-width: 1000px;
+        margin: 0;
+        font-size: clamp(3rem, 8vw, 7rem);
+        line-height: 0.92;
+        letter-spacing: -0.065em;
+        font-weight: 800;
+      }
+
+      .hero h1 span {
+        display: block;
+        color: #777;
+      }
+
+      .hero-subtitle {
+        max-width: 780px;
+        margin: 2rem 0 0;
+        color: #b7b7b7;
+        font-size: clamp(1.1rem, 2vw, 1.35rem);
+      }
+
+      .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-top: 2rem;
+      }
+
+      .meta-chip {
+        padding: 0.45rem 0.7rem;
+        border: 1px solid #303030;
+        background: #111;
+        color: #aaa;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .meta-chip.strong {
+        color: #eee;
+        border-color: #555;
+      }
+
+      /* =========================================================
+         DOCUMENT NAV
+         ========================================================= */
+
+      .document-shell {
+        display: grid;
+        grid-template-columns: 250px minmax(0, 1fr);
+        gap: 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 4rem 2rem 8rem;
+      }
+
+      .toc {
+        position: sticky;
+        top: 2rem;
+        align-self: start;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+        padding-right: 1rem;
+      }
+
+      .toc-label {
+        margin-bottom: 1rem;
+        color: #666;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .toc a {
+        display: flex;
+        gap: 0.7rem;
+        padding: 0.35rem 0;
+        color: #777;
+        text-decoration: none;
+        font-size: 0.78rem;
+        line-height: 1.35;
+      }
+
+      .toc a:hover {
+        color: #eee;
+      }
+
+      .toc-number {
+        min-width: 24px;
+        color: #555;
+        font-family: monospace;
+      }
+
+      /* =========================================================
+         DOCUMENT
+         ========================================================= */
+
+      .document {
+        min-width: 0;
+      }
+
+      .document-intro {
+        padding: 2rem;
+        margin-bottom: 5rem;
+        border: 1px solid #292929;
+        background: #0d0d0d;
+      }
+
+      .document-intro h2 {
+        margin: 0 0 1rem;
+        font-size: 1rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .document-intro p {
+        max-width: 850px;
+        margin: 0;
+        color: #aaa;
+      }
+
+      .warning {
+        margin-top: 1.5rem;
+        padding: 1rem 1.2rem;
+        border-left: 2px solid #777;
+        background: #121212;
+        color: #999;
+        font-size: 0.9rem;
+      }
+
+      /* =========================================================
+         SECTIONS
+         ========================================================= */
+
+      .standard-section {
+        scroll-margin-top: 2rem;
+        margin-bottom: 6rem;
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: 70px minmax(0, 1fr);
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+      }
+
+      .section-number {
+        color: #555;
+        font-family: monospace;
+        font-size: 1rem;
+        padding-top: 0.45rem;
+      }
+
+      .section-kicker {
+        display: block;
+        margin-bottom: 0.4rem;
+        color: #666;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .section-heading h2 {
+        margin: 0;
+        font-size: clamp(1.8rem, 4vw, 3.2rem);
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .section-rule {
+        width: 100%;
+        height: 1px;
+        margin: 0 0 2rem 70px;
+        background: #252525;
+      }
+
+      .section-body {
+        padding-left: 70px;
+      }
+
+      .section-body > p {
+        max-width: 850px;
+        color: #aaa;
+      }
+
+      /* =========================================================
+         REQUIREMENTS
+         ========================================================= */
+
+      .requirement {
+        margin: 1.25rem 0;
+        padding: 1.2rem 1.4rem;
+        border: 1px solid #292929;
+        background: #0d0d0d;
+      }
+
+      .requirement:hover {
+        border-color: #414141;
+      }
+
+      .requirement-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.8rem;
+        margin-bottom: 0.45rem;
+      }
+
+      .requirement-id {
+        color: #666;
+        font-family: monospace;
+        font-size: 0.78rem;
+      }
+
+      .requirement-title {
+        color: #ddd;
+        font-weight: 700;
+      }
+
+      .requirement p {
+        margin: 0;
+        color: #aaa;
+      }
+
+      .keyword {
+        color: #eee;
+        font-family: monospace;
+        font-size: 0.85em;
+      }
+
+      /* =========================================================
+         PRINCIPLES
+         ========================================================= */
+
+      .principles {
+        display: grid;
+        gap: 1px;
+        border: 1px solid #292929;
+        background: #292929;
+      }
+
+      .principle {
+        padding: 1.3rem 1.5rem;
+        background: #0d0d0d;
+      }
+
+      .principle strong {
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #eee;
+      }
+
+      .principle span {
+        color: #999;
+      }
+
+      /* =========================================================
+         DEFINITIONS
+         ========================================================= */
+
+      .definition-list {
+        display: grid;
+        border-top: 1px solid #292929;
+      }
+
+      .definition {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 2rem;
+        padding: 1.1rem 0;
+        border-bottom: 1px solid #292929;
+      }
+
+      .definition dt {
+        color: #ddd;
+        font-weight: 700;
+      }
+
+      .definition dd {
+        margin: 0;
+        color: #999;
+      }
+
+      /* =========================================================
+         TABLES
+         ========================================================= */
+
+      .table-wrap {
+        overflow-x: auto;
+        margin: 1.5rem 0;
+        border: 1px solid #292929;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 650px;
+      }
+
+      th,
+      td {
+        padding: 0.9rem 1rem;
+        border-bottom: 1px solid #292929;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: #111;
+        color: #ddd;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      td {
+        color: #999;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      /* =========================================================
+         CHECKLIST
+         ========================================================= */
+
+      .checklist {
+        display: grid;
+        gap: 0.55rem;
+        margin: 1.5rem 0;
+      }
+
+      .check {
+        display: flex;
+        gap: 0.8rem;
+        align-items: flex-start;
+        padding: 0.75rem 1rem;
+        border: 1px solid #292929;
+        background: #0d0d0d;
+        color: #aaa;
+      }
+
+      .check::before {
+        content: "□";
+        color: #777;
+        font-family: monospace;
+      }
+
+      /* =========================================================
+         DECLARATION
+         ========================================================= */
+
+      .declaration {
+        padding: 2rem;
+        border: 1px solid #383838;
+        background: #0d0d0d;
+      }
+
+      .declaration-label {
+        margin-bottom: 1.5rem;
+        color: #666;
+        font-family: monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .declaration-line {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 1rem;
+        min-height: 2.4rem;
+        border-bottom: 1px dotted #333;
+        margin-bottom: 0.8rem;
+      }
+
+      .declaration-line span:first-child {
+        color: #aaa;
+      }
+
+      .declaration-line span:last-child {
+        color: #555;
+      }
+
+      /* =========================================================
+         FOOTER
+         ========================================================= */
+
+      .document-footer {
+        margin-top: 7rem;
+        padding-top: 2rem;
+        border-top: 1px solid #292929;
+        color: #666;
+        font-size: 0.85rem;
+      }
+
+      /* =========================================================
+         MOBILE
+         ========================================================= */
+
+      @media (max-width: 900px) {
+        .document-shell {
+          display: block;
+          padding-top: 2rem;
+        }
+
+        .toc {
+          position: relative;
+          top: auto;
+          max-height: none;
+          margin-bottom: 4rem;
+          padding: 1rem;
+          border: 1px solid #292929;
+          background: #0d0d0d;
+        }
+
+        .toc a {
+          display: inline-flex;
+          margin-right: 1rem;
+        }
+
+        .section-heading {
+          grid-template-columns: 45px minmax(0, 1fr);
+        }
+
+        .section-rule,
+        .section-body {
+          margin-left: 45px;
+          padding-left: 0;
+        }
+
+        .definition {
+          grid-template-columns: 1fr;
+          gap: 0.4rem;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .hero {
+          padding: 5rem 1.25rem 3rem;
+        }
+
+        .document-shell {
+          padding-left: 1.25rem;
+          padding-right: 1.25rem;
+        }
+
+        .section-heading {
+          grid-template-columns: 1fr;
+          gap: 0.25rem;
+        }
+
+        .section-number {
+          padding-top: 0;
+        }
+
+        .section-rule,
+        .section-body {
+          margin-left: 0;
+        }
+
+        .hero h1 {
+          font-size: 3.4rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="page">
+
+      <!-- =====================================================
+           HERO
+           ===================================================== -->
+
+      <header class="hero">
+        <div class="hero-inner">
+
+          <div class="eyebrow">
+            Barkly Labs / Standards
+          </div>
+
+          <h1>
+            PAW-HC 0.1
+            <span>People Are Worth Designing For.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Human-Centered AI Engineering Standard.
+            An open engineering specification for designing AI systems
+            around human capability, autonomy, accessibility, safety,
+            privacy, transparency, and meaningful participation.
+          </p>
+
+          <div class="hero-meta">
+            <div class="meta-chip strong">PUBLIC DRAFT</div>
+            <div class="meta-chip">VERSION 0.1</div>
+            <div class="meta-chip">SEPTEMBER 2026</div>
+            <div class="meta-chip">OPEN COMMUNITY SPECIFICATION</div>
+          </div>
+
+        </div>
+      </header>
+
+
+      <!-- =====================================================
+           DOCUMENT
+           ===================================================== -->
+
+      <div class="document-shell">
+
+        <!-- TABLE OF CONTENTS -->
+
+        <aside class="toc">
+
+          <div class="toc-label">
+            Contents
+          </div>
+
+          {
+            sections.map(([number, title]) => (
+              <a href={`#section-${number}`}>
+                <span class="toc-number">{number}</span>
+                <span>{title}</span>
+              </a>
+            ))
+          }
+
+        </aside>
+
+
+        <!-- MAIN DOCUMENT -->
+
+        <article class="document">
+
+          <!-- STATUS -->
+
+          <section class="document-intro">
+
+            <h2>Document Status</h2>
+
+            <p>
+              PAW-HC 0.1 is an experimental public draft intended
+              for review, implementation, criticism, and revision.
+              It is not issued by ISO, IEC, NIST, W3C, or another
+              standards body.
+            </p>
+
+            <div class="warning">
+              PAW-HC conformance claims MUST be supported by
+              documented evidence. Following PAW-HC does not imply
+              ISO, IEC, NIST, W3C, regulatory, or third-party
+              certification.
+            </div>
+
+          </section>
+
+
+          <!-- ===================================================
+               01
+               =================================================== -->
+
+          <section id="section-01" class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">01</div>
+
+              <div>
+                <span class="section-kicker">Foundation</span>
+                <h2>Scope and Objectives</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <p>
+                PAW-HC applies to AI systems, AI-enabled applications,
+                agents, assistants, models, interfaces, and services
+                where people meaningfully interact with or are affected
+                by the system.
+              </p>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-001</span>
+                  <span class="requirement-title">
+                    Human-centered objective
+                  </span>
+                </div>
+
+                <p>
+                  The system owner <span class="keyword">MUST</span>
+                  define the human goals the system is intended to
+                  support and the people who may be affected by it.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-002</span>
+                  <span class="requirement-title">
+                    Lifecycle coverage
+                  </span>
+                </div>
+
+                <p>
+                  Human-centered requirements
+                  <span class="keyword">MUST</span> be considered
+                  during design, development, testing, deployment,
+                  monitoring, and retirement.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-003</span>
+                  <span class="requirement-title">
+                    Evidence
+                  </span>
+                </div>
+
+                <p>
+                  Claims about human-centered performance
+                  <span class="keyword">MUST</span> be supported
+                  by documented evidence, testing, or traceable
+                  design rationale.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-004</span>
+                  <span class="requirement-title">
+                    Known limitations
+                  </span>
+                </div>
+
+                <p>
+                  Material limitations, unresolved risks, and
+                  populations for which the system has not been
+                  adequately evaluated <span class="keyword">MUST</span>
+                  be documented.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               02 PRINCIPLES
+               =================================================== -->
+
+          <section id="section-02" class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">02</div>
+
+              <div>
+                <span class="section-kicker">Foundation</span>
+                <h2>Principles</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="principles">
+
+                <div class="principle">
+                  <strong>Human capability</strong>
+                  <span>
+                    AI should increase people's ability to understand,
+                    create, decide, communicate, and act.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Human autonomy</strong>
+                  <span>
+                    Users should retain meaningful control over
+                    consequential actions.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Accessibility</strong>
+                  <span>
+                    Disability and access needs are engineering
+                    requirements, not optional polish.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Safety</strong>
+                  <span>
+                    Systems should fail predictably and avoid
+                    creating unnecessary harm.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Transparency</strong>
+                  <span>
+                    Users and affected stakeholders should be able
+                    to understand relevant system behavior and
+                    limitations.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Privacy</strong>
+                  <span>
+                    Data collection and retention should be limited
+                    to legitimate purposes.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Non-manipulation</strong>
+                  <span>
+                    Systems should not optimize for coercion,
+                    dependency, or compulsive engagement.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Participation</strong>
+                  <span>
+                    People affected by the system should have
+                    mechanisms to influence its design and correction.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Openness</strong>
+                  <span>
+                    Where practical and safe, implementation,
+                    evaluation, interfaces, and governance should
+                    be inspectable and reusable.
+                  </span>
+                </div>
+
+                <div class="principle">
+                  <strong>Evidence over branding</strong>
+                  <span>
+                    A claim of human-centeredness requires evidence.
+                  </span>
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               03 DEFINITIONS
+               =================================================== -->
+
+          <section id="section-03" class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">03</div>
+
+              <div>
+                <span class="section-kicker">Vocabulary</span>
+                <h2>Definitions</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <dl class="definition-list">
+
+                <div class="definition">
+                  <dt>Affected person</dt>
+                  <dd>
+                    A person whose interests, rights, opportunities,
+                    access, safety, or wellbeing may be influenced
+                    by the system.
+                  </dd>
+                </div>
+
+                <div class="definition">
+                  <dt>Human-centered AI</dt>
+                  <dd>
+                    AI designed and evaluated around human goals,
+                    capabilities, limitations, autonomy,
+                    accessibility, and context.
+                  </dd>
+                </div>
+
+                <div class="definition">
+                  <dt>Consequential action</dt>
+                  <dd>
+                    An action that can materially affect legal status,
+                    finances, employment, housing, healthcare,
+                    education, safety, or another significant interest.
+                  </dd>
+                </div>
+
+                <div class="definition">
+                  <dt>Meaningful control</dt>
+                  <dd>
+                    The practical ability to understand, review,
+                    interrupt, reject, or correct a system action
+                    when appropriate.
+                  </dd>
+                </div>
+
+                <div class="definition">
+                  <dt>Cognitive load</dt>
+                  <dd>
+                    The mental effort required to understand, operate,
+                    monitor, or recover from the system.
+                  </dd>
+                </div>
+
+                <div class="definition">
+                  <dt>Open development</dt>
+                  <dd>
+                    Development practices that provide public
+                    visibility or reproducibility appropriate to
+                    safety, privacy, and legal constraints.
+                  </dd>
+                </div>
+
+                <div class="definition">
+                  <dt>Conformance evidence</dt>
+                  <dd>
+                    Artifacts demonstrating that a requirement has
+                    been implemented and evaluated.
+                  </dd>
+                </div>
+
+                <div class="definition">
+                  <dt>Human outcome</dt>
+                  <dd>
+                    A measurable change in human capability,
+                    task success, autonomy, accessibility, safety,
+                    burden, or another relevant human-centered objective.
+                  </dd>
+                </div>
+
+              </dl>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               REQUIREMENT SECTIONS
+               =================================================== -->
+
+          <section id="section-04" class="standard-section">
+            <div class="section-heading">
+              <div class="section-number">04</div>
+              <div>
+                <span class="section-kicker">Context</span>
+                <h2>System and Stakeholder Context</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-010</span>
+                  <span class="requirement-title">System description</span>
+                </div>
+                <p>
+                  The project <span class="keyword">MUST</span>
+                  document its intended purpose, users, affected
+                  populations, operating environment, major dependencies,
+                  and known boundaries.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-011</span>
+                  <span class="requirement-title">Stakeholder map</span>
+                </div>
+                <p>
+                  The project <span class="keyword">SHOULD</span>
+                  maintain a stakeholder map identifying direct users,
+                  affected non-users, operators, developers, maintainers,
+                  accessibility stakeholders, and relevant public-interest groups.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-012</span>
+                  <span class="requirement-title">Context of use</span>
+                </div>
+                <p>
+                  Evaluation <span class="keyword">MUST</span>
+                  account for realistic environments rather than only
+                  ideal laboratory conditions.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <section id="section-05" class="standard-section">
+            <div class="section-heading">
+              <div class="section-number">05</div>
+              <div>
+                <span class="section-kicker">Participation</span>
+                <h2>Human Needs and Participation</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-020</span>
+                  <span class="requirement-title">Needs discovery</span>
+                </div>
+                <p>
+                  Human needs <span class="keyword">MUST</span> be
+                  identified before finalizing major product requirements.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-021</span>
+                  <span class="requirement-title">Participatory input</span>
+                </div>
+                <p>
+                  Projects <span class="keyword">SHOULD</span> involve
+                  representative users and affected communities during
+                  requirements, prototype evaluation, and revision.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-022</span>
+                  <span class="requirement-title">Feedback pathway</span>
+                </div>
+                <p>
+                  Users <span class="keyword">MUST</span> have a
+                  documented mechanism to report usability,
+                  accessibility, safety, and harmful-behavior concerns.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-023</span>
+                  <span class="requirement-title">Feedback traceability</span>
+                </div>
+                <p>
+                  Material feedback <span class="keyword">SHOULD</span>
+                  be traceable to a disposition: addressed, deferred
+                  with rationale, rejected with rationale, or under investigation.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <section id="section-06" class="standard-section">
+            <div class="section-heading">
+              <div class="section-number">06</div>
+              <div>
+                <span class="section-kicker">Inclusion</span>
+                <h2>Accessibility and Disability Inclusion</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <p>
+                PAW-HC treats accessibility as a system property.
+                For web interfaces, projects should use WCAG 2.2
+                as a baseline reference where applicable.
+              </p>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-030</span>
+                  <span class="requirement-title">Accessibility baseline</span>
+                </div>
+                <p>
+                  Applicable interfaces <span class="keyword">MUST</span>
+                  define an accessibility target and the technologies
+                  and assistive technologies included in evaluation.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-031</span>
+                  <span class="requirement-title">Human accessibility testing</span>
+                </div>
+                <p>
+                  Automated accessibility checks <span class="keyword">MUST NOT</span>
+                  be the sole basis for accessibility claims.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-032</span>
+                  <span class="requirement-title">Assistive technology</span>
+                </div>
+                <p>
+                  Where relevant, evaluation <span class="keyword">SHOULD</span>
+                  include actual assistive technology and users with
+                  relevant access needs.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-033</span>
+                  <span class="requirement-title">Cognitive accessibility</span>
+                </div>
+                <p>
+                  Projects <span class="keyword">MUST</span> consider
+                  cognitive, language, attention, memory, and
+                  executive-function barriers where relevant.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-034</span>
+                  <span class="requirement-title">Accessible failure states</span>
+                </div>
+                <p>
+                  Errors, refusals, authentication failures, and
+                  recovery flows <span class="keyword">MUST</span>
+                  be evaluated for accessibility.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-035</span>
+                  <span class="requirement-title">Alternative interaction</span>
+                </div>
+                <p>
+                  Material functionality <span class="keyword">SHOULD</span>
+                  remain available through more than one interaction
+                  modality where practical.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               CORE PRINCIPLE SECTIONS
+               =================================================== -->
+
+          <section id="section-07" class="standard-section">
+            <div class="section-heading">
+              <div class="section-number">07</div>
+              <div>
+                <span class="section-kicker">Usability</span>
+                <h2>Cognitive Load and Usability</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-040</span>
+                  <span class="requirement-title">Task definition</span>
+                </div>
+                <p>Key user tasks <span class="keyword">MUST</span> be explicitly identified.</p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-041</span>
+                  <span class="requirement-title">Burden measurement</span>
+                </div>
+                <p>
+                  For key tasks, projects <span class="keyword">SHOULD</span>
+                  measure completion time, errors, abandonment,
+                  recovery effort, and subjective burden.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-042</span>
+                  <span class="requirement-title">Progressive complexity</span>
+                </div>
+                <p>
+                  Interfaces <span class="keyword">SHOULD</span> expose
+                  complexity progressively rather than requiring users
+                  to understand the entire system before completing ordinary tasks.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-043</span>
+                  <span class="requirement-title">Recovery</span>
+                </div>
+                <p>
+                  Users <span class="keyword">SHOULD</span> be able to
+                  recover from common errors without restarting the entire task.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <section id="section-08" class="standard-section">
+            <div class="section-heading">
+              <div class="section-number">08</div>
+              <div>
+                <span class="section-kicker">Agency</span>
+                <h2>Human Autonomy and Control</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-050</span>
+                  <span class="requirement-title">Human authority</span>
+                </div>
+                <p>
+                  The system <span class="keyword">MUST</span> clearly
+                  identify actions it can take on a user's behalf.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-051</span>
+                  <span class="requirement-title">Consequential confirmation</span>
+                </div>
+                <p>
+                  Consequential actions <span class="keyword">MUST</span>
+                  require an appropriate level of human authorization
+                  unless a documented exception applies.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-052</span>
+                  <span class="requirement-title">Interruptibility</span>
+                </div>
+                <p>
+                  Users <span class="keyword">SHOULD</span> be able to
+                  interrupt or stop ongoing autonomous actions where
+                  technically feasible.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-053</span>
+                  <span class="requirement-title">Reversibility</span>
+                </div>
+                <p>
+                  Material actions <span class="keyword">SHOULD</span>
+                  be reversible where feasible.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-054</span>
+                  <span class="requirement-title">No hidden delegation</span>
+                </div>
+                <p>
+                  The system <span class="keyword">MUST NOT</span>
+                  conceal that an action was performed by AI when that
+                  fact is material to the user's decision.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <section id="section-09" class="standard-section">
+            <div class="section-heading">
+              <div class="section-number">09</div>
+              <div>
+                <span class="section-kicker">Protection</span>
+                <h2>Safety and Risk</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-060</span>
+                  <span class="requirement-title">Risk assessment</span>
+                </div>
+                <p>
+                  A documented risk assessment <span class="keyword">MUST</span>
+                  exist before production deployment.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-061</span>
+                  <span class="requirement-title">Failure modes</span>
+                </div>
+                <p>
+                  Material foreseeable failure modes
+                  <span class="keyword">MUST</span> be identified and tested.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-062</span>
+                  <span class="requirement-title">Safe failure</span>
+                </div>
+                <p>
+                  When the system cannot reliably complete a task,
+                  it <span class="keyword">SHOULD</span> fail in a way
+                  that minimizes downstream harm rather than fabricating success.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-063</span>
+                  <span class="requirement-title">High-impact domains</span>
+                </div>
+                <p>
+                  Systems operating in high-impact contexts
+                  <span class="keyword">MUST</span> apply heightened
+                  review, documentation, and human oversight.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-064</span>
+                  <span class="requirement-title">Uncertainty</span>
+                </div>
+                <p>
+                  Material uncertainty <span class="keyword">SHOULD</span>
+                  be communicated in a manner appropriate to the user's context.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <section id="section-10" class="standard-section">
+            <div class="section-heading">
+              <div class="section-number">10</div>
+              <div>
+                <span class="section-kicker">Visibility</span>
+                <h2>Transparency and Explainability</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-070</span>
+                  <span class="requirement-title">System identity</span>
+                </div>
+                <p>
+                  Users <span class="keyword">MUST</span> be informed
+                  when interacting with an AI system when that distinction
+                  could reasonably affect their decisions.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-071</span>
+                  <span class="requirement-title">Capability boundaries</span>
+                </div>
+                <p>
+                  Material limitations <span class="keyword">MUST</span>
+                  be documented in user-accessible language.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-072</span>
+                  <span class="requirement-title">Action records</span>
+                </div>
+                <p>
+                  For agentic systems, the system
+                  <span class="keyword">SHOULD</span> provide an
+                  understandable record of significant actions taken.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-073</span>
+                  <span class="requirement-title">Explanation quality</span>
+                </div>
+                <p>
+                  Explanations <span class="keyword">SHOULD</span>
+                  communicate relevant reasons, evidence, uncertainty,
+                  and limitations without implying certainty the system does not possess.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               STANDARDS MATRIX
+               =================================================== -->
+
+          <section id="section-28" class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">28</div>
+
+              <div>
+                <span class="section-kicker">Conformance</span>
+                <h2>Conformance Levels</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <p>
+                Conformance is not a quality ranking. A system may meet
+                one level while having strengths or weaknesses outside
+                the level's scope.
+              </p>
+
+              <div class="table-wrap">
+
+                <table>
+
+                  <thead>
+                    <tr>
+                      <th>Level</th>
+                      <th>Minimum concept</th>
+                      <th>Typical evidence</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <tr>
+                      <td><strong>Core</strong></td>
+                      <td>
+                        Baseline human-centered engineering
+                      </td>
+                      <td>
+                        Requirements, risk assessment, key-task
+                        testing, accessibility plan, documentation
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td><strong>Open</strong></td>
+                      <td>
+                        Core + meaningful openness/interoperability
+                      </td>
+                      <td>
+                        Public code or justified exceptions,
+                        APIs, issue tracker, reproducible evaluation
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td><strong>Advanced</strong></td>
+                      <td>
+                        Core + deeper human testing and governance
+                      </td>
+                      <td>
+                        Representative testing, independent review,
+                        impact evaluation, incident process
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td><strong>Public Interest</strong></td>
+                      <td>
+                        Advanced + affected-community influence
+                        and strong transparency
+                      </td>
+                      <td>
+                        Community governance, public evidence,
+                        independent review, open implementation
+                        where safe
+                      </td>
+                    </tr>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               29 AUDIT
+               =================================================== -->
+
+          <section id="section-29" class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">29</div>
+
+              <div>
+                <span class="section-kicker">Evidence</span>
+                <h2>Audit and Evidence</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-250</span>
+                  <span class="requirement-title">Evidence register</span>
+                </div>
+
+                <p>
+                  Projects claiming conformance
+                  <span class="keyword">MUST</span> maintain an
+                  evidence register mapping requirements to artifacts.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-251</span>
+                  <span class="requirement-title">Traceability</span>
+                </div>
+
+                <p>
+                  Each normative requirement <span class="keyword">MUST</span>
+                  be marked implemented, not applicable with rationale,
+                  partially implemented, or not implemented.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-252</span>
+                  <span class="requirement-title">Independent audit</span>
+                </div>
+
+                <p>
+                  Public Interest conformance
+                  <span class="keyword">SHOULD</span> be reviewed
+                  by an independent evaluator.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-253</span>
+                  <span class="requirement-title">No self-certification implication</span>
+                </div>
+
+                <p>
+                  A self-declaration <span class="keyword">MUST</span>
+                  be clearly labeled as self-declared and
+                  <span class="keyword">MUST NOT</span> imply
+                  third-party certification.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               30 COMMUNITY GOVERNANCE
+               =================================================== -->
+
+          <section id="section-30" class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">30</div>
+
+              <div>
+                <span class="section-kicker">Open Standard</span>
+                <h2>Community Governance</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-260</span>
+                  <span class="requirement-title">Public issue process</span>
+                </div>
+                <p>
+                  Draft requirements <span class="keyword">SHOULD</span>
+                  be maintained in a public issue or discussion process.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-261</span>
+                  <span class="requirement-title">Change proposals</span>
+                </div>
+                <p>
+                  Changes to normative requirements
+                  <span class="keyword">SHOULD</span> include rationale
+                  and impact analysis.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-262</span>
+                  <span class="requirement-title">Versioning</span>
+                </div>
+                <p>
+                  Major changes <span class="keyword">MUST</span>
+                  increment the major or minor version according to
+                  documented versioning rules.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-263</span>
+                  <span class="requirement-title">Conflict of interest</span>
+                </div>
+                <p>
+                  Standard maintainers <span class="keyword">SHOULD</span>
+                  disclose material conflicts of interest.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-264</span>
+                  <span class="requirement-title">Affected voices</span>
+                </div>
+                <p>
+                  Governance <span class="keyword">SHOULD</span> include
+                  participation from accessibility, HCI, security,
+                  privacy, AI engineering, and affected-user communities.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               31 CYN-X
+               =================================================== -->
+
+          <section id="section-31" class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">31</div>
+
+              <div>
+                <span class="section-kicker">Reference</span>
+                <h2>Reference Implementation — CYN-X</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <p>
+                CYN-X may serve as a reference implementation for
+                PAW-HC. A reference implementation demonstrates
+                how the standard can be implemented; it is not
+                automatically proof that the implementation conforms.
+              </p>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-270</span>
+                  <span class="requirement-title">Dogfooding</span>
+                </div>
+                <p>
+                  If CYN-X claims PAW-HC conformance, CYN-X
+                  <span class="keyword">MUST</span> evaluate itself
+                  against the same requirements it publishes.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-271</span>
+                  <span class="requirement-title">Public evidence</span>
+                </div>
+                <p>
+                  CYN-X <span class="keyword">SHOULD</span> publish
+                  its conformance evidence, failed tests, known
+                  limitations, and remediation plans.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-272</span>
+                  <span class="requirement-title">Benchmark openness</span>
+                </div>
+                <p>
+                  CYN-X <span class="keyword">SHOULD</span> publish
+                  the methodology for human-centered benchmarks used
+                  to support PAW-HC claims.
+                </p>
+              </div>
+
+              <div class="requirement">
+                <div class="requirement-header">
+                  <span class="requirement-id">PAW-HC-273</span>
+                  <span class="requirement-title">Community challenge</span>
+                </div>
+                <p>
+                  CYN-X <span class="keyword">SHOULD</span> invite
+                  independent developers and affected users to
+                  challenge its conformance claims.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               32 DECLARATION
+               =================================================== -->
+
+          <section id="section-32" class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">32</div>
+
+              <div>
+                <span class="section-kicker">Declaration</span>
+                <h2>Conformance Declaration</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="declaration">
+
+                <div class="declaration-label">
+                  PAW-HC Conformance Declaration
+                </div>
+
+                <div class="declaration-line">
+                  <span>Project</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>Version</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>PAW-HC level claimed</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>Date</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>Responsible maintainer</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>Scope of claim</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>Excluded components</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>Known limitations</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>Evidence repository</span>
+                  <span>________________________________</span>
+                </div>
+
+                <div class="declaration-line">
+                  <span>Independent review</span>
+                  <span>Yes / No</span>
+                </div>
+
+                <p style="margin-top: 2rem; color: #999;">
+                  We declare that the above claim is supported by the
+                  evidence identified and that this declaration does
+                  not represent ISO, IEC, NIST, W3C, or third-party
+                  certification.
+                </p>
+
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               APPENDIX
+               =================================================== -->
+
+          <section class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">A</div>
+
+              <div>
+                <span class="section-kicker">Appendix</span>
+                <h2>Human-Centered Test Suite</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="table-wrap">
+
+                <table>
+
+                  <thead>
+                    <tr>
+                      <th>Test ID</th>
+                      <th>Test</th>
+                      <th>Measure</th>
+                      <th>Pass condition</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <tr>
+                      <td>HCT-01</td>
+                      <td>Key-task completion</td>
+                      <td>Completion rate, errors, time</td>
+                      <td>
+                        Defined target achieved or limitation documented
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-02</td>
+                      <td>Recovery</td>
+                      <td>Recovery time and abandonment</td>
+                      <td>
+                        User can recover from common failures
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-03</td>
+                      <td>Accessibility</td>
+                      <td>Assistive technology + human testing</td>
+                      <td>
+                        No critical blocker for tested scope
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-04</td>
+                      <td>Autonomy</td>
+                      <td>Unauthorized-action simulation</td>
+                      <td>
+                        No consequential action without required authorization
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-05</td>
+                      <td>Transparency</td>
+                      <td>User understanding test</td>
+                      <td>
+                        Users can identify material limits/actions
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-06</td>
+                      <td>Uncertainty</td>
+                      <td>Calibration/communication review</td>
+                      <td>
+                        Material uncertainty is not presented as certainty
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-07</td>
+                      <td>Privacy</td>
+                      <td>Data inventory review</td>
+                      <td>
+                        Unnecessary collection/retention eliminated or justified
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-08</td>
+                      <td>Manipulation</td>
+                      <td>Interaction review</td>
+                      <td>
+                        No prohibited coercive engagement mechanism
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-09</td>
+                      <td>Incident recovery</td>
+                      <td>Fault injection</td>
+                      <td>
+                        System enters documented safe state
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>HCT-10</td>
+                      <td>Human outcome</td>
+                      <td>Outcome measurement</td>
+                      <td>
+                        Evidence supports the defined human goal
+                      </td>
+                    </tr>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               APPENDIX C
+               =================================================== -->
+
+          <section class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">C</div>
+
+              <div>
+                <span class="section-kicker">Appendix</span>
+                <h2>Accessibility Checklist</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="checklist">
+
+                <div class="check">
+                  Keyboard operation evaluated where applicable.
+                </div>
+
+                <div class="check">
+                  Screen-reader or equivalent assistive technology evaluated where applicable.
+                </div>
+
+                <div class="check">
+                  Focus order and focus visibility evaluated.
+                </div>
+
+                <div class="check">
+                  Text alternatives and meaningful labels evaluated.
+                </div>
+
+                <div class="check">
+                  Color is not the sole carrier of critical information.
+                </div>
+
+                <div class="check">
+                  Text scaling and reflow evaluated.
+                </div>
+
+                <div class="check">
+                  Motion, animation, and seizure-related risks considered.
+                </div>
+
+                <div class="check">
+                  Captions and transcripts provided where relevant.
+                </div>
+
+                <div class="check">
+                  Error messages are understandable and actionable.
+                </div>
+
+                <div class="check">
+                  Timeouts and session recovery are accessible.
+                </div>
+
+                <div class="check">
+                  Cognitive load and memory demands assessed.
+                </div>
+
+                <div class="check">
+                  Users with relevant disabilities participated where feasible.
+                </div>
+
+                <div class="check">
+                  Known barriers and remediation status published.
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               APPENDIX D
+               =================================================== -->
+
+          <section class="standard-section">
+
+            <div class="section-heading">
+              <div class="section-number">D</div>
+
+              <div>
+                <span class="section-kicker">Appendix</span>
+                <h2>Release Checklist</h2>
+              </div>
+            </div>
+
+            <div class="section-rule"></div>
+
+            <div class="section-body">
+
+              <div class="checklist">
+
+                <div class="check">Human goals documented.</div>
+                <div class="check">Stakeholders identified.</div>
+                <div class="check">Risk assessment completed.</div>
+                <div class="check">Accessibility evaluation completed.</div>
+                <div class="check">Key tasks evaluated.</div>
+                <div class="check">Autonomy and agent-action controls tested.</div>
+                <div class="check">Privacy review completed.</div>
+                <div class="check">Security review completed.</div>
+                <div class="check">Known limitations documented.</div>
+                <div class="check">Incident process ready.</div>
+                <div class="check">Rollback/containment plan ready where appropriate.</div>
+                <div class="check">Documentation published.</div>
+                <div class="check">Change log published.</div>
+                <div class="check">Conformance evidence mapped to requirements.</div>
+                <div class="check">Community feedback mechanism available.</div>
+
+              </div>
+
+            </div>
+          </section>
+
+
+          <!-- ===================================================
+               FOOTER
+               =================================================== -->
+
+          <footer class="document-footer">
+
+            <strong>PAW-HC 0.1</strong>
+
+            <p>
+              People Are Worth Designing For.
+              Human-Centered AI Engineering Standard.
+            </p>
+
+            <p>
+              PUBLIC DRAFT · VERSION 0.1 · SEPTEMBER 2026
+            </p>
+
+            <p>
+              The goal is not to create another badge that says an AI
+              is “ethical.” The goal is to make human-centered
+              engineering observable, testable, contestable,
+              and improvable.
+            </p>
+
+          </footer>
+
+        </article>
+
+      </div>
+
+    </main>
+  </body>
+</html>
