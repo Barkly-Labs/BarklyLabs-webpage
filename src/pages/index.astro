@@ -816,32 +816,15 @@ const ethics = [
     box-sizing: border-box;
   }
 
-  :root {
-    --barkly-black: #050505;
-    --barkly-deep: #030303;
-    --barkly-surface: #070707;
-
-    --barkly-white: #f2f2f2;
-    --barkly-muted: #858585;
-    --barkly-dim: #555555;
-
-    --barkly-line: #242424;
-    --barkly-line-soft: rgba(255, 255, 255, 0.08);
-
-    --barkly-pink: #ff4fa3;
-    --barkly-pink-soft: #ff8bc5;
-    --barkly-pink-dim: rgba(255, 79, 163, 0.35);
-  }
-
   html {
     scroll-behavior: smooth;
-    background: var(--barkly-black);
+    background: #050505;
   }
 
   body {
     margin: 0;
-    background: var(--barkly-black);
-    color: var(--barkly-white);
+    background: #050505;
+    color: #f2f2f2;
     font-family:
       Inter,
       ui-sans-serif,
@@ -874,8 +857,8 @@ const ethics = [
   }
 
   ::selection {
-    background: var(--barkly-pink);
-    color: var(--barkly-black);
+    background: #ff4fa3;
+    color: #050505;
   }
 
   /* =========================================================
@@ -889,7 +872,7 @@ const ethics = [
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--barkly-deep);
+    background: #030303;
     overflow: hidden;
   }
 
@@ -900,7 +883,7 @@ const ethics = [
   .intro-grid {
     position: absolute;
     inset: 0;
-    opacity: 0.12;
+    opacity: 0.16;
     background-image:
       linear-gradient(rgba(255, 79, 163, 0.08) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 79, 163, 0.08) 1px, transparent 1px);
@@ -913,7 +896,7 @@ const ethics = [
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.08;
     background: repeating-linear-gradient(
       to bottom,
       transparent 0,
@@ -926,7 +909,7 @@ const ethics = [
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.025;
+    opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
   }
 
@@ -970,8 +953,7 @@ const ethics = [
   .slice-a {
     transform: translate(-7px, -4px);
     clip-path: inset(0 0 68% 0);
-    opacity: 0.55;
-    color: var(--barkly-pink);
+    opacity: 0.4;
   }
 
   .slice-b {
@@ -983,7 +965,7 @@ const ethics = [
   .slice-c {
     transform: translate(4px, -1px);
     clip-path: inset(40% 0 35% 0);
-    opacity: 0.2;
+    opacity: 0.25;
   }
 
   .slice-main {
@@ -1014,7 +996,6 @@ const ethics = [
   .intro-welcome strong {
     font-size: 15px;
     letter-spacing: 0.4em;
-    color: var(--barkly-pink);
   }
 
   .intro-tagline {
@@ -1026,10 +1007,10 @@ const ethics = [
   }
 
   #enter {
-    border: 1px solid var(--barkly-pink-dim);
+    border: 1px solid #ff4fa3;
     padding: 14px 20px;
     background: transparent;
-    color: var(--barkly-white);
+    color: #ff4fa3;
     font-family: "Courier New", monospace;
     font-size: 11px;
     letter-spacing: 0.18em;
@@ -1043,18 +1024,13 @@ const ethics = [
 
   #enter span {
     margin-left: 15px;
-    color: var(--barkly-pink);
   }
 
   #enter:hover {
-    background: var(--barkly-pink);
-    color: var(--barkly-black);
-    border-color: var(--barkly-pink);
+    background: #ff4fa3;
+    color: #000;
+    border-color: #ff4fa3;
     transform: translateY(-3px);
-  }
-
-  #enter:hover span {
-    color: var(--barkly-black);
   }
 
   /* =========================================================
@@ -1071,7 +1047,7 @@ const ethics = [
     justify-content: space-between;
     width: 100%;
     padding: 28px 5vw;
-    border-bottom: 1px solid var(--barkly-line-soft);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .brand {
@@ -1086,7 +1062,7 @@ const ethics = [
 
   .brand-symbol {
     font-size: 8px;
-    color: var(--barkly-pink);
+    color: #ff4fa3;
   }
 
   .nav-links {
@@ -1104,7 +1080,7 @@ const ethics = [
   }
 
   .nav-links a:hover {
-    color: var(--barkly-pink);
+    color: #ff4fa3;
   }
 
   .nav-status {
@@ -1118,7 +1094,7 @@ const ethics = [
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--barkly-pink);
+    background: #ff4fa3;
     box-shadow: 0 0 12px rgba(255, 79, 163, 0.7);
   }
 
@@ -1133,7 +1109,7 @@ const ethics = [
     align-items: center;
     padding: 160px 10vw 100px;
     overflow: hidden;
-    border-bottom: 1px solid var(--barkly-line-soft);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .hero-background {
@@ -1149,7 +1125,7 @@ const ethics = [
     background:
       radial-gradient(
         circle at 72% 50%,
-        rgba(255, 79, 163, 0.075),
+        rgba(255, 79, 163, 0.07),
         transparent 28%
       ),
       linear-gradient(90deg, #050505 20%, transparent 100%);
@@ -1159,7 +1135,7 @@ const ethics = [
     position: absolute;
     top: 50%;
     left: 70%;
-    border: 1px solid rgba(255, 79, 163, 0.1);
+    border: 1px solid rgba(255, 79, 163, 0.08);
     border-radius: 50%;
     transform: translate(-50%, -50%);
   }
@@ -1199,7 +1175,7 @@ const ethics = [
   }
 
   .eyebrow span {
-    color: var(--barkly-pink);
+    color: #fff;
   }
 
   .hero h1 {
@@ -1211,10 +1187,11 @@ const ethics = [
     font-weight: 900;
   }
 
+  /* ONLY the originally-gray large hero text */
   .hero h1 span {
     display: block;
     padding-left: 10vw;
-    color: rgba(255, 255, 255, 0.35);
+    color: #ff4fa3;
   }
 
   .hero-copy {
@@ -1243,12 +1220,11 @@ const ethics = [
   }
 
   .button-primary {
-    background: var(--barkly-pink);
-    color: var(--barkly-black);
+    background: #fff;
+    color: #000;
   }
 
   .button-primary:hover {
-    background: var(--barkly-pink-soft);
     transform: translateY(-3px);
   }
 
@@ -1258,8 +1234,8 @@ const ethics = [
   }
 
   .button-secondary:hover {
-    border-color: var(--barkly-pink);
-    color: var(--barkly-pink);
+    border-color: #ff4fa3;
+    color: #ff4fa3;
   }
 
   .hero-side {
@@ -1292,7 +1268,7 @@ const ethics = [
   .scroll-line {
     width: 70px;
     height: 1px;
-    background: var(--barkly-pink-dim);
+    background: rgba(255, 79, 163, 0.3);
   }
 
   /* =========================================================
@@ -1302,7 +1278,7 @@ const ethics = [
   .section {
     position: relative;
     padding: 150px 10vw;
-    border-bottom: 1px solid var(--barkly-line-soft);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     opacity: 0;
     transform: translateY(30px);
     transition:
@@ -1325,7 +1301,7 @@ const ethics = [
   .section-number {
     font-family: "Courier New", monospace;
     font-size: 11px;
-    color: var(--barkly-pink);
+    color: #ff4fa3;
   }
 
   .section-heading h2 {
@@ -1336,9 +1312,10 @@ const ethics = [
     letter-spacing: -0.06em;
   }
 
+  /* ONLY the originally-gray large section text */
   .section-heading h2 span {
     display: block;
-    color: rgba(255, 255, 255, 0.32);
+    color: #ff4fa3;
   }
 
   /* =========================================================
@@ -1346,7 +1323,7 @@ const ethics = [
      ========================================================= */
 
   .principles {
-    background: var(--barkly-surface);
+    background: #070707;
   }
 
   .principles-intro {
@@ -1366,12 +1343,13 @@ const ethics = [
     color: rgba(255, 255, 255, 0.7);
   }
 
+  /* This was gray decorative text */
   .principles-mark {
     font-size: 35px;
     line-height: 0.85;
     font-weight: 900;
     letter-spacing: -0.05em;
-    color: rgba(255, 79, 163, 0.16);
+    color: #ff4fa3;
   }
 
   .principles-grid {
@@ -1399,7 +1377,7 @@ const ethics = [
   .card-number {
     font-family: "Courier New", monospace;
     font-size: 9px;
-    color: var(--barkly-pink);
+    color: rgba(255, 255, 255, 0.25);
   }
 
   .principle-card h3 {
@@ -1422,7 +1400,7 @@ const ethics = [
 
   .cynx-section {
     overflow: hidden;
-    background: var(--barkly-deep);
+    background: #030303;
   }
 
   .cynx-glow {
@@ -1434,7 +1412,7 @@ const ethics = [
     border-radius: 50%;
     background: radial-gradient(
       circle,
-      rgba(255, 79, 163, 0.065),
+      rgba(255, 79, 163, 0.07),
       transparent 65%
     );
     pointer-events: none;
@@ -1459,12 +1437,6 @@ const ethics = [
     color: rgba(255, 255, 255, 0.4);
   }
 
-  .system-label::before {
-    content: "●";
-    color: var(--barkly-pink);
-    font-size: 7px;
-  }
-
   .large-copy {
     font-size: clamp(35px, 4vw, 60px);
     line-height: 1;
@@ -1483,18 +1455,11 @@ const ethics = [
     gap: 25px;
     margin-top: 25px;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 79, 163, 0.45);
+    border-bottom: 1px solid rgba(255, 79, 163, 0.3);
     font-family: "Courier New", monospace;
     font-size: 9px;
     letter-spacing: 0.12em;
-    transition:
-      color 0.25s,
-      border-color 0.25s;
-  }
-
-  .text-link:hover {
-    color: var(--barkly-pink);
-    border-color: var(--barkly-pink);
+    color: #ff4fa3;
   }
 
   .cynx-diagram {
@@ -1508,7 +1473,7 @@ const ethics = [
     position: absolute;
     top: 50%;
     left: 50%;
-    border: 1px solid rgba(255, 79, 163, 0.11);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     transform: translate(-50%, -50%);
   }
@@ -1538,16 +1503,17 @@ const ethics = [
     justify-content: center;
     width: 130px;
     height: 130px;
-    border: 1px solid var(--barkly-pink);
+    border: 1px solid rgba(255, 79, 163, 0.4);
     border-radius: 50%;
-    background: var(--barkly-black);
+    background: #050505;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 60px rgba(255, 79, 163, 0.12);
+    box-shadow: 0 0 60px rgba(255, 79, 163, 0.08);
   }
 
   .diagram-core span {
     font-weight: 900;
     letter-spacing: -0.04em;
+    color: #ff4fa3;
   }
 
   .diagram-core small {
@@ -1562,18 +1528,10 @@ const ethics = [
     position: absolute;
     padding: 7px 10px;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    background: var(--barkly-black);
+    background: #050505;
     font-family: "Courier New", monospace;
     font-size: 7px;
     letter-spacing: 0.1em;
-    transition:
-      border-color 0.25s,
-      color 0.25s;
-  }
-
-  .node:hover {
-    border-color: var(--barkly-pink);
-    color: var(--barkly-pink);
   }
 
   .node-one {
@@ -1608,13 +1566,13 @@ const ethics = [
   .docs-section {
     position: relative;
     overflow: hidden;
-    background: var(--barkly-black);
+    background: #050505;
   }
 
   .docs-grid-bg {
     position: absolute;
     inset: 0;
-    opacity: 0.055;
+    opacity: 0.08;
     pointer-events: none;
     background-image:
       linear-gradient(rgba(255, 79, 163, 0.08) 1px, transparent 1px),
@@ -1662,16 +1620,17 @@ const ethics = [
     justify-content: center;
     width: 150px;
     height: 150px;
-    border: 1px solid var(--barkly-pink);
-    background: var(--barkly-black);
+    border: 1px solid rgba(255, 79, 163, 0.4);
+    background: #050505;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 70px rgba(255, 79, 163, 0.08);
+    box-shadow: 0 0 70px rgba(255, 79, 163, 0.06);
   }
 
   .docs-core span {
     font-size: 22px;
     font-weight: 900;
     letter-spacing: -0.04em;
+    color: #ff4fa3;
   }
 
   .docs-core small {
@@ -1688,7 +1647,7 @@ const ethics = [
     left: 50%;
     width: 72%;
     height: 72%;
-    border: 1px solid rgba(255, 79, 163, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     transform: translate(-50%, -50%);
   }
 
@@ -1708,19 +1667,11 @@ const ethics = [
     position: absolute;
     padding: 8px 11px;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    background: var(--barkly-black);
+    background: #050505;
     font-family: "Courier New", monospace;
     font-size: 7px;
     letter-spacing: 0.1em;
     color: rgba(255, 255, 255, 0.55);
-    transition:
-      border-color 0.25s,
-      color 0.25s;
-  }
-
-  .docs-node:hover {
-    border-color: var(--barkly-pink);
-    color: var(--barkly-pink);
   }
 
   .docs-node-one {
@@ -1829,7 +1780,7 @@ const ethics = [
   }
 
   .system-card:hover .system-arrow {
-    color: var(--barkly-pink);
+    color: #ff4fa3;
     transform: translate(4px, -4px);
   }
 
@@ -1854,7 +1805,7 @@ const ethics = [
      ========================================================= */
 
   .process-section {
-    background: var(--barkly-surface);
+    background: #070707;
   }
 
   .section-lead {
@@ -1887,7 +1838,7 @@ const ethics = [
   .lifecycle-number {
     font-family: "Courier New", monospace;
     font-size: 9px;
-    color: var(--barkly-pink);
+    color: #ff4fa3;
   }
 
   .lifecycle-step h3 {
@@ -1904,7 +1855,7 @@ const ethics = [
   }
 
   .lifecycle-arrow {
-    color: rgba(255, 79, 163, 0.5);
+    color: rgba(255, 255, 255, 0.25);
   }
 
   /* =========================================================
@@ -1924,7 +1875,7 @@ const ethics = [
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: linear-gradient(
       135deg,
-      rgba(255, 79, 163, 0.035),
+      rgba(255, 255, 255, 0.04),
       transparent
     );
   }
@@ -1943,9 +1894,10 @@ const ethics = [
     letter-spacing: -0.06em;
   }
 
+  /* ONLY the originally-gray large creator text */
   .creator-content h2 span {
     display: block;
-    color: rgba(255, 255, 255, 0.3);
+    color: #ff4fa3;
   }
 
   .creator-content p {
@@ -1967,14 +1919,6 @@ const ethics = [
     font-family: "Courier New", monospace;
     font-size: 8px;
     letter-spacing: 0.1em;
-    transition:
-      border-color 0.25s,
-      color 0.25s;
-  }
-
-  .creator-values span:hover {
-    border-color: var(--barkly-pink);
-    color: var(--barkly-pink);
   }
 
   /* =========================================================
@@ -2015,13 +1959,13 @@ const ethics = [
     align-items: center;
     margin: 100px 0 0 140px;
     padding: 20px;
-    border-left: 1px solid var(--barkly-pink-dim);
+    border-left: 1px solid rgba(255, 79, 163, 0.3);
     color: rgba(255, 255, 255, 0.45);
     font-size: 13px;
   }
 
   .quiet-note span {
-    color: var(--barkly-pink);
+    color: #ff4fa3;
   }
 
   /* =========================================================
@@ -2029,7 +1973,7 @@ const ethics = [
      ========================================================= */
 
   .ethics-section {
-    background: var(--barkly-surface);
+    background: #070707;
   }
 
   .ethics-layout {
@@ -2061,20 +2005,12 @@ const ethics = [
     padding: 25px;
     border-right: 1px solid rgba(255, 255, 255, 0.12);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    transition:
-      background 0.25s,
-      border-color 0.25s;
-  }
-
-  .ethics-item:hover {
-    background: rgba(255, 79, 163, 0.025);
-    border-color: rgba(255, 79, 163, 0.2);
   }
 
   .ethics-item span {
     font-family: "Courier New", monospace;
     font-size: 8px;
-    color: var(--barkly-pink);
+    color: rgba(255, 255, 255, 0.25);
   }
 
   .ethics-item strong {
@@ -2101,7 +2037,7 @@ const ethics = [
   .detroit-grid {
     position: absolute;
     inset: 0;
-    opacity: 0.1;
+    opacity: 0.15;
     background-image:
       linear-gradient(rgba(255, 79, 163, 0.08) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 79, 163, 0.08) 1px, transparent 1px);
@@ -2132,9 +2068,10 @@ const ethics = [
     letter-spacing: -0.08em;
   }
 
+  /* ONLY the originally-gray large Detroit text */
   .detroit-content h2 span {
     display: block;
-    color: rgba(255, 255, 255, 0.3);
+    color: #ff4fa3;
   }
 
   .detroit-content > p {
@@ -2154,19 +2091,11 @@ const ethics = [
 
   .detroit-points span {
     padding: 9px 11px;
-    border: 1px solid rgba(255, 79, 163, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     font-family: "Courier New", monospace;
     font-size: 8px;
     letter-spacing: 0.1em;
     color: rgba(255, 255, 255, 0.4);
-    transition:
-      border-color 0.25s,
-      color 0.25s;
-  }
-
-  .detroit-points span:hover {
-    border-color: var(--barkly-pink);
-    color: var(--barkly-pink);
   }
 
   /* =========================================================
@@ -2180,6 +2109,7 @@ const ethics = [
     overflow: hidden;
   }
 
+  /* Large decorative gray mark -> pink */
   .about-mark {
     position: absolute;
     right: 4vw;
@@ -2188,7 +2118,8 @@ const ethics = [
     font-weight: 900;
     line-height: 0.6;
     letter-spacing: -0.12em;
-    color: rgba(255, 79, 163, 0.025);
+    color: #ff4fa3;
+    opacity: 0.08;
     pointer-events: none;
   }
 
@@ -2205,9 +2136,10 @@ const ethics = [
     letter-spacing: -0.08em;
   }
 
+  /* ONLY the originally-gray large About text */
   .about-content h2 span {
     display: block;
-    color: rgba(255, 255, 255, 0.3);
+    color: #ff4fa3;
   }
 
   .about-content > p {
@@ -2231,7 +2163,7 @@ const ethics = [
   }
 
   .loop b {
-    color: var(--barkly-pink);
+    color: #ff4fa3;
   }
 
   /* =========================================================
@@ -2240,7 +2172,7 @@ const ethics = [
 
   .footer {
     padding: 100px 5vw 30px;
-    background: var(--barkly-deep);
+    background: #030303;
   }
 
   .footer-main {
@@ -2269,7 +2201,7 @@ const ethics = [
     font-size: 12px;
     letter-spacing: 0.6em;
     padding-left: 0.6em;
-    color: var(--barkly-pink);
+    color: rgba(255, 255, 255, 0.3);
   }
 
   .footer-tagline {
@@ -2572,4 +2504,4 @@ const ethics = [
   }
 </style>
 </body>
-</html> 
+</html>
