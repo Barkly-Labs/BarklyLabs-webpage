@@ -342,12 +342,77 @@ const ethics = [
       </section>
 
       <!-- =======================================================
+           DOCUMENTATION
+           ======================================================= -->
+
+      <section id="docs" class="section docs-section">
+        <div class="docs-grid-bg"></div>
+
+        <div class="section-heading">
+          <div class="section-number">04</div>
+
+          <div>
+            <span class="section-kicker">BARKLY / KNOWLEDGE</span>
+            <h2>
+              DOCUMENTATION
+              <span>IS INFRASTRUCTURE.</span>
+            </h2>
+          </div>
+        </div>
+
+        <div class="docs-layout">
+          <div class="docs-copy">
+            <div class="system-label">
+              <span class="status-dot"></span>
+              KNOWLEDGE SYSTEM
+            </div>
+
+            <p class="large-copy">
+              Understand what we build.
+              <br />
+              Build from what we learn.
+            </p>
+
+            <p>
+              Barkly Labs documents the systems we build, the ideas behind
+              them, the experiments that shape them, and the knowledge we
+              gain along the way. Documentation is part of the engineering
+              itself — something people should be able to read, question,
+              modify, and build upon.
+            </p>
+
+            <a href="/docs" class="text-link">
+              EXPLORE THE BARKLY DOCS
+              <span>→</span>
+            </a>
+          </div>
+
+          <div class="docs-diagram" aria-hidden="true">
+            <div class="docs-line docs-line-one"></div>
+            <div class="docs-line docs-line-two"></div>
+            <div class="docs-line docs-line-three"></div>
+
+            <div class="docs-core">
+              <span>DOCS</span>
+              <small>KNOWLEDGE</small>
+            </div>
+
+            <span class="docs-node docs-node-one">RESEARCH</span>
+            <span class="docs-node docs-node-two">SYSTEMS</span>
+            <span class="docs-node docs-node-three">CYN-X</span>
+            <span class="docs-node docs-node-four">LAAS</span>
+            <span class="docs-node docs-node-five">PEOPLE</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================================================
            SYSTEMS
            ======================================================= -->
 
       <section id="lab" class="section systems-section">
         <div class="section-heading">
-          <div class="section-number">04</div>
+          <div class="section-number">05</div>
 
           <div>
             <span class="section-kicker">THE LAB</span>
@@ -394,7 +459,7 @@ const ethics = [
 
       <section id="process" class="section process-section">
         <div class="section-heading">
-          <div class="section-number">05</div>
+          <div class="section-number">06</div>
 
           <div>
             <span class="section-kicker">HOW WE BUILD</span>
@@ -433,7 +498,7 @@ const ethics = [
       <section class="section creator-section">
         <div class="creator-panel">
           <div class="creator-side">
-            <span class="section-number">06</span>
+            <span class="section-number">07</span>
             <span class="section-kicker">CREATOR LAB</span>
           </div>
 
@@ -472,7 +537,7 @@ const ethics = [
 
       <section id="community" class="section community-section">
         <div class="section-heading">
-          <div class="section-number">07</div>
+          <div class="section-number">08</div>
 
           <div>
             <span class="section-kicker">COMMUNITY</span>
@@ -528,7 +593,7 @@ const ethics = [
 
       <section class="section ethics-section">
         <div class="section-heading">
-          <div class="section-number">08</div>
+          <div class="section-number">09</div>
 
           <div>
             <span class="section-kicker">RESPONSIBLE TECHNOLOGY</span>
@@ -571,7 +636,7 @@ const ethics = [
         </div>
 
         <div class="detroit-content">
-          <span class="section-kicker">09 / DETROIT</span>
+          <span class="section-kicker">10 / DETROIT</span>
 
           <h2>
             BUILT IN
@@ -605,7 +670,7 @@ const ethics = [
         <div class="about-mark">B</div>
 
         <div class="about-content">
-          <span class="section-kicker">10 / THE PROMISE</span>
+          <span class="section-kicker">11 / THE PROMISE</span>
 
           <h2>
             WHAT COULD
@@ -1448,6 +1513,142 @@ const ethics = [
       }
 
       /* =========================================================
+         DOCUMENTATION
+         ========================================================= */
+
+      .docs-section {
+        position: relative;
+        overflow: hidden;
+        background: #050505;
+      }
+
+      .docs-grid-bg {
+        position: absolute;
+        inset: 0;
+        opacity: 0.08;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+        background-size: 90px 90px;
+        mask-image: linear-gradient(90deg, transparent, #000 35%, #000 65%, transparent);
+      }
+
+      .docs-layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 100px;
+        align-items: center;
+        margin-left: 140px;
+      }
+
+      .docs-copy > p:not(.large-copy) {
+        max-width: 560px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.8;
+      }
+
+      .docs-diagram {
+        position: relative;
+        width: min(550px, 45vw);
+        aspect-ratio: 1;
+        margin: auto;
+      }
+
+      .docs-core {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        background: #050505;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 70px rgba(255, 255, 255, 0.06);
+      }
+
+      .docs-core span {
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+      }
+
+      .docs-core small {
+        margin-top: 7px;
+        font-family: "Courier New", monospace;
+        font-size: 7px;
+        letter-spacing: 0.2em;
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      .docs-line {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 72%;
+        height: 72%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transform: translate(-50%, -50%);
+      }
+
+      .docs-line-one {
+        border-radius: 50%;
+      }
+
+      .docs-line-two {
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+
+      .docs-line-three {
+        transform: translate(-50%, -50%) rotate(-45deg);
+      }
+
+      .docs-node {
+        position: absolute;
+        padding: 8px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: #050505;
+        font-family: "Courier New", monospace;
+        font-size: 7px;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .docs-node-one {
+        top: 8%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .docs-node-two {
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+      }
+
+      .docs-node-three {
+        right: 11%;
+        bottom: 9%;
+      }
+
+      .docs-node-four {
+        bottom: 9%;
+        left: 11%;
+      }
+
+      .docs-node-five {
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+      }
+
+      /* =========================================================
          SYSTEMS
          ========================================================= */
 
@@ -2030,6 +2231,16 @@ const ethics = [
          ========================================================= */
 
       @media (max-width: 900px) {
+        .docs-layout {
+          grid-template-columns: 1fr;
+          gap: 60px;
+          margin-left: 0;
+        }
+
+        .docs-diagram {
+          width: min(520px, 80vw);
+        }
+
         .nav-links {
           display: none;
         }
