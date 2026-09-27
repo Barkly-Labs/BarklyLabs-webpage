@@ -49,23 +49,44 @@ const flows = [
   <title>CYN-X ARCHITECTURE // BARKLY LABS</title>
 
   <style>
-    :global(*) { box-sizing: border-box; }
-    :global(html) { scroll-behavior: smooth; }
+    :global(*) {
+      box-sizing: border-box;
+    }
+
+    :global(html) {
+      scroll-behavior: smooth;
+    }
+
     :global(body) {
       margin: 0;
       background: #050505;
       color: #f1f1f1;
       font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
     }
-    :global(a) { color: inherit; text-decoration: none; }
+
+    :global(a) {
+      color: inherit;
+      text-decoration: none;
+    }
 
     :root {
       --bg: #050505;
-      --panel: #090909;
-      --line: #252525;
-      --strong: #454545;
+      --panel: #0a0a0a;
+      --panel-raised: #0f0f0f;
+      --panel-hover: #131313;
+
+      --line: rgba(255, 255, 255, 0.12);
+      --strong: rgba(255, 255, 255, 0.25);
+
       --white: #f1f1f1;
-      --muted: #777;
+      --muted: #a1a1a1;
+      --dim: #686868;
+      --faint: #444;
+
+      --pink: #ff2f92;
+      --pink-soft: rgba(255, 47, 146, 0.10);
+      --pink-line: rgba(255, 47, 146, 0.42);
+
       --max: 1500px;
     }
 
@@ -77,6 +98,7 @@ const flows = [
     }
 
     /* HEADER */
+
     .header {
       height: 64px;
       position: fixed;
@@ -97,6 +119,7 @@ const flows = [
       display: flex;
       align-items: center;
       gap: 14px;
+      color: var(--white);
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .14em;
@@ -105,8 +128,9 @@ const flows = [
     .mark {
       width: 9px;
       height: 9px;
-      border: 1px solid white;
+      border: 1px solid var(--pink);
       transform: rotate(45deg);
+      box-shadow: 0 0 10px rgba(255,47,146,.25);
     }
 
     .header-info {
@@ -116,6 +140,7 @@ const flows = [
     }
 
     /* DOCUMENT NAV */
+
     .side-nav {
       position: fixed;
       left: 0;
@@ -125,10 +150,11 @@ const flows = [
       border-right: 1px solid var(--line);
       padding: 30px 20px;
       z-index: 20;
+      background: rgba(5,5,5,.35);
     }
 
     .side-label {
-      color: #555;
+      color: var(--pink);
       font-size: 8px;
       letter-spacing: .15em;
       margin-bottom: 25px;
@@ -137,17 +163,25 @@ const flows = [
     .side-nav a {
       display: block;
       padding: 9px 0;
-      color: #666;
+      color: var(--dim);
       font-size: 9px;
       letter-spacing: .08em;
-      transition: color .2s;
+      transition: color .2s ease;
     }
 
-    .side-nav a:hover { color: white; }
+    .side-nav a:hover {
+      color: var(--pink);
+    }
 
     /* MAIN */
-    main { margin-left: 190px; }
-    section { border-bottom: 1px solid var(--line); }
+
+    main {
+      margin-left: 190px;
+    }
+
+    section {
+      border-bottom: 1px solid var(--line);
+    }
 
     .container {
       width: min(var(--max), calc(100% - 90px));
@@ -155,6 +189,7 @@ const flows = [
     }
 
     /* ARCHITECTURE HEADER */
+
     .architecture-head {
       padding: 145px 0 100px;
       min-height: 78vh;
@@ -171,35 +206,43 @@ const flows = [
       letter-spacing: .13em;
     }
 
+    .document-meta span:first-child {
+      color: var(--pink);
+    }
+
     .architecture-head h1 {
       margin: 90px 0 35px;
       font-family: Arial, Helvetica, sans-serif;
       font-size: clamp(5rem, 12vw, 12rem);
       line-height: .76;
       letter-spacing: -.075em;
+      color: var(--white);
     }
 
     .architecture-head h1 span {
       display: block;
       color: transparent;
-      -webkit-text-stroke: 1px #666;
+      -webkit-text-stroke: 1px var(--pink);
     }
 
     .head-description {
       max-width: 720px;
-      color: #aaa;
+      color: var(--muted);
       font-size: 13px;
       line-height: 1.8;
     }
 
     /* SYSTEM MAP */
-    .map-section { padding: 110px 0; }
+
+    .map-section {
+      padding: 110px 0;
+    }
 
     .section-label {
       display: flex;
       gap: 25px;
       align-items: center;
-      color: var(--muted);
+      color: var(--pink);
       font-size: 9px;
       letter-spacing: .15em;
       margin-bottom: 45px;
@@ -224,8 +267,6 @@ const flows = [
       background-size: 55px 55px;
     }
 
-    /* The SVG owns all wiring. This keeps every connection aligned
-       instead of using arbitrary rotated CSS lines. */
     .connections {
       position: absolute;
       inset: 0;
@@ -236,13 +277,13 @@ const flows = [
     }
 
     .connections line {
-      stroke: #383838;
+      stroke: var(--pink-line);
       stroke-width: 1;
       vector-effect: non-scaling-stroke;
     }
 
     .connections circle {
-      fill: #555;
+      fill: var(--pink);
     }
 
     .map-center {
@@ -252,24 +293,26 @@ const flows = [
       transform: translate(-50%, -50%);
       width: 260px;
       height: 180px;
-      border: 1px solid white;
+      border: 1px solid var(--pink);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       background: #050505;
       z-index: 3;
+      box-shadow: 0 0 35px rgba(255,47,146,.08);
     }
 
     .map-center strong {
       font-family: Arial, Helvetica, sans-serif;
       font-size: 34px;
       letter-spacing: -.05em;
+      color: var(--white);
     }
 
     .map-center span {
       margin-top: 12px;
-      color: var(--muted);
+      color: var(--pink);
       font-size: 8px;
       letter-spacing: .15em;
     }
@@ -285,25 +328,56 @@ const flows = [
       flex-direction: column;
       justify-content: space-between;
       z-index: 3;
+      transition:
+        border-color .25s ease,
+        background .25s ease,
+        transform .25s ease;
+    }
+
+    .map-node:hover {
+      border-color: var(--pink-line);
+      background: var(--pink-soft);
+      transform: translateY(-3px);
     }
 
     .map-node strong {
       font-size: 11px;
       letter-spacing: .1em;
+      color: var(--white);
+    }
+
+    .map-node:hover strong {
+      color: var(--pink);
     }
 
     .map-node small {
-      color: #666;
+      color: var(--dim);
       font-size: 8px;
       line-height: 1.6;
     }
 
-    .node-input { left: 7%; top: 15%; }
-    .node-memory { right: 7%; top: 15%; }
-    .node-tools { left: 7%; bottom: 15%; }
-    .node-output { right: 7%; bottom: 15%; }
+    .node-input {
+      left: 7%;
+      top: 15%;
+    }
+
+    .node-memory {
+      right: 7%;
+      top: 15%;
+    }
+
+    .node-tools {
+      left: 7%;
+      bottom: 15%;
+    }
+
+    .node-output {
+      right: 7%;
+      bottom: 15%;
+    }
 
     /* LAYERS */
+
     .layers {
       display: grid;
       grid-template-columns: 1fr;
@@ -315,13 +389,20 @@ const flows = [
       grid-template-columns: 90px 300px 1fr;
       min-height: 180px;
       border-bottom: 1px solid var(--line);
+      transition: background .25s ease;
     }
 
-    .layer:last-child { border-bottom: 0; }
+    .layer:last-child {
+      border-bottom: 0;
+    }
+
+    .layer:hover {
+      background: rgba(255,47,146,.025);
+    }
 
     .layer-id {
       padding: 28px;
-      color: var(--muted);
+      color: var(--pink);
       font-size: 10px;
       border-right: 1px solid var(--line);
     }
@@ -332,9 +413,16 @@ const flows = [
       font-family: Arial, Helvetica, sans-serif;
       font-size: 25px;
       letter-spacing: -.04em;
+      color: var(--white);
     }
 
-    .layer-content { padding: 28px; }
+    .layer:hover .layer-name {
+      color: var(--pink);
+    }
+
+    .layer-content {
+      padding: 28px;
+    }
 
     .layer-description {
       max-width: 620px;
@@ -356,9 +444,20 @@ const flows = [
       color: #999;
       font-size: 8px;
       letter-spacing: .08em;
+      transition:
+        color .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+    }
+
+    .component:hover {
+      color: var(--pink);
+      border-color: var(--pink-line);
+      background: var(--pink-soft);
     }
 
     /* FLOW */
+
     .flow {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -374,24 +473,41 @@ const flows = [
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition:
+        background .25s ease,
+        border-color .25s ease;
     }
 
-    .flow-number { color: var(--muted); font-size: 9px; }
+    .flow-step:hover {
+      background: var(--pink-soft);
+      border-color: var(--pink-line);
+    }
+
+    .flow-number {
+      color: var(--pink);
+      font-size: 9px;
+    }
 
     .flow-step strong {
       font-family: Arial, Helvetica, sans-serif;
       font-size: 21px;
       letter-spacing: -.04em;
+      color: var(--white);
+    }
+
+    .flow-step:hover strong {
+      color: var(--pink);
     }
 
     .flow-step p {
       margin: 0;
-      color: #666;
+      color: var(--dim);
       font-size: 9px;
       line-height: 1.7;
     }
 
     /* RUNTIME */
+
     .runtime {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -403,13 +519,16 @@ const flows = [
       padding: 35px;
     }
 
-    .runtime-panel + .runtime-panel { border-left: 1px solid var(--line); }
+    .runtime-panel + .runtime-panel {
+      border-left: 1px solid var(--line);
+    }
 
     .runtime-panel h3 {
       margin: 0 0 30px;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 32px;
       letter-spacing: -.05em;
+      color: var(--white);
     }
 
     .runtime-panel p {
@@ -426,9 +545,21 @@ const flows = [
       color: #aaa;
       font-size: 10px;
       line-height: 1.9;
+      background: rgba(255,255,255,.015);
+      transition:
+        border-color .25s ease,
+        background .25s ease,
+        color .25s ease;
+    }
+
+    .runtime-code:hover {
+      border-color: var(--pink-line);
+      background: var(--pink-soft);
+      color: var(--white);
     }
 
     /* FINAL */
+
     .final {
       min-height: 70vh;
       padding: 120px 0;
@@ -442,12 +573,13 @@ const flows = [
       font-size: clamp(4rem, 10vw, 10rem);
       line-height: .78;
       letter-spacing: -.075em;
+      color: var(--white);
     }
 
     .final h2 span {
       display: block;
       color: transparent;
-      -webkit-text-stroke: 1px #666;
+      -webkit-text-stroke: 1px var(--pink);
     }
 
     .final p {
@@ -467,22 +599,48 @@ const flows = [
       letter-spacing: .1em;
     }
 
+    footer span:first-child {
+      color: var(--pink);
+    }
+
     @media (max-width: 900px) {
-      .side-nav { display: none; }
-      main { margin-left: 0; }
-      .container { width: calc(100% - 40px); }
+      .side-nav {
+        display: none;
+      }
 
-      .system-map { min-height: 600px; }
-      .map-node { width: 145px; }
+      main {
+        margin-left: 0;
+      }
 
-      .layer { grid-template-columns: 60px 1fr; }
+      .container {
+        width: calc(100% - 40px);
+      }
+
+      .system-map {
+        min-height: 600px;
+      }
+
+      .map-node {
+        width: 145px;
+      }
+
+      .layer {
+        grid-template-columns: 60px 1fr;
+      }
+
       .layer-content {
         grid-column: 2;
         border-top: 1px solid var(--line);
       }
 
-      .flow { grid-template-columns: repeat(2, 1fr); }
-      .runtime { grid-template-columns: 1fr; }
+      .flow {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .runtime {
+        grid-template-columns: 1fr;
+      }
+
       .runtime-panel + .runtime-panel {
         border-left: 0;
         border-top: 1px solid var(--line);
@@ -490,8 +648,13 @@ const flows = [
     }
 
     @media (max-width: 600px) {
-      .header { padding: 0 16px; }
-      .header-info { display: none; }
+      .header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
 
       .architecture-head {
         padding: 120px 0 70px;
@@ -502,14 +665,18 @@ const flows = [
         margin: 80px 0 45px;
       }
 
-      .system-map { min-height: 560px; }
+      .system-map {
+        min-height: 560px;
+      }
 
       .map-center {
         width: 190px;
         height: 140px;
       }
 
-      .map-center strong { font-size: 25px; }
+      .map-center strong {
+        font-size: 25px;
+      }
 
       .map-node {
         width: 125px;
@@ -517,12 +684,29 @@ const flows = [
         padding: 12px;
       }
 
-      .node-input { left: 4%; top: 8%; }
-      .node-memory { right: 4%; top: 8%; }
-      .node-tools { left: 4%; bottom: 8%; }
-      .node-output { right: 4%; bottom: 8%; }
+      .node-input {
+        left: 4%;
+        top: 8%;
+      }
 
-      .layer { display: block; }
+      .node-memory {
+        right: 4%;
+        top: 8%;
+      }
+
+      .node-tools {
+        left: 4%;
+        bottom: 8%;
+      }
+
+      .node-output {
+        right: 4%;
+        bottom: 8%;
+      }
+
+      .layer {
+        display: block;
+      }
 
       .layer-id,
       .layer-name {
@@ -530,7 +714,9 @@ const flows = [
         border-bottom: 1px solid var(--line);
       }
 
-      .flow { grid-template-columns: 1fr; }
+      .flow {
+        grid-template-columns: 1fr;
+      }
 
       footer {
         flex-direction: column;
@@ -587,33 +773,24 @@ const flows = [
         <div class="section-label">01 / SYSTEM MAP</div>
 
         <div class="system-map">
-          <!--
-            Wiring is SVG instead of rotated CSS lines.
-            Each line terminates at the actual edge of the CYN-X core,
-            so the connections stay clean and never cross through it.
-          -->
           <svg
             class="connections"
             viewBox="0 0 1000 650"
             preserveAspectRatio="none"
             aria-hidden="true"
           >
-            <!-- INPUT -> CYN-X -->
             <line x1="165" y1="150" x2="370" y2="270" />
             <circle cx="165" cy="150" r="2" />
             <circle cx="370" cy="270" r="2" />
 
-            <!-- MEMORY -> CYN-X -->
             <line x1="835" y1="150" x2="630" y2="270" />
             <circle cx="835" cy="150" r="2" />
             <circle cx="630" cy="270" r="2" />
 
-            <!-- TOOLS -> CYN-X -->
             <line x1="165" y1="500" x2="370" y2="380" />
             <circle cx="165" cy="500" r="2" />
             <circle cx="370" cy="380" r="2" />
 
-            <!-- CYN-X -> OUTPUT -->
             <line x1="630" y1="380" x2="835" y2="500" />
             <circle cx="630" cy="380" r="2" />
             <circle cx="835" cy="500" r="2" />
@@ -658,6 +835,7 @@ const flows = [
               <div class="layer-name">{layer.name}</div>
               <div class="layer-content">
                 <div class="layer-description">{layer.description}</div>
+
                 <div class="component-list">
                   {layer.components.map((component) => (
                     <span class="component">{component}</span>
@@ -693,12 +871,14 @@ const flows = [
         <div class="runtime">
           <div class="runtime-panel">
             <h3>LOCAL<br />INTELLIGENCE.</h3>
+
             <p>
               CYN-X can use local model infrastructure so intelligence
               can remain close to the machine and the person using it.
               The architecture is intentionally compatible with local
               inference systems.
             </p>
+
             <div class="runtime-code">
               CYN-X CORE<br />
               &nbsp;&nbsp;↓<br />
@@ -712,11 +892,13 @@ const flows = [
 
           <div class="runtime-panel">
             <h3>SYSTEM<br />INTEGRATION.</h3>
+
             <p>
               CYN-X can sit between humans and external systems,
               allowing intelligence to operate through applications,
               files, APIs, devices, and future hardware.
             </p>
+
             <div class="runtime-code">
               INPUT<br />
               &nbsp;&nbsp;↓<br />
