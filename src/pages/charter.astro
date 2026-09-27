@@ -485,7 +485,6 @@ const practices = [
 
 </div>
 
-
 <style>
 
 :global(*) {
@@ -507,6 +506,7 @@ const practices = [
   --bg: #050505;
   --panel: #0a0a0a;
   --panel-raised: #0f0f0f;
+  --panel-hover: #131313;
 
   --text: #f1f1f1;
   --white: #f1f1f1;
@@ -531,17 +531,20 @@ const practices = [
 }
 
 
-/* HEADER */
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .site-header {
   height: 72px;
+
+  padding: 0 4vw;
+
   border-bottom: 1px solid var(--line);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 0 4vw;
 
   font-family: "Courier New", monospace;
   font-size: 11px;
@@ -556,6 +559,7 @@ const practices = [
 .header-document {
   display: flex;
   gap: 10px;
+
   color: var(--dim);
 }
 
@@ -564,15 +568,19 @@ const practices = [
 }
 
 
-/* SIDE NAV */
+/* =========================================================
+   SIDE NAVIGATION
+   ========================================================= */
 
 .side-nav {
   position: fixed;
+
   left: 24px;
   top: 50%;
-  transform: translateY(-50%);
 
   z-index: 10;
+
+  transform: translateY(-50%);
 
   display: flex;
   flex-direction: column;
@@ -605,18 +613,16 @@ const practices = [
 }
 
 
-/* HERO */
+/* =========================================================
+   HERO
+   ========================================================= */
 
 .hero {
   max-width: var(--max);
-  margin: 0 auto;
-
   min-height: 720px;
 
-  padding:
-    55px
-    10vw
-    100px;
+  margin: 0 auto;
+  padding: 55px 10vw 100px;
 
   display: flex;
   flex-direction: column;
@@ -626,10 +632,11 @@ const practices = [
   display: flex;
   gap: 110px;
 
+  color: var(--dim);
+
   font-family: "Courier New", monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
-  color: var(--dim);
 }
 
 .section-meta span:first-child {
@@ -657,16 +664,15 @@ const practices = [
   margin-top: 90px;
 
   display: grid;
-  grid-template-columns: minmax(0, 760px) 1fr;
+  grid-template-columns: minmax(0, 760px) minmax(0, 1fr);
   gap: 80px;
 
   align-items: end;
 }
 
 .hero-copy {
-  margin: 0;
-
   max-width: 800px;
+  margin: 0;
 
   color: var(--muted);
 
@@ -686,12 +692,14 @@ const practices = [
 }
 
 
-/* GENERAL SECTIONS */
+/* =========================================================
+   GENERAL CONTENT SECTIONS
+   ========================================================= */
 
 .content-section {
   max-width: var(--max);
-  margin: 0 auto;
 
+  margin: 0 auto;
   padding: 130px 10vw;
 
   border-top: 1px solid var(--line);
@@ -701,51 +709,25 @@ const practices = [
   gap: 80px;
 }
 
-#purpose {
-  grid-template-columns: minmax(340px, 0.9fr) minmax(0, 1.1fr);
-}
 
-#purpose .section-heading h2 {
-  font-size: clamp(40px, 4.2vw, 68px);
-  max-width: 320px;
-}
+/* =========================================================
+   SECTION HEADINGS
+   ========================================================= */
 
 .section-heading {
+  min-width: 0;
+
   display: flex;
   gap: 25px;
-  min-width: 0;
 }
 
 .section-heading > div:last-child {
   min-width: 0;
 }
 
-.section-heading h2 {
-  margin: 0;
-
-  font-size: clamp(42px, 4.5vw, 72px);
-  line-height: 0.92;
-  letter-spacing: -0.06em;
-
-  max-width: 100%;
-}
-
-.section-body p {
-  max-width: 100%;
-  overflow-wrap: break-word;
-}
-
-.section-body {
-  min-width: 0;
-  max-width: 760px;
-}
-
-.section-heading {
-  display: flex;
-  gap: 25px;
-}
-
 .section-number {
+  flex-shrink: 0;
+
   color: var(--pink);
 
   font-family: "Courier New", monospace;
@@ -766,6 +748,8 @@ const practices = [
 }
 
 .section-heading h2 {
+  max-width: 100%;
+
   margin: 0;
 
   font-size: clamp(45px, 5vw, 78px);
@@ -777,17 +761,40 @@ const practices = [
   color: var(--pink);
 }
 
+
+/* =========================================================
+   PURPOSE
+   ========================================================= */
+
+#purpose {
+  grid-template-columns:
+    minmax(340px, 0.9fr)
+    minmax(0, 1.1fr);
+}
+
+#purpose .section-heading h2 {
+  max-width: 320px;
+
+  font-size: clamp(40px, 4.2vw, 68px);
+}
+
 .section-body {
+  min-width: 0;
   max-width: 760px;
 }
 
-.section-body p,
-.ecosystem-copy p,
-.direction-grid p {
+.section-body p {
+  max-width: 100%;
+  margin-top: 0;
+
   color: var(--muted);
 
   font-size: 18px;
   line-height: 1.7;
+}
+
+.section-body p + p {
+  margin-top: 28px;
 }
 
 .large-copy {
@@ -799,22 +806,27 @@ const practices = [
 }
 
 
-/* MISSION */
-/* MISSION */
+/* =========================================================
+   MISSION
+   ========================================================= */
 
 .mission-section {
-  display: grid;
-  grid-template-columns: 30% minmax(0, 1fr);
+  grid-template-columns:
+    minmax(300px, 0.65fr)
+    minmax(0, 1.35fr);
+
   gap: 80px;
 }
 
 .mission-content {
   min-width: 0;
+
   padding-top: 8px;
 }
 
 .mission-statement {
   max-width: 850px;
+
   margin-bottom: 85px;
 }
 
@@ -857,16 +869,18 @@ const practices = [
 }
 
 .mission-details p {
-  margin: 0;
-
   max-width: 700px;
+  margin: 0;
 
   color: var(--muted);
 
   line-height: 1.5;
 }
 
-/* PRINCIPLES */
+
+/* =========================================================
+   PRINCIPLES
+   ========================================================= */
 
 .principles-list {
   border-top: 1px solid var(--line);
@@ -874,7 +888,7 @@ const practices = [
 
 .principle {
   display: grid;
-  grid-template-columns: 55px 240px 1fr;
+  grid-template-columns: 55px 240px minmax(0, 1fr);
   gap: 25px;
 
   padding: 30px 0;
@@ -907,9 +921,8 @@ const practices = [
 }
 
 .principle p {
-  margin: 0;
-
   max-width: 600px;
+  margin: 0;
 
   color: var(--muted);
 
@@ -917,11 +930,13 @@ const practices = [
 }
 
 
-/* PRACTICE */
+/* =========================================================
+   HOW WE BUILD
+   ========================================================= */
 
 .flow-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
@@ -947,7 +962,7 @@ const practices = [
 .flow-item p {
   max-width: 420px;
 
-  margin-top: 45px;
+  margin: 45px 0 0;
 
   color: var(--muted);
 
@@ -955,13 +970,29 @@ const practices = [
 }
 
 
-/* ECOSYSTEM */
+/* =========================================================
+   ECOSYSTEM
+   ========================================================= */
 
 .ecosystem-copy {
+  min-width: 0;
   max-width: 750px;
 }
 
+.ecosystem-copy p {
+  color: var(--muted);
+
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.ecosystem-copy .large-copy {
+  color: var(--white);
+}
+
 .system-map {
+  grid-column: 2;
+
   margin-top: 80px;
 
   display: flex;
@@ -986,8 +1017,8 @@ const practices = [
 .system-node span {
   color: var(--white);
 
-  font-weight: 700;
   font-size: 14px;
+  font-weight: 700;
 }
 
 .system-node small {
@@ -1001,15 +1032,20 @@ const practices = [
 .system-line {
   width: 60px;
   height: 1px;
+
+  flex-shrink: 0;
+
   background: var(--line-strong);
 }
 
 
-/* DIRECTION */
+/* =========================================================
+   DIRECTION
+   ========================================================= */
 
 .direction-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 30px;
 }
 
@@ -1027,17 +1063,23 @@ const practices = [
   letter-spacing: 0.12em;
 }
 
+.direction-grid p {
+  color: var(--muted);
 
-/* FINAL */
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   FINAL
+   ========================================================= */
 
 .final-section {
   max-width: var(--max);
-  margin: 0 auto;
 
-  padding:
-    170px
-    10vw
-    190px;
+  margin: 0 auto;
+  padding: 170px 10vw 190px;
 
   border-top: 1px solid var(--line);
 
@@ -1077,12 +1119,14 @@ const practices = [
 }
 
 
-/* FOOTER */
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
 .site-footer {
   max-width: var(--max);
-  margin: 0 auto;
 
+  margin: 0 auto;
   padding: 30px 10vw;
 
   border-top: 1px solid var(--line);
@@ -1098,7 +1142,26 @@ const practices = [
 }
 
 
-/* RESPONSIVE */
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .content-section {
+    gap: 55px;
+  }
+
+  .mission-section {
+    gap: 55px;
+  }
+
+  .principle {
+    grid-template-columns: 45px 190px minmax(0, 1fr);
+  }
+
+}
+
 
 @media (max-width: 900px) {
 
@@ -1106,9 +1169,13 @@ const practices = [
     display: none;
   }
 
+
+  /* HERO */
+
   .hero {
-    padding:
-      50px 7vw 90px;
+    min-height: auto;
+
+    padding: 50px 7vw 90px;
   }
 
   .hero-bottom {
@@ -1120,55 +1187,114 @@ const practices = [
     justify-self: start;
   }
 
+
+  /* GENERAL SECTIONS */
+
   .content-section {
-    padding:
-      90px 7vw;
+    padding: 90px 7vw;
 
     grid-template-columns: 1fr;
+
     gap: 60px;
   }
 
-  .mission-grid {
+
+  /* PURPOSE */
+
+  #purpose {
     grid-template-columns: 1fr;
   }
 
+  #purpose .section-heading h2 {
+    max-width: none;
+  }
+
+
+  /* MISSION */
+
+  .mission-section {
+    grid-template-columns: 1fr;
+
+    gap: 60px;
+  }
+
+  .mission-content {
+    padding-top: 0;
+  }
+
+  .mission-statement {
+    margin-bottom: 55px;
+  }
+
+
+  /* PRINCIPLES */
+
   .principle {
-    grid-template-columns: 45px 1fr;
+    grid-template-columns: 45px minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .principle-title {
+    grid-column: 2;
   }
 
   .principle p {
     grid-column: 2;
   }
 
-  .direction-grid {
+
+  /* PRACTICE */
+
+  .flow-grid {
     grid-template-columns: 1fr;
   }
 
+
+  /* ECOSYSTEM */
+
   .system-map {
+    grid-column: auto;
+
     flex-direction: column;
     align-items: stretch;
+
+    margin-top: 60px;
   }
 
   .system-line {
     width: 1px;
     height: 35px;
+
     margin-left: 30px;
   }
 
-  .final-section {
-    padding:
-      120px 7vw;
+
+  /* DIRECTION */
+
+  .direction-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
 
+
+  /* FINAL */
+
+  .final-section {
+    padding: 120px 7vw;
+  }
+
+
+  /* FOOTER */
+
   .site-footer {
-    padding:
-      25px 7vw;
+    padding: 25px 7vw;
 
     flex-direction: column;
     gap: 10px;
   }
 
 }
+
 
 @media (max-width: 600px) {
 
@@ -1180,9 +1306,8 @@ const practices = [
     display: none;
   }
 
-  .hero {
-    min-height: auto;
-  }
+
+  /* HERO */
 
   .hero-title h1 {
     font-size: 20vw;
@@ -1196,13 +1321,74 @@ const practices = [
     font-size: 19px;
   }
 
+
+  /* SECTIONS */
+
+  .section-heading {
+    gap: 18px;
+  }
+
   .section-heading h2 {
     font-size: 48px;
   }
 
-  .flow-grid {
-    grid-template-columns: 1fr;
+  .section-number {
+    font-size: 10px;
   }
+
+
+  /* PURPOSE */
+
+  #purpose .section-heading h2 {
+    font-size: 48px;
+  }
+
+
+  /* MISSION */
+
+  .mission-statement p {
+    font-size: 30px;
+  }
+
+  .mission-details > div {
+    min-height: 90px;
+
+    padding: 25px 0;
+
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 15px;
+  }
+
+
+  /* PRINCIPLES */
+
+  .principle {
+    padding: 25px 0;
+  }
+
+  .principle-title {
+    font-size: 16px;
+  }
+
+
+  /* PRACTICE */
+
+  .flow-item {
+    min-height: 160px;
+
+    padding: 25px;
+  }
+
+
+  /* ECOSYSTEM */
+
+  .system-node {
+    min-width: 0;
+    width: 100%;
+  }
+
+
+  /* FINAL */
 
   .final-section h2 {
     font-size: 21vw;
