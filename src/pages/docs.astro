@@ -1,0 +1,1134 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+
+const docsRoot = path.join(process.cwd(), "public", "docs");
+
+type DocEntry = {
+  title: string;
+  slug: string;
+  href: string;
+  category: string;
+  relativePath: string;
+};
+
+const docs: DocEntry[] = [];
+
+function titleFromPath(relativePath: string) {
+  const parts = relativePath.split(path.sep).filter(Boolean);
+
+  const index = parts[parts.length - 1] === "index.html"
+    ? parts[parts.length - 2]
+    : parts[parts.length - 1];
+
+  if (!index) return "DOCUMENTATION";
+
+  return index
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function categoryFromPath(relativePath: string) {
+  const parts = relativePath.split(path.sep).filter(Boolean);
+
+  if (parts.length <= 1) {
+    return "BARKLY";
+  }
+
+  return parts[0]
+    .replace(/[-_]+/g, " ")
+    .toUpperCase();
+}
+
+function scanDirectory(directory: string, relative = "") {
+  if (!fs.existsSync(directory)) return;
+
+  const entries = fs.readdirSync(directory, {
+    withFileTypes: true,
+  });
+
+  for (const entry of entries) {
+    const absolutePath = path.join(directory, entry.name);
+    const relativePath = path.join(relative, entry.name);
+
+    if (entry.isDirectory()) {
+      scanDirectory(absolutePath, relativePath);
+      continue;
+    }
+
+    if (entry.isFile() && entry.name.toLowerCase() === "index.html") {
+      const normalized = relativePath.replaceAll(path.sep, "/");
+
+      docs.push({
+        title: titleFromPath(relativePath),
+        slug: normalized
+          .replace(/\/index\.html$/i, "")
+          .replace(/^index\.html$/i, ""),
+        href: `/docs/${normalized}`,
+        category: categoryFromPath(relativePath),
+        relativePath: normalized,
+      });
+    }
+  }
+}
+
+scanDirectory(docsRoot);
+
+docs.sort((a, b) =>
+  a.relativePath.localeCompare(b.relativePath)
+);
+
+const categories = [...new Set(docs.map((doc) => doc.category))];
+
+const year = 2026;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Barkly Labs / Documentation</title>
+
+    <meta
+      name="description"
+      content="Barkly Labs documentation, technical knowledge, research notes, systems, architecture, and engineering references."
+    />
+  </head>
+
+  <body>
+    <!-- =========================================================
+         TOP BAR
+         ========================================================= -->
+
+    <header class="topbar">
+      <a href="/" class="brand">
+        <span class="brand-symbol">◆</span>
+        <span>BARKLY LABS</span>
+      </a>
+
+      <div class="topbar-center">
+        DOCUMENTATION SYSTEM
+      </div>
+
+      <a href="/" class="back-link">
+        ← RETURN TO LABS
+      </a>
+    </header>
+
+    <main>
+      <!-- =====================================================
+           HERO
+           ===================================================== -->
+
+      <section class="docs-hero">
+        <div class="hero-grid"></div>
+
+        <div class="hero-content">
+          <div class="system-status">
+            <span class="status-dot"></span>
+            KNOWLEDGE SYSTEM / ONLINE
+          </div>
+
+          <div class="hero-label">
+            BARKLY / DOCS
+          </div>
+
+          <h1>
+            KNOWLEDGE
+            <span>ARCHIVE.</span>
+          </h1>
+
+          <p>
+            Technical documentation, research notes, system
+            architecture, experiments, references, and knowledge
+            generated throughout the Barkly ecosystem.
+          </p>
+
+          <div class="hero-meta">
+            <span>{docs.length.toString().padStart(2, "0")} DOCUMENTS</span>
+            <span>{categories.length.toString().padStart(2, "0")} SYSTEMS</span>
+            <span>BUILD / DOCUMENT / LEARN</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           DOCUMENTATION INDEX
+           ===================================================== -->
+
+      <section class="archive">
+        <div class="archive-header">
+          <div>
+            <span class="section-number">01</span>
+            <span class="section-kicker">DOCUMENTATION INDEX</span>
+          </div>
+
+          <div class="archive-count">
+            {docs.length.toString().padStart(2, "0")} ENTRIES
+          </div>
+        </div>
+
+        {
+          docs.length === 0 ? (
+            <div class="empty-state">
+              <span class="empty-symbol">[ 00 ]</span>
+
+              <h2>NO DOCUMENTATION FOUND.</h2>
+
+              <p>
+                The Barkly Docs generator has not produced any
+                <code>index.html</code> files yet.
+              </p>
+            </div>
+          ) : (
+            <div class="document-list">
+              {docs.map((doc, index) => (
+                <a
+                  href={doc.href}
+                  class="document-row"
+                  data-category={doc.category}
+                >
+                  <span class="document-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span class="document-main">
+                    <span class="document-category">
+                      {doc.category}
+                    </span>
+
+                    <strong>{doc.title}</strong>
+
+                    <span class="document-path">
+                      /{doc.relativePath}
+                    </span>
+                  </span>
+
+                  <span class="document-open">
+                    OPEN →
+                  </span>
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </section>
+
+      <!-- =====================================================
+           SYSTEM MAP
+           ===================================================== -->
+
+      <section class="system-map">
+        <div class="map-header">
+          <span class="section-number">02</span>
+
+          <div>
+            <span class="section-kicker">KNOWLEDGE GRAPH</span>
+
+            <h2>
+              ONE ECOSYSTEM.
+              <span>MANY SYSTEMS.</span>
+            </h2>
+          </div>
+        </div>
+
+        <div class="map-grid">
+          <div class="map-core">
+            <span class="core-label">BARKLY</span>
+            <strong>KNOWLEDGE</strong>
+            <small>DOCUMENTATION CORE</small>
+          </div>
+
+          <div class="map-node node-a">
+            <span>01</span>
+            <strong>RESEARCH</strong>
+          </div>
+
+          <div class="map-node node-b">
+            <span>02</span>
+            <strong>ENGINEERING</strong>
+          </div>
+
+          <div class="map-node node-c">
+            <span>03</span>
+            <strong>SYSTEMS</strong>
+          </div>
+
+          <div class="map-node node-d">
+            <span>04</span>
+            <strong>PEOPLE</strong>
+          </div>
+
+          <div class="map-line line-a"></div>
+          <div class="map-line line-b"></div>
+          <div class="map-line line-c"></div>
+          <div class="map-line line-d"></div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           PRINCIPLE
+           ===================================================== -->
+
+      <section class="docs-principle">
+        <div class="principle-number">03</div>
+
+        <div>
+          <span class="section-kicker">BARKLY PRINCIPLE</span>
+
+          <h2>
+            DOCUMENTATION
+            <span>IS INFRASTRUCTURE.</span>
+          </h2>
+
+          <p>
+            A system should not depend on one person's memory.
+            Documentation makes the architecture, decisions,
+            experiments, failures, and knowledge of a system
+            understandable enough for other people to use,
+            question, modify, and improve it.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="footer">
+      <div class="footer-main">
+        <div>
+          <div class="footer-logo">BARKLY</div>
+          <div class="footer-labs">LABS / DOCS</div>
+        </div>
+
+        <div class="footer-tagline">
+          KNOWLEDGE
+          <br />
+          BECOMES INFRASTRUCTURE.
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© {year} BARKLY LABS</span>
+        <span>DETROIT, MICHIGAN</span>
+        <a href="/">BARKLY LABS ↗</a>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(html) {
+    background: #050505;
+    scroll-behavior: smooth;
+  }
+
+  :global(body) {
+    margin: 0;
+    background: #050505;
+    color: #f2f2f2;
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+    overflow-x: hidden;
+  }
+
+  :global(a) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: #f2f2f2;
+    color: #050505;
+  }
+
+  /* =========================================================
+     TOPBAR
+     ========================================================= */
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+
+    min-height: 72px;
+    padding: 0 5vw;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    background: rgba(5, 5, 5, 0.92);
+    backdrop-filter: blur(14px);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+
+  .brand-symbol {
+    font-size: 8px;
+  }
+
+  .topbar-center {
+    color: rgba(255, 255, 255, 0.35);
+
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+  }
+
+  .back-link {
+    justify-self: end;
+
+    color: rgba(255, 255, 255, 0.5);
+
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: #fff;
+  }
+
+  /* =========================================================
+     HERO
+     ========================================================= */
+
+  .docs-hero {
+    position: relative;
+
+    min-height: 650px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 130px 10vw;
+
+    overflow: hidden;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0.12;
+
+    background-image:
+      linear-gradient(
+        rgba(255, 255, 255, 0.08) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.08) 1px,
+        transparent 1px
+      );
+
+    background-size: 60px 60px;
+
+    mask-image: linear-gradient(
+      90deg,
+      black,
+      transparent 75%
+    );
+  }
+
+  .docs-hero::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+      radial-gradient(
+        circle at 80% 40%,
+        rgba(255, 255, 255, 0.07),
+        transparent 28%
+      ),
+      linear-gradient(
+        90deg,
+        #050505 10%,
+        transparent 85%
+      );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+
+    width: min(950px, 100%);
+  }
+
+  .system-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 45px;
+
+    color: rgba(255, 255, 255, 0.38);
+
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+  }
+
+  .hero-label {
+    color: rgba(255, 255, 255, 0.3);
+
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+  }
+
+  .docs-hero h1 {
+    margin: 28px 0;
+
+    font-size: clamp(70px, 11vw, 160px);
+    line-height: 0.78;
+    letter-spacing: -0.08em;
+  }
+
+  .docs-hero h1 span {
+    display: block;
+    margin-left: 12vw;
+
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .docs-hero p {
+    max-width: 650px;
+
+    margin: 50px 0 35px;
+
+    color: rgba(255, 255, 255, 0.52);
+
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+
+    color: rgba(255, 255, 255, 0.25);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+
+  /* =========================================================
+     ARCHIVE
+     ========================================================= */
+
+  .archive {
+    padding: 120px 10vw;
+  }
+
+  .archive-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .archive-header > div:first-child {
+    display: flex;
+    gap: 35px;
+  }
+
+  .section-number,
+  .section-kicker {
+    font-family: "Courier New", monospace;
+  }
+
+  .section-number {
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 10px;
+  }
+
+  .section-kicker {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+  }
+
+  .archive-count {
+    color: rgba(255, 255, 255, 0.25);
+
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .document-list {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .document-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 110px;
+    gap: 30px;
+    align-items: center;
+
+    min-height: 125px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition:
+      background 0.25s,
+      padding 0.25s;
+  }
+
+  .document-row:last-child {
+    border-bottom: 0;
+  }
+
+  .document-row:hover {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .document-number {
+    color: rgba(255, 255, 255, 0.2);
+
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+  }
+
+  .document-main {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .document-category {
+    color: rgba(255, 255, 255, 0.3);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+  }
+
+  .document-main strong {
+    font-size: 22px;
+    letter-spacing: -0.035em;
+  }
+
+  .document-path {
+    color: rgba(255, 255, 255, 0.2);
+
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+  }
+
+  .document-open {
+    justify-self: end;
+
+    color: rgba(255, 255, 255, 0.4);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+
+    transition: color 0.2s;
+  }
+
+  .document-row:hover .document-open {
+    color: #fff;
+  }
+
+  .empty-state {
+    padding: 100px 0;
+    text-align: center;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .empty-symbol {
+    color: rgba(255, 255, 255, 0.2);
+
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+  }
+
+  .empty-state h2 {
+    margin: 25px 0 15px;
+
+    font-size: 30px;
+    letter-spacing: -0.04em;
+  }
+
+  .empty-state p {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+  }
+
+  /* =========================================================
+     SYSTEM MAP
+     ========================================================= */
+
+  .system-map {
+    position: relative;
+
+    min-height: 750px;
+
+    padding: 140px 10vw;
+
+    background: #070707;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    overflow: hidden;
+  }
+
+  .map-header {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 40px;
+
+    position: relative;
+    z-index: 3;
+  }
+
+  .map-header h2 {
+    margin: 18px 0 0;
+
+    max-width: 850px;
+
+    font-size: clamp(45px, 7vw, 95px);
+    line-height: 0.86;
+    letter-spacing: -0.06em;
+  }
+
+  .map-header h2 span {
+    display: block;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .map-grid {
+    position: relative;
+
+    width: min(800px, 80vw);
+    height: 480px;
+
+    margin: 80px auto 0;
+  }
+
+  .map-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 180px;
+    height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transform: translate(-50%, -50%);
+
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    background: #070707;
+
+    text-align: center;
+  }
+
+  .core-label {
+    color: rgba(255, 255, 255, 0.3);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+  }
+
+  .map-core strong {
+    margin: 10px 0;
+
+    font-size: 23px;
+    letter-spacing: -0.04em;
+  }
+
+  .map-core small {
+    color: rgba(255, 255, 255, 0.25);
+
+    font-family: "Courier New", monospace;
+    font-size: 7px;
+    letter-spacing: 0.12em;
+  }
+
+  .map-node {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    padding: 15px;
+
+    min-width: 150px;
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    background: rgba(7, 7, 7, 0.9);
+  }
+
+  .map-node span {
+    color: rgba(255, 255, 255, 0.25);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+  }
+
+  .map-node strong {
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .node-a {
+    top: 20px;
+    left: 0;
+  }
+
+  .node-b {
+    top: 20px;
+    right: 0;
+  }
+
+  .node-c {
+    bottom: 20px;
+    left: 0;
+  }
+
+  .node-d {
+    bottom: 20px;
+    right: 0;
+  }
+
+  .map-line {
+    position: absolute;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    transform-origin: center;
+  }
+
+  .line-a,
+  .line-b {
+    top: 34%;
+    width: 260px;
+    height: 1px;
+  }
+
+  .line-a {
+    left: 12%;
+    transform: rotate(25deg);
+  }
+
+  .line-b {
+    right: 12%;
+    transform: rotate(-25deg);
+  }
+
+  .line-c,
+  .line-d {
+    bottom: 34%;
+    width: 260px;
+    height: 1px;
+  }
+
+  .line-c {
+    left: 12%;
+    transform: rotate(-25deg);
+  }
+
+  .line-d {
+    right: 12%;
+    transform: rotate(25deg);
+  }
+
+  /* =========================================================
+     PRINCIPLE
+     ========================================================= */
+
+  .docs-principle {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 40px;
+
+    padding: 150px 10vw;
+  }
+
+  .docs-principle h2 {
+    max-width: 900px;
+
+    margin: 25px 0 40px;
+
+    font-size: clamp(50px, 7vw, 100px);
+    line-height: 0.85;
+    letter-spacing: -0.065em;
+  }
+
+  .docs-principle h2 span {
+    display: block;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .docs-principle p {
+    max-width: 650px;
+
+    color: rgba(255, 255, 255, 0.52);
+
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* =========================================================
+     FOOTER
+     ========================================================= */
+
+  .footer {
+    padding: 70px 5vw 30px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer-main {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+
+    padding-bottom: 80px;
+  }
+
+  .footer-logo {
+    font-size: 55px;
+    font-weight: 900;
+    line-height: 0.8;
+    letter-spacing: -0.07em;
+  }
+
+  .footer-labs {
+    margin-top: 12px;
+
+    color: rgba(255, 255, 255, 0.3);
+
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+  }
+
+  .footer-tagline {
+    color: rgba(255, 255, 255, 0.35);
+
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+    line-height: 1.7;
+    letter-spacing: 0.12em;
+    text-align: right;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+
+    padding-top: 20px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    color: rgba(255, 255, 255, 0.22);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  /* =========================================================
+     RESPONSIVE
+     ========================================================= */
+
+  @media (max-width: 800px) {
+    .topbar {
+      grid-template-columns: 1fr auto;
+    }
+
+    .topbar-center {
+      display: none;
+    }
+
+    .docs-hero {
+      min-height: 580px;
+      padding: 110px 7vw 80px;
+    }
+
+    .archive,
+    .system-map,
+    .docs-principle {
+      padding-left: 7vw;
+      padding-right: 7vw;
+    }
+
+    .document-row {
+      grid-template-columns: 45px 1fr;
+      gap: 15px;
+      padding: 20px 0;
+    }
+
+    .document-open {
+      grid-column: 2;
+      justify-self: start;
+    }
+
+    .map-header,
+    .docs-principle {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .map-grid {
+      width: 100%;
+      height: 600px;
+    }
+
+    .map-core {
+      width: 150px;
+      height: 150px;
+    }
+
+    .map-node {
+      min-width: 125px;
+    }
+
+    .line-a,
+    .line-b,
+    .line-c,
+    .line-d {
+      width: 130px;
+    }
+
+    .footer-main,
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 30px;
+    }
+
+    .footer-tagline {
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .topbar {
+      min-height: 60px;
+      padding: 0 6vw;
+    }
+
+    .back-link {
+      font-size: 8px;
+    }
+
+    .docs-hero h1 {
+      font-size: 62px;
+    }
+
+    .hero-meta {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .archive-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .archive-header > div:first-child {
+      gap: 20px;
+    }
+
+    .map-grid {
+      height: 500px;
+    }
+
+    .node-a {
+      left: 0;
+      top: 0;
+    }
+
+    .node-b {
+      right: 0;
+      top: 0;
+    }
+
+    .node-c {
+      left: 0;
+      bottom: 0;
+    }
+
+    .node-d {
+      right: 0;
+      bottom: 0;
+    }
+
+    .map-line {
+      display: none;
+    }
+  }
+</style>
