@@ -24,7 +24,13 @@ const docTypes: DocType[] = [
     key: "technical",
     label: "TECHNICAL DOCUMENTATION",
     description:
-      "Implementation details, technical references, APIs, modules, dependencies, and system behavior.",
+      "Implementation details, generated references, APIs, modules, dependencies, and system behavior.",
+  },
+  {
+    key: "requirements",
+    label: "FUNCTIONAL REQUIREMENTS",
+    description:
+      "Requirements describing what systems should do, how they should behave, and what they are intended to accomplish.",
   },
   {
     key: "specifications",
@@ -36,13 +42,7 @@ const docTypes: DocType[] = [
     key: "research",
     label: "RESEARCH & PAPERS",
     description:
-      "Research notes, papers, literature, investigations, findings, and supporting knowledge.",
-  },
-  {
-    key: "requirements",
-    label: "FUNCTIONAL REQUIREMENTS",
-    description:
-      "Functional requirements describing what systems should do and how they should behave.",
+      "Research notes, papers, investigations, findings, experiments, and supporting knowledge.",
   },
   {
     key: "architecture",
@@ -84,23 +84,138 @@ const docTypes: DocType[] = [
 
 const docs: DocEntry[] = [];
 
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function normalizePath(value: string) {
+  return value.replaceAll(path.sep, "/");
+}
+
 function titleFromPath(relativePath: string) {
-  const parts = relativePath.split(path.sep).filter(Boolean);
+  const normalized = normalizePath(relativePath);
+  const parts = normalized.split("/").filter(Boolean);
 
   const index =
-    parts[parts.length - 1] === "index.html"
+    parts[parts.length - 1]?.toLowerCase() === "index.html"
       ? parts[parts.length - 2]
       : parts[parts.length - 1];
 
-  if (!index) return "DOCUMENTATION";
+  if (!index) {
+    return "DOCUMENTATION";
+  }
 
   return index
     .replace(/[-_]+/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+/*
+ * The first folder underneath /public/docs is authoritative.
+ *
+ * Example:
+ *
+ * public/docs/technical/CYN-X/index.html
+ *                  ^^^^^^^^
+ *
+ * public/docs/Functional-requirements/CYN-X/index.html
+ *                  ^^^^^^^^^^^^^^^^^^^^^
+ */
+function typeFromPath(relativePath: string) {
+  const normalized = normalizePath(relativePath).toLowerCase();
+
+  const parts = normalized.split("/").filter(Boolean);
+
+  const root = parts[0] ?? "";
+
+  if (
+    root === "technical" ||
+    root === "technical-docs" ||
+    root === "technical-documentation"
+  ) {
+    return "technical";
+  }
+
+  if (
+    root === "functional-requirements" ||
+    root === "requirements" ||
+    root === "frd"
+  ) {
+    return "requirements";
+  }
+
+  if (
+    root === "specifications" ||
+    root === "specs"
+  ) {
+    return "specifications";
+  }
+
+  if (
+    root === "research" ||
+    root === "papers" ||
+    root === "research-papers"
+  ) {
+    return "research";
+  }
+
+  if (
+    root === "architecture" ||
+    root === "design"
+  ) {
+    return "architecture";
+  }
+
+  if (
+    root === "implementation" ||
+    root === "reference"
+  ) {
+    return "implementation";
+  }
+
+  if (
+    root === "testing" ||
+    root === "tests" ||
+    root === "validation"
+  ) {
+    return "testing";
+  }
+
+  if (
+    root === "experiments" ||
+    root === "notes"
+  ) {
+    return "experiments";
+  }
+
+  if (
+    root === "guides" ||
+    root === "how-to" ||
+    root === "howto"
+  ) {
+    return "guides";
+  }
+
+  if (
+    root === "history" ||
+    root === "changelog" ||
+    root === "changelogs"
+  ) {
+    return "history";
+  }
+
+  /*
+   * Documents that are directly inside public/docs
+   * are not automatically assigned to a knowledge type.
+   *
+   * They remain in the global Documentation Index.
+   */
+  return "unclassified";
+}
+
 function categoryFromPath(relativePath: string) {
-  const parts = relativePath.split(path.sep).filter(Boolean);
+  const normalized = normalizePath(relativePath);
+  const parts = normalized.split("/").filter(Boolean);
 
   if (parts.length <= 1) {
     return "BARKLY";
@@ -111,90 +226,14 @@ function categoryFromPath(relativePath: string) {
     .toUpperCase();
 }
 
-function typeFromPath(relativePath: string) {
-  const normalized = relativePath.toLowerCase();
-
-  if (
-    normalized.includes("/technical/") ||
-    normalized.includes("/technical-docs/") ||
-    normalized.includes("/technical-documentation/")
-  ) {
-    return "technical";
-  }
-
-  if (
-    normalized.includes("/specifications/") ||
-    normalized.includes("/specs/")
-  ) {
-    return "specifications";
-  }
-
-  if (
-    normalized.includes("/research/") ||
-    normalized.includes("/papers/") ||
-    normalized.includes("/research-papers/")
-  ) {
-    return "research";
-  }
-
-  if (
-    normalized.includes("/requirements/") ||
-    normalized.includes("/functional-requirements/") ||
-    normalized.includes("/frd/")
-  ) {
-    return "requirements";
-  }
-
-  if (
-    normalized.includes("/architecture/") ||
-    normalized.includes("/design/")
-  ) {
-    return "architecture";
-  }
-
-  if (
-    normalized.includes("/implementation/") ||
-    normalized.includes("/reference/")
-  ) {
-    return "implementation";
-  }
-
-  if (
-    normalized.includes("/testing/") ||
-    normalized.includes("/tests/") ||
-    normalized.includes("/validation/")
-  ) {
-    return "testing";
-  }
-
-  if (
-    normalized.includes("/experiments/") ||
-    normalized.includes("/notes/")
-  ) {
-    return "experiments";
-  }
-
-  if (
-    normalized.includes("/guides/") ||
-    normalized.includes("/how-to/") ||
-    normalized.includes("/howto/")
-  ) {
-    return "guides";
-  }
-
-  if (
-    normalized.includes("/history/") ||
-    normalized.includes("/changelog/") ||
-    normalized.includes("/changelogs/")
-  ) {
-    return "history";
-  }
-
-  return "technical";
-}
+/* =========================================================
+   RECURSIVE DOCUMENT SCANNER
+   ========================================================= */
 
 function scanDirectory(directory: string, relative = "") {
-  if (!fs.existsSync(directory)) return;
+  if (!fs.existsSync(directory)) {
+    return;
+  }
 
   const entries = fs.readdirSync(directory, {
     withFileTypes: true,
@@ -213,16 +252,21 @@ function scanDirectory(directory: string, relative = "") {
       entry.isFile() &&
       entry.name.toLowerCase() === "index.html"
     ) {
-      const normalized = relativePath.replaceAll(path.sep, "/");
+      const normalized = normalizePath(relativePath);
 
       docs.push({
         title: titleFromPath(relativePath),
+
         slug: normalized
           .replace(/\/index\.html$/i, "")
           .replace(/^index\.html$/i, ""),
+
         href: `/docs/${normalized}`,
+
         category: categoryFromPath(relativePath),
+
         type: typeFromPath(relativePath),
+
         relativePath: normalized,
       });
     }
@@ -231,14 +275,32 @@ function scanDirectory(directory: string, relative = "") {
 
 scanDirectory(docsRoot);
 
+/* =========================================================
+   SORTING
+   ========================================================= */
+
 docs.sort((a, b) =>
-  a.relativePath.localeCompare(b.relativePath)
+  a.relativePath.localeCompare(
+    b.relativePath,
+    undefined,
+    {
+      sensitivity: "base",
+    }
+  )
 );
 
 const categories = [
-  ...new Set(docs.map((doc) => doc.category)),
+  ...new Set(
+    docs
+      .filter((doc) => doc.type !== "unclassified")
+      .map((doc) => doc.category)
+  ),
 ];
 
+/*
+ * Only display knowledge-type sections that actually
+ * contain documents.
+ */
 const activeTypes = docTypes.filter((type) =>
   docs.some((doc) => doc.type === type.key)
 );
@@ -260,16 +322,18 @@ const year = 2026;
 
     <meta
       name="description"
-      content="Barkly Labs documentation, technical knowledge, research, specifications, requirements, architecture, experiments, and engineering references."
+      content="Barkly Labs documentation, technical knowledge, functional requirements, research, architecture, experiments, and engineering references."
     />
   </head>
 
   <body>
+
     <!-- =========================================================
          TOP BAR
          ========================================================= -->
 
     <header class="topbar">
+
       <a href="/" class="brand">
         <span class="brand-symbol">◆</span>
         <span>BARKLY LABS</span>
@@ -282,17 +346,22 @@ const year = 2026;
       <a href="/" class="back-link">
         ← RETURN TO LABS
       </a>
+
     </header>
 
+
     <main>
+
       <!-- =====================================================
            HERO
            ===================================================== -->
 
       <section class="docs-hero">
+
         <div class="hero-grid"></div>
 
         <div class="hero-content">
+
           <div class="system-status">
             <span class="status-dot"></span>
             KNOWLEDGE SYSTEM / ONLINE
@@ -308,114 +377,51 @@ const year = 2026;
           </h1>
 
           <p>
-            Technical documentation, specifications, research,
-            functional requirements, architecture, experiments,
-            implementation references, and knowledge generated
-            throughout the Barkly ecosystem.
+            Technical documentation, functional requirements,
+            research notes, system architecture, experiments,
+            references, and knowledge generated throughout
+            the Barkly ecosystem.
           </p>
 
           <div class="hero-meta">
             <span>
-              {docs.length.toString().padStart(2, "0")} DOCUMENTS
+              {docs.length.toString().padStart(2, "0")}
+              DOCUMENTS
             </span>
 
             <span>
-              {categories.length.toString().padStart(2, "0")} SYSTEMS
+              {categories.length.toString().padStart(2, "0")}
+              SYSTEMS
             </span>
 
             <span>
-              {activeTypes.length.toString().padStart(2, "0")} KNOWLEDGE TYPES
+              {activeTypes.length.toString().padStart(2, "0")}
+              KNOWLEDGE TYPES
             </span>
 
             <span>
               BUILD / DOCUMENT / LEARN
             </span>
           </div>
+
         </div>
+
       </section>
 
-      <!-- =====================================================
-           KNOWLEDGE LIBRARY
-           ===================================================== -->
-
-      <section class="knowledge-library">
-        <div class="library-header">
-          <div>
-            <span class="section-number">01</span>
-
-            <span class="section-kicker">
-              KNOWLEDGE LIBRARY
-            </span>
-
-            <h2>
-              MANY TYPES.
-              <span>ONE SYSTEM.</span>
-            </h2>
-          </div>
-
-          <div class="library-description">
-            Barkly Docs treats documentation as more than source-code
-            reference. Technical knowledge, requirements, research,
-            specifications, architecture, experiments, and history
-            all become part of the system.
-          </div>
-        </div>
-
-        <div class="knowledge-grid">
-          {
-            docTypes.map((type, index) => {
-              const count = docs.filter(
-                (doc) => doc.type === type.key
-              ).length;
-
-              return (
-                <a
-                  href={
-                    count > 0
-                      ? `#${type.key}`
-                      : undefined
-                  }
-                  class:list={[
-                    "knowledge-card",
-                    { "knowledge-card-empty": count === 0 },
-                  ]}
-                >
-                  <span class="knowledge-number">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-
-                  <span class="knowledge-card-content">
-                    <span class="knowledge-card-label">
-                      {type.label}
-                    </span>
-
-                    <strong>
-                      {count.toString().padStart(2, "0")}
-                    </strong>
-
-                    <span class="knowledge-card-description">
-                      {type.description}
-                    </span>
-                  </span>
-
-                  <span class="knowledge-card-arrow">
-                    {count > 0 ? "VIEW →" : "READY"}
-                  </span>
-                </a>
-              );
-            })
-          }
-        </div>
-      </section>
 
       <!-- =====================================================
            DOCUMENTATION INDEX
+           GLOBAL MASTER INDEX
            ===================================================== -->
 
       <section class="archive">
+
         <div class="archive-header">
+
           <div>
-            <span class="section-number">02</span>
+            <span class="section-number">
+              01
+            </span>
 
             <span class="section-kicker">
               DOCUMENTATION INDEX
@@ -423,38 +429,52 @@ const year = 2026;
           </div>
 
           <div class="archive-count">
-            {docs.length.toString().padStart(2, "0")} ENTRIES
+            {docs.length.toString().padStart(2, "0")}
+            ENTRIES
           </div>
+
         </div>
+
 
         {
           docs.length === 0 ? (
+
             <div class="empty-state">
-              <span class="empty-symbol">[ 00 ]</span>
+
+              <span class="empty-symbol">
+                [ 00 ]
+              </span>
 
               <h2>
                 NO DOCUMENTATION FOUND.
               </h2>
 
               <p>
-                The Barkly Docs generator has not produced any
-                <code>index.html</code> files yet.
+                The Barkly Docs generator has not produced
+                any <code>index.html</code> files yet.
               </p>
+
             </div>
+
           ) : (
+
             <div class="document-list">
+
               {docs.map((doc, index) => (
+
                 <a
                   href={doc.href}
                   class="document-row"
-                  data-category={doc.category}
                   data-type={doc.type}
+                  data-category={doc.category}
                 >
+
                   <span class="document-number">
                     {String(index + 1).padStart(2, "0")}
                   </span>
 
                   <span class="document-main">
+
                     <span class="document-category">
                       {doc.category}
                     </span>
@@ -463,111 +483,198 @@ const year = 2026;
                       {doc.title}
                     </strong>
 
-                    <span class="document-type">
-                      {
-                        docTypes.find(
-                          (type) => type.key === doc.type
-                        )?.label
-                      }
-                    </span>
-
                     <span class="document-path">
                       /{doc.relativePath}
                     </span>
+
                   </span>
 
                   <span class="document-open">
                     OPEN →
                   </span>
+
                 </a>
+
               ))}
+
             </div>
+
           )
         }
+
       </section>
 
+
       <!-- =====================================================
-           KNOWLEDGE TYPE INDEX
+           KNOWLEDGE TYPE SECTIONS
            ===================================================== -->
 
       {
         activeTypes.map((type, typeIndex) => {
+
+          /*
+           * IMPORTANT:
+           *
+           * This list is local to THIS knowledge type.
+           *
+           * It is NOT the global docs array.
+           *
+           * Therefore:
+           *
+           * TECHNICAL:
+           * 01 CYN-X
+           * 02 SecuServe
+           *
+           * REQUIREMENTS:
+           * 01 CYN-X
+           * 02 PawBoard
+           */
+
           const typeDocs = docs.filter(
             (doc) => doc.type === type.key
           );
 
+          const sectionNumber =
+            typeIndex + 2;
+
           return (
+
             <section
-              class="type-section"
+              class="knowledge-section"
               id={type.key}
             >
-              <div class="type-header">
-                <div>
-                  <span class="section-number">
-                    {String(typeIndex + 3).padStart(2, "0")}
-                  </span>
 
-                  <span class="section-kicker">
-                    KNOWLEDGE TYPE
-                  </span>
-                </div>
+              <div class="knowledge-container">
 
-                <span class="type-count">
-                  {typeDocs.length
-                    .toString()
-                    .padStart(2, "0")}{" "}
-                  DOCUMENTS
-                </span>
-              </div>
+                <!-- SECTION HEADER -->
 
-              <div class="type-heading">
-                <h2>
-                  {type.label}
-                </h2>
+                <div class="knowledge-header">
 
-                <p>
-                  {type.description}
-                </p>
-              </div>
+                  <div class="knowledge-header-left">
 
-              <div class="type-document-list">
-                {typeDocs.map((doc) => (
-                  <a
-                    href={doc.href}
-                    class="type-document"
-                  >
-                    <span class="type-document-category">
-                      {doc.category}
+                    <span class="section-number">
+                      {String(sectionNumber).padStart(2, "0")}
+                    </span>
+
+                    <div>
+
+                      <span class="section-kicker">
+                        BARKLY / KNOWLEDGE TYPE
+                      </span>
+
+                      <h2>
+                        {type.label}
+                      </h2>
+
+                    </div>
+
+                  </div>
+
+                  <div class="knowledge-count">
+
+                    <span>
+                      DOCUMENTS
                     </span>
 
                     <strong>
-                      {doc.title}
+                      {typeDocs.length
+                        .toString()
+                        .padStart(2, "0")}
                     </strong>
 
-                    <span class="type-document-path">
-                      /{doc.relativePath}
-                    </span>
+                  </div>
 
-                    <span class="type-document-open">
-                      →
-                    </span>
-                  </a>
-                ))}
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="knowledge-description">
+
+                  <p>
+                    {type.description}
+                  </p>
+
+                  <span class="knowledge-path">
+                    /docs/
+                    {type.key}
+                  </span>
+
+                </div>
+
+
+                <!-- DOCUMENTS FOR THIS TYPE ONLY -->
+
+                <div class="knowledge-document-list">
+
+                  {typeDocs.map((doc, index) => (
+
+                    <a
+                      href={doc.href}
+                      class="knowledge-document"
+                    >
+
+                      <!-- LOCAL COUNTER -->
+
+                      <span class="knowledge-document-number">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+
+
+                      <!-- DOCUMENT INFO -->
+
+                      <span class="knowledge-document-main">
+
+                        <span class="knowledge-document-category">
+                          {doc.category}
+                        </span>
+
+                        <strong>
+                          {doc.title}
+                        </strong>
+
+                        <span class="knowledge-document-path">
+                          /{doc.relativePath}
+                        </span>
+
+                      </span>
+
+
+                      <!-- OPEN -->
+
+                      <span class="knowledge-document-open">
+                        OPEN ↗
+                      </span>
+
+                    </a>
+
+                  ))}
+
+                </div>
+
               </div>
+
             </section>
+
           );
         })
       }
+
 
       <!-- =====================================================
            SYSTEM MAP
            ===================================================== -->
 
       <section class="system-map">
+
         <div class="map-header">
-          <span class="section-number">13</span>
+
+          <span class="section-number">
+            {String(activeTypes.length + 2).padStart(2, "0")}
+          </span>
 
           <div>
+
             <span class="section-kicker">
               KNOWLEDGE GRAPH
             </span>
@@ -576,11 +683,16 @@ const year = 2026;
               ONE ECOSYSTEM.
               <span>MANY SYSTEMS.</span>
             </h2>
+
           </div>
+
         </div>
 
+
         <div class="map-grid">
+
           <div class="map-core">
+
             <span class="core-label">
               BARKLY
             </span>
@@ -592,7 +704,9 @@ const year = 2026;
             <small>
               DOCUMENTATION CORE
             </small>
+
           </div>
+
 
           <div class="map-node node-a">
             <span>01</span>
@@ -614,23 +728,31 @@ const year = 2026;
             <strong>PEOPLE</strong>
           </div>
 
+
           <div class="map-line line-a"></div>
           <div class="map-line line-b"></div>
           <div class="map-line line-c"></div>
           <div class="map-line line-d"></div>
+
         </div>
+
       </section>
 
+
       <!-- =====================================================
-           DOCUMENTATION PRINCIPLE
+           PRINCIPLE
            ===================================================== -->
 
       <section class="docs-principle">
+
         <div class="principle-number">
-          14
+
+          {String(activeTypes.length + 3).padStart(2, "0")}
+
         </div>
 
         <div>
+
           <span class="section-kicker">
             BARKLY PRINCIPLE
           </span>
@@ -642,29 +764,29 @@ const year = 2026;
 
           <p>
             A system should not depend on one person's memory.
-            Documentation makes the architecture, requirements,
-            decisions, experiments, failures, implementation,
-            research, and knowledge of a system understandable
-            enough for other people to use, question, modify,
-            validate, and improve it.
+            Documentation makes the architecture, decisions,
+            experiments, failures, and knowledge of a system
+            understandable enough for other people to use,
+            question, modify, and improve it.
           </p>
 
-          <p>
-            Barkly Docs treats knowledge as part of the engineering
-            system itself. Documentation is created alongside the
-            systems it describes and evolves as those systems change.
-          </p>
         </div>
+
       </section>
+
     </main>
+
 
     <!-- =========================================================
          FOOTER
          ========================================================= -->
 
     <footer class="footer">
+
       <div class="footer-main">
+
         <div>
+
           <div class="footer-logo">
             BARKLY
           </div>
@@ -672,16 +794,23 @@ const year = 2026;
           <div class="footer-labs">
             LABS / DOCS
           </div>
+
         </div>
 
+
         <div class="footer-tagline">
+
           KNOWLEDGE
           <br />
           BECOMES INFRASTRUCTURE.
+
         </div>
+
       </div>
 
+
       <div class="footer-bottom">
+
         <span>
           © {year} BARKLY LABS
         </span>
@@ -693,12 +822,21 @@ const year = 2026;
         <a href="/">
           BARKLY LABS ↗
         </a>
+
       </div>
+
     </footer>
+
   </body>
 </html>
 
+
 <style>
+
+  /* =========================================================
+     GLOBAL
+     ========================================================= */
+
   :global(*) {
     box-sizing: border-box;
   }
@@ -710,6 +848,7 @@ const year = 2026;
 
   :global(body) {
     margin: 0;
+
     background: #050505;
     color: #f2f2f2;
 
@@ -735,6 +874,7 @@ const year = 2026;
     color: #050505;
   }
 
+
   /* =========================================================
      TOPBAR
      ========================================================= */
@@ -749,11 +889,15 @@ const year = 2026;
     align-items: center;
 
     min-height: 72px;
+
     padding: 0 5vw;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.1);
 
-    background: rgba(5, 5, 5, 0.92);
+    background:
+      rgba(5, 5, 5, 0.92);
+
     backdrop-filter: blur(14px);
   }
 
@@ -796,6 +940,7 @@ const year = 2026;
     color: #fff;
   }
 
+
   /* =========================================================
      HERO
      ========================================================= */
@@ -812,7 +957,8 @@ const year = 2026;
 
     overflow: hidden;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.1);
   }
 
   .hero-grid {
@@ -834,11 +980,12 @@ const year = 2026;
 
     background-size: 60px 60px;
 
-    mask-image: linear-gradient(
-      90deg,
-      black,
-      transparent 75%
-    );
+    mask-image:
+      linear-gradient(
+        90deg,
+        black,
+        transparent 75%
+      );
   }
 
   .docs-hero::after {
@@ -913,13 +1060,14 @@ const year = 2026;
 
   .docs-hero h1 span {
     display: block;
+
     margin-left: 12vw;
 
     color: rgba(255, 255, 255, 0.3);
   }
 
   .docs-hero p {
-    max-width: 700px;
+    max-width: 650px;
 
     margin: 50px 0 35px;
 
@@ -941,157 +1089,36 @@ const year = 2026;
     letter-spacing: 0.14em;
   }
 
+
   /* =========================================================
-     KNOWLEDGE LIBRARY
+     SHARED SECTION LABELS
      ========================================================= */
 
-  .knowledge-library {
-    padding: 130px 10vw;
-
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .library-header {
-    display: grid;
-    grid-template-columns: 1.3fr 0.7fr;
-    gap: 80px;
-
-    align-items: end;
-
-    margin-bottom: 70px;
-  }
-
-  .section-number,
-  .section-kicker {
-    font-family: "Courier New", monospace;
-  }
-
   .section-number {
-    display: block;
-
-    margin-bottom: 10px;
-
     color: rgba(255, 255, 255, 0.25);
+
+    font-family: "Courier New", monospace;
     font-size: 10px;
   }
 
   .section-kicker {
     color: rgba(255, 255, 255, 0.4);
 
+    font-family: "Courier New", monospace;
     font-size: 9px;
     letter-spacing: 0.16em;
   }
 
-  .library-header h2 {
-    margin: 22px 0 0;
-
-    max-width: 900px;
-
-    font-size: clamp(50px, 7vw, 100px);
-    line-height: 0.86;
-    letter-spacing: -0.06em;
-  }
-
-  .library-header h2 span {
-    display: block;
-
-    color: rgba(255, 255, 255, 0.3);
-  }
-
-  .library-description {
-    color: rgba(255, 255, 255, 0.5);
-
-    font-size: 14px;
-    line-height: 1.8;
-  }
-
-  .knowledge-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .knowledge-card {
-    position: relative;
-
-    display: grid;
-    grid-template-columns: 50px 1fr auto;
-    gap: 20px;
-
-    min-height: 190px;
-    padding: 28px;
-
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
-    transition:
-      background 0.25s,
-      transform 0.25s;
-  }
-
-  .knowledge-card:hover {
-    background: rgba(255, 255, 255, 0.025);
-  }
-
-  .knowledge-card-empty {
-    opacity: 0.55;
-  }
-
-  .knowledge-number {
-    color: rgba(255, 255, 255, 0.22);
-
-    font-family: "Courier New", monospace;
-    font-size: 9px;
-  }
-
-  .knowledge-card-content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .knowledge-card-label {
-    color: rgba(255, 255, 255, 0.42);
-
-    font-family: "Courier New", monospace;
-    font-size: 8px;
-    letter-spacing: 0.12em;
-  }
-
-  .knowledge-card-content strong {
-    margin: 18px 0 10px;
-
-    font-size: 34px;
-    line-height: 1;
-    letter-spacing: -0.05em;
-  }
-
-  .knowledge-card-description {
-    max-width: 400px;
-
-    color: rgba(255, 255, 255, 0.4);
-
-    font-size: 12px;
-    line-height: 1.7;
-  }
-
-  .knowledge-card-arrow {
-    align-self: end;
-
-    color: rgba(255, 255, 255, 0.3);
-
-    font-family: "Courier New", monospace;
-    font-size: 8px;
-    letter-spacing: 0.1em;
-  }
 
   /* =========================================================
-     ARCHIVE
+     MASTER DOCUMENTATION INDEX
      ========================================================= */
 
   .archive {
     padding: 120px 10vw;
+
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.08);
   }
 
   .archive-header {
@@ -1101,7 +1128,8 @@ const year = 2026;
 
     padding-bottom: 25px;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.15);
   }
 
   .archive-header > div:first-child {
@@ -1109,12 +1137,7 @@ const year = 2026;
     gap: 35px;
   }
 
-  .archive-header .section-number {
-    margin: 0;
-  }
-
-  .archive-count,
-  .type-count {
+  .archive-count {
     color: rgba(255, 255, 255, 0.25);
 
     font-family: "Courier New", monospace;
@@ -1123,7 +1146,8 @@ const year = 2026;
   }
 
   .document-list {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.1);
   }
 
   .document-row {
@@ -1132,9 +1156,10 @@ const year = 2026;
     gap: 30px;
     align-items: center;
 
-    min-height: 140px;
+    min-height: 125px;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.08);
 
     transition:
       background 0.25s,
@@ -1149,7 +1174,8 @@ const year = 2026;
     padding-left: 15px;
     padding-right: 15px;
 
-    background: rgba(255, 255, 255, 0.025);
+    background:
+      rgba(255, 255, 255, 0.025);
   }
 
   .document-number {
@@ -1165,8 +1191,7 @@ const year = 2026;
     gap: 7px;
   }
 
-  .document-category,
-  .document-type {
+  .document-category {
     color: rgba(255, 255, 255, 0.3);
 
     font-family: "Courier New", monospace;
@@ -1177,10 +1202,6 @@ const year = 2026;
   .document-main strong {
     font-size: 22px;
     letter-spacing: -0.035em;
-  }
-
-  .document-type {
-    color: rgba(255, 255, 255, 0.45);
   }
 
   .document-path {
@@ -1206,12 +1227,18 @@ const year = 2026;
     color: #fff;
   }
 
+
+  /* =========================================================
+     EMPTY STATE
+     ========================================================= */
+
   .empty-state {
     padding: 100px 0;
 
     text-align: center;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.1);
   }
 
   .empty-symbol {
@@ -1234,112 +1261,221 @@ const year = 2026;
     font-size: 13px;
   }
 
+
   /* =========================================================
      KNOWLEDGE TYPE SECTIONS
      ========================================================= */
 
-  .type-section {
-    padding: 120px 10vw;
+  .knowledge-section {
+    padding: 100px 10vw;
 
-    background: #070707;
+    background: #050505;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .type-header {
+  /*
+   * THIS is the independent visual container.
+   *
+   * Every knowledge type gets its own box.
+   */
+
+  .knowledge-container {
+    width: min(1400px, 100%);
+
+    margin: 0 auto;
+
+    overflow: hidden;
+
+    border:
+      1px solid rgba(255, 255, 255, 0.14);
+
+    background:
+      rgba(255, 255, 255, 0.015);
+  }
+
+  .knowledge-header {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: end;
 
-    padding-bottom: 25px;
+    padding: 45px 50px;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .type-header > div {
+  .knowledge-header-left {
     display: flex;
+    align-items: flex-start;
+
     gap: 35px;
   }
 
-  .type-header .section-number {
-    margin: 0;
+  .knowledge-header h2 {
+    margin: 15px 0 0;
+
+    font-size: clamp(32px, 4vw, 60px);
+    line-height: 0.9;
+    letter-spacing: -0.055em;
   }
 
-  .type-heading {
-    display: grid;
-    grid-template-columns: 1.3fr 0.7fr;
+  .knowledge-count {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 
-    gap: 80px;
+    gap: 8px;
 
-    align-items: end;
+    color: rgba(255, 255, 255, 0.25);
 
-    padding: 60px 0;
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
   }
 
-  .type-heading h2 {
-    margin: 0;
+  .knowledge-count strong {
+    color: rgba(255, 255, 255, 0.75);
 
-    font-size: clamp(42px, 6vw, 85px);
-    line-height: 0.88;
-    letter-spacing: -0.06em;
+    font-size: 22px;
+    font-weight: 400;
   }
 
-  .type-heading p {
+  .knowledge-description {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 40px;
+
+    padding: 30px 50px;
+
+    background:
+      rgba(255, 255, 255, 0.015);
+
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .knowledge-description p {
+    max-width: 720px;
+
     margin: 0;
 
     color: rgba(255, 255, 255, 0.45);
 
-    font-size: 14px;
-    line-height: 1.8;
+    font-size: 13px;
+    line-height: 1.7;
   }
 
-  .type-document-list {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  .knowledge-path {
+    flex-shrink: 0;
+
+    color: rgba(255, 255, 255, 0.2);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.08em;
   }
 
-  .type-document {
+
+  /* =========================================================
+     KNOWLEDGE TYPE DOCUMENT LIST
+     ========================================================= */
+
+  .knowledge-document-list {
+    width: 100%;
+  }
+
+  .knowledge-document {
     display: grid;
-    grid-template-columns: 180px 1fr 260px 30px;
+    grid-template-columns: 70px 1fr 100px;
     gap: 30px;
     align-items: center;
 
-    min-height: 90px;
+    min-height: 115px;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0 50px;
+
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.07);
 
     transition:
       background 0.2s,
       padding 0.2s;
   }
 
-  .type-document:hover {
-    padding-left: 15px;
-    padding-right: 15px;
-
-    background: rgba(255, 255, 255, 0.025);
+  .knowledge-document:last-child {
+    border-bottom: 0;
   }
 
-  .type-document-category,
-  .type-document-path {
+  .knowledge-document:hover {
+    padding-left: 65px;
+    padding-right: 35px;
+
+    background:
+      rgba(255, 255, 255, 0.035);
+  }
+
+  /*
+   * IMPORTANT:
+   *
+   * This counter starts at 01 for EVERY knowledge type.
+   *
+   * It does not use the global document index.
+   */
+
+  .knowledge-document-number {
+    color: rgba(255, 255, 255, 0.2);
+
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+  }
+
+  .knowledge-document-main {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+  }
+
+  .knowledge-document-category {
     color: rgba(255, 255, 255, 0.25);
 
     font-family: "Courier New", monospace;
     font-size: 8px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.14em;
   }
 
-  .type-document strong {
-    font-size: 16px;
-    letter-spacing: -0.025em;
+  .knowledge-document-main strong {
+    font-size: 21px;
+    font-weight: 600;
+
+    letter-spacing: -0.035em;
   }
 
-  .type-document-open {
-    justify-self: end;
-
-    color: rgba(255, 255, 255, 0.35);
+  .knowledge-document-path {
+    color: rgba(255, 255, 255, 0.18);
 
     font-family: "Courier New", monospace;
+    font-size: 8px;
   }
+
+  .knowledge-document-open {
+    justify-self: end;
+
+    color: rgba(255, 255, 255, 0.3);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  .knowledge-document:hover .knowledge-document-open {
+    color: #fff;
+  }
+
 
   /* =========================================================
      SYSTEM MAP
@@ -1352,10 +1488,10 @@ const year = 2026;
 
     padding: 140px 10vw;
 
-    background: #050505;
+    background: #070707;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom:
+      1px solid rgba(255, 255, 255, 0.08);
 
     overflow: hidden;
   }
@@ -1408,9 +1544,11 @@ const year = 2026;
     align-items: center;
     justify-content: center;
 
-    transform: translate(-50%, -50%);
+    transform:
+      translate(-50%, -50%);
 
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border:
+      1px solid rgba(255, 255, 255, 0.35);
 
     background: #070707;
 
@@ -1445,15 +1583,18 @@ const year = 2026;
 
     display: flex;
     flex-direction: column;
-    gap: 7px;
 
-    padding: 15px;
+    gap: 7px;
 
     min-width: 150px;
 
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 15px;
 
-    background: rgba(7, 7, 7, 0.9);
+    border:
+      1px solid rgba(255, 255, 255, 0.16);
+
+    background:
+      rgba(7, 7, 7, 0.9);
   }
 
   .map-node span {
@@ -1492,7 +1633,8 @@ const year = 2026;
   .map-line {
     position: absolute;
 
-    background: rgba(255, 255, 255, 0.12);
+    background:
+      rgba(255, 255, 255, 0.12);
 
     transform-origin: center;
   }
@@ -1507,13 +1649,11 @@ const year = 2026;
 
   .line-a {
     left: 12%;
-
     transform: rotate(25deg);
   }
 
   .line-b {
     right: 12%;
-
     transform: rotate(-25deg);
   }
 
@@ -1527,15 +1667,14 @@ const year = 2026;
 
   .line-c {
     left: 12%;
-
     transform: rotate(-25deg);
   }
 
   .line-d {
     right: 12%;
-
     transform: rotate(25deg);
   }
+
 
   /* =========================================================
      PRINCIPLE
@@ -1547,13 +1686,6 @@ const year = 2026;
     gap: 40px;
 
     padding: 150px 10vw;
-  }
-
-  .principle-number {
-    color: rgba(255, 255, 255, 0.25);
-
-    font-family: "Courier New", monospace;
-    font-size: 10px;
   }
 
   .docs-principle h2 {
@@ -1573,13 +1705,14 @@ const year = 2026;
   }
 
   .docs-principle p {
-    max-width: 700px;
+    max-width: 650px;
 
     color: rgba(255, 255, 255, 0.52);
 
     font-size: 16px;
     line-height: 1.8;
   }
+
 
   /* =========================================================
      FOOTER
@@ -1588,7 +1721,8 @@ const year = 2026;
   .footer {
     padding: 70px 5vw 30px;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top:
+      1px solid rgba(255, 255, 255, 0.1);
   }
 
   .footer-main {
@@ -1632,7 +1766,8 @@ const year = 2026;
 
     padding-top: 20px;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top:
+      1px solid rgba(255, 255, 255, 0.08);
 
     color: rgba(255, 255, 255, 0.22);
 
@@ -1641,31 +1776,13 @@ const year = 2026;
     letter-spacing: 0.12em;
   }
 
+
   /* =========================================================
      RESPONSIVE
      ========================================================= */
 
-  @media (max-width: 900px) {
-    .library-header,
-    .type-heading {
-      grid-template-columns: 1fr;
-      gap: 35px;
-    }
-
-    .knowledge-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .type-document {
-      grid-template-columns: 150px 1fr 30px;
-    }
-
-    .type-document-path {
-      display: none;
-    }
-  }
-
   @media (max-width: 800px) {
+
     .topbar {
       grid-template-columns: 1fr auto;
     }
@@ -1677,17 +1794,21 @@ const year = 2026;
     .docs-hero {
       min-height: 580px;
 
-      padding: 110px 7vw 80px;
+      padding:
+        110px 7vw
+        80px;
     }
 
-    .knowledge-library,
     .archive,
-    .type-section,
+    .knowledge-section,
     .system-map,
     .docs-principle {
       padding-left: 7vw;
       padding-right: 7vw;
     }
+
+
+    /* MASTER INDEX */
 
     .document-row {
       grid-template-columns: 45px 1fr;
@@ -1702,6 +1823,46 @@ const year = 2026;
 
       justify-self: start;
     }
+
+
+    /* KNOWLEDGE SECTIONS */
+
+    .knowledge-header {
+      padding: 35px 30px;
+    }
+
+    .knowledge-description {
+      align-items: flex-start;
+
+      flex-direction: column;
+
+      padding: 25px 30px;
+    }
+
+    .knowledge-document {
+      grid-template-columns: 45px 1fr;
+
+      gap: 15px;
+
+      min-height: 100px;
+
+      padding:
+        20px 30px;
+    }
+
+    .knowledge-document:hover {
+      padding-left: 40px;
+      padding-right: 20px;
+    }
+
+    .knowledge-document-open {
+      grid-column: 2;
+
+      justify-self: start;
+    }
+
+
+    /* MAP */
 
     .map-header,
     .docs-principle {
@@ -1731,6 +1892,9 @@ const year = 2026;
       width: 130px;
     }
 
+
+    /* FOOTER */
+
     .footer-main,
     .footer-bottom {
       flex-direction: column;
@@ -1745,11 +1909,14 @@ const year = 2026;
     }
   }
 
+
   @media (max-width: 520px) {
+
     .topbar {
       min-height: 60px;
 
-      padding: 0 6vw;
+      padding:
+        0 6vw;
     }
 
     .back-link {
@@ -1766,8 +1933,7 @@ const year = 2026;
       gap: 10px;
     }
 
-    .archive-header,
-    .type-header {
+    .archive-header {
       align-items: flex-start;
 
       flex-direction: column;
@@ -1775,43 +1941,35 @@ const year = 2026;
       gap: 15px;
     }
 
-    .archive-header > div:first-child,
-    .type-header > div {
+    .archive-header > div:first-child {
       gap: 20px;
     }
 
-    .knowledge-card {
-      grid-template-columns: 35px 1fr;
 
-      gap: 15px;
+    /* KNOWLEDGE TYPE MOBILE */
+
+    .knowledge-header {
+      align-items: flex-start;
+
+      flex-direction: column;
+
+      gap: 30px;
     }
 
-    .knowledge-card-arrow {
-      grid-column: 2;
-
-      justify-self: start;
+    .knowledge-header-left {
+      gap: 20px;
     }
 
-    .type-document {
-      grid-template-columns: 1fr 30px;
-
-      gap: 15px;
-
-      padding: 20px 0;
+    .knowledge-count {
+      align-items: flex-start;
     }
 
-    .type-document-category {
-      grid-column: 1;
+    .knowledge-header h2 {
+      font-size: 32px;
     }
 
-    .type-document strong {
-      grid-column: 1;
-    }
 
-    .type-document-open {
-      grid-column: 2;
-      grid-row: 1 / span 2;
-    }
+    /* MAP MOBILE */
 
     .map-grid {
       height: 500px;
@@ -1841,4 +1999,5 @@ const year = 2026;
       display: none;
     }
   }
+
 </style>
