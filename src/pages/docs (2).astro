@@ -9,8 +9,8 @@ type DocEntry = {
   slug: string;
   href: string;
   category: string;
-  relativePath: string;
   type: string;
+  relativePath: string;
 };
 
 const docs: DocEntry[] = [];
@@ -26,7 +26,48 @@ const docTypes = [
     label: "FUNCTIONAL REQUIREMENTS",
     description: "Functional requirements describing what systems should do and how they should behave.",
   },
+  {
+    key: "specifications",
+    label: "SPECIFICATIONS",
+    description: "Defined technical specifications, interfaces, protocols, formats, and system contracts.",
+  },
+  {
+    key: "research",
+    label: "RESEARCH & PAPERS",
+    description: "Research notes, papers, literature, investigations, findings, and supporting knowledge.",
+  },
+  {
+    key: "architecture",
+    label: "ARCHITECTURE & DESIGN",
+    description: "System architecture, design decisions, relationships, components, and structural documentation.",
+  },
+  {
+    key: "implementation",
+    label: "IMPLEMENTATION & REFERENCE",
+    description: "Implementation references generated from real project source code and system structure.",
+  },
+  {
+    key: "testing",
+    label: "TESTING & VALIDATION",
+    description: "Tests, validation procedures, benchmarks, verification results, and known limitations.",
+  },
+  {
+    key: "experiments",
+    label: "EXPERIMENTS & NOTES",
+    description: "Experiments, prototypes, observations, development notes, and lessons learned.",
+  },
+  {
+    key: "guides",
+    label: "GUIDES & HOW-TO",
+    description: "Practical guides for using, developing, operating, modifying, and extending Barkly systems.",
+  },
+  {
+    key: "history",
+    label: "HISTORY & CHANGELOGS",
+    description: "Development history, changes, milestones, releases, decisions, and project evolution.",
+  },
 ];
+
 
 function titleFromPath(relativePath: string) {
   const parts = relativePath.split(path.sep).filter(Boolean);
@@ -60,6 +101,14 @@ function typeFromPath(relativePath: string) {
 
   if (root === "technical" || root === "technical-docs" || root === "technical-documentation") return "technical";
   if (root === "functional-requirements" || root === "requirements" || root === "frd") return "requirements";
+  if (root === "specifications" || root === "specs") return "specifications";
+  if (root === "research" || root === "papers" || root === "research-papers") return "research";
+  if (root === "architecture" || root === "design") return "architecture";
+  if (root === "implementation" || root === "reference") return "implementation";
+  if (root === "testing" || root === "tests" || root === "validation") return "testing";
+  if (root === "experiments" || root === "notes") return "experiments";
+  if (root === "guides" || root === "how-to" || root === "howto") return "guides";
+  if (root === "history" || root === "changelog" || root === "changelogs") return "history";
 
   return "unclassified";
 }
@@ -104,6 +153,7 @@ docs.sort((a, b) =>
 );
 
 const categories = [...new Set(docs.map((doc) => doc.category))];
+
 const activeTypes = docTypes.filter((type) =>
   docs.some((doc) => doc.type === type.key)
 );
@@ -186,6 +236,68 @@ const year = 2026;
       </section>
 
       <!-- =====================================================
+           DOCUMENTATION INDEX
+           ===================================================== -->
+
+      <section class="archive">
+        <div class="archive-header">
+          <div>
+            <span class="section-number">01</span>
+            <span class="section-kicker">DOCUMENTATION INDEX</span>
+          </div>
+
+          <div class="archive-count">
+            {docs.length.toString().padStart(2, "0")} ENTRIES
+          </div>
+        </div>
+
+        {
+          docs.length === 0 ? (
+            <div class="empty-state">
+              <span class="empty-symbol">[ 00 ]</span>
+
+              <h2>NO DOCUMENTATION FOUND.</h2>
+
+              <p>
+                The Barkly Docs generator has not produced any
+                <code>index.html</code> files yet.
+              </p>
+            </div>
+          ) : (
+            <div class="document-list">
+              {docs.map((doc, index) => (
+                <a
+                  href={doc.href}
+                  class="document-row"
+                  data-category={doc.category}
+                >
+                  <span class="document-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span class="document-main">
+                    <span class="document-category">
+                      {doc.category}
+                    </span>
+
+                    <strong>{doc.title}</strong>
+
+                    <span class="document-path">
+                      /{doc.relativePath}
+                    </span>
+                  </span>
+
+                  <span class="document-open">
+                    OPEN →
+                  </span>
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </section>
+
+      <!-- =====================================================
            KNOWLEDGE TYPE SECTIONS
            ===================================================== -->
 
@@ -197,23 +309,17 @@ const year = 2026;
             <div class="type-container">
               <div class="type-header">
                 <div class="type-header-main">
-                  <span class="section-number">
-                    {String(typeIndex + 1).padStart(2, "0")}
-                  </span>
+                  <span class="section-number">{String(typeIndex + 2).padStart(2, "0")}</span>
 
                   <div>
-                    <span class="section-kicker">
-                      BARKLY / KNOWLEDGE TYPE
-                    </span>
+                    <span class="section-kicker">BARKLY / KNOWLEDGE TYPE</span>
                     <h2>{type.label}</h2>
                   </div>
                 </div>
 
                 <div class="type-count">
                   <span>DOCUMENTS</span>
-                  <strong>
-                    {typeDocs.length.toString().padStart(2, "0")}
-                  </strong>
+                  <strong>{typeDocs.length.toString().padStart(2, "0")}</strong>
                 </div>
               </div>
 
@@ -222,34 +328,23 @@ const year = 2026;
               </div>
 
               <div class="type-document-list">
-                {typeDocs.length === 0 ? (
-                  <div class="empty-type">
-                    <span>[ 00 ]</span>
-                    <p>NO DOCUMENTATION FOUND.</p>
-                  </div>
-                ) : (
-                  typeDocs.map((doc, index) => (
-                    <a href={doc.href} class="type-document">
-                      <span class="type-document-number">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
+                {typeDocs.map((doc, index) => (
+                  <a href={doc.href} class="type-document">
+                    <span class="type-document-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
 
-                      <span class="type-document-main">
-                        <span class="document-category">
-                          {doc.category}
-                        </span>
-                        <strong>{doc.title}</strong>
-                        <span class="document-path">
-                          /{doc.relativePath}
-                        </span>
-                      </span>
+                    <span class="type-document-main">
+                      <span class="document-category">{doc.category}</span>
+                      <strong>{doc.title}</strong>
+                      <span class="document-path">/{doc.relativePath}</span>
+                    </span>
 
-                      <span class="type-document-open">
-                        OPEN →
-                      </span>
-                    </a>
-                  ))
-                )}
+                    <span class="type-document-open">
+                      OPEN →
+                    </span>
+                  </a>
+                ))}
               </div>
             </div>
           </section>
@@ -262,7 +357,7 @@ const year = 2026;
 
       <section class="system-map">
         <div class="map-header">
-          <span class="section-number">03</span>
+          <span class="section-number">{String(activeTypes.length + 2).padStart(2, "0")}</span>
 
           <div>
             <span class="section-kicker">KNOWLEDGE GRAPH</span>
@@ -313,7 +408,7 @@ const year = 2026;
            ===================================================== -->
 
       <section class="docs-principle">
-        <div class="principle-number">04</div>
+        <div class="principle-number">{String(activeTypes.length + 3).padStart(2, "0")}</div>
 
         <div>
           <span class="section-kicker">BARKLY PRINCIPLE</span>
@@ -601,7 +696,159 @@ const year = 2026;
   }
 
   /* =========================================================
-     KNOWLEDGE TYPE CARDS
+     ARCHIVE
+     ========================================================= */
+
+  .archive {
+    padding: 120px 10vw;
+  }
+
+  .archive-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .archive-header > div:first-child {
+    display: flex;
+    gap: 35px;
+  }
+
+  .section-number,
+  .section-kicker {
+    font-family: "Courier New", monospace;
+  }
+
+  .section-number {
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 10px;
+  }
+
+  .section-kicker {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+  }
+
+  .archive-count {
+    color: rgba(255, 255, 255, 0.25);
+
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .document-list {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .document-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 110px;
+    gap: 30px;
+    align-items: center;
+
+    min-height: 125px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition:
+      background 0.25s,
+      padding 0.25s;
+  }
+
+  .document-row:last-child {
+    border-bottom: 0;
+  }
+
+  .document-row:hover {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .document-number {
+    color: rgba(255, 255, 255, 0.2);
+
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+  }
+
+  .document-main {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .document-category {
+    color: rgba(255, 255, 255, 0.3);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+  }
+
+  .document-main strong {
+    font-size: 22px;
+    letter-spacing: -0.035em;
+  }
+
+  .document-path {
+    color: rgba(255, 255, 255, 0.2);
+
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+  }
+
+  .document-open {
+    justify-self: end;
+
+    color: rgba(255, 255, 255, 0.4);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+
+    transition: color 0.2s;
+  }
+
+  .document-row:hover .document-open {
+    color: #fff;
+  }
+
+  .empty-state {
+    padding: 100px 0;
+    text-align: center;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .empty-symbol {
+    color: rgba(255, 255, 255, 0.2);
+
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+  }
+
+  .empty-state h2 {
+    margin: 25px 0 15px;
+
+    font-size: 30px;
+    letter-spacing: -0.04em;
+  }
+
+  .empty-state p {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+  }
+
+  /* =========================================================
+     KNOWLEDGE TYPE SECTIONS
      ========================================================= */
 
   .type-section {
@@ -718,24 +965,10 @@ const year = 2026;
     font-family: "Courier New", monospace;
     font-size: 8px;
     letter-spacing: 0.12em;
-    transition: color 0.2s;
   }
 
   .type-document:hover .type-document-open {
     color: #fff;
-  }
-
-  .empty-type {
-    padding: 70px 0;
-    color: rgba(255, 255, 255, 0.2);
-    font-family: "Courier New", monospace;
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-align: center;
-  }
-
-  .empty-type p {
-    margin: 15px 0 0;
   }
 
   /* =========================================================
@@ -1040,9 +1273,25 @@ const year = 2026;
       padding: 110px 7vw 80px;
     }
 
-    .type-section,
+    .archive,
     .system-map,
     .docs-principle {
+      padding-left: 7vw;
+      padding-right: 7vw;
+    }
+
+    .document-row {
+      grid-template-columns: 45px 1fr;
+      gap: 15px;
+      padding: 20px 0;
+    }
+
+    .document-open {
+      grid-column: 2;
+      justify-self: start;
+    }
+
+    .type-section {
       padding-left: 7vw;
       padding-right: 7vw;
     }
@@ -1128,6 +1377,16 @@ const year = 2026;
     .hero-meta {
       flex-direction: column;
       gap: 10px;
+    }
+
+    .archive-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .archive-header > div:first-child {
+      gap: 20px;
     }
 
     .map-grid {
