@@ -1,0 +1,1233 @@
+---
+const year = 2026;
+
+const principles = [
+  {
+    number: "01",
+    title: "HUMAN FIRST",
+    tag: "THE FOUNDATION",
+    description:
+      "CYN-X exists to support human goals, not replace them. The system should adapt to the person using it.",
+    details: [
+      "HUMAN-CENTERED DESIGN",
+      "ACCESSIBILITY",
+      "ADAPTIVE INTERACTION",
+      "USER AGENCY",
+      "REDUCED COMPLEXITY",
+    ],
+  },
+  {
+    number: "02",
+    title: "USEFUL INTELLIGENCE",
+    tag: "INTELLIGENCE",
+    description:
+      "Intelligence is more than generating answers. CYN-X should understand context, reason through problems, and help turn ideas into action.",
+    details: [
+      "CONTEXT",
+      "REASONING",
+      "PROBLEM SOLVING",
+      "PLANNING",
+      "ACTION",
+    ],
+  },
+  {
+    number: "03",
+    title: "MEMORY IS CONTEXT",
+    tag: "CONTINUITY",
+    description:
+      "A system that forgets everything cannot meaningfully adapt. CYN-X explores persistent context so interactions can become more useful over time.",
+    details: [
+      "PERSISTENT CONTEXT",
+      "USER PREFERENCES",
+      "PROJECT MEMORY",
+      "CONVERSATION HISTORY",
+      "USER CONTROL",
+    ],
+  },
+  {
+    number: "04",
+    title: "LOCAL WHEN POSSIBLE",
+    tag: "INFRASTRUCTURE",
+    description:
+      "Intelligence does not always need to live in the cloud. CYN-X explores local and private inference for greater control, privacy, and resilience.",
+    details: [
+      "LOCAL INFERENCE",
+      "PRIVATE COMPUTING",
+      "OFFLINE CAPABILITY",
+      "DATA CONTROL",
+      "RESILIENCE",
+    ],
+  },
+  {
+    number: "05",
+    title: "MULTIMODAL",
+    tag: "INTERACTION",
+    description:
+      "Humans do not communicate through one format. CYN-X is designed to grow beyond a text box and interact with the systems around it.",
+    details: [
+      "TEXT",
+      "VOICE",
+      "IMAGES",
+      "VIDEO",
+      "SENSORS",
+    ],
+  },
+  {
+    number: "06",
+    title: "BUILD WITH IT",
+    tag: "COLLABORATION",
+    description:
+      "AI should help people create. CYN-X is intended to work alongside developers, researchers, artists, engineers, and builders.",
+    details: [
+      "AI-ASSISTED DEVELOPMENT",
+      "RESEARCH",
+      "CREATIVE WORK",
+      "ENGINEERING",
+      "ITERATION",
+    ],
+  },
+  {
+    number: "07",
+    title: "HUMAN OVERSIGHT",
+    tag: "RESPONSIBILITY",
+    description:
+      "Capability does not remove responsibility. CYN-X should assist people while keeping humans involved in important decisions.",
+    details: [
+      "HUMAN CONTROL",
+      "TRANSPARENCY",
+      "CONSENT",
+      "SAFETY",
+      "RESPONSIBILITY",
+    ],
+  },
+  {
+    number: "08",
+    title: "OPEN TO MODIFICATION",
+    tag: "ARCHITECTURE",
+    description:
+      "CYN-X is a system to build on. Its architecture should be understandable, experimentable, extensible, and replaceable.",
+    details: [
+      "MODULARITY",
+      "EXTENSIBILITY",
+      "OPEN DEVELOPMENT",
+      "EXPERIMENTATION",
+      "COMMUNITY CONTRIBUTION",
+    ],
+  },
+];
+
+const intelligenceLayers = [
+  "HUMAN",
+  "CYN-X",
+  "MEMORY",
+  "REASONING",
+  "TOOLS",
+  "INTERFACES",
+  "COMPUTERS",
+  "CONNECTED SYSTEMS",
+];
+
+const cycle = [
+  ["01", "UNDERSTAND", "Understand the person, context, problem, and environment."],
+  ["02", "REASON", "Work through information, relationships, possibilities, and constraints."],
+  ["03", "ASSIST", "Provide useful information, actions, tools, or interfaces."],
+  ["04", "LEARN", "Use permitted context and feedback to improve future interactions."],
+  ["05", "ADAPT", "Change the system around the needs of the human using it."],
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="description"
+      content="CYN-X principles — an intelligence system built around the idea that computers should handle the hard parts for humans."
+    />
+    <title>CYN-X / Principles — Barkly Labs</title>
+
+    <style>
+      :root {
+        --bg: #050505;
+        --surface: #0b0b0b;
+        --surface-2: #101010;
+        --line: rgba(255, 255, 255, 0.12);
+        --line-strong: rgba(255, 255, 255, 0.25);
+        --text: #f2f2f2;
+        --muted: #8c8c8c;
+        --dim: #555;
+        --max: 1400px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          Arial,
+          Helvetica,
+          sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        overflow-x: hidden;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      ::selection {
+        background: #f2f2f2;
+        color: #050505;
+      }
+
+      /* NAV */
+
+      .nav {
+        position: relative;
+        z-index: 20;
+        width: 100%;
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 22px 28px;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        width: fit-content;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+      }
+
+      .brand-symbol {
+        font-size: 9px;
+      }
+
+      .nav-center {
+        color: var(--muted);
+        font-size: 9px;
+        letter-spacing: 0.16em;
+      }
+
+      .nav-links {
+        display: flex;
+        justify-content: flex-end;
+        gap: 22px;
+      }
+
+      .nav-links a,
+      .nav-status {
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        transition:
+          color 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .nav-links a:hover,
+      .nav-status:hover {
+        color: var(--text);
+      }
+
+      .nav-status {
+        display: none;
+      }
+
+      /* HERO */
+
+      .hero {
+        position: relative;
+        min-height: 780px;
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 110px 28px 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .hero-background {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.18;
+        background-image:
+          linear-gradient(var(--line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line) 1px, transparent 1px);
+        background-size: 80px 80px;
+        mask-image: linear-gradient(
+          to bottom,
+          transparent,
+          black 25%,
+          black 70%,
+          transparent
+        );
+      }
+
+      .hero-orbit {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .orbit-one {
+        width: 720px;
+        height: 720px;
+      }
+
+      .orbit-two {
+        width: 520px;
+        height: 520px;
+        border-color: var(--line-strong);
+      }
+
+      .orbit-three {
+        width: 300px;
+        height: 300px;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 1000px;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 32px;
+        color: var(--muted);
+        font-size: 9px;
+        letter-spacing: 0.16em;
+      }
+
+      .eyebrow span {
+        color: var(--text);
+      }
+
+      .hero h1 {
+        margin: 0;
+        max-width: 1000px;
+        font-size: clamp(68px, 11vw, 160px);
+        line-height: 0.82;
+        letter-spacing: -0.075em;
+        font-weight: 700;
+      }
+
+      .hero h1 span {
+        display: block;
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+      }
+
+      .hero-copy {
+        max-width: 610px;
+        margin: 48px 0 0;
+        color: #a4a4a4;
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .hero-copy strong {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 34px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 16px;
+        padding: 13px 17px;
+        border: 1px solid var(--line-strong);
+        font-size: 9px;
+        letter-spacing: 0.13em;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          border-color 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .button:hover {
+        background: var(--text);
+        color: var(--bg);
+        border-color: var(--text);
+        transform: translateX(4px);
+      }
+
+      .hero-side {
+        position: absolute;
+        z-index: 3;
+        right: 28px;
+        bottom: 54px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+        color: var(--dim);
+        font-size: 8px;
+        letter-spacing: 0.16em;
+      }
+
+      .hero-bottom {
+        position: absolute;
+        z-index: 3;
+        left: 28px;
+        bottom: 54px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: var(--dim);
+        font-size: 8px;
+        letter-spacing: 0.16em;
+      }
+
+      .scroll-line {
+        display: block;
+        width: 80px;
+        height: 1px;
+        background: var(--line-strong);
+      }
+
+      /* SECTIONS */
+
+      .section {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 110px 28px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: 90px 1fr;
+        gap: 35px;
+        margin-bottom: 70px;
+      }
+
+      .section-number {
+        color: var(--dim);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+      }
+
+      .section-kicker {
+        display: block;
+        margin-bottom: 17px;
+        color: var(--muted);
+        font-size: 9px;
+        letter-spacing: 0.18em;
+      }
+
+      .section-heading h2 {
+        max-width: 850px;
+        margin: 0;
+        font-size: clamp(42px, 7vw, 90px);
+        line-height: 0.88;
+        letter-spacing: -0.065em;
+      }
+
+      .section-heading h2 span {
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+      }
+
+      /* INTRO */
+
+      .intro-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 80px;
+        align-items: end;
+      }
+
+      .intro-large {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 52px);
+        line-height: 1;
+        letter-spacing: -0.045em;
+      }
+
+      .intro-copy {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.9;
+      }
+
+      .intro-copy p {
+        margin: 0 0 18px;
+      }
+
+      .terminal-label {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 8px 10px;
+        border: 1px solid var(--line);
+        color: var(--dim);
+        font-size: 8px;
+        letter-spacing: 0.15em;
+      }
+
+      /* PRINCIPLES */
+
+      .principles-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        border-top: 1px solid var(--line);
+        border-left: 1px solid var(--line);
+      }
+
+      .principle-card {
+        min-height: 360px;
+        padding: 30px;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        background: var(--surface);
+        transition: background 0.25s ease;
+      }
+
+      .principle-card:hover {
+        background: var(--surface-2);
+      }
+
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .card-number {
+        color: var(--dim);
+        font-size: 9px;
+        letter-spacing: 0.12em;
+      }
+
+      .card-tag {
+        color: var(--dim);
+        font-size: 8px;
+        letter-spacing: 0.14em;
+        text-align: right;
+      }
+
+      .principle-card h3 {
+        max-width: 500px;
+        margin: 80px 0 20px;
+        font-size: clamp(28px, 4vw, 48px);
+        line-height: 0.9;
+        letter-spacing: -0.055em;
+      }
+
+      .principle-card p {
+        max-width: 530px;
+        margin: 0 0 28px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .detail {
+        padding: 6px 8px;
+        border: 1px solid var(--line);
+        color: var(--dim);
+        font-size: 7px;
+        letter-spacing: 0.1em;
+      }
+
+      /* INTELLIGENCE ARCHITECTURE */
+
+      .architecture-layout {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: 90px;
+        align-items: center;
+      }
+
+      .architecture-copy h3 {
+        margin: 0 0 25px;
+        font-size: clamp(32px, 4vw, 60px);
+        line-height: 0.9;
+        letter-spacing: -0.055em;
+      }
+
+      .architecture-copy p {
+        max-width: 500px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.9;
+      }
+
+      .architecture-stack {
+        position: relative;
+        border: 1px solid var(--line-strong);
+        padding: 20px;
+      }
+
+      .architecture-stack::before {
+        content: "";
+        position: absolute;
+        inset: 9px;
+        border: 1px solid var(--line);
+        pointer-events: none;
+      }
+
+      .architecture-layer {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        align-items: center;
+        min-height: 55px;
+        padding: 0 16px;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .architecture-layer:last-child {
+        border-bottom: 0;
+      }
+
+      .architecture-layer span:first-child {
+        color: var(--dim);
+        font-size: 8px;
+      }
+
+      .architecture-layer span:last-child {
+        font-size: 10px;
+        letter-spacing: 0.16em;
+      }
+
+      .architecture-layer:first-child {
+        min-height: 75px;
+        background: var(--text);
+        color: var(--bg);
+      }
+
+      .architecture-layer:first-child span:first-child {
+        color: #777;
+      }
+
+      .architecture-layer:nth-child(2) {
+        border-left: 2px solid var(--text);
+      }
+
+      /* CYCLE */
+
+      .cycle {
+        border-top: 1px solid var(--line);
+      }
+
+      .cycle-step {
+        display: grid;
+        grid-template-columns: 70px 230px 1fr;
+        gap: 30px;
+        padding: 28px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .cycle-number {
+        color: var(--dim);
+        font-size: 9px;
+      }
+
+      .cycle-step h3 {
+        margin: 0;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+      }
+
+      .cycle-step p {
+        max-width: 650px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      /* MANIFESTO */
+
+      .manifesto {
+        position: relative;
+        min-height: 650px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .manifesto-mark {
+        position: absolute;
+        right: -30px;
+        bottom: -90px;
+        color: transparent;
+        font-size: min(32vw, 450px);
+        line-height: 0.7;
+        letter-spacing: -0.1em;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+        pointer-events: none;
+      }
+
+      .manifesto-content {
+        position: relative;
+        z-index: 2;
+        max-width: 950px;
+      }
+
+      .manifesto-label {
+        display: block;
+        margin-bottom: 25px;
+        color: var(--muted);
+        font-size: 9px;
+        letter-spacing: 0.18em;
+      }
+
+      .manifesto h2 {
+        margin: 0;
+        font-size: clamp(55px, 9vw, 125px);
+        line-height: 0.84;
+        letter-spacing: -0.075em;
+      }
+
+      .manifesto h2 span {
+        display: block;
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+      }
+
+      .manifesto p {
+        max-width: 620px;
+        margin: 45px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.9;
+      }
+
+      /* CTA */
+
+      .cta-section {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 50px;
+        align-items: end;
+      }
+
+      .cta-section h2 {
+        max-width: 900px;
+        margin: 0;
+        font-size: clamp(42px, 7vw, 90px);
+        line-height: 0.86;
+        letter-spacing: -0.065em;
+      }
+
+      .cta-section h2 span {
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+      }
+
+      .cta-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 9px;
+      }
+
+      /* FOOTER */
+
+      .footer {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 30px 28px 45px;
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        color: var(--dim);
+        font-size: 8px;
+        letter-spacing: 0.14em;
+      }
+
+      .footer-left,
+      .footer-right {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .footer-right {
+        text-align: right;
+      }
+
+      /* RESPONSIVE */
+
+      @media (max-width: 900px) {
+        .nav {
+          grid-template-columns: 1fr auto;
+        }
+
+        .nav-center {
+          display: none;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .nav-status {
+          display: block;
+        }
+
+        .hero {
+          min-height: 700px;
+        }
+
+        .intro-layout,
+        .architecture-layout {
+          grid-template-columns: 1fr;
+          gap: 45px;
+        }
+
+        .principles-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .cycle-step {
+          grid-template-columns: 55px 170px 1fr;
+          gap: 20px;
+        }
+
+        .cta-section {
+          grid-template-columns: 1fr;
+          align-items: start;
+        }
+
+        .cta-actions {
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .nav {
+          padding: 18px 18px;
+        }
+
+        .hero {
+          min-height: 680px;
+          padding: 90px 18px 40px;
+        }
+
+        .hero h1 {
+          font-size: clamp(58px, 18vw, 100px);
+        }
+
+        .hero-copy {
+          font-size: 13px;
+        }
+
+        .hero-side {
+          display: none;
+        }
+
+        .hero-bottom {
+          left: 18px;
+          bottom: 30px;
+        }
+
+        .section {
+          padding: 80px 18px;
+        }
+
+        .section-heading {
+          grid-template-columns: 45px 1fr;
+          gap: 15px;
+          margin-bottom: 50px;
+        }
+
+        .principle-card {
+          min-height: 330px;
+          padding: 22px;
+        }
+
+        .principle-card h3 {
+          margin-top: 60px;
+        }
+
+        .cycle-step {
+          grid-template-columns: 35px 1fr;
+          gap: 10px;
+        }
+
+        .cycle-step p {
+          grid-column: 2;
+        }
+
+        .architecture-stack {
+          padding: 12px;
+        }
+
+        .architecture-layer {
+          grid-template-columns: 35px 1fr;
+          padding: 0 10px;
+        }
+
+        .manifesto {
+          min-height: 570px;
+        }
+
+        .manifesto h2 {
+          font-size: clamp(52px, 16vw, 90px);
+        }
+
+        .footer {
+          padding: 25px 18px 35px;
+          flex-direction: column;
+        }
+
+        .footer-right {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="nav">
+      <a href="/" class="brand" aria-label="Barkly Labs home">
+        <span class="brand-symbol">◆</span>
+        <span>BARKLY LABS</span>
+      </a>
+
+      <div class="nav-center">
+        <span>CYN-X / PRINCIPLES</span>
+      </div>
+
+      <div class="nav-links">
+        <a href="#principles">PRINCIPLES</a>
+        <a href="#architecture">ARCHITECTURE</a>
+        <a href="#cycle">CYCLE</a>
+        <a href="#manifesto">MANIFESTO</a>
+      </div>
+
+      <a href="/cyn-x/" class="nav-status">
+        CYN-X ↗
+      </a>
+    </nav>
+
+    <main>
+      <!-- HERO -->
+
+      <section class="hero">
+        <div class="hero-background">
+          <div class="hero-grid"></div>
+          <div class="hero-orbit orbit-one"></div>
+          <div class="hero-orbit orbit-two"></div>
+          <div class="hero-orbit orbit-three"></div>
+        </div>
+
+        <div class="hero-content">
+          <div class="eyebrow">
+            <span>01</span>
+            CYN-X / INTELLIGENCE PRINCIPLES
+          </div>
+
+          <h1>
+            INTELLIGENCE
+            <span>SHOULD ADAPT</span>
+            TO HUMANS.
+          </h1>
+
+          <p class="hero-copy">
+            CYN-X is an intelligence system built around a simple idea:
+            <strong>computers should handle the hard parts for humans.</strong>
+            Not simply answer questions, but understand context, remember,
+            assist, adapt, and work alongside the people using them.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#principles" class="button">
+              [ EXPLORE THE PRINCIPLES ↓ ]
+            </a>
+
+            <a href="#architecture" class="button">
+              [ VIEW THE ARCHITECTURE ]
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <span>LOCAL INTELLIGENCE</span>
+          <span>HUMAN-CENTERED</span>
+          <span>BARKLY / CYN-X</span>
+        </div>
+
+        <div class="hero-bottom">
+          <span>SCROLL TO EXPLORE</span>
+          <span class="scroll-line"></span>
+        </div>
+      </section>
+
+      <!-- INTRO -->
+
+      <section class="section">
+        <div class="section-heading">
+          <div class="section-number">02</div>
+
+          <div>
+            <span class="section-kicker">THE FOUNDATION</span>
+
+            <h2>
+              THE MACHINE
+              <span>SHOULD CARRY</span>
+              THE COMPLEXITY.
+            </h2>
+          </div>
+        </div>
+
+        <div class="intro-layout">
+          <p class="intro-large">
+            People should not have to become computer experts just to use
+            computers.
+          </p>
+
+          <div class="intro-copy">
+            <p>
+              CYN-X explores what happens when intelligence is designed around
+              the human instead of forcing the human to adapt to the machine.
+            </p>
+
+            <p>
+              The system becomes an interface between people and increasingly
+              complex computers, tools, information, and connected systems.
+            </p>
+
+            <span class="terminal-label">
+              PRINCIPLE / HUMAN → CYN-X → COMPLEXITY
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRINCIPLES -->
+
+      <section id="principles" class="section">
+        <div class="section-heading">
+          <div class="section-number">03</div>
+
+          <div>
+            <span class="section-kicker">CYN-X PRINCIPLES</span>
+
+            <h2>
+              BUILT
+              <span>AROUND PEOPLE.</span>
+            </h2>
+          </div>
+        </div>
+
+        <div class="principles-grid">
+          {principles.map((principle) => (
+            <article class="principle-card">
+              <div class="card-top">
+                <span class="card-number">{principle.number}</span>
+                <span class="card-tag">{principle.tag}</span>
+              </div>
+
+              <h3>{principle.title}</h3>
+
+              <p>{principle.description}</p>
+
+              <div class="details">
+                {principle.details.map((detail) => (
+                  <span class="detail">{detail}</span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- ARCHITECTURE -->
+
+      <section id="architecture" class="section">
+        <div class="section-heading">
+          <div class="section-number">04</div>
+
+          <div>
+            <span class="section-kicker">THE INTELLIGENCE LAYER</span>
+
+            <h2>
+              BETWEEN
+              <span>PEOPLE &amp; COMPLEXITY.</span>
+            </h2>
+          </div>
+        </div>
+
+        <div class="architecture-layout">
+          <div class="architecture-copy">
+            <h3>
+              CYN-X
+              <br />
+              IS THE
+              <br />
+              INTELLIGENCE
+              <br />
+              LAYER.
+            </h3>
+
+            <p>
+              CYN-X connects intelligence, memory, reasoning, tools,
+              interfaces, computers, and connected systems into a layer
+              designed to make technology easier for humans to use.
+            </p>
+          </div>
+
+          <div class="architecture-stack">
+            {intelligenceLayers.map((layer, index) => (
+              <div class="architecture-layer">
+                <span>
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                <span>{layer}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- CYCLE -->
+
+      <section id="cycle" class="section">
+        <div class="section-heading">
+          <div class="section-number">05</div>
+
+          <div>
+            <span class="section-kicker">ADAPTIVE INTELLIGENCE</span>
+
+            <h2>
+              UNDERSTAND.
+              <span>ADAPT.</span>
+              ASSIST.
+            </h2>
+          </div>
+        </div>
+
+        <div class="cycle">
+          {cycle.map(([number, title, description]) => (
+            <div class="cycle-step">
+              <span class="cycle-number">{number}</span>
+
+              <h3>{title}</h3>
+
+              <p>{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- MANIFESTO -->
+
+      <section id="manifesto" class="section manifesto">
+        <div class="manifesto-mark">C</div>
+
+        <div class="manifesto-content">
+          <span class="manifesto-label">
+            CYN-X / CORE PRINCIPLE
+          </span>
+
+          <h2>
+            COMPUTERS
+            <span>SHOULD HANDLE</span>
+            THE HARD STUFF.
+          </h2>
+
+          <p>
+            CYN-X is built around the belief that computers should take on
+            more of the complexity surrounding human work, creativity,
+            research, and everyday life — while people remain at the center
+            of the system.
+          </p>
+        </div>
+      </section>
+
+      <!-- CTA -->
+
+      <section class="section cta-section">
+        <h2>
+          BUILD
+          <span>INTELLIGENCE</span>
+          FOR HUMANS.
+        </h2>
+
+        <div class="cta-actions">
+          <a href="/cyn-x/" class="button">
+            [ RETURN TO CYN-X ↗ ]
+          </a>
+
+          <a href="/" class="button">
+            [ BARKLY LABS ↗ ]
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-left">
+        <span>BARKLY / CYN-X</span>
+        <span>INTELLIGENCE PRINCIPLES</span>
+      </div>
+
+      <div class="footer-right">
+        <span>HUMAN-CENTERED INTELLIGENCE</span>
+        <span>© {year} BARKLY LABS</span>
+      </div>
+    </footer>
+  </body>
+</html>
