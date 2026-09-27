@@ -182,69 +182,69 @@ const practices = [
 
 
     <!-- MISSION -->
+<section class="content-section mission-section" id="mission">
 
-    <section class="content-section mission-section" id="mission">
+  <div class="section-heading">
 
-      <div class="section-heading">
+    <div class="section-number">02</div>
 
-        <div class="section-number">02</div>
+    <div>
+      <span class="eyebrow">MISSION</span>
 
-        <div>
-          <span class="eyebrow">MISSION</span>
+      <h2>
+        MAKE THE<br />
+        <span>COMPLEX</span><br />
+        USEFUL.
+      </h2>
+    </div>
 
-          <h2>
-            MAKE THE<br />
-            <span>COMPLEX</span> USEFUL.
-          </h2>
-        </div>
+  </div>
 
+  <div class="mission-content">
+
+    <div class="mission-statement">
+      <p class="large-copy">
+        Barkly Labs builds human-centered systems that make
+        technology more accessible, creative, understandable,
+        and useful.
+      </p>
+    </div>
+
+    <div class="mission-details">
+
+      <div>
+        <span>01</span>
+        <p>
+          Build practical tools for real people and real problems.
+        </p>
       </div>
 
-      <div class="mission-grid">
-
-        <div class="mission-statement">
-          <p>
-            Barkly Labs builds human-centered systems that make
-            technology more accessible, creative, understandable,
-            and useful.
-          </p>
-        </div>
-
-        <div class="mission-details">
-
-          <div>
-            <span>01</span>
-            <p>
-              Build practical tools for real people and real problems.
-            </p>
-          </div>
-
-          <div>
-            <span>02</span>
-            <p>
-              Create infrastructure that other people can build upon.
-            </p>
-          </div>
-
-          <div>
-            <span>03</span>
-            <p>
-              Document the work so knowledge does not disappear.
-            </p>
-          </div>
-
-          <div>
-            <span>04</span>
-            <p>
-              Keep humans at the center of the systems we create.
-            </p>
-          </div>
-
-        </div>
-
+      <div>
+        <span>02</span>
+        <p>
+          Create infrastructure that other people can build upon.
+        </p>
       </div>
 
-    </section>
+      <div>
+        <span>03</span>
+        <p>
+          Document the work so knowledge does not disappear.
+        </p>
+      </div>
+
+      <div>
+        <span>04</span>
+        <p>
+          Keep humans at the center of the systems we create.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
 
     <!-- PRINCIPLES -->
@@ -810,11 +810,12 @@ const practices = [
 
 .mission-content {
   min-width: 0;
+  padding-top: 8px;
 }
 
 .mission-statement {
   max-width: 850px;
-  margin-bottom: 70px;
+  margin-bottom: 85px;
 }
 
 .mission-statement p {
@@ -835,13 +836,17 @@ const practices = [
 }
 
 .mission-details > div {
-  padding: 24px 0;
+  min-height: 105px;
+
+  padding: 30px 0;
 
   border-bottom: 1px solid var(--line);
 
   display: grid;
   grid-template-columns: 55px minmax(0, 1fr);
   gap: 25px;
+
+  align-items: center;
 }
 
 .mission-details span {
