@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>BARKLY LABS — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            BARKLY LABS
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\BARKLY LABS.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>BARKLY LABS</h1>
+<h2>LAAS</h2>
+<h3>LABS AS A SERVICE</h3>
+<p class="paragraph normal">DOCUMENT TYPE: Functional Requirements / Technical Architecture / Legal &amp; Intellectual Property Specification
+SYSTEM: LAAS
+ORGANIZATION: Barkly Labs
+VERSION: 0.1
+STATUS: DRAFT — FOUNDATIONAL SPECIFICATION
+YEAR: 2026
+CLASSIFICATION: Technical / Legal Framework / Research Documentation</p>
+<h1>01 — PURPOSE</h1>
+<p class="paragraph normal">LAAS, or Labs as a Service, is a technical and organizational system for providing people, organizations, creators, researchers, engineers, educators, and communities with structured access to laboratory infrastructure.</p>
+<p class="paragraph normal">LAAS is designed to allow a person or organization to move an idea through a repeatable research and engineering environment without requiring them to independently construct the entire laboratory infrastructure required to investigate that idea.</p>
+<p class="paragraph normal">LAAS provides a common system for:</p>
+<p class="paragraph normal">idea intake</p>
+<p class="paragraph normal">project creation</p>
+<p class="paragraph normal">research</p>
+<p class="paragraph normal">experimentation</p>
+<p class="paragraph normal">prototyping</p>
+<p class="paragraph normal">engineering</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">testing</p>
+<p class="paragraph normal">collaboration</p>
+<p class="paragraph normal">deployment</p>
+<p class="paragraph normal">ownership</p>
+<p class="paragraph normal">licensing</p>
+<p class="paragraph normal">distribution</p>
+<p class="paragraph normal">maintenance</p>
+<p class="paragraph normal">community contribution</p>
+<p class="paragraph normal">reinvestment into laboratory infrastructure</p>
+<p class="paragraph normal">The system is intended to transform laboratory infrastructure from a fixed physical or organizational location into a reusable service architecture.</p>
+<p class="paragraph normal">The fundamental concept is:</p>
+<p class="paragraph normal">THE LAB IS INFRASTRUCTURE.
+THE INFRASTRUCTURE CAN BE MADE AVAILABLE AS A SERVICE.</p>
+<p class="paragraph normal">LAAS therefore treats the laboratory itself as a system that can be accessed, configured, extended, documented, and reused.</p>
+<h1>02 — SYSTEM DEFINITION</h1>
+<h2>2.1 Definition</h2>
+<p class="paragraph normal">Labs as a Service (LAAS) is a system in which laboratory capabilities are exposed as reusable services that allow external or internal participants to initiate, develop, test, document, and potentially release projects through a shared laboratory infrastructure.</p>
+<p class="paragraph normal">LAAS may provide:</p>
+<p class="paragraph normal">software infrastructure</p>
+<p class="paragraph normal">hardware infrastructure</p>
+<p class="paragraph normal">AI systems</p>
+<p class="paragraph normal">computing resources</p>
+<p class="paragraph normal">research environments</p>
+<p class="paragraph normal">documentation systems</p>
+<p class="paragraph normal">testing infrastructure</p>
+<p class="paragraph normal">development tools</p>
+<p class="paragraph normal">design resources</p>
+<p class="paragraph normal">educational resources</p>
+<p class="paragraph normal">community infrastructure</p>
+<p class="paragraph normal">engineering assistance</p>
+<p class="paragraph normal">project management</p>
+<p class="paragraph normal">deployment infrastructure</p>
+<p class="paragraph normal">manufacturing or fabrication access</p>
+<p class="paragraph normal">media and communication infrastructure</p>
+<p class="paragraph normal">LAAS is not limited to one discipline.</p>
+<p class="paragraph normal">A LAAS laboratory may support:</p>
+<p class="paragraph normal">software engineering</p>
+<p class="paragraph normal">artificial intelligence</p>
+<p class="paragraph normal">computer vision</p>
+<p class="paragraph normal">embedded systems</p>
+<p class="paragraph normal">robotics</p>
+<p class="paragraph normal">hardware</p>
+<p class="paragraph normal">scientific research</p>
+<p class="paragraph normal">creative technology</p>
+<p class="paragraph normal">media</p>
+<p class="paragraph normal">education</p>
+<p class="paragraph normal">accessibility</p>
+<p class="paragraph normal">community technology</p>
+<p class="paragraph normal">experimental systems</p>
+<h1>03 — CORE PRINCIPLE</h1>
+<p class="paragraph normal">LAAS operates according to the Barkly principle:</p>
+<p class="paragraph normal">SHOW THE SHAPE FIRST.
+REVEAL THE DETAILS WHEN THE HUMAN ASKS FOR THEM.</p>
+<p class="paragraph normal">Every LAAS project must therefore have a discoverable structure.</p>
+<p class="paragraph normal">A participant should be able to determine:</p>
+<p class="paragraph normal">What is this project?</p>
+<p class="paragraph normal">What problem is it addressing?</p>
+<p class="paragraph normal">What exists?</p>
+<p class="paragraph normal">What is being tested?</p>
+<p class="paragraph normal">What resources are being used?</p>
+<p class="paragraph normal">Who owns the resulting work?</p>
+<p class="paragraph normal">What are the project&#x27;s boundaries?</p>
+<p class="paragraph normal">What is experimental?</p>
+<p class="paragraph normal">What is production-ready?</p>
+<p class="paragraph normal">How can another person contribute?</p>
+<h1>04 — PROBLEM STATEMENT</h1>
+<p class="paragraph normal">Traditional laboratory access often requires a participant to independently obtain:</p>
+<p class="paragraph normal">workspace</p>
+<p class="paragraph normal">equipment</p>
+<p class="paragraph normal">software</p>
+<p class="paragraph normal">compute</p>
+<p class="paragraph normal">technical expertise</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">testing infrastructure</p>
+<p class="paragraph normal">collaborators</p>
+<p class="paragraph normal">project management</p>
+<p class="paragraph normal">legal agreements</p>
+<p class="paragraph normal">intellectual-property management</p>
+<p class="paragraph normal">distribution infrastructure</p>
+<p class="paragraph normal">This creates a high barrier to experimentation.</p>
+<p class="paragraph normal">LAAS addresses this problem by separating:</p>
+<p class="paragraph normal">THE IDEA</p>
+<p class="paragraph normal">from</p>
+<p class="paragraph normal">THE INFRASTRUCTURE REQUIRED TO DEVELOP THE IDEA.</p>
+<p class="paragraph normal">Instead of requiring every participant to build an entire laboratory, LAAS provides a reusable laboratory substrate.</p>
+<h1>05 — SYSTEM OBJECTIVES</h1>
+<p class="paragraph normal">LAAS SHALL:</p>
+<h3>OBJ-001</h3>
+<p class="paragraph normal">Provide a standardized mechanism for creating laboratory projects.</p>
+<h3>OBJ-002</h3>
+<p class="paragraph normal">Provide reusable infrastructure across multiple projects.</p>
+<h3>OBJ-003</h3>
+<p class="paragraph normal">Allow projects to progress through defined development stages.</p>
+<h3>OBJ-004</h3>
+<p class="paragraph normal">Maintain project documentation as a first-class system component.</p>
+<h3>OBJ-005</h3>
+<p class="paragraph normal">Track ownership and intellectual-property relationships.</p>
+<h3>OBJ-006</h3>
+<p class="paragraph normal">Track contributors and contributions.</p>
+<h3>OBJ-007</h3>
+<p class="paragraph normal">Allow projects to remain independent from the underlying laboratory infrastructure.</p>
+<h3>OBJ-008</h3>
+<p class="paragraph normal">Allow successful project infrastructure to become reusable laboratory infrastructure.</p>
+<h3>OBJ-009</h3>
+<p class="paragraph normal">Allow participants to contribute improvements back to the laboratory ecosystem.</p>
+<h3>OBJ-010</h3>
+<p class="paragraph normal">Preserve human control over project decisions.</p>
+<h3>OBJ-011</h3>
+<p class="paragraph normal">Support accessibility throughout the project lifecycle.</p>
+<h3>OBJ-012</h3>
+<p class="paragraph normal">Maintain an auditable record of significant technical decisions and project state changes.</p>
+<h1>06 — LAAS SYSTEM MODEL</h1>
+<p class="paragraph normal">LAAS consists of seven primary layers.</p>
+<p class="paragraph normal">┌─────────────────────────────────────────────┐</p>
+<p class="paragraph normal">│              PARTICIPANTS                   │</p>
+<p class="paragraph normal">│ people / organizations / communities        │</p>
+<p class="paragraph normal">└──────────────────────┬──────────────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────────────────▼──────────────────────┐</p>
+<p class="paragraph normal">│              PROJECT LAYER                  │</p>
+<p class="paragraph normal">│ ideas / projects / experiments / products   │</p>
+<p class="paragraph normal">└──────────────────────┬──────────────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────────────────▼──────────────────────┐</p>
+<p class="paragraph normal">│             LAB SERVICES                    │</p>
+<p class="paragraph normal">│ AI / compute / hardware / research / tools  │</p>
+<p class="paragraph normal">└──────────────────────┬──────────────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────────────────▼──────────────────────┐</p>
+<p class="paragraph normal">│          ORCHESTRATION LAYER                │</p>
+<p class="paragraph normal">│ workflow / resources / permissions / state  │</p>
+<p class="paragraph normal">└──────────────────────┬──────────────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────────────────▼──────────────────────┐</p>
+<p class="paragraph normal">│           DOCUMENTATION LAYER               │</p>
+<p class="paragraph normal">│ specifications / decisions / artifacts     │</p>
+<p class="paragraph normal">└──────────────────────┬──────────────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────────────────▼──────────────────────┐</p>
+<p class="paragraph normal">│          IP + GOVERNANCE LAYER              │</p>
+<p class="paragraph normal">│ ownership / licensing / contributors       │</p>
+<p class="paragraph normal">└──────────────────────┬──────────────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────────────────▼──────────────────────┐</p>
+<p class="paragraph normal">│          LAB INFRASTRUCTURE                 │</p>
+<p class="paragraph normal">│ compute / storage / hardware / facilities   │</p>
+<p class="paragraph normal">└─────────────────────────────────────────────┘</p>
+<h1>07 — PRIMARY ENTITIES</h1>
+<p class="paragraph normal">LAAS SHALL represent the following entities.</p>
+<h2>7.1 Participant</h2>
+<p class="paragraph normal">A person or organization interacting with LAAS.</p>
+<p class="paragraph normal">Required fields:</p>
+<p class="paragraph normal">participant_id</p>
+<p class="paragraph normal">legal_name or organizational name</p>
+<p class="paragraph normal">display_name</p>
+<p class="paragraph normal">contact information</p>
+<p class="paragraph normal">authorization status</p>
+<p class="paragraph normal">role</p>
+<p class="paragraph normal">consent status</p>
+<p class="paragraph normal">agreement status</p>
+<h2>7.2 Project</h2>
+<p class="paragraph normal">A unit of work operating within LAAS.</p>
+<p class="paragraph normal">Required fields:</p>
+<p class="paragraph normal">project_id</p>
+<p class="paragraph normal">project_name</p>
+<p class="paragraph normal">owner_id</p>
+<p class="paragraph normal">description</p>
+<p class="paragraph normal">status</p>
+<p class="paragraph normal">creation_date</p>
+<p class="paragraph normal">lifecycle_stage</p>
+<p class="paragraph normal">visibility</p>
+<p class="paragraph normal">license</p>
+<p class="paragraph normal">repository</p>
+<p class="paragraph normal">documentation location</p>
+<h2>7.3 Experiment</h2>
+<p class="paragraph normal">A controlled investigation associated with a project.</p>
+<p class="paragraph normal">Required fields:</p>
+<p class="paragraph normal">experiment_id</p>
+<p class="paragraph normal">project_id</p>
+<p class="paragraph normal">hypothesis</p>
+<p class="paragraph normal">objective</p>
+<p class="paragraph normal">inputs</p>
+<p class="paragraph normal">methodology</p>
+<p class="paragraph normal">expected result</p>
+<p class="paragraph normal">observed result</p>
+<p class="paragraph normal">conclusion</p>
+<p class="paragraph normal">artifacts</p>
+<p class="paragraph normal">timestamp</p>
+<p class="paragraph normal">author</p>
+<h2>7.4 Service</h2>
+<p class="paragraph normal">A capability exposed by the laboratory.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">compute</p>
+<p class="paragraph normal">AI inference</p>
+<p class="paragraph normal">model training</p>
+<p class="paragraph normal">code analysis</p>
+<p class="paragraph normal">hardware testing</p>
+<p class="paragraph normal">fabrication</p>
+<p class="paragraph normal">storage</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">deployment</p>
+<p class="paragraph normal">testing</p>
+<p class="paragraph normal">media production</p>
+<p class="paragraph normal">Required fields:</p>
+<p class="paragraph normal">service_id</p>
+<p class="paragraph normal">service_name</p>
+<p class="paragraph normal">description</p>
+<p class="paragraph normal">capabilities</p>
+<p class="paragraph normal">requirements</p>
+<p class="paragraph normal">availability</p>
+<p class="paragraph normal">cost model</p>
+<p class="paragraph normal">authorization requirements</p>
+<h2>7.5 Resource</h2>
+<p class="paragraph normal">A physical or digital resource consumed by a project.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">GPU</p>
+<p class="paragraph normal">CPU</p>
+<p class="paragraph normal">storage</p>
+<p class="paragraph normal">laboratory equipment</p>
+<p class="paragraph normal">development board</p>
+<p class="paragraph normal">camera</p>
+<p class="paragraph normal">sensor</p>
+<p class="paragraph normal">software environment</p>
+<p class="paragraph normal">dataset</p>
+<p class="paragraph normal">workspace</p>
+<h2>7.6 Artifact</h2>
+<p class="paragraph normal">A resulting object produced by a project.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">source code</p>
+<p class="paragraph normal">model</p>
+<p class="paragraph normal">dataset</p>
+<p class="paragraph normal">CAD file</p>
+<p class="paragraph normal">hardware design</p>
+<p class="paragraph normal">document</p>
+<p class="paragraph normal">image</p>
+<p class="paragraph normal">video</p>
+<p class="paragraph normal">prototype</p>
+<p class="paragraph normal">research result</p>
+<h2>7.7 Contribution</h2>
+<p class="paragraph normal">A contribution made by a participant.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">code</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">research</p>
+<p class="paragraph normal">design</p>
+<p class="paragraph normal">hardware</p>
+<p class="paragraph normal">testing</p>
+<p class="paragraph normal">funding</p>
+<p class="paragraph normal">infrastructure</p>
+<p class="paragraph normal">education</p>
+<h1>08 — PROJECT LIFECYCLE</h1>
+<p class="paragraph normal">LAAS SHALL implement the following lifecycle:</p>
+<p class="paragraph normal">IDEA</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RESEARCH</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">EXPERIMENT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PROTOTYPE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">COMMUNITY TESTING</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">ENGINEERING</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RELEASE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">MAINTENANCE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">REINVESTMENT</p>
+<p class="paragraph normal">A project may move backward between stages.</p>
+<p class="paragraph normal">The lifecycle is not required to be strictly linear.</p>
+<p class="paragraph normal">For example:</p>
+<p class="paragraph normal">PROTOTYPE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">TEST</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">FAILURE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RESEARCH</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">EXPERIMENT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PROTOTYPE</p>
+<p class="paragraph normal">Failure SHALL be treated as valid laboratory state.</p>
+<h1>09 — FUNCTIONAL REQUIREMENTS</h1>
+<h2>FR-001 — Project Creation</h2>
+<p class="paragraph normal">The system SHALL allow an authorized participant to create a project.</p>
+<p class="paragraph normal">The system SHALL generate a unique project identifier.</p>
+<p class="paragraph normal">The project SHALL receive an initial lifecycle state of:</p>
+<p class="paragraph normal">IDEA</p>
+<h2>FR-002 — Project Intake</h2>
+<p class="paragraph normal">LAAS SHALL provide an intake mechanism allowing participants to submit:</p>
+<p class="paragraph normal">project title</p>
+<p class="paragraph normal">problem statement</p>
+<p class="paragraph normal">intended outcome</p>
+<p class="paragraph normal">requested resources</p>
+<p class="paragraph normal">requested services</p>
+<p class="paragraph normal">technical requirements</p>
+<p class="paragraph normal">accessibility requirements</p>
+<p class="paragraph normal">expected participants</p>
+<p class="paragraph normal">desired timeline</p>
+<p class="paragraph normal">ownership expectations</p>
+<h2>FR-003 — Project Classification</h2>
+<p class="paragraph normal">LAAS SHALL classify projects by:</p>
+<p class="paragraph normal">discipline</p>
+<p class="paragraph normal">lifecycle stage</p>
+<p class="paragraph normal">risk level</p>
+<p class="paragraph normal">resource requirements</p>
+<p class="paragraph normal">confidentiality</p>
+<p class="paragraph normal">intellectual-property status</p>
+<h2>FR-004 — Resource Request</h2>
+<p class="paragraph normal">A project SHALL be able to request laboratory resources.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">&quot;project_id&quot;: &quot;LAAS-0001&quot;,</p>
+<p class="paragraph normal">&quot;resource&quot;: &quot;GPU_COMPUTE&quot;,</p>
+<p class="paragraph normal">&quot;quantity&quot;: 1,</p>
+<p class="paragraph normal">&quot;duration&quot;: &quot;48h&quot;,</p>
+<p class="paragraph normal">&quot;purpose&quot;: &quot;MODEL_TRAINING&quot;</p>
+<p class="paragraph normal">}</p>
+<h2>FR-005 — Service Allocation</h2>
+<p class="paragraph normal">LAAS SHALL determine whether a requested service is:</p>
+<p class="paragraph normal">available</p>
+<p class="paragraph normal">unavailable</p>
+<p class="paragraph normal">restricted</p>
+<p class="paragraph normal">requires approval</p>
+<p class="paragraph normal">requires payment</p>
+<p class="paragraph normal">requires an agreement</p>
+<h2>FR-006 — Workspace Creation</h2>
+<p class="paragraph normal">When a project is approved, LAAS SHALL create or provision an appropriate project workspace.</p>
+<p class="paragraph normal">The workspace MAY include:</p>
+<p class="paragraph normal">source repository</p>
+<p class="paragraph normal">documentation repository</p>
+<p class="paragraph normal">experiment directory</p>
+<p class="paragraph normal">artifact storage</p>
+<p class="paragraph normal">issue tracker</p>
+<p class="paragraph normal">task system</p>
+<p class="paragraph normal">deployment environment</p>
+<h2>FR-007 — Documentation</h2>
+<p class="paragraph normal">Every LAAS project SHALL maintain machine-readable and human-readable documentation.</p>
+<p class="paragraph normal">Documentation SHALL include:</p>
+<p class="paragraph normal">project overview</p>
+<p class="paragraph normal">architecture</p>
+<p class="paragraph normal">requirements</p>
+<p class="paragraph normal">decisions</p>
+<p class="paragraph normal">experiments</p>
+<p class="paragraph normal">known limitations</p>
+<p class="paragraph normal">dependencies</p>
+<p class="paragraph normal">ownership</p>
+<p class="paragraph normal">license</p>
+<p class="paragraph normal">contributors</p>
+<h2>FR-008 — Experiment Tracking</h2>
+<p class="paragraph normal">The system SHALL allow experiments to be created and recorded.</p>
+<p class="paragraph normal">An experiment SHALL contain:</p>
+<p class="paragraph normal">QUESTION</p>
+<p class="paragraph normal">HYPOTHESIS</p>
+<p class="paragraph normal">METHOD</p>
+<p class="paragraph normal">INPUT</p>
+<p class="paragraph normal">RESULT</p>
+<p class="paragraph normal">CONCLUSION</p>
+<p class="paragraph normal">NEXT ACTION</p>
+<h2>FR-009 — Artifact Tracking</h2>
+<p class="paragraph normal">LAAS SHALL associate generated artifacts with:</p>
+<p class="paragraph normal">project</p>
+<p class="paragraph normal">creator</p>
+<p class="paragraph normal">contributors</p>
+<p class="paragraph normal">timestamp</p>
+<p class="paragraph normal">version</p>
+<p class="paragraph normal">license</p>
+<p class="paragraph normal">ownership status</p>
+<h2>FR-010 — Contribution Tracking</h2>
+<p class="paragraph normal">The system SHALL record meaningful contributions.</p>
+<p class="paragraph normal">Contributions SHALL be attributable to participants.</p>
+<p class="paragraph normal">The system SHALL distinguish between:</p>
+<p class="paragraph normal">author</p>
+<p class="paragraph normal">contributor</p>
+<p class="paragraph normal">owner</p>
+<p class="paragraph normal">maintainer</p>
+<p class="paragraph normal">license holder</p>
+<p class="paragraph normal">service provider</p>
+<p class="paragraph normal">These roles SHALL NOT automatically be treated as identical.</p>
+<h1>10 — INTELLECTUAL PROPERTY MODEL</h1>
+<p class="paragraph normal">LAAS SHALL treat intellectual property as an explicit project object.</p>
+<p class="paragraph normal">Each project SHALL contain an IP record.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">PROJECT</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── OWNER</p>
+<p class="paragraph normal">├── INVENTORS</p>
+<p class="paragraph normal">├── AUTHORS</p>
+<p class="paragraph normal">├── CONTRIBUTORS</p>
+<p class="paragraph normal">├── LICENSE</p>
+<p class="paragraph normal">├── PRE-EXISTING IP</p>
+<p class="paragraph normal">├── GENERATED IP</p>
+<p class="paragraph normal">├── THIRD-PARTY IP</p>
+<p class="paragraph normal">├── OPEN-SOURCE COMPONENTS</p>
+<p class="paragraph normal">└── RESTRICTIONS</p>
+<h1>11 — PRE-EXISTING INTELLECTUAL PROPERTY</h1>
+<p class="paragraph normal">A participant&#x27;s pre-existing work SHALL remain separately identified.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">existing code</p>
+<p class="paragraph normal">existing inventions</p>
+<p class="paragraph normal">existing datasets</p>
+<p class="paragraph normal">existing designs</p>
+<p class="paragraph normal">existing patents</p>
+<p class="paragraph normal">existing trademarks</p>
+<p class="paragraph normal">existing documentation</p>
+<p class="paragraph normal">existing research</p>
+<p class="paragraph normal">LAAS SHALL NOT assume ownership of pre-existing participant IP merely because that IP is used within a LAAS project.</p>
+<p class="paragraph normal">Project agreements SHALL identify any rights granted to LAAS.</p>
+<h1>12 — NEW PROJECT INTELLECTUAL PROPERTY</h1>
+<p class="paragraph normal">Ownership of newly created work SHALL be determined by the applicable project agreement.</p>
+<p class="paragraph normal">Possible models include:</p>
+<h3>MODEL A — PARTICIPANT OWNED</h3>
+<p class="paragraph normal">The participant retains ownership.</p>
+<p class="paragraph normal">Barkly receives only the rights expressly granted by agreement.</p>
+<h3>MODEL B — BARKLY OWNED</h3>
+<p class="paragraph normal">Barkly owns specified project IP under an applicable agreement.</p>
+<h3>MODEL C — JOINT OWNERSHIP</h3>
+<p class="paragraph normal">Ownership is shared under a written agreement defining:</p>
+<p class="paragraph normal">ownership percentages</p>
+<p class="paragraph normal">licensing rights</p>
+<p class="paragraph normal">commercialization</p>
+<p class="paragraph normal">enforcement</p>
+<p class="paragraph normal">maintenance</p>
+<p class="paragraph normal">expenses</p>
+<p class="paragraph normal">revenue</p>
+<p class="paragraph normal">transfer rights</p>
+<h3>MODEL D — OPEN SOURCE</h3>
+<p class="paragraph normal">The resulting work is released under a specified open-source license.</p>
+<h3>MODEL E — CUSTOM</h3>
+<p class="paragraph normal">The project receives an individually negotiated IP structure.</p>
+<h1>13 — INVENTION DISCLOSURE SYSTEM</h1>
+<p class="paragraph normal">LAAS SHALL provide an optional invention disclosure mechanism.</p>
+<p class="paragraph normal">A participant SHALL be able to flag an artifact or technical development as:</p>
+<p class="paragraph normal">POTENTIAL_INVENTION</p>
+<p class="paragraph normal">The system SHALL then preserve:</p>
+<p class="paragraph normal">inventor identity</p>
+<p class="paragraph normal">contribution history</p>
+<p class="paragraph normal">technical description</p>
+<p class="paragraph normal">development timeline</p>
+<p class="paragraph normal">relevant experiments</p>
+<p class="paragraph normal">drawings</p>
+<p class="paragraph normal">architecture</p>
+<p class="paragraph normal">implementation details</p>
+<p class="paragraph normal">prototype evidence</p>
+<p class="paragraph normal">dates</p>
+<p class="paragraph normal">prior-art research</p>
+<p class="paragraph normal">public disclosure events</p>
+<p class="paragraph normal">The system SHALL NOT automatically represent an invention as patentable.</p>
+<p class="paragraph normal">Instead, it SHALL mark the invention:</p>
+<p class="paragraph normal">PATENT_REVIEW_REQUIRED</p>
+<h1>14 — PATENT DOCUMENTATION RECORD</h1>
+<p class="paragraph normal">LAAS SHALL maintain a technical invention record capable of supporting later review by qualified patent counsel.</p>
+<p class="paragraph normal">The record SHOULD include:</p>
+<h3>Technical Problem</h3>
+<p class="paragraph normal">What technical problem exists?</p>
+<h3>Existing Approaches</h3>
+<p class="paragraph normal">How is the problem currently addressed?</p>
+<h3>Limitation</h3>
+<p class="paragraph normal">What limitation exists in existing approaches?</p>
+<h3>Proposed System</h3>
+<p class="paragraph normal">What does LAAS do differently?</p>
+<h3>Mechanism</h3>
+<p class="paragraph normal">How does the system technically accomplish this?</p>
+<h3>Components</h3>
+<p class="paragraph normal">What components are required?</p>
+<h3>Interaction</h3>
+<p class="paragraph normal">How do those components interact?</p>
+<h3>Result</h3>
+<p class="paragraph normal">What measurable technical result occurs?</p>
+<h3>Alternatives</h3>
+<p class="paragraph normal">What alternative implementations are possible?</p>
+<h3>Experimental Evidence</h3>
+<p class="paragraph normal">What prototypes or tests demonstrate the system?</p>
+<h1>15 — PUBLIC DISCLOSURE CONTROL</h1>
+<p class="paragraph normal">The system SHALL record potentially relevant public disclosures.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">public repository commits</p>
+<p class="paragraph normal">public demonstrations</p>
+<p class="paragraph normal">conference presentations</p>
+<p class="paragraph normal">websites</p>
+<p class="paragraph normal">publications</p>
+<p class="paragraph normal">product releases</p>
+<p class="paragraph normal">public videos</p>
+<p class="paragraph normal">public documentation</p>
+<p class="paragraph normal">offers for sale</p>
+<p class="paragraph normal">public use</p>
+<p class="paragraph normal">The disclosure record SHALL contain:</p>
+<p class="paragraph normal">DISCLOSURE ID</p>
+<p class="paragraph normal">DATE</p>
+<p class="paragraph normal">DESCRIPTION</p>
+<p class="paragraph normal">LOCATION</p>
+<p class="paragraph normal">PARTICIPANTS</p>
+<p class="paragraph normal">MATERIAL DISCLOSED</p>
+<p class="paragraph normal">CONFIDENTIALITY STATUS</p>
+<p class="paragraph normal">This is particularly important for inventions that may later be evaluated for patent protection.</p>
+<h1>16 — SECURITY</h1>
+<p class="paragraph normal">LAAS SHALL enforce project-level security boundaries.</p>
+<p class="paragraph normal">Projects SHALL support:</p>
+<p class="paragraph normal">public</p>
+<p class="paragraph normal">private</p>
+<p class="paragraph normal">restricted</p>
+<p class="paragraph normal">confidential</p>
+<p class="paragraph normal">security-sensitive</p>
+<p class="paragraph normal">Resources SHALL require authorization appropriate to their classification.</p>
+<h1>17 — ACCESS CONTROL</h1>
+<p class="paragraph normal">LAAS SHALL support role-based access control.</p>
+<p class="paragraph normal">Minimum roles:</p>
+<p class="paragraph normal">PARTICIPANT</p>
+<p class="paragraph normal">CONTRIBUTOR</p>
+<p class="paragraph normal">RESEARCHER</p>
+<p class="paragraph normal">ENGINEER</p>
+<p class="paragraph normal">MAINTAINER</p>
+<p class="paragraph normal">PROJECT_OWNER</p>
+<p class="paragraph normal">LAB_ADMIN</p>
+<p class="paragraph normal">LEGAL_REVIEWER</p>
+<p class="paragraph normal">SECURITY_REVIEWER</p>
+<p class="paragraph normal">A user MAY have multiple roles.</p>
+<h1>18 — AUDIT LOG</h1>
+<p class="paragraph normal">LAAS SHALL maintain an append-only audit record for significant actions.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">PROJECT_CREATED</p>
+<p class="paragraph normal">PROJECT_APPROVED</p>
+<p class="paragraph normal">RESOURCE_ALLOCATED</p>
+<p class="paragraph normal">EXPERIMENT_CREATED</p>
+<p class="paragraph normal">ARTIFACT_CREATED</p>
+<p class="paragraph normal">CONTRIBUTION_RECORDED</p>
+<p class="paragraph normal">OWNERSHIP_CHANGED</p>
+<p class="paragraph normal">LICENSE_CHANGED</p>
+<p class="paragraph normal">DISCLOSURE_RECORDED</p>
+<p class="paragraph normal">PROJECT_RELEASED</p>
+<p class="paragraph normal">PROJECT_ARCHIVED</p>
+<p class="paragraph normal">Each event SHOULD contain:</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">&quot;event_id&quot;: &quot;evt_000001&quot;,</p>
+<p class="paragraph normal">&quot;event_type&quot;: &quot;PROJECT_CREATED&quot;,</p>
+<p class="paragraph normal">&quot;actor&quot;: &quot;participant_001&quot;,</p>
+<p class="paragraph normal">&quot;project&quot;: &quot;LAAS-0001&quot;,</p>
+<p class="paragraph normal">&quot;timestamp&quot;: &quot;2026-09-27T00:00:00Z&quot;,</p>
+<p class="paragraph normal">&quot;metadata&quot;: {}</p>
+<p class="paragraph normal">}</p>
+<h1>19 — API REQUIREMENTS</h1>
+<p class="paragraph normal">A reference LAAS implementation SHOULD expose an API.</p>
+<p class="paragraph normal">Minimum endpoints:</p>
+<p class="paragraph normal">POST   /projects</p>
+<p class="paragraph normal">GET    /projects</p>
+<p class="paragraph normal">GET    /projects/{id}</p>
+<p class="paragraph normal">PATCH  /projects/{id}</p>
+<p class="paragraph normal">POST   /projects/{id}/experiments</p>
+<p class="paragraph normal">GET    /projects/{id}/experiments</p>
+<p class="paragraph normal">POST   /projects/{id}/artifacts</p>
+<p class="paragraph normal">GET    /projects/{id}/artifacts</p>
+<p class="paragraph normal">POST   /projects/{id}/contributors</p>
+<p class="paragraph normal">GET    /projects/{id}/contributors</p>
+<p class="paragraph normal">POST   /projects/{id}/resources</p>
+<p class="paragraph normal">GET    /resources</p>
+<p class="paragraph normal">POST   /projects/{id}/ip</p>
+<p class="paragraph normal">GET    /projects/{id}/ip</p>
+<p class="paragraph normal">POST   /projects/{id}/disclosures</p>
+<p class="paragraph normal">GET    /projects/{id}/disclosures</p>
+<p class="paragraph normal">GET    /projects/{id}/audit</p>
+<h1>20 — REFERENCE DATA MODEL</h1>
+<p class="paragraph normal">Participant</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Contribution</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└── Project</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Experiment</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Artifact</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Resource</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Documentation</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── IP Record</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Disclosure</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└── Audit Events</p>
+<h1>21 — SERVICE ORCHESTRATION</h1>
+<p class="paragraph normal">LAAS SHALL provide an orchestration layer capable of translating project requirements into available laboratory capabilities.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">PROJECT REQUEST</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">REQUIREMENTS ANALYSIS</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RESOURCE MATCHING</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">AUTHORIZATION</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RESOURCE ALLOCATION</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">WORKSPACE PROVISIONING</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">EXPERIMENT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RESULT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DOCUMENTATION</p>
+<p class="paragraph normal">The orchestration layer SHALL maintain a record of why resources were allocated.</p>
+<h1>22 — LAAS SERVICE CATALOG</h1>
+<p class="paragraph normal">Each laboratory capability SHALL be represented as a service.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">&quot;service_id&quot;: &quot;svc_compute_001&quot;,</p>
+<p class="paragraph normal">&quot;name&quot;: &quot;GPU COMPUTE&quot;,</p>
+<p class="paragraph normal">&quot;category&quot;: &quot;COMPUTE&quot;,</p>
+<p class="paragraph normal">&quot;capabilities&quot;: [</p>
+<p class="paragraph normal">&quot;MODEL_TRAINING&quot;,</p>
+<p class="paragraph normal">&quot;INFERENCE&quot;,</p>
+<p class="paragraph normal">&quot;SIMULATION&quot;</p>
+<p class="paragraph normal">],</p>
+<p class="paragraph normal">&quot;authorization&quot;: &quot;PROJECT_APPROVAL&quot;,</p>
+<p class="paragraph normal">&quot;availability&quot;: &quot;SCHEDULED&quot;</p>
+<p class="paragraph normal">}</p>
+<p class="paragraph normal">This permits LAAS infrastructure to evolve without changing the project model.</p>
+<h1>23 — BILLING / ECONOMIC MODEL</h1>
+<p class="paragraph normal">LAAS MAY support multiple economic models.</p>
+<h3>FREE</h3>
+<p class="paragraph normal">No charge.</p>
+<h3>COMMUNITY</h3>
+<p class="paragraph normal">Subsidized access.</p>
+<h3>SPONSORED</h3>
+<p class="paragraph normal">A third party funds laboratory access.</p>
+<h3>SERVICE</h3>
+<p class="paragraph normal">Participant pays for laboratory services.</p>
+<h3>CONTRACT</h3>
+<p class="paragraph normal">Custom engineering or research engagement.</p>
+<h3>MEMBERSHIP</h3>
+<p class="paragraph normal">Recurring access model.</p>
+<h3>GRANT</h3>
+<p class="paragraph normal">Access funded through grants.</p>
+<h3>REINVESTMENT</h3>
+<p class="paragraph normal">Revenue generated through LAAS is partially or wholly reinvested into laboratory infrastructure.</p>
+<p class="paragraph normal">The economic model SHALL be recorded independently from technical ownership.</p>
+<h1>24 — PROJECT EXIT</h1>
+<p class="paragraph normal">A project MAY exit LAAS as:</p>
+<p class="paragraph normal">ARCHIVED</p>
+<p class="paragraph normal">OPEN SOURCE</p>
+<p class="paragraph normal">INDEPENDENT PROJECT</p>
+<p class="paragraph normal">COMMERCIAL PRODUCT</p>
+<p class="paragraph normal">BARKLY SYSTEM</p>
+<p class="paragraph normal">COMMUNITY PROJECT</p>
+<p class="paragraph normal">RESEARCH PUBLICATION</p>
+<p class="paragraph normal">FAILED EXPERIMENT</p>
+<p class="paragraph normal">CONTINUED RESEARCH</p>
+<p class="paragraph normal">A project leaving LAAS SHALL retain its documented ownership and licensing state.</p>
+<h1>25 — REINVESTMENT LOOP</h1>
+<p class="paragraph normal">One of the defining properties of LAAS is the ability for successful projects to improve the laboratory itself.</p>
+<p class="paragraph normal">PROJECT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">VALUE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">REVENUE / KNOWLEDGE / INFRASTRUCTURE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">REINVESTMENT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">LAB CAPABILITY</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">MORE PROJECTS</p>
+<p class="paragraph normal">Therefore:</p>
+<p class="paragraph normal">THE LAB BUILDS PROJECTS.
+PROJECTS CAN BUILD THE LAB.</p>
+<p class="paragraph normal">This creates a recursive laboratory ecosystem.</p>
+<h1>26 — ACCESSIBILITY REQUIREMENTS</h1>
+<p class="paragraph normal">Every LAAS service SHALL consider:</p>
+<p class="paragraph normal">cognitive accessibility</p>
+<p class="paragraph normal">physical accessibility</p>
+<p class="paragraph normal">sensory accessibility</p>
+<p class="paragraph normal">communication accessibility</p>
+<p class="paragraph normal">economic accessibility</p>
+<p class="paragraph normal">documentation accessibility</p>
+<p class="paragraph normal">interface accessibility</p>
+<p class="paragraph normal">scheduling flexibility</p>
+<p class="paragraph normal">Accessibility requirements SHALL be captured during project intake rather than added only after implementation.</p>
+<h1>27 — HUMAN OVERSIGHT</h1>
+<p class="paragraph normal">LAAS SHALL not make final legal, ownership, safety, financial, or high-impact project decisions solely through automated systems.</p>
+<p class="paragraph normal">Automation MAY:</p>
+<p class="paragraph normal">classify</p>
+<p class="paragraph normal">recommend</p>
+<p class="paragraph normal">validate</p>
+<p class="paragraph normal">provision</p>
+<p class="paragraph normal">document</p>
+<p class="paragraph normal">notify</p>
+<p class="paragraph normal">analyze</p>
+<p class="paragraph normal">Human authorization SHALL remain available for consequential decisions.</p>
+<h1>28 — AI REQUIREMENTS</h1>
+<p class="paragraph normal">AI systems used by LAAS SHALL be treated as tools within the laboratory.</p>
+<p class="paragraph normal">AI-generated output SHALL be attributable to the process that generated it.</p>
+<p class="paragraph normal">Where practical, LAAS SHALL record:</p>
+<p class="paragraph normal">model</p>
+<p class="paragraph normal">version</p>
+<p class="paragraph normal">prompt or task</p>
+<p class="paragraph normal">input</p>
+<p class="paragraph normal">output</p>
+<p class="paragraph normal">human reviewer</p>
+<p class="paragraph normal">modifications</p>
+<p class="paragraph normal">final decision</p>
+<p class="paragraph normal">AI SHALL NOT automatically determine ownership or inventorship.</p>
+<h1>29 — DOCUMENTATION REQUIREMENTS</h1>
+<p class="paragraph normal">Every production LAAS component SHALL have:</p>
+<p class="paragraph normal">README</p>
+<p class="paragraph normal">ARCHITECTURE</p>
+<p class="paragraph normal">REQUIREMENTS</p>
+<p class="paragraph normal">API</p>
+<p class="paragraph normal">DATA MODEL</p>
+<p class="paragraph normal">SECURITY</p>
+<p class="paragraph normal">DEPLOYMENT</p>
+<p class="paragraph normal">TESTING</p>
+<p class="paragraph normal">LIMITATIONS</p>
+<p class="paragraph normal">LICENSE</p>
+<p class="paragraph normal">OWNERSHIP</p>
+<p class="paragraph normal">CHANGELOG</p>
+<p class="paragraph normal">Barkly Docs MAY be used to generate structural documentation.</p>
+<h1>30 — TESTING REQUIREMENTS</h1>
+<p class="paragraph normal">Each LAAS component SHALL have appropriate tests.</p>
+<p class="paragraph normal">Minimum categories:</p>
+<p class="paragraph normal">unit tests</p>
+<p class="paragraph normal">integration tests</p>
+<p class="paragraph normal">API tests</p>
+<p class="paragraph normal">security tests</p>
+<p class="paragraph normal">permission tests</p>
+<p class="paragraph normal">failure tests</p>
+<p class="paragraph normal">accessibility tests</p>
+<p class="paragraph normal">Experimental systems MAY use reduced testing requirements when clearly labeled as experimental.</p>
+<h1>31 — FAILURE MODEL</h1>
+<p class="paragraph normal">LAAS SHALL explicitly distinguish:</p>
+<p class="paragraph normal">UNKNOWN</p>
+<p class="paragraph normal">EXPERIMENTAL</p>
+<p class="paragraph normal">PROTOTYPE</p>
+<p class="paragraph normal">DEGRADED</p>
+<p class="paragraph normal">FAILED</p>
+<p class="paragraph normal">STABLE</p>
+<p class="paragraph normal">PRODUCTION</p>
+<p class="paragraph normal">DEPRECATED</p>
+<p class="paragraph normal">ARCHIVED</p>
+<p class="paragraph normal">The system SHALL NOT represent experimental functionality as production-ready.</p>
+<h1>32 — TECHNICAL DIFFERENTIATION RECORD</h1>
+<p class="paragraph normal">For potential patent evaluation, LAAS SHALL maintain a separate technical differentiation record.</p>
+<p class="paragraph normal">This record SHALL answer:</p>
+<p class="paragraph normal">What is technically new?</p>
+<p class="paragraph normal">What existing systems were considered?</p>
+<p class="paragraph normal">What specific technical mechanism is being introduced?</p>
+<p class="paragraph normal">What components cooperate to produce the result?</p>
+<p class="paragraph normal">What technical limitation is solved?</p>
+<p class="paragraph normal">What measurable improvement occurs?</p>
+<p class="paragraph normal">What alternative implementations exist?</p>
+<p class="paragraph normal">Which portions are conventional?</p>
+<p class="paragraph normal">Which portions are believed to be novel?</p>
+<p class="paragraph normal">What evidence supports the distinction?</p>
+<p class="paragraph normal">The purpose is to distinguish:</p>
+<p class="paragraph normal">BUSINESS CONCEPT</p>
+<p class="paragraph normal">from</p>
+<p class="paragraph normal">TECHNICAL INVENTION.</p>
+<h1>33 — NON-FUNCTIONAL REQUIREMENTS</h1>
+<h2>NFR-001 — Reliability</h2>
+<p class="paragraph normal">Core project data SHALL be persistently stored.</p>
+<h2>NFR-002 — Auditability</h2>
+<p class="paragraph normal">Significant state changes SHALL be auditable.</p>
+<h2>NFR-003 — Portability</h2>
+<p class="paragraph normal">Projects SHOULD be exportable without requiring continued use of LAAS.</p>
+<h2>NFR-004 — Interoperability</h2>
+<p class="paragraph normal">LAAS SHOULD expose standards-based APIs.</p>
+<h2>NFR-005 — Security</h2>
+<p class="paragraph normal">Project boundaries SHALL prevent unauthorized access.</p>
+<h2>NFR-006 — Accessibility</h2>
+<p class="paragraph normal">The primary interface SHALL conform to appropriate accessibility standards.</p>
+<h2>NFR-007 — Maintainability</h2>
+<p class="paragraph normal">Components SHALL be independently maintainable where practical.</p>
+<h2>NFR-008 — Observability</h2>
+<p class="paragraph normal">Services SHALL provide appropriate logs, metrics, and health information.</p>
+<h1>34 — ACCEPTANCE CRITERIA</h1>
+<p class="paragraph normal">A minimum viable LAAS implementation is considered functional when a participant can:</p>
+<p class="paragraph normal">Create a project.</p>
+<p class="paragraph normal">Describe the project&#x27;s problem.</p>
+<p class="paragraph normal">Request laboratory services.</p>
+<p class="paragraph normal">Receive an approved resource allocation.</p>
+<p class="paragraph normal">Obtain a project workspace.</p>
+<p class="paragraph normal">Record an experiment.</p>
+<p class="paragraph normal">Produce an artifact.</p>
+<p class="paragraph normal">Record contributors.</p>
+<p class="paragraph normal">Record ownership information.</p>
+<p class="paragraph normal">Record licensing information.</p>
+<p class="paragraph normal">Record a technical decision.</p>
+<p class="paragraph normal">Export project documentation.</p>
+<p class="paragraph normal">Record a public disclosure.</p>
+<p class="paragraph normal">Archive the project.</p>
+<p class="paragraph normal">Reopen or continue the project later.</p>
+<h1>35 — REFERENCE PROJECT FLOW</h1>
+<p class="paragraph normal">PERSON</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">IDEA</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">LAAS INTAKE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">PROJECT CREATED</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">REQUIREMENTS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">RESOURCE MATCHING</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">LAB SERVICES</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">EXPERIMENT</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">PROTOTYPE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">TEST</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├───────────────┐</p>
+<p class="paragraph normal">│               │</p>
+<p class="paragraph normal">▼               ▼</p>
+<p class="paragraph normal">SUCCESS          FAILURE</p>
+<p class="paragraph normal">│               │</p>
+<p class="paragraph normal">▼               ▼</p>
+<p class="paragraph normal">ENGINEERING     RESEARCH</p>
+<p class="paragraph normal">│               │</p>
+<p class="paragraph normal">└───────┬───────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">RELEASE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">VALUE CREATED</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">REINVESTMENT</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">STRONGER LAB</p>
+<h1>36 — LEGAL AGREEMENT FRAMEWORK</h1>
+<p class="paragraph normal">Each LAAS engagement SHOULD have an applicable written agreement before work begins where ownership, confidentiality, payment, licensing, liability, or other legal rights require contractual treatment.</p>
+<p class="paragraph normal">The agreement SHOULD identify:</p>
+<h3>Parties</h3>
+<p class="paragraph normal">Who is participating?</p>
+<h3>Scope</h3>
+<p class="paragraph normal">What work is being performed?</p>
+<h3>Services</h3>
+<p class="paragraph normal">What laboratory services are being provided?</p>
+<h3>Deliverables</h3>
+<p class="paragraph normal">What is expected to be produced?</p>
+<h3>Existing IP</h3>
+<p class="paragraph normal">What intellectual property existed before the project?</p>
+<h3>New IP</h3>
+<p class="paragraph normal">Who owns newly created work?</p>
+<h3>Licensing</h3>
+<p class="paragraph normal">What rights are granted?</p>
+<h3>Confidentiality</h3>
+<p class="paragraph normal">What information must remain confidential?</p>
+<h3>Publication</h3>
+<p class="paragraph normal">Who may publish results?</p>
+<h3>Patent Rights</h3>
+<p class="paragraph normal">Who controls patent filings and prosecution?</p>
+<h3>Open Source</h3>
+<p class="paragraph normal">Which components may be publicly released?</p>
+<h3>Payment</h3>
+<p class="paragraph normal">What fees or compensation apply?</p>
+<h3>Expenses</h3>
+<p class="paragraph normal">Who pays for external costs?</p>
+<h3>Liability</h3>
+<p class="paragraph normal">What limitations and responsibilities apply?</p>
+<h3>Termination</h3>
+<p class="paragraph normal">How can the engagement end?</p>
+<h3>Data</h3>
+<p class="paragraph normal">How is project data stored, exported, retained, and deleted?</p>
+<h3>Dispute Resolution</h3>
+<p class="paragraph normal">What legal process applies?</p>
+<h1>37 — INVENTION OWNERSHIP CLAUSE TEMPLATE</h1>
+<p class="paragraph normal">The following is a structural drafting template and SHALL be reviewed by qualified legal counsel before being used as a binding contract.</p>
+<p class="paragraph normal">Inventions and Intellectual Property.</p>
+<p class="paragraph normal">Each party retains ownership of intellectual property owned or controlled by that party before commencement of the applicable project (“Background IP”).</p>
+<p class="paragraph normal">Ownership of intellectual property first created during the project (“Project IP”) shall be determined according to the ownership schedule or project-specific agreement executed by the parties.</p>
+<p class="paragraph normal">No party receives rights in another party&#x27;s intellectual property except as expressly granted in writing.</p>
+<p class="paragraph normal">Any patentable invention shall be identified through the project&#x27;s invention disclosure process. Inventorship and ownership shall be determined according to applicable law and the executed agreement governing the project.</p>
+<p class="paragraph normal">No contribution, employment relationship, use of laboratory infrastructure, payment, or participation in a project shall by itself alter ownership of intellectual property except to the extent expressly provided by an applicable written agreement.</p>
+<h1>38 — CONFIDENTIALITY CLAUSE TEMPLATE</h1>
+<p class="paragraph normal">Confidential Information.</p>
+<p class="paragraph normal">Each party shall protect confidential information received from another party and shall use such information only for purposes authorized under the applicable project agreement.</p>
+<p class="paragraph normal">Confidential information shall not include information that is publicly available without breach of the agreement, independently developed without use of confidential information, lawfully received from a third party without confidentiality restriction, or required to be disclosed by law.</p>
+<p class="paragraph normal">The parties may establish project-specific confidentiality requirements for research results, technical information, source code, designs, datasets, inventions, prototypes, business information, or other sensitive materials.</p>
+<h1>39 — OPEN SOURCE CLAUSE TEMPLATE</h1>
+<p class="paragraph normal">Open Source Components.</p>
+<p class="paragraph normal">Project components may be released under an open-source license only when the applicable owner or authorized project governance process has approved such release.</p>
+<p class="paragraph normal">Third-party open-source components shall remain subject to their applicable licenses.</p>
+<p class="paragraph normal">LAAS shall maintain a record of material third-party licenses and required notices.</p>
+<h1>40 — PATENT REVIEW POLICY</h1>
+<p class="paragraph normal">LAAS SHALL NOT represent that a project is patentable merely because it is technically interesting or commercially valuable.</p>
+<p class="paragraph normal">Potential patent candidates SHALL undergo:</p>
+<p class="paragraph normal">INVENTION IDENTIFIED</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">TECHNICAL DISCLOSURE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">INVENTOR IDENTIFICATION</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PRIOR-ART SEARCH</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PUBLIC DISCLOSURE REVIEW</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PATENTABILITY REVIEW</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">LEGAL COUNSEL / PATENT PRACTITIONER</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">FILE / DO NOT FILE</p>
+<p class="paragraph normal">Where patent protection is being considered, LAAS SHOULD preserve the technical disclosure before public release.</p>
+<h1>41 — PATENT-READY TECHNICAL DISCLOSURE STRUCTURE</h1>
+<p class="paragraph normal">A potential LAAS invention disclosure SHOULD contain:</p>
+<p class="paragraph normal">TITLE</p>
+<p class="paragraph normal">FIELD</p>
+<p class="paragraph normal">BACKGROUND</p>
+<p class="paragraph normal">TECHNICAL PROBLEM</p>
+<p class="paragraph normal">LIMITATIONS OF EXISTING SYSTEMS</p>
+<p class="paragraph normal">SUMMARY</p>
+<p class="paragraph normal">SYSTEM ARCHITECTURE</p>
+<p class="paragraph normal">COMPONENTS</p>
+<p class="paragraph normal">DATA FLOW</p>
+<p class="paragraph normal">CONTROL FLOW</p>
+<p class="paragraph normal">RESOURCE ALLOCATION</p>
+<p class="paragraph normal">ORCHESTRATION</p>
+<p class="paragraph normal">SECURITY MODEL</p>
+<p class="paragraph normal">IMPLEMENTATION</p>
+<p class="paragraph normal">ALTERNATIVE IMPLEMENTATIONS</p>
+<p class="paragraph normal">EXPERIMENTAL RESULTS</p>
+<p class="paragraph normal">DRAWINGS</p>
+<p class="paragraph normal">FIGURES</p>
+<p class="paragraph normal">INVENTORS</p>
+<p class="paragraph normal">CONTRIBUTORS</p>
+<p class="paragraph normal">PUBLIC DISCLOSURES</p>
+<p class="paragraph normal">PRIOR ART</p>
+<p class="paragraph normal">DISTINGUISHING FEATURES</p>
+<p class="paragraph normal">CLAIM CANDIDATES</p>
+<p class="paragraph normal">The technical disclosure should be detailed enough for patent counsel to determine whether a patent application is appropriate.</p>
+<h1>42 — REFERENCE ARCHITECTURE</h1>
+<p class="paragraph normal">┌─────────────────────┐</p>
+<p class="paragraph normal">│     PARTICIPANT     │</p>
+<p class="paragraph normal">└──────────┬──────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌─────────────────────┐</p>
+<p class="paragraph normal">│      LAAS API       │</p>
+<p class="paragraph normal">└──────────┬──────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌────────────────┼────────────────┐</p>
+<p class="paragraph normal">▼                ▼                ▼</p>
+<p class="paragraph normal">PROJECT ENGINE    SERVICE ENGINE    IP ENGINE</p>
+<p class="paragraph normal">│                │                │</p>
+<p class="paragraph normal">▼                ▼                ▼</p>
+<p class="paragraph normal">WORKFLOW ENGINE   RESOURCE ENGINE   AUDIT ENGINE</p>
+<p class="paragraph normal">│                │                │</p>
+<p class="paragraph normal">└────────────────┼────────────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌─────────────────────┐</p>
+<p class="paragraph normal">│  LAB INFRASTRUCTURE │</p>
+<p class="paragraph normal">└─────────────────────┘</p>
+<h1>43 — SECURITY BOUNDARY</h1>
+<p class="paragraph normal">The architecture SHALL separate:</p>
+<p class="paragraph normal">USER DATA</p>
+<p class="paragraph normal">PROJECT DATA</p>
+<p class="paragraph normal">LAB INFRASTRUCTURE</p>
+<p class="paragraph normal">SECRET MATERIAL</p>
+<p class="paragraph normal">PUBLIC ARTIFACTS</p>
+<p class="paragraph normal">CONFIDENTIAL ARTIFACTS</p>
+<p class="paragraph normal">IP RECORDS</p>
+<p class="paragraph normal">AUDIT RECORDS</p>
+<p class="paragraph normal">No project SHALL automatically receive access to another project&#x27;s private resources.</p>
+<h1>44 — PORTABILITY</h1>
+<p class="paragraph normal">A participant SHALL be able to export their project in a documented format.</p>
+<p class="paragraph normal">Minimum export SHOULD include:</p>
+<p class="paragraph normal">/project</p>
+<p class="paragraph normal">/source</p>
+<p class="paragraph normal">/documentation</p>
+<p class="paragraph normal">/experiments</p>
+<p class="paragraph normal">/artifacts</p>
+<p class="paragraph normal">/decisions</p>
+<p class="paragraph normal">/ip</p>
+<p class="paragraph normal">/licenses</p>
+<p class="paragraph normal">/contributors</p>
+<p class="paragraph normal">/audit</p>
+<p class="paragraph normal">The purpose is to prevent unnecessary technological lock-in.</p>
+<h1>45 — GOVERNANCE</h1>
+<p class="paragraph normal">LAAS governance SHALL distinguish:</p>
+<p class="paragraph normal">LAB GOVERNANCE</p>
+<p class="paragraph normal">from</p>
+<p class="paragraph normal">PROJECT GOVERNANCE.</p>
+<p class="paragraph normal">Barkly Labs may control laboratory infrastructure while individual projects may retain independent ownership, governance, licensing, or organizational structures.</p>
+<p class="paragraph normal">This separation is fundamental to the LAAS model.</p>
+<h1>46 — PRINCIPLE OF NON-CAPTURE</h1>
+<p class="paragraph normal">LAAS SHALL avoid requiring every project to become permanently dependent upon the laboratory.</p>
+<p class="paragraph normal">Where technically and legally practical:</p>
+<p class="paragraph normal">projects should be exportable</p>
+<p class="paragraph normal">source should remain portable</p>
+<p class="paragraph normal">documentation should remain available</p>
+<p class="paragraph normal">ownership should remain explicit</p>
+<p class="paragraph normal">licenses should remain explicit</p>
+<p class="paragraph normal">contributors should remain identifiable</p>
+<p class="paragraph normal">project infrastructure should be replaceable</p>
+<p class="paragraph normal">The laboratory provides infrastructure.</p>
+<p class="paragraph normal">It does not need to own every outcome.</p>
+<h1>47 — LAAS AS A PLATFORM</h1>
+<p class="paragraph normal">LAAS SHALL therefore be treated as a platform consisting of:</p>
+<p class="paragraph normal">LAB CAPABILITIES</p>
+<p class="paragraph normal">+</p>
+<p class="paragraph normal">SERVICE INTERFACES</p>
+<p class="paragraph normal">+</p>
+<p class="paragraph normal">PROJECT ORCHESTRATION</p>
+<p class="paragraph normal">+</p>
+<p class="paragraph normal">RESOURCE MANAGEMENT</p>
+<p class="paragraph normal">+</p>
+<p class="paragraph normal">DOCUMENTATION</p>
+<p class="paragraph normal">+</p>
+<p class="paragraph normal">IP MANAGEMENT</p>
+<p class="paragraph normal">+</p>
+<p class="paragraph normal">GOVERNANCE</p>
+<p class="paragraph normal">+</p>
+<p class="paragraph normal">AUDITABILITY</p>
+<p class="paragraph normal">+</p>
+<p class="paragraph normal">COMMUNITY</p>
+<p class="paragraph normal">The platform may be implemented by Barkly Labs and later implemented by independent laboratories.</p>
+<h1>48 — ECOSYSTEM MODEL</h1>
+<p class="paragraph normal">The long-term LAAS ecosystem is:</p>
+<p class="paragraph normal">BARKLY LABS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">LAAS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌────────────────┼────────────────┐</p>
+<p class="paragraph normal">▼                ▼                ▼</p>
+<p class="paragraph normal">LAB A            LAB B            LAB C</p>
+<p class="paragraph normal">│                │                │</p>
+<p class="paragraph normal">PROJECTS          PROJECTS          PROJECTS</p>
+<p class="paragraph normal">│                │                │</p>
+<p class="paragraph normal">└────────────────┼────────────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">SHARED KNOWLEDGE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">NEW SERVICES</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">STRONGER LABS</p>
+<p class="paragraph normal">LAAS is therefore intended to support the creation of laboratories, not merely the operation of one laboratory.</p>
+<h1>49 — VERSIONING</h1>
+<p class="paragraph normal">This document SHALL be versioned.</p>
+<p class="paragraph normal">Version format:</p>
+<p class="paragraph normal">MAJOR.MINOR</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">0.1</p>
+<p class="paragraph normal">0.2</p>
+<p class="paragraph normal">0.3</p>
+<p class="paragraph normal">1.0</p>
+<p class="paragraph normal">Changes affecting system architecture SHALL increment the minor version during pre-release development.</p>
+<p class="paragraph normal">A major version SHALL indicate a substantial change to the LAAS model.</p>
+<h1>50 — LIVING STANDARD</h1>
+<p class="paragraph normal">LAAS is a living system.</p>
+<p class="paragraph normal">This specification SHALL evolve as Barkly Labs:</p>
+<p class="paragraph normal">builds</p>
+<p class="paragraph normal">experiments</p>
+<p class="paragraph normal">fails</p>
+<p class="paragraph normal">learns</p>
+<p class="paragraph normal">researches</p>
+<p class="paragraph normal">collaborates</p>
+<p class="paragraph normal">deploys</p>
+<p class="paragraph normal">receives feedback</p>
+<p class="paragraph normal">The standard SHALL therefore be treated as infrastructure rather than permanent doctrine.</p>
+<h1>51 — SUCCESS CONDITION</h1>
+<p class="paragraph normal">LAAS succeeds when a person can arrive with an idea and, without independently constructing an entire laboratory:</p>
+<p class="paragraph normal">UNDERSTAND THE LAB</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">SUBMIT AN IDEA</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RECEIVE RESOURCES</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">BUILD</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">EXPERIMENT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DOCUMENT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">TEST</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RELEASE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">OWN / LICENSE / SHARE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">BUILD SOMETHING NEW</p>
+<p class="paragraph normal">The system should make this process understandable to the human using it.</p>
+<h1>52 — FOUNDATIONAL STATEMENT</h1>
+<p class="paragraph normal">LAAS turns laboratory capability into infrastructure that people can access, use, understand, extend, and contribute back to.</p>
+<p class="paragraph normal">The laboratory is not merely a place where things are built.</p>
+<p class="paragraph normal">The laboratory is a system for making building possible.</p>
+<h1>53 — LEGAL STATUS</h1>
+<p class="paragraph normal">This document is a technical and organizational specification and is not, by itself, a binding contract, patent application, assignment, license, employment agreement, partnership agreement, or legal opinion.</p>
+<p class="paragraph normal">Binding rights SHALL arise only from properly executed agreements and applicable law.</p>
+<p class="paragraph normal">Before relying on this specification for:</p>
+<p class="paragraph normal">intellectual-property assignment</p>
+<p class="paragraph normal">patent ownership</p>
+<p class="paragraph normal">patent filing</p>
+<p class="paragraph normal">inventor determination</p>
+<p class="paragraph normal">licensing</p>
+<p class="paragraph normal">employment classification</p>
+<p class="paragraph normal">revenue sharing</p>
+<p class="paragraph normal">confidentiality</p>
+<p class="paragraph normal">liability</p>
+<p class="paragraph normal">commercialization</p>
+<p class="paragraph normal">Barkly Labs SHOULD obtain review from an appropriately qualified attorney or registered patent practitioner.</p>
+<h1>54 — DOCUMENT CONTROL</h1>
+<p class="paragraph normal">Organization: Barkly Labs
+System: Labs as a Service
+Abbreviation: LAAS
+Document: Functional Requirements / Technical Architecture / Legal &amp; IP Specification
+Version: 0.1
+Status: Foundational Draft
+Year: 2026</p>
+<p class="paragraph normal">Core Principle:</p>
+<p class="paragraph normal">TECHNOLOGY SHOULD ADAPT TO HUMANS.</p>
+<p class="paragraph normal">LAAS Principle:</p>
+<p class="paragraph normal">THE LAB SHOULD ADAPT TO THE PEOPLE BUILDING WITH IT.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
