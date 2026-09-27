@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>PuppySat-1 Functional Requirements Document (FRD) — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            PuppySat-1 Functional Requirements Document (FRD)
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\PuppySat-1 Functional Requirements Document (FRD).docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>PuppySat-1 Functional Requirements Document (FRD)</h1>
+<h2>Version 0.3 — Puppy Network Space Data Architecture Concept</h2>
+<h1>1. Mission Overview</h1>
+<h2>Mission Name</h2>
+<p class="paragraph normal">PuppySat-1 — Puppy Network Orbital Communication &amp; Imaging Satellite</p>
+<h2>Mission Purpose</h2>
+<p class="paragraph normal">PuppySat-1 shall be an educational, community-focused CubeSat platform designed to demonstrate:</p>
+<p class="paragraph normal">Amateur radio communication</p>
+<p class="paragraph normal">Experimental Earth observation</p>
+<p class="paragraph normal">Open satellite communication protocols</p>
+<p class="paragraph normal">Distributed space data networking</p>
+<p class="paragraph normal">Public access to satellite information</p>
+<p class="paragraph normal">Spacecraft software and hardware engineering</p>
+<p class="paragraph normal">The mission shall combine approachable community design with professional spacecraft engineering principles.</p>
+<h1>2. Mission Objectives</h1>
+<h2>FR-001 — Mission Goals</h2>
+<p class="paragraph normal">The satellite shall:</p>
+<p class="paragraph normal">Provide reliable communication services</p>
+<p class="paragraph normal">Collect Earth observation data</p>
+<p class="paragraph normal">Demonstrate custom satellite communication technology</p>
+<p class="paragraph normal">Provide educational resources</p>
+<p class="paragraph normal">Support amateur radio operators</p>
+<p class="paragraph normal">Support software and hardware development</p>
+<p class="paragraph normal">Provide a foundation for future Puppy Network satellites</p>
+<h1>3. Puppy Network Architecture</h1>
+<h2>FR-010 — Multi-Satellite Network Operation</h2>
+<p class="paragraph normal">The Puppy Network shall support multiple satellites operating together as a distributed orbital data system.</p>
+<p class="paragraph normal">The network shall support:</p>
+<p class="paragraph normal">Satellite-to-satellite communication</p>
+<p class="paragraph normal">Data relay</p>
+<p class="paragraph normal">Image transfer</p>
+<p class="paragraph normal">Telemetry sharing</p>
+<p class="paragraph normal">Communication services</p>
+<p class="paragraph normal">Network expansion</p>
+<h2>FR-011 — Hybrid GEO/LEO Architecture</h2>
+<p class="paragraph normal">The Puppy Network shall support a layered satellite architecture.</p>
+<p class="paragraph normal">The network shall consist of:</p>
+<h3>GEO Relay Backbone</h3>
+<p class="paragraph normal">GEO satellites shall provide:</p>
+<p class="paragraph normal">High-capacity data relay</p>
+<p class="paragraph normal">Wide-area communication support</p>
+<p class="paragraph normal">Network backbone services</p>
+<p class="paragraph normal">Connection between LEO satellite groups</p>
+<h3>LEO Mission Satellites</h3>
+<p class="paragraph normal">LEO satellites shall provide:</p>
+<p class="paragraph normal">Earth imaging</p>
+<p class="paragraph normal">Infrared sensing</p>
+<p class="paragraph normal">Amateur radio services</p>
+<p class="paragraph normal">Local relay operations</p>
+<p class="paragraph normal">Data collection</p>
+<p class="paragraph normal">Architecture:</p>
+<p class="paragraph normal">🛰️ GEO PuppyRelay</p>
+<p class="paragraph normal">Network Backbone</p>
+<p class="paragraph normal">|</p>
+<p class="paragraph normal">-------------------------</p>
+<p class="paragraph normal">|           |           |</p>
+<p class="paragraph normal">🛰️ LEO-1    🛰️ LEO-2    🛰️ LEO-3</p>
+<p class="paragraph normal">|           |           |</p>
+<p class="paragraph normal">Sensors     Sensors     Sensors</p>
+<p class="paragraph normal">|           |           |</p>
+<p class="paragraph normal">🌎 Ground Stations</p>
+<h1>4. PuppyLink Communication Protocol</h1>
+<h2>FR-020 — PuppyLink Protocol</h2>
+<p class="paragraph normal">The satellite shall use an open communication protocol called PuppyLink.</p>
+<p class="paragraph normal">PuppyLink shall support:</p>
+<p class="paragraph normal">Packet synchronization</p>
+<p class="paragraph normal">Satellite identification</p>
+<p class="paragraph normal">Telemetry transmission</p>
+<p class="paragraph normal">Image transmission</p>
+<p class="paragraph normal">Command communication</p>
+<p class="paragraph normal">Network routing</p>
+<p class="paragraph normal">Error detection</p>
+<p class="paragraph normal">Packet format:</p>
+<p class="paragraph normal">PUPPYLINK HEADER</p>
+<p class="paragraph normal">Source ID</p>
+<p class="paragraph normal">Destination ID</p>
+<p class="paragraph normal">Packet Type</p>
+<p class="paragraph normal">Timestamp</p>
+<p class="paragraph normal">Priority</p>
+<p class="paragraph normal">Hop Count</p>
+<p class="paragraph normal">Satellite Status</p>
+<p class="paragraph normal">Payload Data</p>
+<p class="paragraph normal">Integrity Check</p>
+<h1>5. Radio Communication System</h1>
+<h2>FR-030 — Amateur Radio Communication</h2>
+<p class="paragraph normal">The satellite shall provide amateur radio communication services.</p>
+<p class="paragraph normal">The system shall support:</p>
+<p class="paragraph normal">FM repeater operations</p>
+<p class="paragraph normal">Digital communication modes</p>
+<p class="paragraph normal">Telemetry transmission</p>
+<p class="paragraph normal">Experimental communication</p>
+<h2>FR-031 — FM Repeater Mode</h2>
+<p class="paragraph normal">The satellite shall:</p>
+<p class="paragraph normal">Receive FM signals</p>
+<p class="paragraph normal">Process audio</p>
+<p class="paragraph normal">Retransmit audio</p>
+<p class="paragraph normal">Report repeater health</p>
+<p class="paragraph normal">Maintain communication availability</p>
+<h2>FR-032 — Digital Communication Mode</h2>
+<p class="paragraph normal">The satellite shall support digital data transmission.</p>
+<p class="paragraph normal">Supported data:</p>
+<p class="paragraph normal">Telemetry</p>
+<p class="paragraph normal">Images</p>
+<p class="paragraph normal">Sensor information</p>
+<p class="paragraph normal">Network packets</p>
+<p class="paragraph normal">Experimental modes</p>
+<h1>6. Earth Observation Payload</h1>
+<h2>FR-040 — Visible Imaging System</h2>
+<p class="paragraph normal">The satellite shall capture visible-light Earth imagery.</p>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Capture images</p>
+<p class="paragraph normal">Compress images</p>
+<p class="paragraph normal">Store image data</p>
+<p class="paragraph normal">Attach metadata</p>
+<p class="paragraph normal">Transmit images</p>
+<p class="paragraph normal">Image metadata:</p>
+<p class="paragraph normal">Image ID</p>
+<p class="paragraph normal">UTC timestamp</p>
+<p class="paragraph normal">Satellite position</p>
+<p class="paragraph normal">Camera settings</p>
+<p class="paragraph normal">Sensor information</p>
+<h2>FR-041 — Infrared Imaging System</h2>
+<p class="paragraph normal">The satellite shall support infrared observation.</p>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Capture infrared measurements</p>
+<p class="paragraph normal">Store IR data</p>
+<p class="paragraph normal">Associate data with location</p>
+<p class="paragraph normal">Transmit infrared information</p>
+<h1>7. APT-NG Imaging System</h1>
+<h2>FR-050 — Analog Image Transmission</h2>
+<p class="paragraph normal">The satellite shall support an analog image transmission system inspired by NOAA APT.</p>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Convert image data into a waveform</p>
+<p class="paragraph normal">Generate synchronization signals</p>
+<p class="paragraph normal">Transmit image information</p>
+<p class="paragraph normal">Support amateur decoding</p>
+<h2>FR-051 — Digital Enhancement Channel</h2>
+<p class="paragraph normal">The satellite shall support a digital imaging channel.</p>
+<p class="paragraph normal">The digital channel shall provide:</p>
+<p class="paragraph normal">Color imagery</p>
+<p class="paragraph normal">Higher-resolution images</p>
+<p class="paragraph normal">Infrared information</p>
+<p class="paragraph normal">Additional metadata</p>
+<p class="paragraph normal">Error correction</p>
+<h1>8. Flight Computer System</h1>
+<h2>FR-060 — Onboard Computer</h2>
+<p class="paragraph normal">The satellite shall contain a flight computer capable of:</p>
+<p class="paragraph normal">Running mission software</p>
+<p class="paragraph normal">Managing payloads</p>
+<p class="paragraph normal">Controlling communications</p>
+<p class="paragraph normal">Monitoring spacecraft health</p>
+<h2>FR-061 — Real-Time Operating System</h2>
+<p class="paragraph normal">The spacecraft software shall use a real-time architecture.</p>
+<p class="paragraph normal">Tasks shall include:</p>
+<p class="paragraph normal">Camera Task</p>
+<p class="paragraph normal">Radio Task</p>
+<p class="paragraph normal">Telemetry Task</p>
+<p class="paragraph normal">Storage Task</p>
+<p class="paragraph normal">Network Task</p>
+<p class="paragraph normal">Command Task</p>
+<p class="paragraph normal">Power Task</p>
+<p class="paragraph normal">Thermal Task</p>
+<p class="paragraph normal">Recovery Task</p>
+<p class="paragraph normal">Health Monitoring Task</p>
+<h1>9. Data Storage System</h1>
+<h2>FR-070 — High Capacity Storage</h2>
+<p class="paragraph normal">The satellite shall provide onboard mission storage.</p>
+<p class="paragraph normal">Storage shall support:</p>
+<p class="paragraph normal">Images</p>
+<p class="paragraph normal">Infrared data</p>
+<p class="paragraph normal">Telemetry history</p>
+<p class="paragraph normal">Relay packets</p>
+<p class="paragraph normal">Logs</p>
+<p class="paragraph normal">Software updates</p>
+<p class="paragraph normal">Target capability:</p>
+<p class="paragraph normal">1 TB-class storage system</p>
+<h2>FR-071 — Fault-Tolerant Storage</h2>
+<p class="paragraph normal">Storage shall include:</p>
+<p class="paragraph normal">Error detection</p>
+<p class="paragraph normal">Data integrity checks</p>
+<p class="paragraph normal">Recovery capability</p>
+<p class="paragraph normal">Health monitoring</p>
+<h2>FR-072 — Store-and-Forward Data Handling</h2>
+<p class="paragraph normal">Satellites shall temporarily store data when communication paths are unavailable.</p>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Receive packets</p>
+<p class="paragraph normal">Verify packets</p>
+<p class="paragraph normal">Store packets</p>
+<p class="paragraph normal">Forward packets when possible</p>
+<h1>10. Power System</h1>
+<h2>FR-080 — Electrical Power System</h2>
+<p class="paragraph normal">The satellite shall provide reliable electrical power.</p>
+<p class="paragraph normal">The system shall include:</p>
+<p class="paragraph normal">Solar power generation</p>
+<p class="paragraph normal">Battery storage</p>
+<p class="paragraph normal">Power management electronics</p>
+<p class="paragraph normal">Power monitoring</p>
+<h2>FR-081 — Solar Power Generation</h2>
+<p class="paragraph normal">Solar panels shall provide power for:</p>
+<p class="paragraph normal">Flight computer</p>
+<p class="paragraph normal">Communications</p>
+<p class="paragraph normal">Sensors</p>
+<p class="paragraph normal">Storage</p>
+<p class="paragraph normal">Thermal systems</p>
+<h2>FR-082 — Battery System</h2>
+<p class="paragraph normal">The battery system shall:</p>
+<p class="paragraph normal">Store electrical energy</p>
+<p class="paragraph normal">Provide eclipse power</p>
+<p class="paragraph normal">Monitor battery health</p>
+<p class="paragraph normal">Protect against unsafe conditions</p>
+<h2>FR-083 — Power Management</h2>
+<p class="paragraph normal">The spacecraft shall prioritize power usage.</p>
+<p class="paragraph normal">Priority:</p>
+<p class="paragraph normal">1. Flight computer survival</p>
+<p class="paragraph normal">2. Emergency communication</p>
+<p class="paragraph normal">3. Power management</p>
+<p class="paragraph normal">4. Telemetry</p>
+<p class="paragraph normal">5. Payload operations</p>
+<p class="paragraph normal">6. Experimental systems</p>
+<h1>11. Space Environment Engineering</h1>
+<h2>FR-090 — Thermal Management</h2>
+<p class="paragraph normal">The satellite shall survive extreme temperature conditions.</p>
+<p class="paragraph normal">The thermal system shall manage:</p>
+<p class="paragraph normal">Sun exposure</p>
+<p class="paragraph normal">Eclipse periods</p>
+<p class="paragraph normal">Internal heat generation</p>
+<p class="paragraph normal">Temperature changes</p>
+<p class="paragraph normal">The spacecraft shall use:</p>
+<p class="paragraph normal">Thermal insulation</p>
+<p class="paragraph normal">Heat spreading methods</p>
+<p class="paragraph normal">Temperature monitoring</p>
+<p class="paragraph normal">Controlled operating modes</p>
+<h2>FR-091 — Radiation Protection</h2>
+<p class="paragraph normal">The spacecraft shall protect electronics from radiation effects.</p>
+<p class="paragraph normal">The system shall include:</p>
+<p class="paragraph normal">Error detection</p>
+<p class="paragraph normal">Data integrity checking</p>
+<p class="paragraph normal">Recovery from memory errors</p>
+<p class="paragraph normal">Radiation-aware hardware design</p>
+<h2>FR-092 — Harsh Environment Reliability</h2>
+<p class="paragraph normal">The satellite shall be designed to withstand:</p>
+<p class="paragraph normal">Vacuum environment</p>
+<p class="paragraph normal">Temperature cycling</p>
+<p class="paragraph normal">Radiation exposure</p>
+<p class="paragraph normal">Launch vibration</p>
+<p class="paragraph normal">Mechanical stress</p>
+<h1>12. Command and Control Security</h1>
+<h2>FR-100 — Authorized Commands</h2>
+<p class="paragraph normal">The satellite shall restrict spacecraft commands.</p>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Authenticate operators</p>
+<p class="paragraph normal">Verify commands</p>
+<p class="paragraph normal">Reject unauthorized commands</p>
+<p class="paragraph normal">Record command history</p>
+<h2>FR-101 — Separate Telemetry and Command Systems</h2>
+<p class="paragraph normal">Telemetry:</p>
+<p class="paragraph normal">Public mission information</p>
+<p class="paragraph normal">Health data</p>
+<p class="paragraph normal">Sensor information</p>
+<p class="paragraph normal">Command:</p>
+<p class="paragraph normal">Configuration changes</p>
+<p class="paragraph normal">Software updates</p>
+<p class="paragraph normal">Recovery commands</p>
+<h1>13. Software Update System</h1>
+<h2>FR-110 — Remote Software Updates</h2>
+<p class="paragraph normal">The satellite shall support controlled software updates.</p>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Receive update packages</p>
+<p class="paragraph normal">Verify integrity</p>
+<p class="paragraph normal">Install approved updates</p>
+<p class="paragraph normal">Recover from failed updates</p>
+<h1>14. Fault Detection and Recovery</h1>
+<h2>FR-120 — Fault Monitoring</h2>
+<p class="paragraph normal">The satellite shall monitor:</p>
+<p class="paragraph normal">Battery health</p>
+<p class="paragraph normal">Solar generation</p>
+<p class="paragraph normal">Temperature</p>
+<p class="paragraph normal">Memory</p>
+<p class="paragraph normal">Computer health</p>
+<p class="paragraph normal">Radio status</p>
+<p class="paragraph normal">Sensor status</p>
+<h2>FR-121 — Recovery Mode</h2>
+<p class="paragraph normal">When critical faults occur, the satellite shall enter recovery mode.</p>
+<p class="paragraph normal">Recovery mode shall:</p>
+<p class="paragraph normal">Disable non-essential systems</p>
+<p class="paragraph normal">Preserve power</p>
+<p class="paragraph normal">Maintain communication</p>
+<p class="paragraph normal">Protect mission data</p>
+<p class="paragraph normal">Await instructions</p>
+<h2>FR-122 — Emergency Beacon</h2>
+<p class="paragraph normal">The satellite shall transmit:</p>
+<p class="paragraph normal">PUPPYSAT EMERGENCY BEACON</p>
+<p class="paragraph normal">STATUS:</p>
+<p class="paragraph normal">RECOVERY MODE</p>
+<p class="paragraph normal">TIME:</p>
+<p class="paragraph normal">UTC Timestamp</p>
+<p class="paragraph normal">POWER:</p>
+<p class="paragraph normal">Battery Level</p>
+<p class="paragraph normal">RADIO:</p>
+<p class="paragraph normal">ACTIVE</p>
+<p class="paragraph normal">FAULT:</p>
+<p class="paragraph normal">Error Code</p>
+<p class="paragraph normal">REQUEST:</p>
+<p class="paragraph normal">GROUND ASSISTANCE</p>
+<h1>15. Ground Station Network</h1>
+<h2>FR-130 — Ground Station Support</h2>
+<p class="paragraph normal">The Puppy Network shall support distributed ground stations.</p>
+<p class="paragraph normal">Ground stations shall:</p>
+<p class="paragraph normal">Track satellites</p>
+<p class="paragraph normal">Receive telemetry</p>
+<p class="paragraph normal">Decode images</p>
+<p class="paragraph normal">Receive APT-NG signals</p>
+<p class="paragraph normal">Upload mission data</p>
+<h1>16. Community Data Access</h1>
+<h2>FR-140 — Public Mission Data</h2>
+<p class="paragraph normal">The Puppy Network shall provide public access to:</p>
+<p class="paragraph normal">Satellite passes</p>
+<p class="paragraph normal">Images</p>
+<p class="paragraph normal">Telemetry</p>
+<p class="paragraph normal">Educational material</p>
+<p class="paragraph normal">Communication experiments</p>
+<h1>17. Future Expansion</h1>
+<p class="paragraph normal">Future capabilities may include:</p>
+<p class="paragraph normal">Additional LEO satellites</p>
+<p class="paragraph normal">GEO relay satellites</p>
+<p class="paragraph normal">More sensors</p>
+<p class="paragraph normal">Autonomous mission scheduling</p>
+<p class="paragraph normal">Expanded ground station network</p>
+<p class="paragraph normal">Scientific payloads</p>
+<h1>Mission Statement</h1>
+<p class="paragraph normal">PuppySat-1 is a community-driven space technology platform combining amateur radio, Earth observation, open communication systems, and accessible space education.</p>
+<p class="paragraph normal">The Puppy Network shall demonstrate that satellites can be both technically advanced and welcoming to a global community of learners.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>

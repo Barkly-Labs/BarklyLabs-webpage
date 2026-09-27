@@ -4,22 +4,93 @@ import path from "node:path";
 
 const docsRoot = path.join(process.cwd(), "public", "docs");
 
+type DocType = {
+  key: string;
+  label: string;
+  description: string;
+};
+
 type DocEntry = {
   title: string;
   slug: string;
   href: string;
   category: string;
+  type: string;
   relativePath: string;
 };
+
+const docTypes: DocType[] = [
+  {
+    key: "technical",
+    label: "TECHNICAL DOCUMENTATION",
+    description:
+      "Implementation details, technical references, APIs, modules, dependencies, and system behavior.",
+  },
+  {
+    key: "specifications",
+    label: "SPECIFICATIONS",
+    description:
+      "Defined technical specifications, interfaces, protocols, formats, and system contracts.",
+  },
+  {
+    key: "research",
+    label: "RESEARCH & PAPERS",
+    description:
+      "Research notes, papers, literature, investigations, findings, and supporting knowledge.",
+  },
+  {
+    key: "requirements",
+    label: "FUNCTIONAL REQUIREMENTS",
+    description:
+      "Functional requirements describing what systems should do and how they should behave.",
+  },
+  {
+    key: "architecture",
+    label: "ARCHITECTURE & DESIGN",
+    description:
+      "System architecture, design decisions, relationships, components, and structural documentation.",
+  },
+  {
+    key: "implementation",
+    label: "IMPLEMENTATION & REFERENCE",
+    description:
+      "Implementation references generated from real project source code and system structure.",
+  },
+  {
+    key: "testing",
+    label: "TESTING & VALIDATION",
+    description:
+      "Tests, validation procedures, benchmarks, verification results, and known limitations.",
+  },
+  {
+    key: "experiments",
+    label: "EXPERIMENTS & NOTES",
+    description:
+      "Experiments, prototypes, observations, development notes, and lessons learned.",
+  },
+  {
+    key: "guides",
+    label: "GUIDES & HOW-TO",
+    description:
+      "Practical guides for using, developing, operating, modifying, and extending Barkly systems.",
+  },
+  {
+    key: "history",
+    label: "HISTORY & CHANGELOGS",
+    description:
+      "Development history, changes, milestones, releases, decisions, and project evolution.",
+  },
+];
 
 const docs: DocEntry[] = [];
 
 function titleFromPath(relativePath: string) {
   const parts = relativePath.split(path.sep).filter(Boolean);
 
-  const index = parts[parts.length - 1] === "index.html"
-    ? parts[parts.length - 2]
-    : parts[parts.length - 1];
+  const index =
+    parts[parts.length - 1] === "index.html"
+      ? parts[parts.length - 2]
+      : parts[parts.length - 1];
 
   if (!index) return "DOCUMENTATION";
 
@@ -40,6 +111,88 @@ function categoryFromPath(relativePath: string) {
     .toUpperCase();
 }
 
+function typeFromPath(relativePath: string) {
+  const normalized = relativePath.toLowerCase();
+
+  if (
+    normalized.includes("/technical/") ||
+    normalized.includes("/technical-docs/") ||
+    normalized.includes("/technical-documentation/")
+  ) {
+    return "technical";
+  }
+
+  if (
+    normalized.includes("/specifications/") ||
+    normalized.includes("/specs/")
+  ) {
+    return "specifications";
+  }
+
+  if (
+    normalized.includes("/research/") ||
+    normalized.includes("/papers/") ||
+    normalized.includes("/research-papers/")
+  ) {
+    return "research";
+  }
+
+  if (
+    normalized.includes("/requirements/") ||
+    normalized.includes("/functional-requirements/") ||
+    normalized.includes("/frd/")
+  ) {
+    return "requirements";
+  }
+
+  if (
+    normalized.includes("/architecture/") ||
+    normalized.includes("/design/")
+  ) {
+    return "architecture";
+  }
+
+  if (
+    normalized.includes("/implementation/") ||
+    normalized.includes("/reference/")
+  ) {
+    return "implementation";
+  }
+
+  if (
+    normalized.includes("/testing/") ||
+    normalized.includes("/tests/") ||
+    normalized.includes("/validation/")
+  ) {
+    return "testing";
+  }
+
+  if (
+    normalized.includes("/experiments/") ||
+    normalized.includes("/notes/")
+  ) {
+    return "experiments";
+  }
+
+  if (
+    normalized.includes("/guides/") ||
+    normalized.includes("/how-to/") ||
+    normalized.includes("/howto/")
+  ) {
+    return "guides";
+  }
+
+  if (
+    normalized.includes("/history/") ||
+    normalized.includes("/changelog/") ||
+    normalized.includes("/changelogs/")
+  ) {
+    return "history";
+  }
+
+  return "technical";
+}
+
 function scanDirectory(directory: string, relative = "") {
   if (!fs.existsSync(directory)) return;
 
@@ -56,7 +209,10 @@ function scanDirectory(directory: string, relative = "") {
       continue;
     }
 
-    if (entry.isFile() && entry.name.toLowerCase() === "index.html") {
+    if (
+      entry.isFile() &&
+      entry.name.toLowerCase() === "index.html"
+    ) {
       const normalized = relativePath.replaceAll(path.sep, "/");
 
       docs.push({
@@ -66,6 +222,7 @@ function scanDirectory(directory: string, relative = "") {
           .replace(/^index\.html$/i, ""),
         href: `/docs/${normalized}`,
         category: categoryFromPath(relativePath),
+        type: typeFromPath(relativePath),
         relativePath: normalized,
       });
     }
@@ -78,7 +235,13 @@ docs.sort((a, b) =>
   a.relativePath.localeCompare(b.relativePath)
 );
 
-const categories = [...new Set(docs.map((doc) => doc.category))];
+const categories = [
+  ...new Set(docs.map((doc) => doc.category)),
+];
+
+const activeTypes = docTypes.filter((type) =>
+  docs.some((doc) => doc.type === type.key)
+);
 
 const year = 2026;
 ---
@@ -87,6 +250,7 @@ const year = 2026;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0"
@@ -96,7 +260,7 @@ const year = 2026;
 
     <meta
       name="description"
-      content="Barkly Labs documentation, technical knowledge, research notes, systems, architecture, and engineering references."
+      content="Barkly Labs documentation, technical knowledge, research, specifications, requirements, architecture, experiments, and engineering references."
     />
   </head>
 
@@ -144,16 +308,103 @@ const year = 2026;
           </h1>
 
           <p>
-            Technical documentation, research notes, system
-            architecture, experiments, references, and knowledge
-            generated throughout the Barkly ecosystem.
+            Technical documentation, specifications, research,
+            functional requirements, architecture, experiments,
+            implementation references, and knowledge generated
+            throughout the Barkly ecosystem.
           </p>
 
           <div class="hero-meta">
-            <span>{docs.length.toString().padStart(2, "0")} DOCUMENTS</span>
-            <span>{categories.length.toString().padStart(2, "0")} SYSTEMS</span>
-            <span>BUILD / DOCUMENT / LEARN</span>
+            <span>
+              {docs.length.toString().padStart(2, "0")} DOCUMENTS
+            </span>
+
+            <span>
+              {categories.length.toString().padStart(2, "0")} SYSTEMS
+            </span>
+
+            <span>
+              {activeTypes.length.toString().padStart(2, "0")} KNOWLEDGE TYPES
+            </span>
+
+            <span>
+              BUILD / DOCUMENT / LEARN
+            </span>
           </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           KNOWLEDGE LIBRARY
+           ===================================================== -->
+
+      <section class="knowledge-library">
+        <div class="library-header">
+          <div>
+            <span class="section-number">01</span>
+
+            <span class="section-kicker">
+              KNOWLEDGE LIBRARY
+            </span>
+
+            <h2>
+              MANY TYPES.
+              <span>ONE SYSTEM.</span>
+            </h2>
+          </div>
+
+          <div class="library-description">
+            Barkly Docs treats documentation as more than source-code
+            reference. Technical knowledge, requirements, research,
+            specifications, architecture, experiments, and history
+            all become part of the system.
+          </div>
+        </div>
+
+        <div class="knowledge-grid">
+          {
+            docTypes.map((type, index) => {
+              const count = docs.filter(
+                (doc) => doc.type === type.key
+              ).length;
+
+              return (
+                <a
+                  href={
+                    count > 0
+                      ? `#${type.key}`
+                      : undefined
+                  }
+                  class:list={[
+                    "knowledge-card",
+                    { "knowledge-card-empty": count === 0 },
+                  ]}
+                >
+                  <span class="knowledge-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span class="knowledge-card-content">
+                    <span class="knowledge-card-label">
+                      {type.label}
+                    </span>
+
+                    <strong>
+                      {count.toString().padStart(2, "0")}
+                    </strong>
+
+                    <span class="knowledge-card-description">
+                      {type.description}
+                    </span>
+                  </span>
+
+                  <span class="knowledge-card-arrow">
+                    {count > 0 ? "VIEW →" : "READY"}
+                  </span>
+                </a>
+              );
+            })
+          }
         </div>
       </section>
 
@@ -164,8 +415,11 @@ const year = 2026;
       <section class="archive">
         <div class="archive-header">
           <div>
-            <span class="section-number">01</span>
-            <span class="section-kicker">DOCUMENTATION INDEX</span>
+            <span class="section-number">02</span>
+
+            <span class="section-kicker">
+              DOCUMENTATION INDEX
+            </span>
           </div>
 
           <div class="archive-count">
@@ -178,7 +432,9 @@ const year = 2026;
             <div class="empty-state">
               <span class="empty-symbol">[ 00 ]</span>
 
-              <h2>NO DOCUMENTATION FOUND.</h2>
+              <h2>
+                NO DOCUMENTATION FOUND.
+              </h2>
 
               <p>
                 The Barkly Docs generator has not produced any
@@ -192,6 +448,7 @@ const year = 2026;
                   href={doc.href}
                   class="document-row"
                   data-category={doc.category}
+                  data-type={doc.type}
                 >
                   <span class="document-number">
                     {String(index + 1).padStart(2, "0")}
@@ -202,7 +459,17 @@ const year = 2026;
                       {doc.category}
                     </span>
 
-                    <strong>{doc.title}</strong>
+                    <strong>
+                      {doc.title}
+                    </strong>
+
+                    <span class="document-type">
+                      {
+                        docTypes.find(
+                          (type) => type.key === doc.type
+                        )?.label
+                      }
+                    </span>
 
                     <span class="document-path">
                       /{doc.relativePath}
@@ -220,15 +487,90 @@ const year = 2026;
       </section>
 
       <!-- =====================================================
+           KNOWLEDGE TYPE INDEX
+           ===================================================== -->
+
+      {
+        activeTypes.map((type, typeIndex) => {
+          const typeDocs = docs.filter(
+            (doc) => doc.type === type.key
+          );
+
+          return (
+            <section
+              class="type-section"
+              id={type.key}
+            >
+              <div class="type-header">
+                <div>
+                  <span class="section-number">
+                    {String(typeIndex + 3).padStart(2, "0")}
+                  </span>
+
+                  <span class="section-kicker">
+                    KNOWLEDGE TYPE
+                  </span>
+                </div>
+
+                <span class="type-count">
+                  {typeDocs.length
+                    .toString()
+                    .padStart(2, "0")}{" "}
+                  DOCUMENTS
+                </span>
+              </div>
+
+              <div class="type-heading">
+                <h2>
+                  {type.label}
+                </h2>
+
+                <p>
+                  {type.description}
+                </p>
+              </div>
+
+              <div class="type-document-list">
+                {typeDocs.map((doc) => (
+                  <a
+                    href={doc.href}
+                    class="type-document"
+                  >
+                    <span class="type-document-category">
+                      {doc.category}
+                    </span>
+
+                    <strong>
+                      {doc.title}
+                    </strong>
+
+                    <span class="type-document-path">
+                      /{doc.relativePath}
+                    </span>
+
+                    <span class="type-document-open">
+                      →
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          );
+        })
+      }
+
+      <!-- =====================================================
            SYSTEM MAP
            ===================================================== -->
 
       <section class="system-map">
         <div class="map-header">
-          <span class="section-number">02</span>
+          <span class="section-number">13</span>
 
           <div>
-            <span class="section-kicker">KNOWLEDGE GRAPH</span>
+            <span class="section-kicker">
+              KNOWLEDGE GRAPH
+            </span>
 
             <h2>
               ONE ECOSYSTEM.
@@ -239,9 +581,17 @@ const year = 2026;
 
         <div class="map-grid">
           <div class="map-core">
-            <span class="core-label">BARKLY</span>
-            <strong>KNOWLEDGE</strong>
-            <small>DOCUMENTATION CORE</small>
+            <span class="core-label">
+              BARKLY
+            </span>
+
+            <strong>
+              KNOWLEDGE
+            </strong>
+
+            <small>
+              DOCUMENTATION CORE
+            </small>
           </div>
 
           <div class="map-node node-a">
@@ -272,14 +622,18 @@ const year = 2026;
       </section>
 
       <!-- =====================================================
-           PRINCIPLE
+           DOCUMENTATION PRINCIPLE
            ===================================================== -->
 
       <section class="docs-principle">
-        <div class="principle-number">03</div>
+        <div class="principle-number">
+          14
+        </div>
 
         <div>
-          <span class="section-kicker">BARKLY PRINCIPLE</span>
+          <span class="section-kicker">
+            BARKLY PRINCIPLE
+          </span>
 
           <h2>
             DOCUMENTATION
@@ -288,10 +642,17 @@ const year = 2026;
 
           <p>
             A system should not depend on one person's memory.
-            Documentation makes the architecture, decisions,
-            experiments, failures, and knowledge of a system
-            understandable enough for other people to use,
-            question, modify, and improve it.
+            Documentation makes the architecture, requirements,
+            decisions, experiments, failures, implementation,
+            research, and knowledge of a system understandable
+            enough for other people to use, question, modify,
+            validate, and improve it.
+          </p>
+
+          <p>
+            Barkly Docs treats knowledge as part of the engineering
+            system itself. Documentation is created alongside the
+            systems it describes and evolves as those systems change.
           </p>
         </div>
       </section>
@@ -304,8 +665,13 @@ const year = 2026;
     <footer class="footer">
       <div class="footer-main">
         <div>
-          <div class="footer-logo">BARKLY</div>
-          <div class="footer-labs">LABS / DOCS</div>
+          <div class="footer-logo">
+            BARKLY
+          </div>
+
+          <div class="footer-labs">
+            LABS / DOCS
+          </div>
         </div>
 
         <div class="footer-tagline">
@@ -316,9 +682,17 @@ const year = 2026;
       </div>
 
       <div class="footer-bottom">
-        <span>© {year} BARKLY LABS</span>
-        <span>DETROIT, MICHIGAN</span>
-        <a href="/">BARKLY LABS ↗</a>
+        <span>
+          © {year} BARKLY LABS
+        </span>
+
+        <span>
+          DETROIT, MICHIGAN
+        </span>
+
+        <a href="/">
+          BARKLY LABS ↗
+        </a>
       </div>
     </footer>
   </body>
@@ -338,6 +712,7 @@ const year = 2026;
     margin: 0;
     background: #050505;
     color: #f2f2f2;
+
     font-family:
       Inter,
       ui-sans-serif,
@@ -346,6 +721,7 @@ const year = 2026;
       BlinkMacSystemFont,
       "Segoe UI",
       sans-serif;
+
     overflow-x: hidden;
   }
 
@@ -514,7 +890,9 @@ const year = 2026;
     border-radius: 50%;
 
     background: #fff;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+
+    box-shadow:
+      0 0 12px rgba(255, 255, 255, 0.7);
   }
 
   .hero-label {
@@ -541,7 +919,7 @@ const year = 2026;
   }
 
   .docs-hero p {
-    max-width: 650px;
+    max-width: 700px;
 
     margin: 50px 0 35px;
 
@@ -561,6 +939,151 @@ const year = 2026;
     font-family: "Courier New", monospace;
     font-size: 8px;
     letter-spacing: 0.14em;
+  }
+
+  /* =========================================================
+     KNOWLEDGE LIBRARY
+     ========================================================= */
+
+  .knowledge-library {
+    padding: 130px 10vw;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .library-header {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 80px;
+
+    align-items: end;
+
+    margin-bottom: 70px;
+  }
+
+  .section-number,
+  .section-kicker {
+    font-family: "Courier New", monospace;
+  }
+
+  .section-number {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 10px;
+  }
+
+  .section-kicker {
+    color: rgba(255, 255, 255, 0.4);
+
+    font-size: 9px;
+    letter-spacing: 0.16em;
+  }
+
+  .library-header h2 {
+    margin: 22px 0 0;
+
+    max-width: 900px;
+
+    font-size: clamp(50px, 7vw, 100px);
+    line-height: 0.86;
+    letter-spacing: -0.06em;
+  }
+
+  .library-header h2 span {
+    display: block;
+
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .library-description {
+    color: rgba(255, 255, 255, 0.5);
+
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .knowledge-card {
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    gap: 20px;
+
+    min-height: 190px;
+    padding: 28px;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition:
+      background 0.25s,
+      transform 0.25s;
+  }
+
+  .knowledge-card:hover {
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .knowledge-card-empty {
+    opacity: 0.55;
+  }
+
+  .knowledge-number {
+    color: rgba(255, 255, 255, 0.22);
+
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+  }
+
+  .knowledge-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .knowledge-card-label {
+    color: rgba(255, 255, 255, 0.42);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  .knowledge-card-content strong {
+    margin: 18px 0 10px;
+
+    font-size: 34px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .knowledge-card-description {
+    max-width: 400px;
+
+    color: rgba(255, 255, 255, 0.4);
+
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .knowledge-card-arrow {
+    align-self: end;
+
+    color: rgba(255, 255, 255, 0.3);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
   }
 
   /* =========================================================
@@ -586,23 +1109,12 @@ const year = 2026;
     gap: 35px;
   }
 
-  .section-number,
-  .section-kicker {
-    font-family: "Courier New", monospace;
+  .archive-header .section-number {
+    margin: 0;
   }
 
-  .section-number {
-    color: rgba(255, 255, 255, 0.25);
-    font-size: 10px;
-  }
-
-  .section-kicker {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 9px;
-    letter-spacing: 0.16em;
-  }
-
-  .archive-count {
+  .archive-count,
+  .type-count {
     color: rgba(255, 255, 255, 0.25);
 
     font-family: "Courier New", monospace;
@@ -620,7 +1132,7 @@ const year = 2026;
     gap: 30px;
     align-items: center;
 
-    min-height: 125px;
+    min-height: 140px;
 
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
@@ -653,7 +1165,8 @@ const year = 2026;
     gap: 7px;
   }
 
-  .document-category {
+  .document-category,
+  .document-type {
     color: rgba(255, 255, 255, 0.3);
 
     font-family: "Courier New", monospace;
@@ -664,6 +1177,10 @@ const year = 2026;
   .document-main strong {
     font-size: 22px;
     letter-spacing: -0.035em;
+  }
+
+  .document-type {
+    color: rgba(255, 255, 255, 0.45);
   }
 
   .document-path {
@@ -691,6 +1208,7 @@ const year = 2026;
 
   .empty-state {
     padding: 100px 0;
+
     text-align: center;
 
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -712,7 +1230,115 @@ const year = 2026;
 
   .empty-state p {
     color: rgba(255, 255, 255, 0.4);
+
     font-size: 13px;
+  }
+
+  /* =========================================================
+     KNOWLEDGE TYPE SECTIONS
+     ========================================================= */
+
+  .type-section {
+    padding: 120px 10vw;
+
+    background: #070707;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .type-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .type-header > div {
+    display: flex;
+    gap: 35px;
+  }
+
+  .type-header .section-number {
+    margin: 0;
+  }
+
+  .type-heading {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+
+    gap: 80px;
+
+    align-items: end;
+
+    padding: 60px 0;
+  }
+
+  .type-heading h2 {
+    margin: 0;
+
+    font-size: clamp(42px, 6vw, 85px);
+    line-height: 0.88;
+    letter-spacing: -0.06em;
+  }
+
+  .type-heading p {
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.45);
+
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .type-document-list {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .type-document {
+    display: grid;
+    grid-template-columns: 180px 1fr 260px 30px;
+    gap: 30px;
+    align-items: center;
+
+    min-height: 90px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition:
+      background 0.2s,
+      padding 0.2s;
+  }
+
+  .type-document:hover {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .type-document-category,
+  .type-document-path {
+    color: rgba(255, 255, 255, 0.25);
+
+    font-family: "Courier New", monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .type-document strong {
+    font-size: 16px;
+    letter-spacing: -0.025em;
+  }
+
+  .type-document-open {
+    justify-self: end;
+
+    color: rgba(255, 255, 255, 0.35);
+
+    font-family: "Courier New", monospace;
   }
 
   /* =========================================================
@@ -726,7 +1352,7 @@ const year = 2026;
 
     padding: 140px 10vw;
 
-    background: #070707;
+    background: #050505;
 
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -755,6 +1381,7 @@ const year = 2026;
 
   .map-header h2 span {
     display: block;
+
     color: rgba(255, 255, 255, 0.3);
   }
 
@@ -769,6 +1396,7 @@ const year = 2026;
 
   .map-core {
     position: absolute;
+
     top: 50%;
     left: 50%;
 
@@ -872,34 +1500,40 @@ const year = 2026;
   .line-a,
   .line-b {
     top: 34%;
+
     width: 260px;
     height: 1px;
   }
 
   .line-a {
     left: 12%;
+
     transform: rotate(25deg);
   }
 
   .line-b {
     right: 12%;
+
     transform: rotate(-25deg);
   }
 
   .line-c,
   .line-d {
     bottom: 34%;
+
     width: 260px;
     height: 1px;
   }
 
   .line-c {
     left: 12%;
+
     transform: rotate(-25deg);
   }
 
   .line-d {
     right: 12%;
+
     transform: rotate(25deg);
   }
 
@@ -915,6 +1549,13 @@ const year = 2026;
     padding: 150px 10vw;
   }
 
+  .principle-number {
+    color: rgba(255, 255, 255, 0.25);
+
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+  }
+
   .docs-principle h2 {
     max-width: 900px;
 
@@ -927,11 +1568,12 @@ const year = 2026;
 
   .docs-principle h2 span {
     display: block;
+
     color: rgba(255, 255, 255, 0.3);
   }
 
   .docs-principle p {
-    max-width: 650px;
+    max-width: 700px;
 
     color: rgba(255, 255, 255, 0.52);
 
@@ -1003,6 +1645,26 @@ const year = 2026;
      RESPONSIVE
      ========================================================= */
 
+  @media (max-width: 900px) {
+    .library-header,
+    .type-heading {
+      grid-template-columns: 1fr;
+      gap: 35px;
+    }
+
+    .knowledge-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .type-document {
+      grid-template-columns: 150px 1fr 30px;
+    }
+
+    .type-document-path {
+      display: none;
+    }
+  }
+
   @media (max-width: 800px) {
     .topbar {
       grid-template-columns: 1fr auto;
@@ -1014,10 +1676,13 @@ const year = 2026;
 
     .docs-hero {
       min-height: 580px;
+
       padding: 110px 7vw 80px;
     }
 
+    .knowledge-library,
     .archive,
+    .type-section,
     .system-map,
     .docs-principle {
       padding-left: 7vw;
@@ -1026,18 +1691,22 @@ const year = 2026;
 
     .document-row {
       grid-template-columns: 45px 1fr;
+
       gap: 15px;
+
       padding: 20px 0;
     }
 
     .document-open {
       grid-column: 2;
+
       justify-self: start;
     }
 
     .map-header,
     .docs-principle {
       grid-template-columns: 1fr;
+
       gap: 20px;
     }
 
@@ -1065,7 +1734,9 @@ const year = 2026;
     .footer-main,
     .footer-bottom {
       flex-direction: column;
+
       align-items: flex-start;
+
       gap: 30px;
     }
 
@@ -1077,6 +1748,7 @@ const year = 2026;
   @media (max-width: 520px) {
     .topbar {
       min-height: 60px;
+
       padding: 0 6vw;
     }
 
@@ -1090,17 +1762,55 @@ const year = 2026;
 
     .hero-meta {
       flex-direction: column;
+
       gap: 10px;
     }
 
-    .archive-header {
+    .archive-header,
+    .type-header {
       align-items: flex-start;
+
       flex-direction: column;
+
       gap: 15px;
     }
 
-    .archive-header > div:first-child {
+    .archive-header > div:first-child,
+    .type-header > div {
       gap: 20px;
+    }
+
+    .knowledge-card {
+      grid-template-columns: 35px 1fr;
+
+      gap: 15px;
+    }
+
+    .knowledge-card-arrow {
+      grid-column: 2;
+
+      justify-self: start;
+    }
+
+    .type-document {
+      grid-template-columns: 1fr 30px;
+
+      gap: 15px;
+
+      padding: 20px 0;
+    }
+
+    .type-document-category {
+      grid-column: 1;
+    }
+
+    .type-document strong {
+      grid-column: 1;
+    }
+
+    .type-document-open {
+      grid-column: 2;
+      grid-row: 1 / span 2;
     }
 
     .map-grid {

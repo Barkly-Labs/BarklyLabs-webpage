@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Human-Centered Unified Benefits Intake System — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Human-Centered Unified Benefits Intake System
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Human-Centered Unified Benefits Intake System (1).docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Human-Centered Unified Benefits Intake System</h1>
+<h2>Functional Requirements Specification (FRS)</h2>
+<p class="paragraph normal">Version 2.0 — September 2026
+Policy &amp; Systems Concept Paper</p>
+<h1>1. Executive Summary</h1>
+<p class="paragraph normal">This Functional Requirements Specification (FRS) proposes a human-centered intake and requirements-management system for state-administered public benefit programs. The system is designed to reduce avoidable administrative friction without changing statutory eligibility rules.</p>
+<p class="paragraph normal">The central concept is simple: applicants should be able to begin with what they actually need rather than having to understand government agencies or program names first. The system should explain what programs may be relevant, identify what information and documentation is required, validate completeness before submission, collect common information once and reuse it where legally permitted, and provide workers with a structured, review-ready case.</p>
+<p class="paragraph normal">The proposed platform is not an eligibility-rewriting system. It is an administrative modernization layer. Its purpose is to make existing rules easier to execute consistently, reduce duplicate work, improve application completion, and give applicants clearer visibility into their case.</p>
+<p class="paragraph normal">The platform may incorporate a large-language-model (LLM) assistant as an optional human-interface layer. The LLM may help residents describe their needs in ordinary language, understand government terminology, identify potential application pathways, and understand requirements. The LLM shall not replace the requirements engine, alter program rules, or make official eligibility determinations.</p>
+<p class="paragraph normal">The architecture should maintain a clear separation of responsibilities:</p>
+<p class="paragraph normal">LLM: Understands and assists the human.
+Requirements Engine: Applies controlled and versioned program requirements.
+Benefits System: Performs authorized processing and official eligibility determination.</p>
+<p class="paragraph normal">The proposal is intentionally suitable for bipartisan consideration. Its benefits include better constituent service and access, but also reduced administrative waste, clearer verification, stronger data quality, improved worker productivity, and measurable performance management.</p>
+<p class="paragraph normal">The recommended implementation path is a controlled pilot followed by evidence-based expansion. The state should establish baseline measurements, test the system with a limited program or region, evaluate outcomes, and expand only when security, legal, accessibility, operational, and performance requirements are met.</p>
+<h1>2. Problem Statement</h1>
+<p class="paragraph normal">Public benefit administration frequently requires applicants and workers to exchange information across multiple stages. A person may begin an application without understanding every requirement, submit partial information, receive a request for additional material, respond, and then discover another missing item. Each additional interaction can create delay for the applicant and administrative workload for the agency.</p>
+<p class="paragraph normal">The problem is not necessarily that eligibility rules are too strict or too lenient. A significant modernization opportunity exists in the process surrounding those rules: explaining requirements, collecting information, checking completeness, routing cases, tracking outstanding items, and communicating status.</p>
+<p class="paragraph normal">Government systems are frequently organized around agency structures, program names, forms, and internal workflows. Residents, however, generally experience government through real-life needs. A person may know that they need help paying for food, housing, medical care, childcare, or other necessities without knowing which government program addresses that need.</p>
+<p class="paragraph normal">The proposed system therefore begins with the human need and translates that need into an appropriate government workflow.</p>
+<p class="paragraph normal">An optional LLM can assist with this translation by allowing residents to describe their circumstances naturally. However, AI assistance must remain subordinate to authoritative program rules. The LLM should help the resident communicate with government; it should not become the source of government policy.</p>
+<p class="paragraph normal">The proposed system addresses process friction while preserving program integrity. It should not automatically approve an applicant merely because an application is complete. Instead, completeness should mean that the agency has the information needed to perform the legally required eligibility determination.</p>
+<p class="paragraph normal">The system should also distinguish three states that are often confusing to applicants:</p>
+<p class="paragraph normal">Incomplete application</p>
+<p class="paragraph normal">Application under review</p>
+<p class="paragraph normal">Eligibility decision</p>
+<p class="paragraph normal">Clear separation of these states can reduce unnecessary contacts and prevent people from interpreting a request for documentation as a final denial.</p>
+<p class="paragraph normal">A modern intake system should therefore treat the applicant experience, AI assistance, requirements management, and worker workflow as one connected service-design problem.</p>
+<h1>3. Goals and Objectives</h1>
+<h3>Primary goals:</h3>
+<p class="paragraph normal">Increase the percentage of eligible applicants who successfully complete the application process.</p>
+<p class="paragraph normal">Reduce avoidable requests for information that could have been identified earlier.</p>
+<p class="paragraph normal">Reduce duplicate data entry across programs.</p>
+<p class="paragraph normal">Reduce administrative time spent assembling and correcting incomplete cases.</p>
+<p class="paragraph normal">Improve transparency about requirements, case status, and next steps.</p>
+<p class="paragraph normal">Allow residents to begin from their real-world needs rather than government terminology.</p>
+<p class="paragraph normal">Provide optional natural-language assistance for residents who need help determining where to start.</p>
+<p class="paragraph normal">Preserve statutory eligibility standards and required verification.</p>
+<p class="paragraph normal">Prevent AI assistance from changing or overriding official program rules.</p>
+<p class="paragraph normal">Improve accessibility for people with disabilities, limited English proficiency, limited digital access, or difficulty navigating complex forms.</p>
+<p class="paragraph normal">Improve worker access to organized, complete, and actionable case information.</p>
+<p class="paragraph normal">Objectives should be measurable. The state should establish a baseline before deployment and measure changes in application completion, incomplete submissions, processing time, applicant contacts, document resubmissions, worker handling time, AI-assisted guidance outcomes, and eligible-person enrollment.</p>
+<p class="paragraph normal">The system should optimize for successful and accurate processing rather than simply maximizing approval rates. A higher approval rate by itself is not a valid success criterion because eligibility is governed by law and program policy.</p>
+<h1>4. Scope</h1>
+<h3>In scope:</h3>
+<p class="paragraph normal">A unified applicant intake experience.</p>
+<p class="paragraph normal">A human-centered main landing page.</p>
+<p class="paragraph normal">Program discovery and application selection.</p>
+<p class="paragraph normal">Optional LLM-assisted program discovery and guidance.</p>
+<p class="paragraph normal">Dynamic presentation of program-specific requirements.</p>
+<p class="paragraph normal">Reuse of common applicant information where authorized.</p>
+<p class="paragraph normal">Document collection and validation.</p>
+<p class="paragraph normal">Pre-submission completeness checks.</p>
+<p class="paragraph normal">Requirements explanation.</p>
+<p class="paragraph normal">Caseworker review dashboards.</p>
+<p class="paragraph normal">Status and notification functions.</p>
+<p class="paragraph normal">Accessibility and language support.</p>
+<p class="paragraph normal">Assisted application workflows.</p>
+<p class="paragraph normal">Audit logging and operational reporting.</p>
+<p class="paragraph normal">Interfaces to authorized state systems.</p>
+<p class="paragraph normal">Controlled and versioned program requirements.</p>
+<h3>Out of scope:</h3>
+<p class="paragraph normal">Changing statutory eligibility criteria.</p>
+<p class="paragraph normal">Automatically granting benefits without required determination or verification.</p>
+<p class="paragraph normal">Replacing human judgment where law or policy requires a worker decision.</p>
+<p class="paragraph normal">Allowing an LLM to make official eligibility determinations.</p>
+<p class="paragraph normal">Allowing an LLM to independently modify government program requirements.</p>
+<p class="paragraph normal">Creating a new standard for fraud investigations.</p>
+<p class="paragraph normal">Sharing applicant information outside authorized purposes.</p>
+<p class="paragraph normal">The system may eventually support multiple programs, but implementation should begin with a controlled scope that is operationally manageable and legally reviewed.</p>
+<h1>5. Guiding Principles</h1>
+<p class="paragraph normal">Human-centered: The system must be designed around what a resident needs to accomplish, not around the organizational structure of government.</p>
+<p class="paragraph normal">Start with the human need: A resident should be able to describe what they need without first knowing the government program responsible for helping them.</p>
+<p class="paragraph normal">Explainability: Every requested item should have a plain-language explanation of what is needed and, when appropriate, why it is needed.</p>
+<p class="paragraph normal">Complete once, reuse appropriately: Common information should not be requested repeatedly when an authorized, reliable copy already exists.</p>
+<p class="paragraph normal">Rules remain rules: The platform should faithfully implement approved program requirements and should not silently alter eligibility policy.</p>
+<p class="paragraph normal">AI assists; government decides: AI may help residents understand and navigate government, but official rules and determinations remain controlled by authorized government systems.</p>
+<p class="paragraph normal">No dead ends: When information is missing, the applicant should receive a specific next step rather than a generic error.</p>
+<p class="paragraph normal">Accessibility by design: Accessibility should be part of the core product requirements rather than an afterthought.</p>
+<p class="paragraph normal">Privacy by design: The system should collect, use, retain, and disclose information only as authorized and necessary.</p>
+<p class="paragraph normal">Measure outcomes: Every major workflow should produce metrics that allow the state to identify bottlenecks and improve the service.</p>
+<h1>6. Users and Roles</h1>
+<p class="paragraph normal">Applicant: A person seeking one or more benefits. The applicant needs understandable questions, clear requirements, secure document submission, status visibility, and reasonable opportunities to correct mistakes.</p>
+<p class="paragraph normal">Authorized helper: A person assisting an applicant, subject to applicable authorization and privacy controls.</p>
+<p class="paragraph normal">Caseworker: Reviews submitted information, verifies documentation, communicates requests, and makes or supports eligibility determinations according to program rules.</p>
+<p class="paragraph normal">Supervisor: Monitors workload, quality, escalations, and operational performance.</p>
+<p class="paragraph normal">Program administrator: Maintains program-specific requirements, notices, workflows, and policy configurations.</p>
+<p class="paragraph normal">System administrator: Manages technical configuration, access, integrations, and operational health without receiving unnecessary case content.</p>
+<p class="paragraph normal">AI/LLM administrator or service owner: Maintains the approved AI configuration, grounding sources, safeguards, monitoring, and operational controls without having authority to change program eligibility rules.</p>
+<p class="paragraph normal">Auditor/oversight role: Reviews authorized logs, decisions, AI-assisted activity, and performance information for accountability.</p>
+<p class="paragraph normal">The system must enforce role-based access so each role receives only the information and functions necessary for its responsibilities.</p>
+<h1>7. Functional Requirements — Human-Centered Main Page and Unified Intake</h1>
+<p class="paragraph normal">The unified intake experience is the primary resident-facing workflow. It shall provide a single, understandable starting point for residents seeking one or more participating benefit programs.</p>
+<h3>FR-001</h3>
+<p class="paragraph normal">The system shall provide a single entry point capable of collecting common information for multiple participating benefit programs.</p>
+<h3>FR-002</h3>
+<p class="paragraph normal">The main page shall be organized around resident needs and tasks rather than government agency structure.</p>
+<h3>FR-003</h3>
+<p class="paragraph normal">The main page shall prominently present a plain-language starting question such as “What do you need help with?”</p>
+<h3>FR-004</h3>
+<p class="paragraph normal">The system shall allow a resident to begin seeking assistance without knowing the name of the applicable government program.</p>
+<h3>FR-005</h3>
+<p class="paragraph normal">The main page shall provide clear primary actions including:</p>
+<p class="paragraph normal">Apply for benefits.</p>
+<p class="paragraph normal">Continue an application.</p>
+<p class="paragraph normal">Check my application.</p>
+<p class="paragraph normal">Upload documents.</p>
+<p class="paragraph normal">Get help.</p>
+<p class="paragraph normal">Help me figure out where to start.</p>
+<h3>FR-006</h3>
+<p class="paragraph normal">The system shall present primary actions in a manner that minimizes unnecessary cognitive load.</p>
+<h3>FR-007</h3>
+<p class="paragraph normal">The system shall allow an applicant to select the programs for which they want to apply when program rules permit.</p>
+<h3>FR-008</h3>
+<p class="paragraph normal">The system shall present relevant program questions based on prior answers, avoiding irrelevant questions where the rules allow.</p>
+<h3>FR-009</h3>
+<p class="paragraph normal">The system shall preserve entered information during an interrupted session, subject to security, retention, and consent requirements.</p>
+<h3>FR-010</h3>
+<p class="paragraph normal">The system shall identify information that can be reused across participating programs.</p>
+<h3>FR-011</h3>
+<p class="paragraph normal">The system shall clearly identify which program requires each piece of information.</p>
+<h3>FR-012</h3>
+<p class="paragraph normal">The system shall provide an application summary before final submission.</p>
+<h3>FR-013</h3>
+<p class="paragraph normal">The system shall allow an applicant to review and correct information before submission.</p>
+<h3>FR-014</h3>
+<p class="paragraph normal">The system shall provide an accessible alternative for applicants who cannot or do not wish to use the standard digital workflow.</p>
+<h3>FR-015</h3>
+<p class="paragraph normal">The system shall support authorized assisted application workflows.</p>
+<p class="paragraph normal">Acceptance principle: A reasonable applicant should be able to understand what they are applying for, what information has been entered, what remains required, and what will happen after submission without needing to understand government organizational structures.</p>
+<h1>8. Functional Requirements — LLM-Assisted Guidance</h1>
+<p class="paragraph normal">The LLM component is an optional assistance layer intended to help residents communicate their needs and understand the application process. It shall not replace the controlled requirements engine or official eligibility determination process.</p>
+<h3>FR-016</h3>
+<p class="paragraph normal">The system shall provide an optional natural-language assistance experience through which a resident may describe what they need in their own words.</p>
+<h3>FR-017</h3>
+<p class="paragraph normal">The LLM may interpret a resident&#x27;s description and identify potentially relevant programs, services, application paths, or next steps.</p>
+<h3>FR-018</h3>
+<p class="paragraph normal">The LLM may help translate ordinary descriptions of life circumstances into candidate government services without requiring the resident to know government terminology.</p>
+<h3>FR-019</h3>
+<p class="paragraph normal">The LLM may explain government terminology, application questions, requirements, documentation, and next steps in plain language.</p>
+<h3>FR-020</h3>
+<p class="paragraph normal">Where program-specific information is provided, the LLM shall use authoritative and current program information supplied through approved system sources.</p>
+<h3>FR-021</h3>
+<p class="paragraph normal">The LLM shall not make the official determination of eligibility, benefit amount, compliance, legal entitlement, fraud, sanctions, approval, or denial.</p>
+<h3>FR-022</h3>
+<p class="paragraph normal">The LLM shall not modify, override, or independently create official program requirements.</p>
+<h3>FR-023</h3>
+<p class="paragraph normal">The LLM shall not fabricate requirements, documents, deadlines, policies, benefit amounts, or legal obligations.</p>
+<h3>FR-024</h3>
+<p class="paragraph normal">When authoritative information is unavailable or uncertain, the system shall communicate the limitation rather than presenting an unsupported answer as fact.</p>
+<h3>FR-025</h3>
+<p class="paragraph normal">When the LLM identifies a potentially applicable program, the system shall provide a controlled handoff into the appropriate requirements-engine workflow.</p>
+<h3>FR-026</h3>
+<p class="paragraph normal">Information gathered through the LLM shall be presented to the resident for review and confirmation before being entered into the official application.</p>
+<h3>FR-027</h3>
+<p class="paragraph normal">Confirmed information collected through the LLM shall be reusable in the official application workflow when legally and technically appropriate.</p>
+<h3>FR-028</h3>
+<p class="paragraph normal">The system shall avoid requiring the resident to repeat information already provided through the LLM when that information can appropriately be reused.</p>
+<h3>FR-029</h3>
+<p class="paragraph normal">The LLM shall remain optional and shall never be required for accessing or completing a benefit application.</p>
+<h3>FR-030</h3>
+<p class="paragraph normal">The system shall provide a clear human-assistance pathway when the resident needs assistance beyond the capabilities of the automated system.</p>
+<h3>FR-031</h3>
+<p class="paragraph normal">The system shall clearly distinguish AI-generated assistance from official government information and determinations.</p>
+<h3>FR-032</h3>
+<p class="paragraph normal">AI-assisted actions shall be subject to applicable privacy, security, retention, monitoring, and audit requirements.</p>
+<h3>FR-033</h3>
+<p class="paragraph normal">The LLM shall not be granted direct authority to alter production program requirements.</p>
+<h3>FR-034</h3>
+<p class="paragraph normal">The system should provide the basis or authoritative source for program-specific guidance when technically and operationally feasible.</p>
+<p class="paragraph normal">Architecture principle:</p>
+<p class="paragraph normal">LLM = understands the human.
+Requirements Engine = understands the rules.
+Benefits System = performs the official determination.</p>
+<h1>9. Functional Requirements — Dynamic Requirements Engine</h1>
+<p class="paragraph normal">The requirements engine is the core rules-management component of the proposal. It converts approved program rules and application context into an understandable, applicant-specific checklist.</p>
+<h3>FR-035</h3>
+<p class="paragraph normal">The system shall maintain a version-controlled catalog of requirements for each participating program.</p>
+<h3>FR-036</h3>
+<p class="paragraph normal">Each requirement shall include a plain-language label and a machine-readable identifier.</p>
+<h3>FR-037</h3>
+<p class="paragraph normal">Each requirement shall specify whether it is required, conditional, optional, or informational.</p>
+<h3>FR-038</h3>
+<p class="paragraph normal">Conditional requirements shall be displayed only when their approved triggering conditions are satisfied, unless policy requires advance notice.</p>
+<h3>FR-039</h3>
+<p class="paragraph normal">The system shall explain why a required item is being requested when appropriate.</p>
+<h3>FR-040</h3>
+<p class="paragraph normal">The system shall identify acceptable document or information types according to program policy.</p>
+<h3>FR-041</h3>
+<p class="paragraph normal">The system shall identify whether an item can be verified through an authorized data source instead of applicant submission.</p>
+<h3>FR-042</h3>
+<p class="paragraph normal">The system shall prevent unauthorized users from modifying production requirements.</p>
+<h3>FR-043</h3>
+<p class="paragraph normal">Changes to requirements shall be versioned and auditable.</p>
+<h3>FR-044</h3>
+<p class="paragraph normal">The system shall not infer eligibility solely from a checklist being complete.</p>
+<h3>FR-045</h3>
+<p class="paragraph normal">The system shall support effective dates so requirements can change without corrupting historical applications.</p>
+<h3>FR-046</h3>
+<p class="paragraph normal">The requirements engine shall provide a live checklist showing the requirements applicable to the resident&#x27;s current application context.</p>
+<h3>FR-047</h3>
+<p class="paragraph normal">The requirements engine shall update the applicable checklist when an applicant provides information that changes which requirements apply.</p>
+<h3>FR-048</h3>
+<p class="paragraph normal">The requirements engine shall provide a machine-readable relationship between requirements, programs, triggering conditions, acceptable documentation, and verification methods.</p>
+<h3>FR-049</h3>
+<p class="paragraph normal">The system shall distinguish between information required from the applicant and information that can be obtained through an authorized verification source.</p>
+<h3>FR-050</h3>
+<p class="paragraph normal">The system shall flag inconsistent or conflicting requirements configurations for authorized review rather than silently applying potentially incorrect rules.</p>
+<p class="paragraph normal">The engine should be configurable rather than hard-coded wherever practical. This permits program administrators to update approved requirements while preserving governance and auditability.</p>
+<h1>10. Functional Requirements — Documents, Verification and Completeness</h1>
+<h3>FR-051</h3>
+<p class="paragraph normal">The system shall accept authorized document formats and provide clear upload instructions.</p>
+<h3>FR-052</h3>
+<p class="paragraph normal">The system shall confirm receipt of submitted documents.</p>
+<h3>FR-053</h3>
+<p class="paragraph normal">The system shall associate each document with the requirement it satisfies.</p>
+<h3>FR-054</h3>
+<p class="paragraph normal">The system shall detect obvious technical problems such as unreadable files where technically feasible.</p>
+<h3>FR-055</h3>
+<p class="paragraph normal">The system shall identify missing required items before final submission whenever the requirement can be determined from available information.</p>
+<h3>FR-056</h3>
+<p class="paragraph normal">The system shall distinguish “missing,” “received,” “under verification,” “accepted,” and “rejected/insufficient” document states.</p>
+<h3>FR-057</h3>
+<p class="paragraph normal">When a document is insufficient, the system shall provide a specific explanation and next action consistent with agency policy.</p>
+<h3>FR-058</h3>
+<p class="paragraph normal">The system shall avoid requesting the same document multiple times when an authorized copy is already available and valid.</p>
+<h3>FR-059</h3>
+<p class="paragraph normal">The system shall provide workers with a consolidated completeness view.</p>
+<h3>FR-060</h3>
+<p class="paragraph normal">The system shall allow applicants to see which requirements are complete and which remain outstanding.</p>
+<h3>FR-061</h3>
+<p class="paragraph normal">The system shall provide a completeness check before final submission.</p>
+<h3>FR-062</h3>
+<p class="paragraph normal">The completeness check shall distinguish missing information from information that is currently under verification.</p>
+<p class="paragraph normal">A complete application is not an approved application. The system should explicitly preserve this distinction. Completeness means the case has reached the agency with the information required to conduct the applicable determination, while verification and adjudication remain governed by program rules.</p>
+<h1>11. Functional Requirements — Worker Workflow</h1>
+<h3>FR-063</h3>
+<p class="paragraph normal">The worker dashboard shall present a standardized case summary.</p>
+<h3>FR-064</h3>
+<p class="paragraph normal">The dashboard shall identify the programs involved.</p>
+<h3>FR-065</h3>
+<p class="paragraph normal">The dashboard shall show outstanding requirements and their current status.</p>
+<h3>FR-066</h3>
+<p class="paragraph normal">The dashboard shall show relevant submitted information without requiring unnecessary navigation between systems.</p>
+<h3>FR-067</h3>
+<p class="paragraph normal">The system shall support requests for additional information.</p>
+<h3>FR-068</h3>
+<p class="paragraph normal">Information requests shall identify exactly what the applicant must provide.</p>
+<h3>FR-069</h3>
+<p class="paragraph normal">Workers shall be able to document actions and decisions in an auditable record.</p>
+<h3>FR-070</h3>
+<p class="paragraph normal">The system shall support supervisor escalation.</p>
+<h3>FR-071</h3>
+<p class="paragraph normal">The system shall prioritize work according to approved operational rules.</p>
+<h3>FR-072</h3>
+<p class="paragraph normal">The system shall provide workers with workload and aging indicators.</p>
+<h3>FR-073</h3>
+<p class="paragraph normal">The worker interface shall clearly distinguish applicant-provided information, externally verified information, and system-generated status information.</p>
+<h3>FR-074</h3>
+<p class="paragraph normal">Where AI assistance was used, authorized workers shall be able to identify relevant AI-assisted application activity without treating AI output as an official determination.</p>
+<p class="paragraph normal">The worker experience should reduce administrative hunting. A worker should spend less time locating scattered information and more time performing the substantive eligibility and verification work required by the program.</p>
+<h1>12. Functional Requirements — Communication and Status</h1>
+<h3>FR-075</h3>
+<p class="paragraph normal">The system shall provide applicants with a clear confirmation after submission.</p>
+<h3>FR-076</h3>
+<p class="paragraph normal">The system shall communicate the current processing stage in plain language.</p>
+<h3>FR-077</h3>
+<p class="paragraph normal">The system shall identify whether action is required from the applicant.</p>
+<h3>FR-078</h3>
+<p class="paragraph normal">Notices shall identify deadlines when applicable.</p>
+<h3>FR-079</h3>
+<p class="paragraph normal">The system shall provide multiple authorized communication channels where available.</p>
+<h3>FR-080</h3>
+<p class="paragraph normal">The system shall maintain a record of notices and applicant communications.</p>
+<h3>FR-081</h3>
+<p class="paragraph normal">The system shall avoid exposing sensitive information in insecure notifications.</p>
+<h3>FR-082</h3>
+<p class="paragraph normal">The system shall provide clear next-step instructions whenever an applicant is required to take action.</p>
+<h3>Suggested status vocabulary</h3>
+<p class="paragraph normal">Draft — Application has not been submitted.</p>
+<p class="paragraph normal">Submitted — Application has been received.</p>
+<p class="paragraph normal">Completeness review — Required information is being checked.</p>
+<p class="paragraph normal">Verification/review — Agency review is underway.</p>
+<p class="paragraph normal">Action needed — Applicant must provide something.</p>
+<p class="paragraph normal">Decision — Eligibility determination is being finalized or has been issued.</p>
+<p class="paragraph normal">Completed — The application has reached its final state.</p>
+<p class="paragraph normal">Status labels should be accompanied by a short explanation and a clear next step whenever possible.</p>
+<h1>13. Accessibility, Privacy, Security and Equity</h1>
+<p class="paragraph normal">Accessibility requirements shall be treated as mandatory system requirements. The platform should follow applicable accessibility standards and state requirements, support keyboard navigation and screen readers, use readable language, provide sufficient time for completion, and offer accessible alternatives.</p>
+<p class="paragraph normal">The applicant-facing experience should be designed so that people with limited formal education, limited digital literacy, limited experience with government forms, or difficulty understanding bureaucratic terminology can successfully navigate the system.</p>
+<p class="paragraph normal">The system shall not treat difficulty understanding government terminology as an applicant failure.</p>
+<p class="paragraph normal">The system should support multiple languages according to agency policy and should avoid translating legal meaning in ways that change program requirements.</p>
+<p class="paragraph normal">Privacy requirements shall include data minimization, purpose limitation, role-based access, encryption appropriate to the environment, secure authentication, audit logging, retention controls, and documented incident response.</p>
+<p class="paragraph normal">Security requirements shall include least-privilege access, separation of administrative functions, monitoring for unauthorized access, secure software development practices, and regular security testing.</p>
+<p class="paragraph normal">AI systems shall receive additional safeguards appropriate to their function, including protection against unauthorized access, inappropriate disclosure, fabricated guidance, unsupported certainty, prompt manipulation, and unauthorized modification of official rules.</p>
+<p class="paragraph normal">The system should include safeguards against automation errors. If a rules configuration appears inconsistent, produces unexpected results, or conflicts with an approved policy version, the system should flag the issue rather than silently producing a potentially harmful result.</p>
+<p class="paragraph normal">Equity should be measured through outcomes, including completion and processing patterns across relevant populations where legally permissible to analyze.</p>
+<h1>14. Data Integration and Interoperability</h1>
+<p class="paragraph normal">The platform should use standardized interfaces to communicate with existing authorized state systems rather than requiring agencies to replace all legacy systems at once.</p>
+<h3>FR-083</h3>
+<p class="paragraph normal">The system shall maintain unique identifiers for applications and requirements.</p>
+<h3>FR-084</h3>
+<p class="paragraph normal">Data exchanged between systems shall use documented schemas.</p>
+<h3>FR-085</h3>
+<p class="paragraph normal">Integration failures shall be detectable and recoverable.</p>
+<h3>FR-086</h3>
+<p class="paragraph normal">The system shall record the source and timestamp of externally retrieved information where appropriate.</p>
+<h3>FR-087</h3>
+<p class="paragraph normal">The system shall not overwrite authoritative data without an authorized workflow.</p>
+<h3>FR-088</h3>
+<p class="paragraph normal">Integration access shall be authenticated and authorized.</p>
+<h3>FR-089</h3>
+<p class="paragraph normal">The system shall support controlled transfer of resident-confirmed information from the LLM-assisted workflow into the structured application workflow.</p>
+<h3>FR-090</h3>
+<p class="paragraph normal">The LLM shall not receive unrestricted access to underlying benefits databases.</p>
+<h3>FR-091</h3>
+<p class="paragraph normal">AI services shall receive only the information necessary for their authorized function.</p>
+<p class="paragraph normal">The architecture should favor modular services. The intake layer, LLM assistance layer, requirements engine, document service, notification service, worker interface, analytics layer, and integrations should have clear boundaries. This makes phased deployment more realistic and reduces the risk of a single large replacement project.</p>
+<h1>15. Performance, Metrics and Success Criteria</h1>
+<p class="paragraph normal">The state should establish baseline performance before the pilot.</p>
+<p class="paragraph normal">Recommended measures include:</p>
+<p class="paragraph normal">Application-start-to-completion rate.</p>
+<p class="paragraph normal">Percentage of applications submitted complete.</p>
+<p class="paragraph normal">Percentage of cases requiring additional information.</p>
+<p class="paragraph normal">Average number of applicant contacts per case.</p>
+<p class="paragraph normal">Average processing time.</p>
+<p class="paragraph normal">Average worker handling time.</p>
+<p class="paragraph normal">Document resubmission rate.</p>
+<p class="paragraph normal">Abandonment rate.</p>
+<p class="paragraph normal">Applicant-reported clarity and ease of use.</p>
+<p class="paragraph normal">Accessibility defects.</p>
+<p class="paragraph normal">System availability and error rates.</p>
+<p class="paragraph normal">Enrollment among people determined eligible.</p>
+<p class="paragraph normal">Percentage of residents successfully finding an appropriate application pathway.</p>
+<p class="paragraph normal">LLM-assisted application completion rate.</p>
+<p class="paragraph normal">Frequency of incorrect or unsupported AI guidance.</p>
+<p class="paragraph normal">Frequency of human escalation from AI assistance.</p>
+<p class="paragraph normal">Success should be evaluated against baseline and control/comparison data when feasible. The state should avoid declaring success based on a single metric.</p>
+<p class="paragraph normal">A useful target framework is to seek measurable reductions in avoidable administrative contacts and incomplete submissions while maintaining or improving accuracy, timeliness, privacy, accessibility, and program integrity.</p>
+<h3>Acceptance criteria for a pilot</h3>
+<p class="paragraph normal">No material degradation in eligibility accuracy.</p>
+<p class="paragraph normal">No unacceptable privacy or security findings.</p>
+<p class="paragraph normal">Required accessibility testing completed.</p>
+<p class="paragraph normal">Measurable improvement in at least one primary process metric.</p>
+<p class="paragraph normal">No material deterioration in worker or applicant satisfaction.</p>
+<p class="paragraph normal">No unacceptable AI guidance error rate.</p>
+<p class="paragraph normal">A documented plan for correcting identified defects.</p>
+<h1>16. Implementation and Pilot Strategy</h1>
+<p class="paragraph normal">Phase 1 — Discovery: Map existing application journeys, requirements, notices, systems, bottlenecks, and legal constraints. Establish baseline metrics.</p>
+<p class="paragraph normal">Phase 2 — Design: Develop the unified main page, intake experience, requirements data model, LLM assistance layer, accessibility design, worker dashboard, and governance model.</p>
+<p class="paragraph normal">Phase 3 — Controlled pilot: Deploy to a limited program, geography, or workflow. Keep a clear rollback path.</p>
+<p class="paragraph normal">Phase 4 — Evaluation: Compare outcomes against baseline and, where practical, a suitable comparison group.</p>
+<p class="paragraph normal">Phase 5 — Expansion: Add programs incrementally after security, legal, operational, AI, and performance review.</p>
+<p class="paragraph normal">Phase 6 — Continuous improvement: Establish a permanent product-management process for requirements updates, accessibility review, usability testing, AI monitoring, and performance monitoring.</p>
+<p class="paragraph normal">Governance should include program policy owners, operations staff, technology staff, accessibility specialists, privacy/security personnel, legal review, AI governance personnel, and resident/user representatives.</p>
+<p class="paragraph normal">The pilot should not be framed as a promise that technology will solve every benefits problem. Its purpose is to test whether better intake, human-centered design, requirements management, and carefully governed AI assistance can produce measurable improvements.</p>
+<h1>17. Risks, Safeguards and Governance</h1>
+<p class="paragraph normal">Risk: Incorrect requirements configuration.
+Safeguard: Version control, approval workflows, automated testing, effective dates, and audit logs.</p>
+<p class="paragraph normal">Risk: Applicants misunderstand automated guidance as an eligibility decision.
+Safeguard: Explicit language stating that final eligibility is determined under applicable program rules.</p>
+<p class="paragraph normal">Risk: AI provides incorrect or fabricated information.
+Safeguard: Authoritative grounding sources, controlled prompts and workflows, monitoring, testing, confidence/uncertainty handling, and human escalation.</p>
+<p class="paragraph normal">Risk: AI modifies or overrides official requirements.
+Safeguard: Strict separation between the LLM and requirements engine, with no direct LLM authority to change production rules.</p>
+<p class="paragraph normal">Risk: Data exposure.
+Safeguard: Least privilege, encryption, monitoring, secure authentication, data minimization, and privacy review.</p>
+<p class="paragraph normal">Risk: Digital exclusion.
+Safeguard: Assisted application, accessible alternatives, and non-digital support channels.</p>
+<p class="paragraph normal">Risk: Legacy-system failures.
+Safeguard: Resilient integrations, reconciliation processes, monitoring, and rollback procedures.</p>
+<p class="paragraph normal">Risk: Increased complexity for workers.
+Safeguard: Usability testing with frontline staff and phased deployment.</p>
+<p class="paragraph normal">Risk: Over-automation.
+Safeguard: Preserve human review where required and require human accountability for consequential determinations.</p>
+<p class="paragraph normal">Risk: Residents become dependent on AI assistance.
+Safeguard: Maintain a complete non-AI application pathway and ensure that AI is optional.</p>
+<p class="paragraph normal">Governance should establish who owns the requirements catalog, who approves changes, who monitors system performance, who governs AI behavior, who handles incidents, and who has authority to pause a feature when it creates unacceptable risk.</p>
+<h1>18. Future Expansion and Policy Value</h1>
+<p class="paragraph normal">Once validated, the architecture could become a common administrative capability across state benefit programs. The long-term value is not merely a nicer application form. It is a reusable government service layer for requirements, documents, status, communication, workflow, and human-centered assistance.</p>
+<p class="paragraph normal">Future capabilities could include:</p>
+<p class="paragraph normal">Proactive identification of programs for which a person may wish to apply.</p>
+<p class="paragraph normal">Secure reuse of previously submitted documents.</p>
+<p class="paragraph normal">Improved mobile access.</p>
+<p class="paragraph normal">Multilingual assistance.</p>
+<p class="paragraph normal">Appointment coordination.</p>
+<p class="paragraph normal">Analytics that identify where applicants most often encounter barriers.</p>
+<p class="paragraph normal">More sophisticated natural-language assistance.</p>
+<p class="paragraph normal">Voice-based accessibility options.</p>
+<p class="paragraph normal">Personalized explanations of government terminology.</p>
+<p class="paragraph normal">Cross-program application progress tracking.</p>
+<p class="paragraph normal">Any expansion should remain grounded in consent, legal authority, privacy, accessibility, and program-specific rules.</p>
+<p class="paragraph normal">The broader policy principle is straightforward:</p>
+<p class="paragraph normal">Government should absorb complexity wherever possible instead of transferring unnecessary complexity to the resident.</p>
+<p class="paragraph normal">A state can maintain rigorous eligibility standards while making the path to an eligibility decision clearer, faster, and less repetitive.</p>
+<h1>19. Appendix — Example Applicant Journey</h1>
+<p class="paragraph normal">A resident visits the benefits portal.</p>
+<p class="paragraph normal">The main page asks:</p>
+<p class="paragraph normal">“What do you need help with?”</p>
+<p class="paragraph normal">The resident does not know which program applies.</p>
+<p class="paragraph normal">They select:</p>
+<p class="paragraph normal">“Help me figure out where to start.”</p>
+<p class="paragraph normal">The optional LLM assistant asks the resident to describe what they need in their own words.</p>
+<p class="paragraph normal">The resident says:</p>
+<p class="paragraph normal">“I don&#x27;t have much money and I need help paying for food and medical stuff.”</p>
+<p class="paragraph normal">The LLM identifies potential programs and explains them in simple language.</p>
+<p class="paragraph normal">The resident reviews the suggested options and chooses which application path they want to pursue.</p>
+<p class="paragraph normal">The system transfers the resident into the official application workflow.</p>
+<p class="paragraph normal">The requirements engine determines which questions and requirements apply.</p>
+<p class="paragraph normal">The resident answers common questions once.</p>
+<p class="paragraph normal">The requirements engine dynamically updates the checklist based on the resident&#x27;s answers.</p>
+<p class="paragraph normal">The resident sees:</p>
+<p class="paragraph normal">✓ Identity information</p>
+<p class="paragraph normal">✓ Household information</p>
+<p class="paragraph normal">✓ Income information</p>
+<p class="paragraph normal">□ Required document A</p>
+<p class="paragraph normal">□ Required document B</p>
+<p class="paragraph normal">The system explains each outstanding item in plain language.</p>
+<p class="paragraph normal">The resident uploads the documents.</p>
+<p class="paragraph normal">The system confirms receipt and associates each document with the relevant requirement.</p>
+<p class="paragraph normal">Before submission, the system performs a completeness check.</p>
+<p class="paragraph normal">If something required is missing, the applicant is told exactly what is missing and what to do.</p>
+<p class="paragraph normal">The resident reviews the application.</p>
+<p class="paragraph normal">The resident confirms the information and submits it.</p>
+<p class="paragraph normal">The system provides a submission receipt and clear status.</p>
+<p class="paragraph normal">The worker receives a structured case containing:</p>
+<p class="paragraph normal">Application information.</p>
+<p class="paragraph normal">Programs involved.</p>
+<p class="paragraph normal">Requirement checklist.</p>
+<p class="paragraph normal">Document status.</p>
+<p class="paragraph normal">Verification status.</p>
+<p class="paragraph normal">Applicant communications.</p>
+<p class="paragraph normal">Any relevant AI-assisted intake information.</p>
+<p class="paragraph normal">The worker performs the required verification and eligibility work.</p>
+<p class="paragraph normal">If additional information is required, the system generates a specific request rather than a generic message.</p>
+<p class="paragraph normal">The applicant can see exactly what is needed and why.</p>
+<p class="paragraph normal">The official government system remains responsible for the final eligibility determination.</p>
+<p class="paragraph normal">This journey illustrates the central design goal:</p>
+<p class="paragraph normal">Move complexity into the system&#x27;s architecture while keeping the human-facing experience understandable.</p>
+<h1>20. Applicant Usability and Human-Centered Design Requirements</h1>
+<h2>Purpose</h2>
+<p class="paragraph normal">The applicant-facing portal shall be designed so that a person with limited formal education, limited digital literacy, limited experience with government forms, or difficulty understanding bureaucratic terminology can successfully navigate the application process.</p>
+<p class="paragraph normal">The design shall not assume that applicants understand government terminology, program structures, or administrative procedures.</p>
+<h3>FR-UX-001 — Plain-language interface</h3>
+<p class="paragraph normal">The portal shall use clear, ordinary language for applicant-facing instructions, questions, notices, buttons, errors, and status messages whenever legally and technically appropriate.</p>
+<h3>FR-UX-002 — Comprehension target</h3>
+<p class="paragraph normal">Applicant-facing content shall be written and tested for comprehension by people with a range of educational backgrounds, including users whose reading proficiency is at or below a typical high-school level.</p>
+<p class="paragraph normal">This is a requirement for understandable government communication, not a judgment about applicant ability.</p>
+<h3>FR-UX-003 — One task at a time</h3>
+<p class="paragraph normal">Pages should focus on a clear task or decision and avoid unnecessary questions or instructions.</p>
+<h3>FR-UX-004 — Explain requirements</h3>
+<p class="paragraph normal">For each required piece of information or documentation, the portal shall explain what is needed and, when appropriate, why it is being requested.</p>
+<h3>FR-UX-005 — Examples and definitions</h3>
+<p class="paragraph normal">Where a question or requirement could reasonably be misunderstood, the portal shall provide examples, definitions, or explanations of acceptable responses.</p>
+<h3>FR-UX-006 — Clear required fields</h3>
+<p class="paragraph normal">Required information shall be clearly distinguishable from optional information and shall not rely solely on color.</p>
+<h3>FR-UX-007 — Helpful errors</h3>
+<p class="paragraph normal">Errors shall identify what needs to be corrected and provide a practical next step.</p>
+<h3>FR-UX-008 — Save and resume</h3>
+<p class="paragraph normal">Applicants shall be able to save progress and safely resume an incomplete application, subject to security, privacy, and retention requirements.</p>
+<h3>FR-UX-009 — Review before submission</h3>
+<p class="paragraph normal">The portal shall provide a plain-language review screen with an opportunity to correct errors before final submission.</p>
+<h3>FR-UX-010 — Accessibility</h3>
+<p class="paragraph normal">The portal shall support applicable accessibility requirements and standards, including keyboard navigation, screen-reader compatibility, accessible forms, readable content, and alternatives for users who cannot complete the standard digital workflow.</p>
+<h3>FR-UX-011 — Assisted applications</h3>
+<p class="paragraph normal">The system shall support authorized workers, navigators, or other permitted helpers assisting applicants without compromising privacy or applicant control.</p>
+<h3>FR-UX-012 — Language access</h3>
+<p class="paragraph normal">The portal shall support applicable language-access requirements and provide translated content where required, while preserving the meaning of program requirements.</p>
+<h3>FR-UX-013 — Mobile usability</h3>
+<p class="paragraph normal">The core application workflow shall be usable on common mobile devices.</p>
+<h3>FR-UX-014 — No unnecessary repetition</h3>
+<p class="paragraph normal">The portal shall reuse information already provided within an application and, where legally authorized, across participating programs.</p>
+<h3>FR-UX-015 — Applicant control</h3>
+<p class="paragraph normal">Applicants shall be able to see what information has been entered, understand what remains incomplete, and correct information when the workflow permits.</p>
+<h3>FR-UX-016 — Usability testing</h3>
+<p class="paragraph normal">Before production deployment, the state shall conduct usability testing with participants representing different education levels, digital-literacy levels, accessibility needs, language needs, and experience with government applications.</p>
+<h3>FR-UX-017 — Human-centered main page</h3>
+<p class="paragraph normal">The main page shall be evaluated as a primary usability component rather than merely as a navigation screen.</p>
+<h3>FR-UX-018 — Need-based entry</h3>
+<p class="paragraph normal">The system shall allow residents to begin from a description of their need instead of requiring knowledge of program names.</p>
+<h3>FR-UX-019 — Optional conversational assistance</h3>
+<p class="paragraph normal">The portal may provide an optional conversational interface for residents who prefer to explain their situation in natural language.</p>
+<h3>FR-UX-020 — Non-conversational alternative</h3>
+<p class="paragraph normal">Every function provided through the conversational interface shall have an appropriate non-conversational alternative when necessary for equitable access.</p>
+<h2>Design principle</h2>
+<p class="paragraph normal">If a reasonably eligible person cannot understand what the portal is asking them to do, the system has a usability problem—not the person.</p>
+<p class="paragraph normal">Government complexity may remain behind the scenes when necessary, but unnecessary complexity should not be transferred to the resident.</p>
+<h1>21. Expanded Functional Requirements — Application Lifecycle</h1>
+<h3>FR-LIFE-001 — Pre-application guidance</h3>
+<p class="paragraph normal">The system shall provide a concise explanation of what the applicant will need before beginning.</p>
+<h3>FR-LIFE-002 — Requirements preview</h3>
+<p class="paragraph normal">Where feasible, the system shall provide an initial preview of likely information and documentation requirements.</p>
+<h3>FR-LIFE-003 — Dynamic checklist</h3>
+<p class="paragraph normal">The system shall maintain a live checklist of applicable requirements and update it when answers change the requirements that apply.</p>
+<h3>FR-LIFE-004 — Completeness gate</h3>
+<p class="paragraph normal">Before submission, the system shall identify known missing required information and prevent accidental submission of an incomplete application when policy permits.</p>
+<h3>FR-LIFE-005 — Exception handling</h3>
+<p class="paragraph normal">If a requirement cannot be satisfied through the standard method, the system shall provide an authorized alternative or assistance instructions where available.</p>
+<h3>FR-LIFE-006 — Submission receipt</h3>
+<p class="paragraph normal">After submission, the system shall provide confirmation containing the application identifier, submission date/time, and next-step information, subject to security controls.</p>
+<h3>FR-LIFE-007 — Post-submission requests</h3>
+<p class="paragraph normal">If additional information becomes necessary, the system shall clearly identify the new requirement and avoid requesting information already received and still valid.</p>
+<h3>FR-LIFE-008 — Applicant correction</h3>
+<p class="paragraph normal">The system shall provide authorized methods for correcting information after submission when permitted.</p>
+<h3>FR-LIFE-009 — Consistent terminology</h3>
+<p class="paragraph normal">The same concept shall use consistent applicant-facing terminology across forms, notices, status pages, and communications unless a legal requirement necessitates different wording.</p>
+<h3>FR-LIFE-010 — Auditability</h3>
+<p class="paragraph normal">Material system actions affecting requirements, documents, routing, notices, status, or AI-assisted guidance shall be auditable by authorized personnel.</p>
+<h3>FR-LIFE-011 — AI-to-application transition</h3>
+<p class="paragraph normal">When a resident uses the LLM assistant to determine where to start, the system shall provide a clear transition from conversational assistance to the official structured application workflow.</p>
+<h3>FR-LIFE-012 — Confirmation before transition</h3>
+<p class="paragraph normal">The resident shall be given an opportunity to confirm the programs or application paths identified through AI assistance before proceeding.</p>
+<h1>22. Product Acceptance Checklist</h1>
+<p class="paragraph normal">Applicant can understand what they are applying for without knowing agency terminology.</p>
+<p class="paragraph normal">Applicant can begin from their real-world need.</p>
+<p class="paragraph normal">Applicant can use the main page without understanding government organizational structure.</p>
+<p class="paragraph normal">Applicant can see the primary tasks available to them.</p>
+<p class="paragraph normal">Applicant can optionally describe their needs using natural language.</p>
+<p class="paragraph normal">The LLM can help identify potential application pathways.</p>
+<p class="paragraph normal">The LLM does not make official eligibility determinations.</p>
+<p class="paragraph normal">Official requirements come from controlled program rules.</p>
+<p class="paragraph normal">The LLM cannot modify official requirements.</p>
+<p class="paragraph normal">The system does not fabricate requirements.</p>
+<p class="paragraph normal">Applicant can see the requirements that apply to their situation.</p>
+<p class="paragraph normal">Applicant can tell which requirements are complete and which remain outstanding.</p>
+<p class="paragraph normal">Applicant can understand why important information or documents are requested.</p>
+<p class="paragraph normal">The system catches known missing requirements before submission.</p>
+<p class="paragraph normal">The system does not confuse completeness with eligibility approval.</p>
+<p class="paragraph normal">The same information is not unnecessarily requested multiple times.</p>
+<p class="paragraph normal">Information provided through AI assistance can be reused when appropriate.</p>
+<p class="paragraph normal">The applicant can save and resume the application.</p>
+<p class="paragraph normal">Error messages explain how to recover.</p>
+<p class="paragraph normal">The workflow is accessible and usable on mobile devices.</p>
+<p class="paragraph normal">Assisted and alternative application pathways are available where required.</p>
+<p class="paragraph normal">Worker-facing cases arrive organized enough to minimize avoidable administrative follow-up.</p>
+<p class="paragraph normal">Requirements changes are version-controlled and auditable.</p>
+<p class="paragraph normal">AI-assisted activity is appropriately monitored and governed.</p>
+<p class="paragraph normal">Privacy, security, and accessibility testing are completed before production rollout.</p>
+<p class="paragraph normal">Pilot results are measured against established baseline metrics.</p>
+<p class="paragraph normal">The system provides a human-assistance pathway when automated assistance is insufficient.</p>
+<h1>23. Detailed Functional Requirements and System Behavior</h1>
+<h2>23.1 Purpose</h2>
+<p class="paragraph normal">The requirements in this section provide a lower-level definition of how the system shall behave while remaining technology-neutral.</p>
+<p class="paragraph normal">The primary Functional Requirements sections define what the system must accomplish. This section defines how those functions must behave from the perspective of the applicant, worker, system, and authorized integrations.</p>
+<p class="paragraph normal">These requirements are intended to provide sufficient detail for software designers, engineers, accessibility specialists, program administrators, and testers to develop and validate the system without embedding implementation-specific decisions such as programming languages, database technologies, cloud providers, or specific vendor products.</p>
+<p class="paragraph normal">Detailed technical architecture, API specifications, database schemas, infrastructure configuration, and implementation decisions shall be maintained in a separate Technical Design Specification.</p>
+<h2>23.2 Detailed Requirement Structure</h2>
+<p class="paragraph normal">Each high-level functional requirement may contain one or more subordinate requirements.</p>
+<p class="paragraph normal">For example:</p>
+<h3>FR-016 — Optional Natural-Language Assistance</h3>
+<p class="paragraph normal">The system shall provide an optional natural-language interface that allows applicants to describe their needs in ordinary language.</p>
+<p class="paragraph normal">Detailed requirements:</p>
+<p class="paragraph normal">FR-016.1 — Natural-Language Input: The system shall allow an applicant to describe their situation, needs, or goals using ordinary language.</p>
+<p class="paragraph normal">FR-016.2 — Intent Identification: The system shall identify potential benefit, service, or assistance categories expressed by the applicant.</p>
+<p class="paragraph normal">FR-016.3 — Clarification: When the applicant&#x27;s description is ambiguous or insufficient to identify an appropriate pathway, the system may ask targeted clarification questions.</p>
+<p class="paragraph normal">FR-016.4 — Program Mapping: The system shall map identified needs to candidate programs or services using an authoritative program catalog.</p>
+<p class="paragraph normal">FR-016.5 — Requirements Handoff: Information confirmed by the applicant shall be transferred from the conversational interface into the structured application workflow.</p>
+<p class="paragraph normal">FR-016.6 — Official Requirements Authority: The LLM shall not independently create, modify, remove, or override official application requirements.</p>
+<p class="paragraph normal">FR-016.7 — Eligibility Authority: The LLM shall not make the official determination of eligibility, benefit amount, sanction, compliance status, approval, or denial.</p>
+<p class="paragraph normal">FR-016.8 — Uncertainty Handling: When the system cannot reliably determine an appropriate pathway, it shall communicate that limitation and provide an appropriate alternative, including human assistance where available.</p>
+<p class="paragraph normal">FR-016.9 — Non-AI Alternative: The applicant shall be able to complete the application process without using the LLM.</p>
+<p class="paragraph normal">FR-016.10 — AI Transparency: The system shall distinguish AI-generated guidance from official program information and official government determinations.</p>
+<h2>23.3 Detailed Unified Intake Requirements</h2>
+<p class="paragraph normal">FR-001.1 — Single Entry Point: The system shall provide a common entry point for supported benefit and assistance programs.</p>
+<p class="paragraph normal">FR-001.2 — Need-Based Navigation: The system shall allow applicants to begin with their need rather than requiring knowledge of agency names or program names.</p>
+<p class="paragraph normal">FR-001.3 — Common Information Collection: Information applicable to multiple programs shall be collected once whenever legally and operationally permissible.</p>
+<p class="paragraph normal">FR-001.4 — Information Reuse: Previously confirmed information shall be available for reuse in subsequent applicable workflows.</p>
+<p class="paragraph normal">FR-001.5 — Applicant Confirmation: The applicant shall be able to review information before it is submitted as part of an official application.</p>
+<p class="paragraph normal">FR-001.6 — Program Association: The system shall identify which program or process requires each significant piece of information.</p>
+<p class="paragraph normal">FR-001.7 — Conditional Questions: Questions that do not apply to an applicant&#x27;s circumstances shall not be unnecessarily presented.</p>
+<p class="paragraph normal">FR-001.8 — Save and Resume: Applicants shall be able to securely save an incomplete application and return to it later.</p>
+<h2>23.4 Detailed Dynamic Requirements Engine</h2>
+<p class="paragraph normal">FR-035.1 — Requirement Catalog: The system shall maintain a structured catalog of program requirements.</p>
+<p class="paragraph normal">FR-035.2 — Requirement Identification: Each requirement shall have a unique system identifier.</p>
+<p class="paragraph normal">FR-035.3 — Requirement Classification: Requirements shall be classified as required, conditional, optional, or informational.</p>
+<p class="paragraph normal">FR-035.4 — Trigger Conditions: Conditional requirements shall contain defined conditions that determine when they apply.</p>
+<p class="paragraph normal">FR-035.5 — Program Association: Each requirement shall be associated with the applicable program, workflow, or process.</p>
+<p class="paragraph normal">FR-035.6 — Effective Dates: Requirements shall support effective dates so that the system can distinguish current requirements from historical requirements.</p>
+<p class="paragraph normal">FR-035.7 — Version Control: Changes to requirements shall create an auditable version history.</p>
+<p class="paragraph normal">FR-035.8 — Approval Control: Changes to production requirements shall require authorization according to established governance procedures.</p>
+<p class="paragraph normal">FR-035.9 — Explanation: The system shall provide a plain-language explanation of why a requirement is being requested when appropriate.</p>
+<p class="paragraph normal">FR-035.10 — Acceptable Evidence: The system shall identify acceptable forms of documentation or information for applicable requirements.</p>
+<p class="paragraph normal">FR-035.11 — Dynamic Checklist: The applicant shall receive a current checklist reflecting the requirements applicable to their circumstances.</p>
+<p class="paragraph normal">FR-035.12 — Recalculation: When an applicant changes an answer that affects conditional requirements, the system shall recalculate the applicable requirements.</p>
+<p class="paragraph normal">FR-035.13 — Completeness Separation: The requirements engine shall not treat application completeness as equivalent to eligibility.</p>
+<h2>23.5 Detailed Document and Verification Requirements</h2>
+<p class="paragraph normal">FR-051.1 — Document Instructions: The system shall provide clear instructions for documents that may satisfy a requirement.</p>
+<p class="paragraph normal">FR-051.2 — Document Association: Uploaded documents shall be associated with the applicable requirement or requirements.</p>
+<p class="paragraph normal">FR-051.3 — Receipt Confirmation: The system shall provide confirmation when a document is successfully received.</p>
+<p class="paragraph normal">FR-051.4 — Technical Validation: The system may perform technical checks for supported file types, corruption, readability, or other defined technical conditions.</p>
+<p class="paragraph normal">FR-051.5 — Missing Information Detection: The system shall identify known missing required information before submission when technically and legally appropriate.</p>
+<p class="paragraph normal">FR-051.6 — Verification State: The system shall distinguish between information that has been received and information that has been verified.</p>
+<p class="paragraph normal">FR-051.7 — Insufficient Evidence: When submitted evidence is insufficient, the system shall provide or support a specific explanation of what additional information is required.</p>
+<p class="paragraph normal">FR-051.8 — Duplicate Prevention: The system shall identify previously submitted information or documents when reuse is authorized and appropriate.</p>
+<p class="paragraph normal">FR-051.9 — Applicant Visibility: Applicants shall be able to view the status of their submitted information.</p>
+<p class="paragraph normal">FR-051.10 — Worker Visibility: Authorized workers shall be able to view the requirements, submitted evidence, and verification status relevant to the case.</p>
+<h2>23.6 Detailed Worker Workflow Requirements</h2>
+<p class="paragraph normal">FR-063.1 — Structured Case Summary: The worker interface shall provide a consolidated summary of relevant applicant information.</p>
+<p class="paragraph normal">FR-063.2 — Requirement Status: Workers shall be able to identify which requirements are complete, missing, under verification, or insufficient.</p>
+<p class="paragraph normal">FR-063.3 — Information Source Identification: The system shall distinguish applicant-provided information from information obtained through authorized verification systems.</p>
+<p class="paragraph normal">FR-063.4 — Additional Information Request: Workers shall be able to request additional information through the system.</p>
+<p class="paragraph normal">FR-063.5 — Specific Requests: Additional-information requests shall identify the specific item needed and, when appropriate, explain why it is needed.</p>
+<p class="paragraph normal">FR-063.6 — Case History: Authorized workers shall be able to view relevant application and communication history.</p>
+<p class="paragraph normal">FR-063.7 — Audit Trail: Material worker actions shall be recorded in an auditable history.</p>
+<p class="paragraph normal">FR-063.8 — Escalation: Workers shall have an established mechanism for escalating cases that require supervisory, policy, technical, or specialized review.</p>
+<p class="paragraph normal">FR-063.9 — Workload Management: Supervisors shall have access to authorized workload and aging information.</p>
+<p class="paragraph normal">FR-063.10 — Human Determination: The system shall preserve appropriate human and program-system authority for official eligibility determinations.</p>
+<h2>23.7 Detailed Application Lifecycle Requirements</h2>
+<p class="paragraph normal">FR-LIFE-001.1 — Pre-Application Guidance: Applicants shall be able to obtain guidance before beginning an official application.</p>
+<p class="paragraph normal">FR-LIFE-001.2 — Requirements Preview: Where appropriate, the system shall provide an estimate or preview of information and documentation that may be required.</p>
+<p class="paragraph normal">FR-LIFE-001.3 — Application Creation: The system shall create a structured application from information confirmed by the applicant.</p>
+<p class="paragraph normal">FR-LIFE-001.4 — Completeness Review: The system shall perform a completeness review before final submission.</p>
+<p class="paragraph normal">FR-LIFE-001.5 — Applicant Correction: Applicants shall have an opportunity to correct identified errors before submission.</p>
+<p class="paragraph normal">FR-LIFE-001.6 — Submission Receipt: The system shall provide a record confirming successful submission.</p>
+<p class="paragraph normal">FR-LIFE-001.7 — Post-Submission Requests: Additional information requested after submission shall be associated with the existing application.</p>
+<p class="paragraph normal">FR-LIFE-001.8 — Status Continuity: The applicant shall be able to view the current status and outstanding actions associated with the application.</p>
+<p class="paragraph normal">FR-LIFE-001.9 — Consistent Terminology: Applicant-facing terminology shall remain consistent throughout the application lifecycle.</p>
+<p class="paragraph normal">FR-LIFE-001.10 — AI-to-Application Transition: Information gathered through optional AI assistance shall not become part of the official application solely because the AI generated or suggested it.</p>
+<p class="paragraph normal">FR-LIFE-001.11 — Applicant Confirmation: Information originating from AI-assisted guidance shall require appropriate applicant confirmation before being treated as applicant-provided application information.</p>
+<h2>23.8 Detailed Accessibility and Usability Requirements</h2>
+<p class="paragraph normal">FR-UX-001.1 — Plain Language: Applicant-facing content shall use clear, ordinary language whenever possible.</p>
+<p class="paragraph normal">FR-UX-001.2 — Government Terminology: Necessary government or legal terminology shall be explained in understandable language.</p>
+<p class="paragraph normal">FR-UX-001.3 — One Task at a Time: The interface should minimize unnecessary simultaneous decisions and information demands.</p>
+<p class="paragraph normal">FR-UX-001.4 — Error Recovery: Errors shall identify what went wrong and provide a clear path toward correction.</p>
+<p class="paragraph normal">FR-UX-001.5 — Progress Visibility: Applicants shall be able to understand where they are in the application process.</p>
+<p class="paragraph normal">FR-UX-001.6 — Mobile Support: Core application functions shall be usable on commonly supported mobile devices.</p>
+<p class="paragraph normal">FR-UX-001.7 — Assisted Access: The system shall support authorized assistance from workers, navigators, representatives, or other permitted helpers.</p>
+<p class="paragraph normal">FR-UX-001.8 — Non-Conversational Access: Applicants shall not be required to interact with an AI chatbot or conversational interface.</p>
+<p class="paragraph normal">FR-UX-001.9 — Accessibility Testing: The system shall undergo accessibility testing using applicable standards and representative assistive technologies.</p>
+<p class="paragraph normal">FR-UX-001.10 — Human-Centered Testing: Usability testing shall include people with varying levels of digital literacy and familiarity with government processes.</p>
+<h2>23.9 Detailed AI Governance Requirements</h2>
+<p class="paragraph normal">FR-AI-001 — Separation of Authority: AI assistance shall remain separate from authoritative eligibility and program-rule systems.</p>
+<p class="paragraph normal">FR-AI-002 — Authoritative Grounding: AI-generated program guidance shall be grounded in approved and current information.</p>
+<p class="paragraph normal">FR-AI-003 — No Rule Creation: The AI system shall not create official requirements based solely on its own generated output.</p>
+<p class="paragraph normal">FR-AI-004 — No Rule Modification: The AI system shall not directly modify production program requirements or policy configuration.</p>
+<p class="paragraph normal">FR-AI-005 — No Official Determination: The AI system shall not independently approve, deny, sanction, or establish legal entitlement to benefits.</p>
+<p class="paragraph normal">FR-AI-006 — Uncertainty Disclosure: The AI system shall communicate uncertainty when information is incomplete, ambiguous, or outside its supported scope.</p>
+<p class="paragraph normal">FR-AI-007 — Human Escalation: The system shall provide a path to human assistance when AI guidance is insufficient.</p>
+<p class="paragraph normal">FR-AI-008 — Auditability: AI-assisted interactions shall be logged to the extent necessary for oversight, debugging, quality assurance, and accountability, subject to applicable privacy and retention requirements.</p>
+<p class="paragraph normal">FR-AI-009 — Version Identification: Relevant AI model, prompt, knowledge source, or configuration versions shall be identifiable for appropriate audit and incident investigation.</p>
+<p class="paragraph normal">FR-AI-010 — Failure Isolation: Failure of the AI service shall not prevent applicants from accessing the underlying non-AI application process.</p>
+<p class="paragraph normal">FR-AI-011 — Data Minimization: The AI system shall receive only the information necessary for its authorized function.</p>
+<p class="paragraph normal">FR-AI-012 — Prompt Manipulation Protection: The system shall implement safeguards against attempts to cause the AI component to ignore system rules, expose protected information, or perform unauthorized actions.</p>
+<h2>23.10 Detailed Data Integration Requirements</h2>
+<p class="paragraph normal">FR-DATA-001 — Structured Handoff: Information transferred between system components shall use defined structured representations.</p>
+<p class="paragraph normal">FR-DATA-002 — Source Attribution: Significant data elements shall retain information identifying their authorized source where operationally appropriate.</p>
+<p class="paragraph normal">FR-DATA-003 — Timestamping: Applicable data and verification events shall include relevant timestamps.</p>
+<p class="paragraph normal">FR-DATA-004 — Authorization: System integrations shall authenticate and authorize access according to established security requirements.</p>
+<p class="paragraph normal">FR-DATA-005 — Failure Detection: Integration failures shall be detected and recorded.</p>
+<p class="paragraph normal">FR-DATA-006 — Recovery: The system shall provide defined recovery behavior for failed or unavailable integrations.</p>
+<p class="paragraph normal">FR-DATA-007 — No Unauthorized Overwrite: Information shall not be automatically overwritten by another system without defined authorization and data-governance rules.</p>
+<p class="paragraph normal">FR-DATA-008 — Restricted AI Access: AI components shall not receive unrestricted access to benefits databases or other government systems.</p>
+<p class="paragraph normal">FR-DATA-009 — Minimum Necessary Data: Data shared between components shall be limited to the minimum information necessary to perform the authorized function.</p>
+<h2>23.11 Detailed Status and Communication Requirements</h2>
+<p class="paragraph normal">FR-COMM-001 — Submission Confirmation: Applicants shall receive confirmation when an application or requested document is successfully submitted.</p>
+<p class="paragraph normal">FR-COMM-002 — Understandable Status: Application statuses shall be presented in language understandable to the general public.</p>
+<p class="paragraph normal">FR-COMM-003 — Action Required: When applicant action is required, the system shall clearly identify the action.</p>
+<p class="paragraph normal">FR-COMM-004 — Deadline Visibility: Applicable deadlines shall be clearly displayed.</p>
+<p class="paragraph normal">FR-COMM-005 — Next-Step Guidance: Each actionable application state shall provide appropriate next-step information.</p>
+<p class="paragraph normal">FR-COMM-006 — Communication History: Authorized users shall be able to access relevant communication records.</p>
+<p class="paragraph normal">FR-COMM-007 — Secure Notifications: Notifications shall avoid unnecessarily exposing sensitive information through insecure communication channels.</p>
+<h2>23.12 Detailed Failure and Exception Handling</h2>
+<p class="paragraph normal">The system shall be designed so that common technical, procedural, or applicant-side problems do not unnecessarily result in abandonment.</p>
+<p class="paragraph normal">FR-EX-001 — Recoverable Errors: The system shall provide recovery paths for recoverable technical errors.</p>
+<p class="paragraph normal">FR-EX-002 — Interrupted Sessions: An interrupted application shall preserve saved information to the extent permitted by security and retention requirements.</p>
+<p class="paragraph normal">FR-EX-003 — Integration Failure: Failure of an external verification service shall not be represented to the applicant as applicant failure.</p>
+<p class="paragraph normal">FR-EX-004 — AI Failure: Failure of an AI service shall result in fallback to a non-AI workflow where available.</p>
+<p class="paragraph normal">FR-EX-005 — Configuration Error: Suspected conflicts or errors in production requirements configuration shall be flagged for authorized review rather than silently producing potentially incorrect applicant guidance.</p>
+<p class="paragraph normal">FR-EX-006 — Human Escalation: Cases that cannot be safely resolved through automated workflow shall have a defined human escalation path.</p>
+<h2>23.13 Requirement Boundary: FRS vs. Technical Design</h2>
+<p class="paragraph normal">This FRS shall define the required behavior and outcomes of the system.</p>
+<p class="paragraph normal">The FRS shall not prescribe implementation details unless those details are necessary to establish a functional, legal, accessibility, security, or interoperability requirement.</p>
+<p class="paragraph normal">The following items should normally be maintained in a separate Technical Design Specification:</p>
+<p class="paragraph normal">Database schemas</p>
+<p class="paragraph normal">API endpoints and request/response definitions</p>
+<p class="paragraph normal">Programming languages</p>
+<p class="paragraph normal">Framework selections</p>
+<p class="paragraph normal">Cloud infrastructure</p>
+<p class="paragraph normal">Network architecture</p>
+<p class="paragraph normal">Container and deployment configuration</p>
+<p class="paragraph normal">Specific LLM provider or model selection</p>
+<p class="paragraph normal">Prompt implementation details</p>
+<p class="paragraph normal">Vector databases or retrieval implementation</p>
+<p class="paragraph normal">Internal service architecture</p>
+<p class="paragraph normal">Queue and messaging implementation</p>
+<p class="paragraph normal">Detailed authentication protocols</p>
+<p class="paragraph normal">Infrastructure-as-code</p>
+<p class="paragraph normal">Source-code organization</p>
+<p class="paragraph normal">Automated test implementation</p>
+<p class="paragraph normal">This separation allows the FRS to remain stable even when the underlying technical implementation changes.</p>
+<h2>23.14 Core Architectural Separation</h2>
+<p class="paragraph normal">The system shall maintain three distinct functional authorities:</p>
+<p class="paragraph normal">LLM — Understands the Human
+Interprets ordinary-language descriptions, explains terminology, helps users navigate the system, and assists with discovery.</p>
+<p class="paragraph normal">Requirements Engine — Understands the Rules
+Determines which requirements apply based on authoritative, version-controlled program configuration.</p>
+<p class="paragraph normal">Benefits System — Makes the Official Determination
+Performs the official eligibility, benefit, approval, denial, or other legally required determination through the authorized government process.</p>
+<p class="paragraph normal">No component shall assume the authority assigned to another component.</p>
+<p class="paragraph normal">This separation is a foundational architectural and governance requirement.</p>
+<h2>23.15 Detailed Design Principle</h2>
+<p class="paragraph normal">The system shall not merely reproduce existing government forms in digital form.</p>
+<p class="paragraph normal">Where the underlying law and program requirements permit, the system shall redesign the administrative workflow so that necessary complexity is handled by the system rather than unnecessarily transferred to the applicant.</p>
+<p class="paragraph normal">The objective is not to make government rules less accurate. The objective is to make the process for complying with those rules understandable, navigable, and efficient for the person who must use it.</p>
+<h2>23.16 Relationship to Existing Functional Requirements</h2>
+<p class="paragraph normal">The detailed requirements in this section supplement, rather than replace, the high-level requirements defined in Sections 7–12 and the expanded requirements in Sections 20–21.</p>
+<p class="paragraph normal">The high-level requirements establish the capabilities and intended product behavior. The detailed requirements establish more specific, testable behaviors for those capabilities.</p>
+<p class="paragraph normal">The requirement hierarchy should follow this structure:</p>
+<p class="paragraph normal">FR-### — High-Level Functional Requirement</p>
+<p class="paragraph normal">├── FR-###.1 — Detailed Requirement</p>
+<p class="paragraph normal">├── FR-###.2 — Detailed Requirement</p>
+<p class="paragraph normal">├── FR-###.3 — Detailed Requirement</p>
+<p class="paragraph normal">└── FR-###.4 — Detailed Requirement</p>
+<p class="paragraph normal">New requirements should use the same numbering convention and should not duplicate existing requirements unless they intentionally replace or revise an existing requirement.</p>
+<h1>7. Functional Requirements — Human-Centered Main Page and Unified Intake</h1>
+<p class="paragraph normal">The unified intake experience is the primary resident-facing workflow. It shall provide a single, understandable starting point for residents seeking one or more participating benefit programs.</p>
+<h3>FR-001 — Unified Entry Point</h3>
+<p class="paragraph normal">The system shall provide a single entry point capable of collecting common information for multiple participating benefit programs.</p>
+<h3>FR-002 — Human-Centered Main Page</h3>
+<p class="paragraph normal">The main page shall be organized around resident needs and tasks rather than government agency structure.</p>
+<h3>FR-003 — Need-Based Starting Point</h3>
+<p class="paragraph normal">The main page shall prominently present a plain-language starting question such as:</p>
+<p class="paragraph normal">“What do you need help with?”</p>
+<h3>FR-004 — No Program Knowledge Required</h3>
+<p class="paragraph normal">The system shall allow a resident to begin seeking assistance without knowing the name of the applicable government program.</p>
+<h3>FR-005 — Primary Actions</h3>
+<p class="paragraph normal">The main page shall provide clear primary actions, including:</p>
+<p class="paragraph normal">Apply for benefits</p>
+<p class="paragraph normal">Continue an application</p>
+<p class="paragraph normal">Check my application</p>
+<p class="paragraph normal">Upload documents</p>
+<p class="paragraph normal">Get help</p>
+<p class="paragraph normal">Help me figure out where to start</p>
+<h3>FR-006 — Cognitive Load Reduction</h3>
+<p class="paragraph normal">The system shall present primary actions and information in a manner that minimizes unnecessary cognitive load.</p>
+<h3>FR-007 — Program Selection</h3>
+<p class="paragraph normal">The system shall allow an applicant to select the programs for which they want to apply when program rules permit.</p>
+<h3>FR-008 — Conditional Questions</h3>
+<p class="paragraph normal">The system shall present relevant questions based on prior answers and avoid unnecessary questions when the applicable rules allow.</p>
+<h3>FR-009 — Save and Resume</h3>
+<p class="paragraph normal">The system shall preserve entered information during an interrupted session, subject to applicable security, privacy, and retention requirements.</p>
+<h3>FR-010 — Reusable Information</h3>
+<p class="paragraph normal">The system shall identify information that can be reused across participating programs.</p>
+<h3>FR-011 — Requirement Association</h3>
+<p class="paragraph normal">The system shall clearly identify which program requires each significant piece of information.</p>
+<h3>FR-012 — Application Summary</h3>
+<p class="paragraph normal">The system shall provide an application summary before final submission.</p>
+<h3>FR-013 — Review and Correction</h3>
+<p class="paragraph normal">The system shall allow an applicant to review and correct information before submission.</p>
+<h3>FR-014 — Accessible Alternative</h3>
+<p class="paragraph normal">The system shall provide an accessible alternative for applicants who cannot or do not wish to use the standard digital workflow.</p>
+<h3>FR-015 — Assisted Workflow</h3>
+<p class="paragraph normal">The system shall support authorized assisted-application workflows.</p>
+<h3>Applicant Experience Requirement</h3>
+<p class="paragraph normal">A reasonable applicant should be able to understand:</p>
+<p class="paragraph normal">What they are applying for.</p>
+<p class="paragraph normal">What information they have already provided.</p>
+<p class="paragraph normal">What information remains required.</p>
+<p class="paragraph normal">What documents are needed.</p>
+<p class="paragraph normal">What will happen after submission.</p>
+<p class="paragraph normal">The applicant should not need to understand the organizational structure of government to accomplish these tasks.</p>
+<h1>8. Functional Requirements — LLM-Assisted Guidance</h1>
+<p class="paragraph normal">The LLM component is an optional assistance layer intended to help residents communicate their needs and understand the application process.</p>
+<p class="paragraph normal">The LLM shall not replace the requirements engine or official eligibility determination process.</p>
+<h3>FR-016 — Optional Natural-Language Assistance</h3>
+<p class="paragraph normal">The system shall provide an optional natural-language assistance experience through which a resident may describe their needs in ordinary language.</p>
+<h3>FR-017 — Intent Identification</h3>
+<p class="paragraph normal">The LLM may interpret the resident&#x27;s description and identify potentially relevant programs, services, or application paths.</p>
+<h3>FR-018 — Human-to-Government Translation</h3>
+<p class="paragraph normal">The LLM may help translate ordinary descriptions of life circumstances into candidate government services without requiring the resident to know government terminology.</p>
+<h3>FR-019 — Explanation</h3>
+<p class="paragraph normal">The LLM may explain:</p>
+<p class="paragraph normal">Government terminology</p>
+<p class="paragraph normal">Application questions</p>
+<p class="paragraph normal">Requirements</p>
+<p class="paragraph normal">Documentation</p>
+<p class="paragraph normal">Next steps</p>
+<p class="paragraph normal">General process information</p>
+<p class="paragraph normal">Explanations shall use understandable language whenever possible.</p>
+<h3>FR-020 — Authoritative Information</h3>
+<p class="paragraph normal">Where program-specific information is provided, the LLM shall use authoritative and current program information supplied through approved system sources.</p>
+<h3>FR-021 — No Official Determination</h3>
+<p class="paragraph normal">The LLM shall not make official determinations concerning:</p>
+<p class="paragraph normal">Eligibility</p>
+<p class="paragraph normal">Benefit amounts</p>
+<p class="paragraph normal">Compliance</p>
+<p class="paragraph normal">Legal entitlement</p>
+<p class="paragraph normal">Fraud</p>
+<p class="paragraph normal">Sanctions</p>
+<p class="paragraph normal">Approval</p>
+<p class="paragraph normal">Denial</p>
+<h3>FR-022 — No Requirement Modification</h3>
+<p class="paragraph normal">The LLM shall not modify, override, remove, or independently create official program requirements.</p>
+<h3>FR-023 — No Fabrication</h3>
+<p class="paragraph normal">The LLM shall not fabricate:</p>
+<p class="paragraph normal">Requirements</p>
+<p class="paragraph normal">Documents</p>
+<p class="paragraph normal">Deadlines</p>
+<p class="paragraph normal">Policies</p>
+<p class="paragraph normal">Benefit amounts</p>
+<p class="paragraph normal">Legal obligations</p>
+<p class="paragraph normal">Government procedures</p>
+<h3>FR-024 — Uncertainty Handling</h3>
+<p class="paragraph normal">When authoritative information is unavailable, ambiguous, outdated, or outside the system&#x27;s supported scope, the system shall communicate the limitation rather than presenting unsupported information as fact.</p>
+<h3>FR-025 — Requirements-Engine Handoff</h3>
+<p class="paragraph normal">When the LLM identifies a potentially applicable program, the system shall provide a controlled handoff into the appropriate requirements-engine workflow.</p>
+<h3>FR-026 — Resident Confirmation</h3>
+<p class="paragraph normal">Information gathered through the LLM shall be presented to the resident for review and confirmation before being entered into the official application.</p>
+<h3>FR-027 — Reuse of Confirmed Information</h3>
+<p class="paragraph normal">Confirmed information collected through the LLM shall be reusable in the official application workflow when legally and technically appropriate.</p>
+<h3>FR-028 — Avoid Repetition</h3>
+<p class="paragraph normal">The system shall avoid requiring the resident to repeat information already provided through the LLM when that information can appropriately be reused.</p>
+<h3>FR-029 — AI Is Optional</h3>
+<p class="paragraph normal">The LLM shall remain optional.</p>
+<p class="paragraph normal">No resident shall be required to use the AI assistant to:</p>
+<p class="paragraph normal">Find an application</p>
+<p class="paragraph normal">Submit an application</p>
+<p class="paragraph normal">Upload documents</p>
+<p class="paragraph normal">Check status</p>
+<p class="paragraph normal">Receive assistance</p>
+<h3>FR-030 — Human Assistance</h3>
+<p class="paragraph normal">The system shall provide a clear pathway to human assistance when the resident needs support beyond the capabilities of automated guidance.</p>
+<h3>FR-031 — AI Transparency</h3>
+<p class="paragraph normal">The system shall clearly distinguish:</p>
+<p class="paragraph normal">AI-generated assistance</p>
+<p class="paragraph normal">Official government information</p>
+<p class="paragraph normal">Official government determinations</p>
+<h3>FR-032 — AI Privacy and Security</h3>
+<p class="paragraph normal">AI-assisted actions shall be subject to applicable privacy, security, retention, monitoring, and audit requirements.</p>
+<h3>FR-033 — No Production-Rule Authority</h3>
+<p class="paragraph normal">The LLM shall not have direct authority to alter production program requirements.</p>
+<h3>FR-034 — Source Visibility</h3>
+<p class="paragraph normal">The system should provide the authoritative basis or source for program-specific guidance when technically and operationally feasible.</p>
+<h2>Architectural Boundary</h2>
+<p class="paragraph normal">The architecture shall maintain the following separation:</p>
+<p class="paragraph normal">LLM = Understands the Human 🧠</p>
+<p class="paragraph normal">The LLM interprets ordinary language and helps the resident navigate the system.</p>
+<p class="paragraph normal">Requirements Engine = Understands the Rules 📋</p>
+<p class="paragraph normal">The requirements engine determines which requirements apply using controlled, authoritative, versioned rules.</p>
+<p class="paragraph normal">Benefits System = Makes the Official Determination 🏛️</p>
+<p class="paragraph normal">The benefits system performs the official eligibility and benefit determination through authorized government processes.</p>
+<h1>9. Functional Requirements — Dynamic Requirements Engine</h1>
+<p class="paragraph normal">The requirements engine is the controlled rules-management component of the platform.</p>
+<p class="paragraph normal">Its purpose is to determine which requirements apply to an applicant based on approved program rules and application context.</p>
+<h3>FR-035 — Version-Controlled Requirement Catalog</h3>
+<p class="paragraph normal">The system shall maintain a version-controlled catalog of requirements for each participating program.</p>
+<h3>FR-036 — Requirement Identification</h3>
+<p class="paragraph normal">Each requirement shall contain:</p>
+<p class="paragraph normal">A plain-language label</p>
+<p class="paragraph normal">A unique machine-readable identifier</p>
+<h3>FR-037 — Requirement Classification</h3>
+<p class="paragraph normal">Each requirement shall specify whether it is:</p>
+<p class="paragraph normal">Required</p>
+<p class="paragraph normal">Conditional</p>
+<p class="paragraph normal">Optional</p>
+<p class="paragraph normal">Informational</p>
+<h3>FR-038 — Conditional Requirements</h3>
+<p class="paragraph normal">Conditional requirements shall be displayed when their approved triggering conditions are satisfied.</p>
+<h3>FR-039 — Requirement Explanation</h3>
+<p class="paragraph normal">The system shall explain why a required item is being requested when appropriate.</p>
+<h3>FR-040 — Acceptable Evidence</h3>
+<p class="paragraph normal">The system shall identify acceptable document or information types according to program policy.</p>
+<h3>FR-041 — Authorized Verification</h3>
+<p class="paragraph normal">The system shall identify whether an item can be verified through an authorized data source instead of applicant submission.</p>
+<h3>FR-042 — Production Protection</h3>
+<p class="paragraph normal">The system shall prevent unauthorized users or components from modifying production requirements.</p>
+<h3>FR-043 — Versioning and Auditability</h3>
+<p class="paragraph normal">Changes to requirements shall be versioned and auditable.</p>
+<h3>FR-044 — Completeness Is Not Eligibility</h3>
+<p class="paragraph normal">The system shall not infer eligibility solely because an application is complete.</p>
+<h3>FR-045 — Effective Dates</h3>
+<p class="paragraph normal">The requirements engine shall support effective dates so that changes in requirements can be applied to the appropriate applications.</p>
+<h3>FR-046 — Live Checklist</h3>
+<p class="paragraph normal">The system shall provide a live checklist showing requirements applicable to the resident&#x27;s current application context.</p>
+<h3>FR-047 — Dynamic Recalculation</h3>
+<p class="paragraph normal">The requirements engine shall update the applicable checklist when an applicant provides or changes information that affects applicable requirements.</p>
+<h3>FR-048 — Machine-Readable Relationships</h3>
+<p class="paragraph normal">The system shall maintain machine-readable relationships between:</p>
+<p class="paragraph normal">Programs</p>
+<p class="paragraph normal">Requirements</p>
+<p class="paragraph normal">Triggering conditions</p>
+<p class="paragraph normal">Acceptable documentation</p>
+<p class="paragraph normal">Verification methods</p>
+<h3>FR-049 — Applicant vs. Verification Source</h3>
+<p class="paragraph normal">The system shall distinguish between information required from the applicant and information that may be obtained through an authorized verification source.</p>
+<h3>FR-050 — Configuration Conflict Detection</h3>
+<p class="paragraph normal">The system shall flag inconsistent or conflicting requirements configurations for authorized review rather than silently applying potentially incorrect rules.</p>
+<h2>Requirements Engine Principle</h2>
+<p class="paragraph normal">The requirements engine should be the authoritative interpreter of application requirements, while remaining separate from the official eligibility determination system.</p>
+<p class="paragraph normal">The engine answers:</p>
+<p class="paragraph normal">“What does this applicant need to provide for this process?”</p>
+<p class="paragraph normal">It does not answer:</p>
+<p class="paragraph normal">“Is this applicant legally eligible for benefits?”</p>
+<h1>10. Functional Requirements — Documents, Verification and Completeness</h1>
+<h3>FR-051 — Authorized Document Formats</h3>
+<p class="paragraph normal">The system shall accept authorized document formats and provide clear upload instructions.</p>
+<h3>FR-052 — Receipt Confirmation</h3>
+<p class="paragraph normal">The system shall confirm successful receipt of submitted documents.</p>
+<h3>FR-053 — Requirement Association</h3>
+<p class="paragraph normal">The system shall associate each submitted document with the requirement or requirements it is intended to satisfy.</p>
+<h3>FR-054 — Technical Validation</h3>
+<p class="paragraph normal">Where technically feasible, the system shall identify obvious technical problems, such as:</p>
+<p class="paragraph normal">Unsupported file formats</p>
+<p class="paragraph normal">Corrupted files</p>
+<p class="paragraph normal">Unreadable documents</p>
+<p class="paragraph normal">Other defined technical problems</p>
+<p class="paragraph normal">Technical validation shall not be treated as substantive eligibility verification.</p>
+<h3>FR-055 — Missing Information Detection</h3>
+<p class="paragraph normal">The system shall identify known missing required information before final submission whenever the requirement can be determined from available information.</p>
+<h3>FR-056 — Verification States</h3>
+<p class="paragraph normal">The system shall distinguish between:</p>
+<p class="paragraph normal">Missing</p>
+<p class="paragraph normal">Received</p>
+<p class="paragraph normal">Under verification</p>
+<p class="paragraph normal">Accepted</p>
+<p class="paragraph normal">Rejected/insufficient</p>
+<h3>FR-057 — Insufficient Evidence</h3>
+<p class="paragraph normal">When submitted evidence is insufficient, the system shall provide a specific explanation and next action consistent with agency policy.</p>
+<h3>FR-058 — Duplicate Prevention</h3>
+<p class="paragraph normal">The system shall avoid requesting the same document multiple times when an authorized copy has already been received and remains valid.</p>
+<h3>FR-059 — Worker Completeness View</h3>
+<p class="paragraph normal">The system shall provide workers with a consolidated completeness view.</p>
+<h3>FR-060 — Applicant Completeness View</h3>
+<p class="paragraph normal">Applicants shall be able to see which requirements are complete and which remain outstanding.</p>
+<h3>FR-061 — Completeness Gate</h3>
+<p class="paragraph normal">The system shall provide a completeness check before final submission.</p>
+<h3>FR-062 — Completeness vs. Verification</h3>
+<p class="paragraph normal">The system shall distinguish missing information from information that has been received but is still under verification.</p>
+<h2>Required State Model</h2>
+<p class="paragraph normal">The system should make the difference between these states obvious:</p>
+<p class="paragraph normal">Missing</p>
+<p class="paragraph normal">“We still need this from you.”</p>
+<p class="paragraph normal">Received</p>
+<p class="paragraph normal">“We received this.”</p>
+<p class="paragraph normal">Under Verification</p>
+<p class="paragraph normal">“We received this and are checking it.”</p>
+<p class="paragraph normal">Accepted</p>
+<p class="paragraph normal">“This requirement has been satisfied.”</p>
+<p class="paragraph normal">Insufficient</p>
+<p class="paragraph normal">“What you provided does not satisfy this requirement. Here is what you need to do next.”</p>
+<p class="paragraph normal">The system shall not present an applicant as having failed merely because a submitted item is still being verified.</p>
+<p class="paragraph normal">Likewise, the system shall not represent a complete application as an approved application.</p>
+<h1>11. Functional Requirements — Worker Workflow</h1>
+<p class="paragraph normal">The worker-facing workflow shall be designed to reduce administrative searching and repetitive information gathering.</p>
+<p class="paragraph normal">A worker should receive a structured case rather than having to reconstruct the applicant&#x27;s situation from scattered forms, uploads, messages, and systems.</p>
+<h3>FR-063 — Structured Case Summary</h3>
+<p class="paragraph normal">The worker dashboard shall present a standardized case summary.</p>
+<h3>FR-064 — Program Identification</h3>
+<p class="paragraph normal">The dashboard shall identify the programs involved in the application.</p>
+<h3>FR-065 — Requirement Status</h3>
+<p class="paragraph normal">The dashboard shall show outstanding requirements and their current status.</p>
+<h3>FR-066 — Relevant Information</h3>
+<p class="paragraph normal">The dashboard shall provide authorized workers with relevant submitted information without requiring unnecessary navigation between systems.</p>
+<h3>FR-067 — Additional Information Requests</h3>
+<p class="paragraph normal">The system shall support worker requests for additional information.</p>
+<h3>FR-068 — Specific Information Requests</h3>
+<p class="paragraph normal">Requests shall identify exactly what the applicant must provide.</p>
+<h3>FR-069 — Worker Documentation</h3>
+<p class="paragraph normal">Workers shall be able to document relevant actions, findings, and decisions in an auditable record.</p>
+<h3>FR-070 — Supervisor Escalation</h3>
+<p class="paragraph normal">The system shall support escalation to supervisors or other authorized personnel.</p>
+<h3>FR-071 — Work Prioritization</h3>
+<p class="paragraph normal">The system shall support prioritization of work according to approved operational rules.</p>
+<h3>FR-072 — Workload and Aging</h3>
+<p class="paragraph normal">The system shall provide authorized users with workload and case-aging information.</p>
+<h3>FR-073 — Information Source Distinction</h3>
+<p class="paragraph normal">The worker interface shall distinguish between:</p>
+<p class="paragraph normal">Applicant-provided information</p>
+<p class="paragraph normal">Authorized externally verified information</p>
+<p class="paragraph normal">System-generated information</p>
+<p class="paragraph normal">AI-assisted information</p>
+<h3>FR-074 — AI Activity Visibility</h3>
+<p class="paragraph normal">Where AI assistance was used, authorized workers shall be able to identify relevant AI-assisted application activity without treating AI output as an official determination.</p>
+<h2>Worker Experience Principle</h2>
+<p class="paragraph normal">The system should shift worker time away from:</p>
+<p class="paragraph normal">Finding missing information</p>
+<p class="paragraph normal">Re-entering information</p>
+<p class="paragraph normal">Searching multiple systems</p>
+<p class="paragraph normal">Repeatedly requesting the same document</p>
+<p class="paragraph normal">Explaining basic status information</p>
+<p class="paragraph normal">and toward:</p>
+<p class="paragraph normal">Verification</p>
+<p class="paragraph normal">Eligibility analysis</p>
+<p class="paragraph normal">Case judgment</p>
+<p class="paragraph normal">Applicant assistance</p>
+<p class="paragraph normal">Exception handling</p>
+<p class="paragraph normal">Other substantive work</p>
+<p class="paragraph normal">The system is therefore intended to improve the administrative workflow, not merely the applicant interface.</p>
+<h1>12. Functional Requirements — Communication and Status</h1>
+<p class="paragraph normal">Applicants need to understand what happened to their application after submission.</p>
+<p class="paragraph normal">The system shall avoid unexplained internal government terminology whenever possible.</p>
+<h3>FR-075 — Submission Confirmation</h3>
+<p class="paragraph normal">The system shall provide clear confirmation after submission.</p>
+<h3>FR-076 — Processing Stage</h3>
+<p class="paragraph normal">The system shall communicate the current processing stage in plain language.</p>
+<h3>FR-077 — Action Required</h3>
+<p class="paragraph normal">The system shall clearly identify whether action is required from the applicant.</p>
+<h3>FR-078 — Deadline Visibility</h3>
+<p class="paragraph normal">Notices shall clearly identify applicable deadlines.</p>
+<h3>FR-079 — Communication Channels</h3>
+<p class="paragraph normal">The system shall support authorized communication channels according to program and agency policy.</p>
+<h3>FR-080 — Communication History</h3>
+<p class="paragraph normal">The system shall maintain a record of relevant notices and applicant communications.</p>
+<h3>FR-081 — Secure Notifications</h3>
+<p class="paragraph normal">The system shall prevent unnecessary exposure of sensitive information through insecure notifications.</p>
+<h3>FR-082 — Next-Step Guidance</h3>
+<p class="paragraph normal">Whenever applicant action is required, the system shall provide clear next-step instructions.</p>
+<h2>Recommended Applicant-Facing Status Model</h2>
+<h3>1. Draft</h3>
+<p class="paragraph normal">“Your application has been started but has not been submitted.”</p>
+<h3>2. Submitted</h3>
+<p class="paragraph normal">“We received your application.”</p>
+<h3>3. Completeness Review</h3>
+<p class="paragraph normal">“We are checking that we have the information needed to process your application.”</p>
+<h3>4. Verification / Review</h3>
+<p class="paragraph normal">“We are reviewing the information you provided.”</p>
+<h3>5. Action Needed</h3>
+<p class="paragraph normal">“We need something from you before we can continue.”</p>
+<h3>6. Decision</h3>
+<p class="paragraph normal">“Your application is being finalized or a decision has been issued.”</p>
+<h3>7. Completed</h3>
+<p class="paragraph normal">“Your application has reached its final status.”</p>
+<p class="paragraph normal">The exact legal terminology required by a program may still be displayed when necessary. However, the system should accompany required terminology with an understandable explanation.</p>
+<h2>Communication Principle</h2>
+<p class="paragraph normal">A resident should not have to call an agency simply to answer:</p>
+<p class="paragraph normal">“What is happening with my application?”</p>
+<p class="paragraph normal">The portal should provide that information whenever the system has the authorized information necessary to do so.</p>
+<h1>13. Accessibility, Privacy, Security and Equity</h1>
+<p class="paragraph normal">The system shall be designed so that accessibility, privacy, security, and equitable access are core functional requirements rather than secondary features.</p>
+<h2>13.1 Accessibility</h2>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Support users with disabilities and differing levels of digital literacy.</p>
+<p class="paragraph normal">Support keyboard navigation and assistive technologies.</p>
+<p class="paragraph normal">Provide appropriate labels, instructions, error messages, and focus behavior.</p>
+<p class="paragraph normal">Avoid relying exclusively on color, audio, animation, or other single sensory channels.</p>
+<p class="paragraph normal">Provide readable text, adequate contrast, and scalable interfaces.</p>
+<p class="paragraph normal">Support mobile and desktop access.</p>
+<p class="paragraph normal">Provide accessible document-upload and review workflows.</p>
+<p class="paragraph normal">Allow applicants to obtain assistance without losing control of their application.</p>
+<p class="paragraph normal">Provide an alternative to conversational or AI-based interaction.</p>
+<h2>13.2 Language Access</h2>
+<p class="paragraph normal">The system should support language access appropriate to the jurisdictions and programs using the platform.</p>
+<p class="paragraph normal">Translated content shall preserve the meaning of official requirements and instructions.</p>
+<p class="paragraph normal">Where automated translation or language assistance is used, the system shall clearly distinguish translated assistance from authoritative source material where appropriate.</p>
+<h2>13.3 Privacy</h2>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Collect only information necessary for the applicable application workflow.</p>
+<p class="paragraph normal">Explain why requested information is needed where practical.</p>
+<p class="paragraph normal">Protect applicant information throughout collection, transmission, storage, processing, and display.</p>
+<p class="paragraph normal">Limit access according to role and authorization.</p>
+<p class="paragraph normal">Avoid exposing information from one applicant or household to another.</p>
+<p class="paragraph normal">Provide appropriate privacy notices.</p>
+<p class="paragraph normal">Maintain records according to applicable retention requirements.</p>
+<h2>13.4 Security</h2>
+<p class="paragraph normal">The system shall implement appropriate safeguards for:</p>
+<p class="paragraph normal">Authentication</p>
+<p class="paragraph normal">Authorization</p>
+<p class="paragraph normal">Session management</p>
+<p class="paragraph normal">Data transmission</p>
+<p class="paragraph normal">Data storage</p>
+<p class="paragraph normal">Document handling</p>
+<p class="paragraph normal">Audit logging</p>
+<p class="paragraph normal">Administrative access</p>
+<p class="paragraph normal">Integration access</p>
+<p class="paragraph normal">AI-related access</p>
+<p class="paragraph normal">Security controls shall be designed according to applicable government and program requirements.</p>
+<h2>13.5 Equity</h2>
+<p class="paragraph normal">The system shall be evaluated for whether differences in technology access, disability, language, literacy, age, or other barriers create unequal ability to complete an application.</p>
+<p class="paragraph normal">The system shall not assume that inability to successfully navigate a digital interface means an applicant is unwilling or unable to comply with program requirements.</p>
+<h1>14. Data Integration and Interoperability</h1>
+<p class="paragraph normal">The platform shall support controlled integration with existing government systems rather than requiring every participating program to replace its existing determination infrastructure.</p>
+<h2>14.1 Common Information Model</h2>
+<p class="paragraph normal">The system should maintain a common representation of information that is frequently required across programs.</p>
+<p class="paragraph normal">Examples may include:</p>
+<p class="paragraph normal">Applicant identity information</p>
+<p class="paragraph normal">Household information</p>
+<p class="paragraph normal">Contact information</p>
+<p class="paragraph normal">Address information</p>
+<p class="paragraph normal">Income information</p>
+<p class="paragraph normal">Employment information</p>
+<p class="paragraph normal">Expense information</p>
+<p class="paragraph normal">Program-specific information</p>
+<p class="paragraph normal">Documents</p>
+<p class="paragraph normal">Verification results</p>
+<p class="paragraph normal">Application status</p>
+<p class="paragraph normal">The common model shall not eliminate program-specific requirements.</p>
+<h2>14.2 Information Reuse</h2>
+<p class="paragraph normal">When the same information is applicable to multiple programs, the system should allow the applicant to provide it once and associate it with the applicable programs.</p>
+<p class="paragraph normal">The system shall preserve the distinction between:</p>
+<p class="paragraph normal">Information supplied by the applicant</p>
+<p class="paragraph normal">Information obtained through authorized verification</p>
+<p class="paragraph normal">Information entered or modified by an authorized worker</p>
+<p class="paragraph normal">Information generated by system processing</p>
+<h2>14.3 Source Attribution</h2>
+<p class="paragraph normal">Information obtained through an integration shall identify its source where required for auditability and operational use.</p>
+<p class="paragraph normal">The system should maintain appropriate timestamps and version or transaction identifiers.</p>
+<h2>14.4 Integration Failures</h2>
+<p class="paragraph normal">The system shall detect and appropriately handle integration failures.</p>
+<p class="paragraph normal">An integration failure shall not silently appear to the applicant as though the applicant failed to provide information.</p>
+<p class="paragraph normal">Where appropriate, the system shall:</p>
+<p class="paragraph normal">Retry the operation.</p>
+<p class="paragraph normal">Mark the information as pending verification.</p>
+<p class="paragraph normal">Notify an authorized worker.</p>
+<p class="paragraph normal">Provide the applicant with an understandable status.</p>
+<p class="paragraph normal">Preserve information already collected.</p>
+<h2>14.5 No Unauthorized Overwrite</h2>
+<p class="paragraph normal">External systems shall not automatically overwrite applicant-provided or worker-entered information without appropriate authorization and traceability.</p>
+<p class="paragraph normal">Where conflicting information exists, the system should preserve the relevant sources and route the conflict through an appropriate workflow.</p>
+<h2>14.6 Interoperability</h2>
+<p class="paragraph normal">The system should use standardized, documented interfaces and machine-readable data structures where appropriate.</p>
+<p class="paragraph normal">The functional requirements do not prescribe a specific programming language, database, cloud provider, API technology, or integration architecture.</p>
+<h1>15. Performance, Metrics and Success Criteria</h1>
+<p class="paragraph normal">The system shall be evaluated based on whether it makes the overall benefits process more understandable, complete, efficient, and usable.</p>
+<h2>15.1 Applicant Metrics</h2>
+<p class="paragraph normal">Potential measures include:</p>
+<p class="paragraph normal">Application completion rate</p>
+<p class="paragraph normal">Application abandonment rate</p>
+<p class="paragraph normal">Time required to complete an application</p>
+<p class="paragraph normal">Number of repeated questions</p>
+<p class="paragraph normal">Number of unnecessary document requests</p>
+<p class="paragraph normal">Number of applicant corrections</p>
+<p class="paragraph normal">Successful save/resume rate</p>
+<p class="paragraph normal">Applicant-reported understanding</p>
+<p class="paragraph normal">Applicant-reported ease of use</p>
+<p class="paragraph normal">Accessibility success rates</p>
+<p class="paragraph normal">Successful completion using assisted workflows</p>
+<h2>15.2 Administrative Metrics</h2>
+<p class="paragraph normal">Potential measures include:</p>
+<p class="paragraph normal">Worker processing time</p>
+<p class="paragraph normal">Number of incomplete applications received</p>
+<p class="paragraph normal">Number of additional-information requests</p>
+<p class="paragraph normal">Time between submission and initial review</p>
+<p class="paragraph normal">Time spent locating missing information</p>
+<p class="paragraph normal">Duplicate data-entry volume</p>
+<p class="paragraph normal">Verification turnaround time</p>
+<p class="paragraph normal">Case aging</p>
+<p class="paragraph normal">Worker workload</p>
+<p class="paragraph normal">Administrative cost per completed application</p>
+<h2>15.3 System Metrics</h2>
+<p class="paragraph normal">The platform should monitor:</p>
+<p class="paragraph normal">Availability</p>
+<p class="paragraph normal">Error rates</p>
+<p class="paragraph normal">Integration failures</p>
+<p class="paragraph normal">Document-processing failures</p>
+<p class="paragraph normal">AI-assistance failures</p>
+<p class="paragraph normal">Response times</p>
+<p class="paragraph normal">Authentication failures</p>
+<p class="paragraph normal">Security events</p>
+<p class="paragraph normal">Accessibility defects</p>
+<h2>15.4 Outcome Metrics</h2>
+<p class="paragraph normal">Success shall not be measured solely by the number of applications submitted.</p>
+<p class="paragraph normal">The system should evaluate whether eligible residents are more successfully able to complete required processes.</p>
+<p class="paragraph normal">Potential outcome measures include:</p>
+<p class="paragraph normal">Percentage of applications reaching a complete state</p>
+<p class="paragraph normal">Reduction in avoidable application abandonment</p>
+<p class="paragraph normal">Reduction in avoidable missing-information requests</p>
+<p class="paragraph normal">Reduction in administrative processing time</p>
+<p class="paragraph normal">Reduction in duplicate information collection</p>
+<p class="paragraph normal">Improvement in applicant comprehension</p>
+<p class="paragraph normal">Improvement in worker efficiency</p>
+<p class="paragraph normal">Improvement in successful completion among users requiring accessibility or language support</p>
+<p class="paragraph normal">The system shall not define increased approval rates alone as evidence of success.</p>
+<p class="paragraph normal">The objective is to improve the process without changing substantive eligibility rules.</p>
+<h1>16. Implementation and Pilot Strategy</h1>
+<p class="paragraph normal">The platform should be introduced incrementally rather than requiring an immediate replacement of every existing benefits system.</p>
+<h2>16.1 Pilot Approach</h2>
+<p class="paragraph normal">A pilot should begin with a limited number of programs and workflows that share significant information requirements.</p>
+<p class="paragraph normal">The pilot should test:</p>
+<p class="paragraph normal">Unified intake</p>
+<p class="paragraph normal">Dynamic requirements</p>
+<p class="paragraph normal">Document collection</p>
+<p class="paragraph normal">Completeness validation</p>
+<p class="paragraph normal">Worker workflow</p>
+<p class="paragraph normal">Status communication</p>
+<p class="paragraph normal">Accessibility</p>
+<p class="paragraph normal">Optional AI guidance</p>
+<p class="paragraph normal">Integration with existing systems</p>
+<h2>16.2 Baseline Measurement</h2>
+<p class="paragraph normal">Before implementation, the pilot should establish baseline measurements for:</p>
+<p class="paragraph normal">Completion rates</p>
+<p class="paragraph normal">Abandonment rates</p>
+<p class="paragraph normal">Processing time</p>
+<p class="paragraph normal">Worker workload</p>
+<p class="paragraph normal">Missing-information requests</p>
+<p class="paragraph normal">Applicant satisfaction</p>
+<p class="paragraph normal">Accessibility barriers</p>
+<p class="paragraph normal">The same measurements should be collected after implementation.</p>
+<h2>16.3 Phased Expansion</h2>
+<p class="paragraph normal">Following successful validation, the system may expand to:</p>
+<p class="paragraph normal">Additional programs</p>
+<p class="paragraph normal">Additional jurisdictions</p>
+<p class="paragraph normal">Additional verification sources</p>
+<p class="paragraph normal">Additional communication channels</p>
+<p class="paragraph normal">Additional accessibility and language capabilities</p>
+<p class="paragraph normal">Additional worker tools</p>
+<h2>16.4 Existing-System Compatibility</h2>
+<p class="paragraph normal">The platform should initially operate as an intake and workflow layer where possible, allowing existing eligibility and benefits determination systems to remain authoritative.</p>
+<p class="paragraph normal">This reduces implementation risk and allows the human-centered intake model to be evaluated before deeper system replacement.</p>
+<h2>16.5 Pilot Governance</h2>
+<p class="paragraph normal">Pilot implementation should include representatives from:</p>
+<p class="paragraph normal">Program administration</p>
+<p class="paragraph normal">Front-line workers</p>
+<p class="paragraph normal">Applicants and residents</p>
+<p class="paragraph normal">Accessibility experts</p>
+<p class="paragraph normal">Privacy and security teams</p>
+<p class="paragraph normal">Technology teams</p>
+<p class="paragraph normal">Legal and policy teams</p>
+<p class="paragraph normal">Community organizations</p>
+<p class="paragraph normal">The system should be evaluated using both quantitative metrics and direct user feedback.</p>
+<h1>17. Risks, Safeguards and Governance</h1>
+<h2>17.1 Risk: Incorrect AI Guidance</h2>
+<p class="paragraph normal">An AI system could misunderstand an applicant or provide incorrect information.</p>
+<p class="paragraph normal">Safeguards:</p>
+<p class="paragraph normal">Authoritative grounding</p>
+<p class="paragraph normal">Requirements-engine handoff</p>
+<p class="paragraph normal">Uncertainty disclosure</p>
+<p class="paragraph normal">Human escalation</p>
+<p class="paragraph normal">Non-AI alternative</p>
+<p class="paragraph normal">Auditability</p>
+<h2>17.2 Risk: AI Becomes an Eligibility Authority</h2>
+<p class="paragraph normal">An AI system could unintentionally be treated as the source of eligibility rules.</p>
+<p class="paragraph normal">Safeguards:</p>
+<p class="paragraph normal">Explicit architectural separation</p>
+<p class="paragraph normal">No direct production-rule authority</p>
+<p class="paragraph normal">Deterministic requirements engine</p>
+<p class="paragraph normal">Official determination performed by the authorized benefits system</p>
+<h2>17.3 Risk: Digital Exclusion</h2>
+<p class="paragraph normal">Applicants without reliable internet access, devices, or digital skills could be disadvantaged.</p>
+<p class="paragraph normal">Safeguards:</p>
+<p class="paragraph normal">Assisted application pathways</p>
+<p class="paragraph normal">Non-conversational interface</p>
+<p class="paragraph normal">Accessible design</p>
+<p class="paragraph normal">Mobile support</p>
+<p class="paragraph normal">Human support channels</p>
+<p class="paragraph normal">Alternative access methods where required</p>
+<h2>17.4 Risk: Privacy Exposure</h2>
+<p class="paragraph normal">A unified system creates significant value by reducing repeated data collection, but also creates a potentially valuable concentration of sensitive information.</p>
+<p class="paragraph normal">Safeguards:</p>
+<p class="paragraph normal">Data minimization</p>
+<p class="paragraph normal">Role-based access</p>
+<p class="paragraph normal">Authorization controls</p>
+<p class="paragraph normal">Audit logging</p>
+<p class="paragraph normal">Secure integrations</p>
+<p class="paragraph normal">Appropriate retention controls</p>
+<p class="paragraph normal">Restricted AI access</p>
+<h2>17.5 Risk: Incorrect Requirement Configuration</h2>
+<p class="paragraph normal">A configuration error could cause an applicant to be asked for incorrect or unnecessary information.</p>
+<p class="paragraph normal">Safeguards:</p>
+<p class="paragraph normal">Version control</p>
+<p class="paragraph normal">Effective dates</p>
+<p class="paragraph normal">Approval workflows</p>
+<p class="paragraph normal">Configuration auditing</p>
+<p class="paragraph normal">Automated validation</p>
+<p class="paragraph normal">Conflict detection</p>
+<p class="paragraph normal">Controlled production deployment</p>
+<h2>17.6 Risk: Automation Reproduces Existing Bureaucracy</h2>
+<p class="paragraph normal">Simply converting paper forms into web forms could preserve the underlying problems.</p>
+<p class="paragraph normal">Safeguard:</p>
+<p class="paragraph normal">Every major workflow should be evaluated by asking:</p>
+<p class="paragraph normal">Does this requirement exist because the program actually needs it, or because the old process happened to work this way?</p>
+<p class="paragraph normal">The platform must preserve legally required information while eliminating unnecessary procedural friction where permitted.</p>
+<h2>17.7 Governance Principle</h2>
+<p class="paragraph normal">Technology shall support government workers and residents rather than replace lawful authority.</p>
+<p class="paragraph normal">The system must maintain clear accountability for:</p>
+<p class="paragraph normal">Program rules</p>
+<p class="paragraph normal">Eligibility determinations</p>
+<p class="paragraph normal">Benefit calculations</p>
+<p class="paragraph normal">Compliance decisions</p>
+<p class="paragraph normal">Adverse actions</p>
+<p class="paragraph normal">Appeals</p>
+<p class="paragraph normal">Human review</p>
+<h1>18. Future Expansion and Policy Value</h1>
+<p class="paragraph normal">The system architecture should allow future expansion without requiring the underlying human-centered principles to change.</p>
+<p class="paragraph normal">Potential future capabilities include:</p>
+<p class="paragraph normal">Cross-program benefit discovery</p>
+<p class="paragraph normal">Household-level service coordination</p>
+<p class="paragraph normal">Integrated renewal workflows</p>
+<p class="paragraph normal">Automated reminders</p>
+<p class="paragraph normal">Proactive notification of potentially relevant programs</p>
+<p class="paragraph normal">Improved verification coordination</p>
+<p class="paragraph normal">More accessible communication channels</p>
+<p class="paragraph normal">Resident-controlled information reuse</p>
+<p class="paragraph normal">Community-service referrals</p>
+<p class="paragraph normal">Additional government services beyond benefits</p>
+<h2>18.1 Policy Value</h2>
+<p class="paragraph normal">The platform could provide governments with better information about where administrative processes create unnecessary barriers.</p>
+<p class="paragraph normal">For example, aggregate system data could identify:</p>
+<p class="paragraph normal">Frequently misunderstood questions</p>
+<p class="paragraph normal">Requirements that cause high abandonment</p>
+<p class="paragraph normal">Documents frequently rejected for technical reasons</p>
+<p class="paragraph normal">Programs with unusually high missing-information rates</p>
+<p class="paragraph normal">Workflows that create excessive worker workload</p>
+<p class="paragraph normal">Accessibility barriers</p>
+<p class="paragraph normal">Language-access problems</p>
+<p class="paragraph normal">Integration failures</p>
+<p class="paragraph normal">This information could support future process improvement and policy evaluation.</p>
+<p class="paragraph normal">The system should distinguish between:</p>
+<p class="paragraph normal">Problems caused by substantive policy.</p>
+<p class="paragraph normal">Problems caused by administrative workflow.</p>
+<p class="paragraph normal">Problems caused by technology.</p>
+<p class="paragraph normal">Problems caused by communication or usability.</p>
+<p class="paragraph normal">That distinction is important because not every problem can or should be solved through software.</p>
+<h1>19. Appendix — Example Applicant Journey</h1>
+<p class="paragraph normal">The following example illustrates how the proposed system could work from the applicant&#x27;s perspective.</p>
+<h2>19.1 Starting Point</h2>
+<p class="paragraph normal">An applicant arrives at the main page.</p>
+<p class="paragraph normal">Instead of being presented with a long list of government programs, the system asks:</p>
+<p class="paragraph normal">“What do you need help with?”</p>
+<p class="paragraph normal">Possible choices might include:</p>
+<p class="paragraph normal">Food</p>
+<p class="paragraph normal">Housing</p>
+<p class="paragraph normal">Health care</p>
+<p class="paragraph normal">Cash assistance</p>
+<p class="paragraph normal">Disability-related assistance</p>
+<p class="paragraph normal">Child care</p>
+<p class="paragraph normal">Utilities</p>
+<p class="paragraph normal">I’m not sure</p>
+<p class="paragraph normal">The applicant does not need to know the official name of a program.</p>
+<h2>19.2 Identifying Potential Programs</h2>
+<p class="paragraph normal">The applicant selects:</p>
+<p class="paragraph normal">“I need help paying for food and housing.”</p>
+<p class="paragraph normal">The system identifies programs that may be relevant.</p>
+<p class="paragraph normal">If conversational assistance is enabled, the applicant may describe their situation naturally.</p>
+<p class="paragraph normal">The AI may help interpret what the applicant is asking about, but it does not make the official eligibility determination.</p>
+<h2>19.3 Requirements Preview</h2>
+<p class="paragraph normal">Before the applicant begins entering a large amount of information, the system explains:</p>
+<p class="paragraph normal">Which programs are being considered</p>
+<p class="paragraph normal">What information may be needed</p>
+<p class="paragraph normal">Which documents may be required</p>
+<p class="paragraph normal">Which information can potentially be reused</p>
+<p class="paragraph normal">Which information may be verified through authorized sources</p>
+<p class="paragraph normal">The applicant can see why information is being requested.</p>
+<h2>19.4 Unified Information Collection</h2>
+<p class="paragraph normal">The applicant provides common information once.</p>
+<p class="paragraph normal">For example:</p>
+<p class="paragraph normal">Name</p>
+<p class="paragraph normal">Contact information</p>
+<p class="paragraph normal">Household members</p>
+<p class="paragraph normal">Address</p>
+<p class="paragraph normal">Income</p>
+<p class="paragraph normal">Employment information</p>
+<p class="paragraph normal">The system determines which additional questions apply based on the applicant&#x27;s answers.</p>
+<p class="paragraph normal">The applicant is not repeatedly asked for the same information for every program.</p>
+<h2>19.5 Dynamic Requirements</h2>
+<p class="paragraph normal">Suppose the applicant indicates that they have employment income.</p>
+<p class="paragraph normal">The system updates the requirements checklist.</p>
+<p class="paragraph normal">If the applicant indicates that they do not have a particular circumstance, requirements that depend on that circumstance are not unnecessarily displayed.</p>
+<p class="paragraph normal">The applicant sees an understandable checklist such as:</p>
+<p class="paragraph normal">Completed</p>
+<p class="paragraph normal">Identity information</p>
+<p class="paragraph normal">Household information</p>
+<p class="paragraph normal">Address</p>
+<p class="paragraph normal">Still needed</p>
+<p class="paragraph normal">Income information</p>
+<p class="paragraph normal">Proof of income</p>
+<p class="paragraph normal">Being verified</p>
+<p class="paragraph normal">Residency</p>
+<h2>19.6 Document Submission</h2>
+<p class="paragraph normal">The applicant uploads the requested document.</p>
+<p class="paragraph normal">The system confirms that the document was received and associates it with the applicable requirement.</p>
+<p class="paragraph normal">If the same document can satisfy requirements for multiple programs, the system should avoid asking the applicant to upload it again.</p>
+<h2>19.7 Completeness Review</h2>
+<p class="paragraph normal">Before submission, the system checks whether required information is missing.</p>
+<p class="paragraph normal">If something is missing, the system identifies the specific item.</p>
+<p class="paragraph normal">Instead of:</p>
+<p class="paragraph normal">“Application incomplete.”</p>
+<p class="paragraph normal">the system should say something understandable such as:</p>
+<p class="paragraph normal">“We still need proof of income. Upload a recent pay statement, or choose another available way to provide this information.”</p>
+<h2>19.8 Submission</h2>
+<p class="paragraph normal">Once the applicant confirms the information, the application is submitted.</p>
+<p class="paragraph normal">The system provides:</p>
+<p class="paragraph normal">Submission confirmation</p>
+<p class="paragraph normal">Application identifier</p>
+<p class="paragraph normal">Programs associated with the application</p>
+<p class="paragraph normal">Current status</p>
+<p class="paragraph normal">Outstanding actions, if any</p>
+<p class="paragraph normal">Expected next step</p>
+<h2>19.9 Worker Review</h2>
+<p class="paragraph normal">The worker receives a structured case summary.</p>
+<p class="paragraph normal">The worker can see:</p>
+<p class="paragraph normal">Programs requested</p>
+<p class="paragraph normal">Information supplied</p>
+<p class="paragraph normal">Documents received</p>
+<p class="paragraph normal">Requirements completed</p>
+<p class="paragraph normal">Requirements still outstanding</p>
+<p class="paragraph normal">Information awaiting verification</p>
+<p class="paragraph normal">Applicant corrections</p>
+<p class="paragraph normal">Relevant case history</p>
+<p class="paragraph normal">The worker does not need to reconstruct the applicant&#x27;s situation from multiple disconnected forms.</p>
+<h2>19.10 Additional Information Request</h2>
+<p class="paragraph normal">If the worker needs additional information, the system identifies the specific requirement.</p>
+<p class="paragraph normal">The applicant receives an understandable request explaining:</p>
+<p class="paragraph normal">What is needed</p>
+<p class="paragraph normal">Why it is needed</p>
+<p class="paragraph normal">What can be provided</p>
+<p class="paragraph normal">How to provide it</p>
+<p class="paragraph normal">Any applicable deadline</p>
+<p class="paragraph normal">The request becomes part of the application record.</p>
+<h2>19.11 Final Determination</h2>
+<p class="paragraph normal">The authorized benefits system and responsible government process perform the official determination.</p>
+<p class="paragraph normal">The AI does not approve, deny, calculate benefits, establish legal eligibility, or make an official compliance decision.</p>
+<h2>19.12 Result</h2>
+<p class="paragraph normal">The applicant receives a clear status and next-step explanation.</p>
+<p class="paragraph normal">The overall process is designed so that:</p>
+<p class="paragraph normal">The applicant understands what is happening.</p>
+<p class="paragraph normal">The applicant knows what they need to do.</p>
+<p class="paragraph normal">The worker receives a structured and more complete case.</p>
+<p class="paragraph normal">The official benefits system remains the authority for the determination.</p>
+<p class="paragraph normal">The AI remains an optional assistance layer rather than a government decision-maker.</p>
+<h1>Final System Principle</h1>
+<p class="paragraph normal">The system shall follow the principle:</p>
+<p class="paragraph normal">Don&#x27;t just digitize the old bureaucracy. Redesign the workflow around the person.</p>
+<p class="paragraph normal">The objective is not to make government rules disappear.</p>
+<p class="paragraph normal">The objective is to make those rules understandable, navigable, and administratively efficient.</p>
+<p class="paragraph normal">The resident should experience government as:</p>
+<p class="paragraph normal">“Tell us what you need. We&#x27;ll explain what may apply. We&#x27;ll tell you what we need from you. You provide it once. We&#x27;ll keep track of the rest.”</p>
+<p class="paragraph normal">rather than:</p>
+<p class="paragraph normal">“Figure out which agency you need, find the right form, understand the terminology, submit incomplete paperwork, wait, discover something is missing, resubmit it, and repeat the process.”</p>
+<p class="paragraph normal">The final architecture therefore follows three principles:</p>
+<p class="paragraph normal">The LLM understands the human.
+The requirements engine understands the rules.
+The benefits system makes the official determination.</p>
+<p class="paragraph normal">This allows modern AI to make government easier to navigate without allowing AI to replace law, policy, due process, or authorized government decision-making.</p>
+<p class="paragraph normal">Government should be understandable to the person it is designed to serve.</p>
+<p class="paragraph normal">Living-document status: New requirements should be added using the same numbered requirement structure as the proposal evolves.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>

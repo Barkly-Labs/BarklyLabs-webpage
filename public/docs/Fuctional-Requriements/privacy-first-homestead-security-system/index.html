@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Privacy-First Homestead Security System — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Privacy-First Homestead Security System
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Privacy-First Homestead Security System.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Privacy-First Homestead Security System</h1>
+<h2>Functional Requirements Document (FRD)</h2>
+<p class="paragraph normal">Version: 1.1
+ Status: Engineering Specification
+ Primary Controller: Raspberry Pi Security Controller
+ System Purpose: Privacy-first physical and digital security for a private homestead/server environment</p>
+<h2>1. Purpose</h2>
+<p class="paragraph normal">The Privacy-First Homestead Security System provides a physically controlled security boundary between the occupants, their private computing infrastructure, and unauthorized access.</p>
+<p class="paragraph normal">The system combines:</p>
+<p class="paragraph normal">Physical authentication keys</p>
+<p class="paragraph normal">NFC authentication</p>
+<p class="paragraph normal">Raspberry Pi security controller</p>
+<p class="paragraph normal">Network segmentation</p>
+<p class="paragraph normal">Encrypted storage</p>
+<p class="paragraph normal">Service isolation</p>
+<p class="paragraph normal">Emergency lockdown</p>
+<p class="paragraph normal">Hardware-backed identity</p>
+<p class="paragraph normal">Independent recovery mechanisms</p>
+<p class="paragraph normal">Auditable administrative controls</p>
+<p class="paragraph normal">The design prioritizes privacy, recoverability, least privilege, and deliberate physical authorization.</p>
+<h1>2. Design Principles</h1>
+<p class="paragraph normal">Physical authorization matters.</p>
+<p class="paragraph normal">No single ordinary credential should control the entire system.</p>
+<p class="paragraph normal">Emergency lockdown should be fast and reversible.</p>
+<p class="paragraph normal">Critical administrative capabilities should require separate physical authorization.</p>
+<p class="paragraph normal">Encryption should protect sensitive information at rest.</p>
+<p class="paragraph normal">Network segmentation should limit compromise.</p>
+<p class="paragraph normal">The security controller should have narrowly scoped privileges.</p>
+<p class="paragraph normal">Recovery must remain possible after accidental activation or hardware failure.</p>
+<p class="paragraph normal">Security functions should fail safely rather than catastrophically.</p>
+<p class="paragraph normal">Destructive administrative operations must be separated from emergency response.</p>
+<h1>3. High-Level Architecture</h1>
+<p class="paragraph normal">┌──────────────────────┐</p>
+<p class="paragraph normal">│   PHYSICAL SECURITY  │</p>
+<p class="paragraph normal">│        PANEL         │</p>
+<p class="paragraph normal">└──────────┬───────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────────────────┼──────────────────────┐</p>
+<p class="paragraph normal">│                      │                      │</p>
+<p class="paragraph normal">▼                      ▼                      ▼</p>
+<p class="paragraph normal">NORMAL KEYS              E-STOP              NFC CREDENTIAL</p>
+<p class="paragraph normal">AUTHORIZATION          DANGER MODE           MAX LOCKDOWN</p>
+<p class="paragraph normal">│                      │                      │</p>
+<p class="paragraph normal">└──────────────────────┼──────────────────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌──────────────────────┐</p>
+<p class="paragraph normal">│ Raspberry Pi Security│</p>
+<p class="paragraph normal">│     Controller       │</p>
+<p class="paragraph normal">└──────────┬───────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌────────────────────┼────────────────────┐</p>
+<p class="paragraph normal">▼                    ▼                    ▼</p>
+<p class="paragraph normal">NETWORK CONTROL      SERVICE CONTROL      KEY CONTROL</p>
+<p class="paragraph normal">│                    │                    │</p>
+<p class="paragraph normal">▼                    ▼                    ▼</p>
+<p class="paragraph normal">VLAN FIREWALLS       Vault Locking       Credential</p>
+<p class="paragraph normal">VPN CONTROL          Session Revocation  Revocation</p>
+<p class="paragraph normal">│                    │                    │</p>
+<p class="paragraph normal">└────────────────────┼────────────────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌──────────────────────┐</p>
+<p class="paragraph normal">│ Private Server / NAS │</p>
+<p class="paragraph normal">│ Encrypted Storage    │</p>
+<p class="paragraph normal">│ CYN-X Infrastructure │</p>
+<p class="paragraph normal">└──────────────────────┘</p>
+<p class="paragraph normal">SEPARATE PHYSICAL RECOVERY KEY</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">CATASTROPHIC ADMIN</p>
+<p class="paragraph normal">AUTHORIZATION</p>
+<h1>4. Security States</h1>
+<p class="paragraph normal">The system shall implement four primary operational states.</p>
+<h2>4.1 NORMAL</h2>
+<p class="paragraph normal">Normal operation.</p>
+<p class="paragraph normal">Permitted:</p>
+<p class="paragraph normal">Authorized users</p>
+<p class="paragraph normal">Normal server access</p>
+<p class="paragraph normal">CYN-X operation</p>
+<p class="paragraph normal">Network services</p>
+<p class="paragraph normal">Approved remote VPN access</p>
+<p class="paragraph normal">Normal storage access</p>
+<h2>4.2 WARNING</h2>
+<p class="paragraph normal">Elevated security state.</p>
+<p class="paragraph normal">Possible actions:</p>
+<p class="paragraph normal">Increase logging</p>
+<p class="paragraph normal">Require reauthentication</p>
+<p class="paragraph normal">Restrict administrative access</p>
+<p class="paragraph normal">Disable unnecessary external services</p>
+<p class="paragraph normal">Increase physical monitoring</p>
+<p class="paragraph normal">Notify authorized administrators</p>
+<p class="paragraph normal">No data destruction occurs.</p>
+<h2>4.3 DANGER</h2>
+<p class="paragraph normal">Emergency physical-security state.</p>
+<p class="paragraph normal">Activated by the physical E-stop.</p>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Immediately restrict network access</p>
+<p class="paragraph normal">Revoke active remote sessions where technically possible</p>
+<p class="paragraph normal">Stop designated sensitive services</p>
+<p class="paragraph normal">Lock or unmount designated encrypted storage where safely possible</p>
+<p class="paragraph normal">Disable unnecessary external connectivity</p>
+<p class="paragraph normal">Restrict administrative interfaces</p>
+<p class="paragraph normal">Preserve system integrity</p>
+<p class="paragraph normal">Maintain recovery capability</p>
+<p class="paragraph normal">DANGER mode shall not irreversibly destroy data.</p>
+<h2>4.4 MAXIMUM LOCKDOWN</h2>
+<p class="paragraph normal">Highest emergency privacy state.</p>
+<p class="paragraph normal">Activated by an authenticated emergency NFC credential.</p>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Isolate sensitive VLANs</p>
+<p class="paragraph normal">Revoke active sessions</p>
+<p class="paragraph normal">Lock designated encrypted volumes</p>
+<p class="paragraph normal">Stop designated sensitive services</p>
+<p class="paragraph normal">Disable remote administrative access</p>
+<p class="paragraph normal">Restrict management interfaces</p>
+<p class="paragraph normal">Rotate or revoke temporary credentials where appropriate</p>
+<p class="paragraph normal">Preserve audit information required for system recovery</p>
+<p class="paragraph normal">Require explicit recovery authorization before returning to NORMAL</p>
+<p class="paragraph normal">MAXIMUM LOCKDOWN shall preserve data integrity.</p>
+<h1>5. Physical Security-Key Architecture</h1>
+<p class="paragraph normal">The system shall use physically separated credentials with different privileges.</p>
+<h2>5.1 Key Class A — Normal Administration Keys</h2>
+<p class="paragraph normal">Purpose:</p>
+<p class="paragraph normal">Routine system administration.</p>
+<p class="paragraph normal">Capabilities may include:</p>
+<p class="paragraph normal">Authenticate administrators</p>
+<p class="paragraph normal">Access approved management interfaces</p>
+<p class="paragraph normal">Start/stop ordinary services</p>
+<p class="paragraph normal">Perform maintenance</p>
+<p class="paragraph normal">Access non-critical configuration</p>
+<p class="paragraph normal">These keys shall not independently authorize catastrophic administrative operations.</p>
+<h2>5.2 Key Class B — Emergency Recovery Key</h2>
+<p class="paragraph normal">Purpose:</p>
+<p class="paragraph normal">Recover the system from emergency states.</p>
+<p class="paragraph normal">Capabilities:</p>
+<p class="paragraph normal">Authorize recovery from DANGER</p>
+<p class="paragraph normal">Authorize recovery from MAXIMUM LOCKDOWN</p>
+<p class="paragraph normal">Restore designated services</p>
+<p class="paragraph normal">Re-enable management access</p>
+<p class="paragraph normal">Validate system integrity</p>
+<p class="paragraph normal">Perform emergency maintenance</p>
+<p class="paragraph normal">The recovery key shall be physically stored separately from ordinary authentication keys.</p>
+<h1>6. Key Class C — Catastrophic Administrative Key</h1>
+<p class="paragraph normal">A dedicated physical security key shall exist for high-consequence administrative operations.</p>
+<p class="paragraph normal">This key shall:</p>
+<p class="paragraph normal">Be physically separate from ordinary keys</p>
+<p class="paragraph normal">Require deliberate physical insertion/presence</p>
+<p class="paragraph normal">Never be required for ordinary system operation</p>
+<p class="paragraph normal">Never be automatically triggered by NFC</p>
+<p class="paragraph normal">Never be exposed through a normal web interface</p>
+<p class="paragraph normal">Require additional authorization safeguards</p>
+<p class="paragraph normal">Be stored securely when not in use</p>
+<p class="paragraph normal">The existence of this key creates a deliberate physical boundary around high-consequence operations.</p>
+<h3>C-001 — Separate Credential</h3>
+<p class="paragraph normal">The catastrophic administrative credential shall be cryptographically distinct from all normal and emergency credentials.</p>
+<h3>C-002 — Physical Presence</h3>
+<p class="paragraph normal">The operation shall require physical presence of the dedicated credential.</p>
+<h3>C-003 — No Remote Equivalent</h3>
+<p class="paragraph normal">The system shall not provide an equivalent remote command capable of substituting for the physical catastrophic-administration credential.</p>
+<h3>C-004 — Deliberate Authorization</h3>
+<p class="paragraph normal">High-consequence operations shall require explicit administrative authorization and shall not be triggered merely by detecting:</p>
+<p class="paragraph normal">Police presence</p>
+<p class="paragraph normal">An E-stop</p>
+<p class="paragraph normal">An ordinary NFC tag</p>
+<p class="paragraph normal">Loss of network connectivity</p>
+<p class="paragraph normal">Loss of power</p>
+<p class="paragraph normal">Failed authentication</p>
+<p class="paragraph normal">Physical tampering</p>
+<h3>C-005 — Safety Interlock</h3>
+<p class="paragraph normal">The system should provide safeguards against accidental activation, including appropriate confirmation/interlock mechanisms.</p>
+<h3>C-006 — Recovery Separation</h3>
+<p class="paragraph normal">Recovery credentials shall remain independent from the catastrophic administrative credential.</p>
+<h1>7. NFC Architecture</h1>
+<p class="paragraph normal">NFC shall use cryptographic authentication rather than trusting an NFC identifier alone.</p>
+<h2>NFC Requirements</h2>
+<p class="paragraph normal">The system shall:</p>
+<p class="paragraph normal">Authenticate the credential cryptographically</p>
+<p class="paragraph normal">Reject unknown credentials</p>
+<p class="paragraph normal">Support credential revocation</p>
+<p class="paragraph normal">Prevent simple identifier cloning</p>
+<p class="paragraph normal">Log authentication events</p>
+<p class="paragraph normal">Rate-limit repeated failures</p>
+<p class="paragraph normal">Require appropriate authorization for privileged actions</p>
+<h3>Emergency NFC</h3>
+<p class="paragraph normal">The emergency NFC credential may activate:</p>
+<p class="paragraph normal">MAXIMUM LOCKDOWN</p>
+<p class="paragraph normal">It shall not directly activate irreversible data destruction.</p>
+<h1>8. Raspberry Pi Security Controller</h1>
+<p class="paragraph normal">The Raspberry Pi shall function as a dedicated security-policy controller.</p>
+<p class="paragraph normal">Responsibilities:</p>
+<p class="paragraph normal">Physical input processing</p>
+<p class="paragraph normal">Authentication</p>
+<p class="paragraph normal">State-machine management</p>
+<p class="paragraph normal">VLAN/firewall control</p>
+<p class="paragraph normal">Service-control orchestration</p>
+<p class="paragraph normal">Credential validation</p>
+<p class="paragraph normal">Emergency-state management</p>
+<p class="paragraph normal">Audit logging</p>
+<p class="paragraph normal">Recovery coordination</p>
+<p class="paragraph normal">The controller shall operate with least privilege.</p>
+<p class="paragraph normal">It shall not possess unrestricted access to every server resource merely because it controls the security system.</p>
+<h1>9. Hardware Identity</h1>
+<p class="paragraph normal">The controller shall have a hardware-backed or otherwise strongly protected identity where practical.</p>
+<p class="paragraph normal">Requirements:</p>
+<p class="paragraph normal">Unique controller identity</p>
+<p class="paragraph normal">Protected private credentials</p>
+<p class="paragraph normal">Secure administrative authentication</p>
+<p class="paragraph normal">Controller replacement/recovery procedure</p>
+<p class="paragraph normal">Ability to revoke a compromised controller</p>
+<p class="paragraph normal">A copied SD card or copied configuration should not automatically become a trusted security controller.</p>
+<h1>10. Network Architecture</h1>
+<p class="paragraph normal">Recommended VLAN structure:</p>
+<p class="paragraph normal">VLAN 10  HOME</p>
+<p class="paragraph normal">VLAN 20  SERVERS</p>
+<p class="paragraph normal">VLAN 30  SECURITY</p>
+<p class="paragraph normal">VLAN 40  MANAGEMENT</p>
+<p class="paragraph normal">VLAN 50  GUEST</p>
+<p class="paragraph normal">VLAN 60  LAB / DEVELOPMENT</p>
+<p class="paragraph normal">VLAN 70  CAMERAS / IOT</p>
+<p class="paragraph normal">Default policy:</p>
+<p class="paragraph normal">VLAN → VLAN</p>
+<p class="paragraph normal">DENY BY DEFAULT</p>
+<p class="paragraph normal">Only explicitly required traffic should be permitted.</p>
+<p class="paragraph normal">The security controller shall have narrowly defined access to the management plane.</p>
+<p class="paragraph normal">Remote administration should use a VPN rather than exposing administrative services directly to the Internet.</p>
+<p class="paragraph normal">UPnP should be disabled where practical.</p>
+<h1>11. Server Security</h1>
+<p class="paragraph normal">Servers should use:</p>
+<p class="paragraph normal">Full-disk encryption where practical</p>
+<p class="paragraph normal">Encrypted sensitive volumes</p>
+<p class="paragraph normal">Strong authentication</p>
+<p class="paragraph normal">Hardware-backed authentication where available</p>
+<p class="paragraph normal">SSH keys/FIDO2-compatible authentication where appropriate</p>
+<p class="paragraph normal">Host firewalls</p>
+<p class="paragraph normal">Minimal exposed services</p>
+<p class="paragraph normal">Automatic security updates where appropriate</p>
+<p class="paragraph normal">Offline or otherwise independently protected backups</p>
+<p class="paragraph normal">Sensitive storage should be capable of being locked or unmounted during emergency lockdown.</p>
+<h1>12. Cryptography</h1>
+<p class="paragraph normal">The system should use established modern cryptographic primitives rather than proprietary encryption.</p>
+<p class="paragraph normal">Potential technologies include:</p>
+<p class="paragraph normal">AES-256 or equivalent authenticated encryption</p>
+<p class="paragraph normal">Argon2id for password-derived keys</p>
+<p class="paragraph normal">TLS 1.3</p>
+<p class="paragraph normal">FIDO2</p>
+<p class="paragraph normal">PIV-compatible credentials</p>
+<p class="paragraph normal">Hardware-backed key storage</p>
+<p class="paragraph normal">“Military grade” shall not be treated as a technical security requirement.</p>
+<p class="paragraph normal">The actual requirement is well-reviewed, appropriately configured cryptography with sound key management.</p>
+<h1>13. Key Separation</h1>
+<p class="paragraph normal">The following functions shall use separate authorization domains:</p>
+<p class="paragraph normal">Normal Administration</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Normal Authentication Key</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">Emergency Lockdown</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── E-Stop</p>
+<p class="paragraph normal">└── Emergency NFC</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">Emergency Recovery</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└── Recovery Key</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">High-Consequence Administration</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└── Dedicated Catastrophic Admin Key</p>
+<p class="paragraph normal">No ordinary credential shall automatically inherit all privileges.</p>
+<h1>14. E-Stop Requirements</h1>
+<p class="paragraph normal">The physical E-stop shall function as a security-state transition rather than a destructive computer command.</p>
+<p class="paragraph normal">When activated:</p>
+<p class="paragraph normal">Physical input is detected.</p>
+<p class="paragraph normal">Controller verifies the transition.</p>
+<p class="paragraph normal">System enters DANGER.</p>
+<p class="paragraph normal">Network restrictions are applied.</p>
+<p class="paragraph normal">Sensitive services are stopped.</p>
+<p class="paragraph normal">Sensitive encrypted storage is locked/unmounted where safe.</p>
+<p class="paragraph normal">Active sessions are revoked where possible.</p>
+<p class="paragraph normal">System records the security-state transition.</p>
+<p class="paragraph normal">Recovery remains possible.</p>
+<p class="paragraph normal">The E-stop shall not perform irreversible data destruction.</p>
+<h1>15. Physical Tamper Detection</h1>
+<p class="paragraph normal">The system may monitor:</p>
+<p class="paragraph normal">Security-panel opening</p>
+<p class="paragraph normal">Controller enclosure opening</p>
+<p class="paragraph normal">Unexpected key insertion</p>
+<p class="paragraph normal">Repeated authentication failures</p>
+<p class="paragraph normal">Unauthorized configuration changes</p>
+<p class="paragraph normal">Network topology changes</p>
+<p class="paragraph normal">Controller replacement</p>
+<p class="paragraph normal">Tamper detection should cause an appropriate security-state transition rather than automatically destroying information.</p>
+<h1>16. Power Architecture</h1>
+<p class="paragraph normal">The security controller should use UPS-backed power.</p>
+<p class="paragraph normal">Requirements:</p>
+<p class="paragraph normal">Graceful shutdown</p>
+<p class="paragraph normal">Power-loss detection</p>
+<p class="paragraph normal">Emergency-state persistence</p>
+<p class="paragraph normal">Recovery after power restoration</p>
+<p class="paragraph normal">Protection against filesystem corruption</p>
+<p class="paragraph normal">The security controller should not interpret ordinary power loss as authorization for destructive operations.</p>
+<h1>17. CYN-X Integration</h1>
+<p class="paragraph normal">CYN-X may integrate with the security system through a narrow API.</p>
+<p class="paragraph normal">CYN-X may request:</p>
+<p class="paragraph normal">Current security state</p>
+<p class="paragraph normal">Non-sensitive status</p>
+<p class="paragraph normal">Authorized service status</p>
+<p class="paragraph normal">Security notifications</p>
+<p class="paragraph normal">CYN-X shall not independently possess unrestricted authority over the security controller.</p>
+<p class="paragraph normal">High-consequence security actions shall remain under dedicated authorization controls.</p>
+<h1>18. State Machine</h1>
+<p class="paragraph normal">┌───────────┐</p>
+<p class="paragraph normal">│  NORMAL   │</p>
+<p class="paragraph normal">└─────┬─────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">security event</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌───────────┐</p>
+<p class="paragraph normal">│  WARNING  │</p>
+<p class="paragraph normal">└─────┬─────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">E-STOP</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌───────────┐</p>
+<p class="paragraph normal">│  DANGER   │</p>
+<p class="paragraph normal">└─────┬─────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">Emergency NFC</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌──────────────────┐</p>
+<p class="paragraph normal">│ MAXIMUM LOCKDOWN │</p>
+<p class="paragraph normal">└────────┬─────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">Recovery Key</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌───────────┐</p>
+<p class="paragraph normal">│  RECOVERY │</p>
+<p class="paragraph normal">└─────┬─────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">integrity check</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌────────┐</p>
+<p class="paragraph normal">│ NORMAL │</p>
+<p class="paragraph normal">└────────┘</p>
+<p class="paragraph normal">The catastrophic administrative key exists outside the ordinary emergency state machine and is reserved for separately authorized high-consequence administration.</p>
+<h1>19. Audit Logging</h1>
+<p class="paragraph normal">The system shall log security-relevant events such as:</p>
+<p class="paragraph normal">Authentication attempts</p>
+<p class="paragraph normal">Successful authentication</p>
+<p class="paragraph normal">Credential revocation</p>
+<p class="paragraph normal">E-stop activation</p>
+<p class="paragraph normal">NFC lockdown activation</p>
+<p class="paragraph normal">State transitions</p>
+<p class="paragraph normal">Recovery authorization</p>
+<p class="paragraph normal">Configuration changes</p>
+<p class="paragraph normal">Controller replacement</p>
+<p class="paragraph normal">Tamper events</p>
+<p class="paragraph normal">Logs should be protected against ordinary modification.</p>
+<p class="paragraph normal">Logging shall not prevent legitimate emergency recovery.</p>
+<h1>20. Backup Architecture</h1>
+<p class="paragraph normal">At least one independent recovery mechanism should exist outside the primary security controller.</p>
+<p class="paragraph normal">Recommended architecture:</p>
+<p class="paragraph normal">PRIMARY SYSTEM</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Encrypted Server Storage</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Local Backup</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└── Independent Recovery Backup</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└── Separate Physical Location</p>
+<p class="paragraph normal">The backup system should not depend exclusively on the Raspberry Pi.</p>
+<h1>21. Functional Requirements</h1>
+<div class="table-wrap">
+<table>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+</tr>
+<tr>
+<td>SEC-001</td>
+<td>System shall support physically authenticated administration.</td>
+</tr>
+<tr>
+<td>SEC-002</td>
+<td>System shall support an E-stop security transition.</td>
+</tr>
+<tr>
+<td>SEC-003</td>
+<td>E-stop shall activate DANGER mode.</td>
+</tr>
+<tr>
+<td>SEC-004</td>
+<td>Emergency NFC shall activate MAXIMUM LOCKDOWN.</td>
+</tr>
+<tr>
+<td>SEC-005</td>
+<td>Emergency lockdown shall preserve data integrity.</td>
+</tr>
+<tr>
+<td>SEC-006</td>
+<td>System shall support independent recovery credentials.</td>
+</tr>
+<tr>
+<td>SEC-007</td>
+<td>System shall support a physically separate catastrophic-admin credential.</td>
+</tr>
+<tr>
+<td>SEC-008</td>
+<td>Catastrophic-admin credential shall not be required for normal operation.</td>
+</tr>
+<tr>
+<td>SEC-009</td>
+<td>Catastrophic-admin authorization shall not be remotely substitutable.</td>
+</tr>
+<tr>
+<td>SEC-010</td>
+<td>NFC credentials shall use cryptographic authentication.</td>
+</tr>
+<tr>
+<td>SEC-011</td>
+<td>Credentials shall be revocable.</td>
+</tr>
+<tr>
+<td>SEC-012</td>
+<td>Security VLAN shall be isolated from ordinary devices.</td>
+</tr>
+<tr>
+<td>SEC-013</td>
+<td>Management access shall use least privilege.</td>
+</tr>
+<tr>
+<td>SEC-014</td>
+<td>Sensitive storage shall support emergency locking/unmounting.</td>
+</tr>
+<tr>
+<td>SEC-015</td>
+<td>Remote administrative access shall be protected by VPN and strong authentication.</td>
+</tr>
+<tr>
+<td>SEC-016</td>
+<td>Security events shall be logged.</td>
+</tr>
+<tr>
+<td>SEC-017</td>
+<td>Controller identity shall be protected.</td>
+</tr>
+<tr>
+<td>SEC-018</td>
+<td>System shall provide a recovery procedure.</td>
+</tr>
+<tr>
+<td>SEC-019</td>
+<td>Independent backups shall exist.</td>
+</tr>
+<tr>
+<td>SEC-020</td>
+<td>High-consequence administrative operations shall be separately authorized.</td>
+</tr>
+</table>
+</div>
+<h1>22. Acceptance Testing</h1>
+<h2>Test A — Normal Key</h2>
+<p class="paragraph normal">Action: Insert valid normal security key.</p>
+<p class="paragraph normal">Expected:</p>
+<p class="paragraph normal">Authentication succeeds.</p>
+<p class="paragraph normal">Authorized administrative functions become available.</p>
+<p class="paragraph normal">Catastrophic functions remain unavailable.</p>
+<h2>Test B — Invalid Key</h2>
+<p class="paragraph normal">Action: Present unknown credential.</p>
+<p class="paragraph normal">Expected:</p>
+<p class="paragraph normal">Authentication fails.</p>
+<p class="paragraph normal">No privileged operation occurs.</p>
+<p class="paragraph normal">Event is logged.</p>
+<h2>Test C — E-Stop</h2>
+<p class="paragraph normal">Action: Activate physical E-stop.</p>
+<p class="paragraph normal">Expected:</p>
+<p class="paragraph normal">DANGER mode activates.</p>
+<p class="paragraph normal">Sensitive services are restricted.</p>
+<p class="paragraph normal">Sensitive storage is locked/unmounted where safe.</p>
+<p class="paragraph normal">Network access is restricted.</p>
+<p class="paragraph normal">Recovery remains possible.</p>
+<h2>Test D — Emergency NFC</h2>
+<p class="paragraph normal">Action: Present valid emergency NFC credential.</p>
+<p class="paragraph normal">Expected:</p>
+<p class="paragraph normal">MAXIMUM LOCKDOWN activates.</p>
+<p class="paragraph normal">Active sessions are restricted/revoked.</p>
+<p class="paragraph normal">Sensitive services are stopped.</p>
+<p class="paragraph normal">Sensitive encrypted storage is locked where safe.</p>
+<p class="paragraph normal">Recovery remains possible.</p>
+<h2>Test E — Recovery</h2>
+<p class="paragraph normal">Action: Present authorized recovery credential.</p>
+<p class="paragraph normal">Expected:</p>
+<p class="paragraph normal">Recovery workflow begins.</p>
+<p class="paragraph normal">System validates required conditions.</p>
+<p class="paragraph normal">Services can be restored.</p>
+<p class="paragraph normal">System returns to NORMAL only after successful recovery.</p>
+<h2>Test F — Catastrophic Administrative Credential</h2>
+<p class="paragraph normal">Action: Present dedicated catastrophic-admin credential under an authorized maintenance procedure.</p>
+<p class="paragraph normal">Expected:</p>
+<p class="paragraph normal">High-consequence administrative authorization becomes available only after required safeguards.</p>
+<p class="paragraph normal">Ordinary users and remote sessions cannot substitute for the physical credential.</p>
+<p class="paragraph normal">The system records the authorization event.</p>
+<h1>23. Security Testing</h1>
+<p class="paragraph normal">Testing shall include:</p>
+<p class="paragraph normal">Credential cloning resistance</p>
+<p class="paragraph normal">NFC replay resistance</p>
+<p class="paragraph normal">Authentication brute-force resistance</p>
+<p class="paragraph normal">VLAN escape testing</p>
+<p class="paragraph normal">Firewall testing</p>
+<p class="paragraph normal">Privilege-escalation testing</p>
+<p class="paragraph normal">Controller compromise analysis</p>
+<p class="paragraph normal">Physical tamper testing</p>
+<p class="paragraph normal">Recovery testing</p>
+<p class="paragraph normal">Backup restoration testing</p>
+<p class="paragraph normal">Power-loss testing</p>
+<p class="paragraph normal">Secure boot/integrity testing where supported</p>
+<p class="paragraph normal">Key-revocation testing</p>
+<h1>24. Threat Model</h1>
+<p class="paragraph normal">The system shall consider:</p>
+<h3>Network attacker</h3>
+<p class="paragraph normal">Controls a compromised device on the home network.</p>
+<p class="paragraph normal">Defense: VLAN isolation, host firewalls, least privilege.</p>
+<h3>Stolen credential</h3>
+<p class="paragraph normal">An authentication key is lost or stolen.</p>
+<p class="paragraph normal">Defense: credential revocation and separate privilege tiers.</p>
+<h3>Compromised controller</h3>
+<p class="paragraph normal">The Raspberry Pi itself is compromised.</p>
+<p class="paragraph normal">Defense: hardware identity, minimal privileges, network segmentation, independent recovery.</p>
+<h3>Physical attacker</h3>
+<p class="paragraph normal">An unauthorized person gains physical access.</p>
+<p class="paragraph normal">Defense: enclosure protection, physical authentication, tamper detection, encryption, network isolation.</p>
+<h3>Accidental activation</h3>
+<p class="paragraph normal">An authorized person accidentally activates an emergency control.</p>
+<p class="paragraph normal">Defense: recoverable security states, interlocks, separated credentials, independent recovery.</p>
+<h1>25. Recovery Philosophy</h1>
+<p class="paragraph normal">The system shall follow:</p>
+<p class="paragraph normal">Lock first. Recover deliberately. Destroy nothing accidentally.</p>
+<p class="paragraph normal">Emergency controls are intended to rapidly reduce exposure while maintaining the ability to recover the system.</p>
+<p class="paragraph normal">High-consequence administrative operations are intentionally separated from emergency controls so that an emergency button, NFC credential, software bug, or compromised device cannot trivially cause irreversible loss.</p>
+<h1>26. Final Architecture</h1>
+<p class="paragraph normal">HOMESTEAD</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────┴──────────┐</p>
+<p class="paragraph normal">│ Physical Security   │</p>
+<p class="paragraph normal">│       Panel         │</p>
+<p class="paragraph normal">└──────────┬──────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌─────────────────┼──────────────────┐</p>
+<p class="paragraph normal">│                 │                  │</p>
+<p class="paragraph normal">▼                 ▼                  ▼</p>
+<p class="paragraph normal">NORMAL KEY          E-STOP          EMERGENCY NFC</p>
+<p class="paragraph normal">│                 │                  │</p>
+<p class="paragraph normal">│                 ▼                  ▼</p>
+<p class="paragraph normal">│              DANGER        MAXIMUM LOCKDOWN</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">NORMAL ADMIN</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└─────────────────┐</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">┌───────────────────┐</p>
+<p class="paragraph normal">│ Raspberry Pi      │</p>
+<p class="paragraph normal">│ Security Controller│</p>
+<p class="paragraph normal">└─────────┬─────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌─────────────┼─────────────┐</p>
+<p class="paragraph normal">▼             ▼             ▼</p>
+<p class="paragraph normal">FIREWALL       SERVICES       STORAGE</p>
+<p class="paragraph normal">│             │             │</p>
+<p class="paragraph normal">└─────────────┼─────────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">PRIVATE SERVERS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌────┴────┐</p>
+<p class="paragraph normal">│ CYN-X   │</p>
+<p class="paragraph normal">│  AI     │</p>
+<p class="paragraph normal">└─────────┘</p>
+<p class="paragraph normal">SEPARATE PHYSICAL RECOVERY DOMAIN</p>
+<p class="paragraph normal">RECOVERY KEY</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">SYSTEM RECOVERY</p>
+<p class="paragraph normal">SEPARATE HIGH-CONSEQUENCE DOMAIN</p>
+<p class="paragraph normal">CATASTROPHIC ADMIN KEY</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">AUTHORIZED HIGH-CONSEQUENCE</p>
+<p class="paragraph normal">ADMINISTRATION</p>
+<h1>27. Core Security Rule</h1>
+<p class="paragraph normal">The final architecture is governed by four independent principles:</p>
+<p class="paragraph normal">Normal keys authorize normal access.</p>
+<p class="paragraph normal">E-stop creates DANGER mode.</p>
+<p class="paragraph normal">Emergency NFC creates MAXIMUM LOCKDOWN.</p>
+<p class="paragraph normal">The dedicated physical catastrophic-admin key is required for separately authorized high-consequence administration.</p>
+<p class="paragraph normal">The emergency system remains recoverable by design.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>

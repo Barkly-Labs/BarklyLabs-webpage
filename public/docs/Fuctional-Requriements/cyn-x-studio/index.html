@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>CYN-X Studio — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            CYN-X Studio
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\CYN-X Studio.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>CYN-X Studio</h1>
+<h2>Human-Centered Creative Technology Lab &amp; Ecosystem</h2>
+<p class="paragraph normal">Founder: Nicky Blackburn
+Location: Detroit, Michigan
+Core Principle: Technology should adapt to humans.</p>
+<h1>1. Executive Summary</h1>
+<p class="paragraph normal">CYN-X Studio is a human-centered creative technology laboratory and ecosystem built around one simple idea:</p>
+<p class="paragraph normal">Technology should support people, not consume them.</p>
+<p class="paragraph normal">CYN-X Studio brings together artificial intelligence, software engineering, embedded systems, robotics, computer vision, creative technology, media, streaming, education, and community development.</p>
+<p class="paragraph normal">The studio exists to help people turn ideas into working technology.</p>
+<p class="paragraph normal">A person should be able to walk into CYN-X Studio with an idea and say:</p>
+<p class="paragraph normal">“I had an idea, and this community helped me make it real.”</p>
+<p class="paragraph normal">CYN-X is therefore not intended to operate solely as a conventional software company. It is designed as a combination of:</p>
+<p class="paragraph normal">Technology studio</p>
+<p class="paragraph normal">Research laboratory</p>
+<p class="paragraph normal">Product-development organization</p>
+<p class="paragraph normal">Creator ecosystem</p>
+<p class="paragraph normal">Maker space</p>
+<p class="paragraph normal">Educational environment</p>
+<p class="paragraph normal">Community hub</p>
+<p class="paragraph normal">Media/streaming studio</p>
+<p class="paragraph normal">Collaborative engineering workshop</p>
+<p class="paragraph normal">The long-term goal is to establish a Detroit-based ecosystem where technology, creativity, learning, and community development reinforce one another.</p>
+<h1>2. Mission</h1>
+<p class="paragraph normal">CYN-X Studio&#x27;s mission is to make advanced technology more human, accessible, creative, and useful.</p>
+<p class="paragraph normal">The studio develops technology that:</p>
+<p class="paragraph normal">adapts to human needs;</p>
+<p class="paragraph normal">reduces unnecessary complexity;</p>
+<p class="paragraph normal">supports creativity;</p>
+<p class="paragraph normal">encourages experimentation;</p>
+<p class="paragraph normal">respects accessibility;</p>
+<p class="paragraph normal">gives creators ownership;</p>
+<p class="paragraph normal">enables people to learn by building;</p>
+<p class="paragraph normal">encourages collaboration instead of unnecessary competition;</p>
+<p class="paragraph normal">makes advanced technology understandable;</p>
+<p class="paragraph normal">and contributes positively to the surrounding community.</p>
+<p class="paragraph normal">CYN-X believes that technological progress should improve people&#x27;s ability to live, create, communicate, learn, and participate.</p>
+<h1>3. Vision</h1>
+<p class="paragraph normal">The long-term vision is a Detroit-based technology ecosystem where someone does not need to already be an expert, wealthy investor, or established company to turn an idea into something real.</p>
+<p class="paragraph normal">CYN-X Studio provides a path:</p>
+<p class="paragraph normal">Idea → Experiment → Prototype → Community Testing → Product → Release → Continued Development</p>
+<p class="paragraph normal">A person might arrive with:</p>
+<p class="paragraph normal">an AI idea;</p>
+<p class="paragraph normal">a game;</p>
+<p class="paragraph normal">a hardware prototype;</p>
+<p class="paragraph normal">an accessibility device;</p>
+<p class="paragraph normal">a robotics project;</p>
+<p class="paragraph normal">a software application;</p>
+<p class="paragraph normal">an artistic technology project;</p>
+<p class="paragraph normal">a creator project;</p>
+<p class="paragraph normal">a scientific experiment;</p>
+<p class="paragraph normal">or simply a problem they want technology to solve.</p>
+<p class="paragraph normal">CYN-X provides the environment, technical knowledge, equipment, collaboration, and support necessary to explore that idea.</p>
+<h1>4. Human-Centered Philosophy</h1>
+<p class="paragraph normal">CYN-X Studio is built around a human-centered engineering philosophy.</p>
+<p class="paragraph normal">Technology should not require people to reorganize their entire lives around machines.</p>
+<p class="paragraph normal">Instead:</p>
+<p class="paragraph normal">Technology should adapt to humans.</p>
+<p class="paragraph normal">This principle applies to both products and the organization itself.</p>
+<h2>4.1 Technology should support people</h2>
+<p class="paragraph normal">Technology should reduce unnecessary effort rather than create additional burdens.</p>
+<h2>4.2 Humans are not machines</h2>
+<p class="paragraph normal">People have different energy levels, abilities, interests, working styles, and needs.</p>
+<p class="paragraph normal">CYN-X therefore values sustainable contribution rather than treating constant productivity as the measure of a person&#x27;s worth.</p>
+<h2>4.3 Accessibility is foundational</h2>
+<p class="paragraph normal">Accessibility should be considered during design rather than added only after a product is finished.</p>
+<h2>4.4 Experimentation is valuable</h2>
+<p class="paragraph normal">Not every experiment needs to become a commercial product.</p>
+<p class="paragraph normal">Research, prototypes, failures, weird ideas, and unfinished projects can all contribute to knowledge.</p>
+<h2>4.5 Technology should remain understandable</h2>
+<p class="paragraph normal">CYN-X seeks to document its work so that people can understand how systems function rather than treating technology as a black box.</p>
+<h1>5. Core Values</h1>
+<h3>Curiosity</h3>
+<p class="paragraph normal">Ask questions. Explore possibilities. Build things simply because they are interesting.</p>
+<h3>Systems Thinking</h3>
+<p class="paragraph normal">Understand how hardware, software, people, organizations, and environments interact.</p>
+<h3>Craftsmanship</h3>
+<p class="paragraph normal">Build things carefully and continuously improve them.</p>
+<h3>Documentation</h3>
+<p class="paragraph normal">Knowledge should remain accessible instead of disappearing inside one person&#x27;s head.</p>
+<h3>Accessibility</h3>
+<p class="paragraph normal">Technology should be usable by as many people as reasonably possible.</p>
+<h3>Collaboration</h3>
+<p class="paragraph normal">Different people bring different strengths.</p>
+<h3>Experimentation</h3>
+<p class="paragraph normal">Prototypes and failures are part of engineering.</p>
+<h3>Human Well-Being</h3>
+<p class="paragraph normal">People should not have to destroy themselves to produce technology.</p>
+<h3>Creator Ownership</h3>
+<p class="paragraph normal">People who create things should retain meaningful ownership of their work.</p>
+<h3>Technology for the Greater Good</h3>
+<p class="paragraph normal">Technology should ultimately improve people&#x27;s ability to live and create.</p>
+<h1>6. What CYN-X Studio Does</h1>
+<p class="paragraph normal">CYN-X operates across several connected areas.</p>
+<h2>6.1 Artificial Intelligence</h2>
+<p class="paragraph normal">The AI division develops CYN-X and related intelligent systems.</p>
+<p class="paragraph normal">Areas of exploration include:</p>
+<p class="paragraph normal">local AI;</p>
+<p class="paragraph normal">personal assistants;</p>
+<p class="paragraph normal">adaptive intelligence;</p>
+<p class="paragraph normal">memory systems;</p>
+<p class="paragraph normal">personality systems;</p>
+<p class="paragraph normal">multimodal interaction;</p>
+<p class="paragraph normal">computer vision;</p>
+<p class="paragraph normal">robotics integration;</p>
+<p class="paragraph normal">AI interfaces;</p>
+<p class="paragraph normal">AI-assisted development;</p>
+<p class="paragraph normal">human-AI collaboration;</p>
+<p class="paragraph normal">private/local inference.</p>
+<p class="paragraph normal">The goal is not simply to create another chatbot.</p>
+<p class="paragraph normal">CYN-X explores what an AI system can become when it is designed around an ongoing relationship with its user, environment, tools, and projects.</p>
+<h1>7. Software Engineering</h1>
+<p class="paragraph normal">The software engineering division develops:</p>
+<p class="paragraph normal">applications;</p>
+<p class="paragraph normal">web interfaces;</p>
+<p class="paragraph normal">APIs;</p>
+<p class="paragraph normal">automation;</p>
+<p class="paragraph normal">developer tools;</p>
+<p class="paragraph normal">dashboards;</p>
+<p class="paragraph normal">infrastructure;</p>
+<p class="paragraph normal">AI applications;</p>
+<p class="paragraph normal">community platforms;</p>
+<p class="paragraph normal">internal studio systems.</p>
+<p class="paragraph normal">Software development follows an iterative process:</p>
+<p class="paragraph normal">Requirement → Design → Prototype → Implementation → Testing → Feedback → Release</p>
+<p class="paragraph normal">Documentation is maintained throughout the process.</p>
+<h1>8. Embedded Systems</h1>
+<p class="paragraph normal">CYN-X explores the relationship between software and physical computing.</p>
+<p class="paragraph normal">Potential areas include:</p>
+<p class="paragraph normal">microcontrollers;</p>
+<p class="paragraph normal">sensors;</p>
+<p class="paragraph normal">actuators;</p>
+<p class="paragraph normal">IoT;</p>
+<p class="paragraph normal">environmental monitoring;</p>
+<p class="paragraph normal">robotics;</p>
+<p class="paragraph normal">custom hardware;</p>
+<p class="paragraph normal">edge computing;</p>
+<p class="paragraph normal">AI accelerators;</p>
+<p class="paragraph normal">human-computer interfaces.</p>
+<h3>Smart Garden</h3>
+<p class="paragraph normal">Smart Garden is an embedded-systems project exploring technology for plants, environments, and automated growing.</p>
+<p class="paragraph normal">Possible systems include:</p>
+<p class="paragraph normal">environmental sensors;</p>
+<p class="paragraph normal">automated watering;</p>
+<p class="paragraph normal">lighting;</p>
+<p class="paragraph normal">temperature monitoring;</p>
+<p class="paragraph normal">humidity monitoring;</p>
+<p class="paragraph normal">local control;</p>
+<p class="paragraph normal">data collection;</p>
+<p class="paragraph normal">automation.</p>
+<p class="paragraph normal">The project also serves as a practical educational platform for learning embedded engineering.</p>
+<h1>9. Computer Vision</h1>
+<h3>SecuServe</h3>
+<p class="paragraph normal">SecuServe is a computer-vision and security-oriented technology project.</p>
+<p class="paragraph normal">The project explores responsible applications of:</p>
+<p class="paragraph normal">object detection;</p>
+<p class="paragraph normal">visual monitoring;</p>
+<p class="paragraph normal">automated alerts;</p>
+<p class="paragraph normal">computer vision;</p>
+<p class="paragraph normal">edge AI;</p>
+<p class="paragraph normal">environmental awareness.</p>
+<p class="paragraph normal">CYN-X&#x27;s approach to computer vision emphasizes responsible deployment, transparency, privacy, and human oversight.</p>
+<h1>10. Creative Technology</h1>
+<h3>FoxStore</h3>
+<p class="paragraph normal">FoxStore represents the creative-commerce side of the ecosystem.</p>
+<p class="paragraph normal">It can provide a place for:</p>
+<p class="paragraph normal">digital products;</p>
+<p class="paragraph normal">physical products;</p>
+<p class="paragraph normal">creator projects;</p>
+<p class="paragraph normal">artwork;</p>
+<p class="paragraph normal">technology projects;</p>
+<p class="paragraph normal">merchandise;</p>
+<p class="paragraph normal">experimental products.</p>
+<p class="paragraph normal">The objective is to connect creativity with sustainable revenue without taking ownership away from creators.</p>
+<h1>11. CYN-X Core</h1>
+<p class="paragraph normal">CYN-X Core serves as a connecting layer between the studio&#x27;s intelligent systems, interfaces, services, and physical devices.</p>
+<p class="paragraph normal">The long-term concept is an ecosystem in which CYN-X can interact with:</p>
+<p class="paragraph normal">computers;</p>
+<p class="paragraph normal">phones;</p>
+<p class="paragraph normal">displays;</p>
+<p class="paragraph normal">speakers;</p>
+<p class="paragraph normal">cameras;</p>
+<p class="paragraph normal">sensors;</p>
+<p class="paragraph normal">wearable devices;</p>
+<p class="paragraph normal">robotics;</p>
+<p class="paragraph normal">custom hardware;</p>
+<p class="paragraph normal">software services.</p>
+<p class="paragraph normal">Instead of creating isolated products, CYN-X Core can provide shared infrastructure.</p>
+<p class="paragraph normal">The broader idea is:</p>
+<p class="paragraph normal">One intelligent ecosystem → many interfaces.</p>
+<h1>12. Creator Support</h1>
+<p class="paragraph normal">One of CYN-X Studio&#x27;s defining functions is helping independent creators turn ideas into finished projects.</p>
+<p class="paragraph normal">Creators can receive support with:</p>
+<p class="paragraph normal">technical planning;</p>
+<p class="paragraph normal">programming;</p>
+<p class="paragraph normal">development;</p>
+<p class="paragraph normal">design feedback;</p>
+<p class="paragraph normal">prototyping;</p>
+<p class="paragraph normal">testing;</p>
+<p class="paragraph normal">debugging;</p>
+<p class="paragraph normal">documentation;</p>
+<p class="paragraph normal">marketing;</p>
+<p class="paragraph normal">content creation;</p>
+<p class="paragraph normal">exposure;</p>
+<p class="paragraph normal">release preparation.</p>
+<p class="paragraph normal">The creator remains the owner of their work.</p>
+<p class="paragraph normal">CYN-X&#x27;s role is to provide the infrastructure and expertise needed to help the creator succeed.</p>
+<h1>13. Creator Revenue Model</h1>
+<p class="paragraph normal">CYN-X Studio is designed around transparent creator economics.</p>
+<p class="paragraph normal">Rather than automatically taking ownership of a creator&#x27;s work, the studio can operate through a small, clearly defined contribution from successful releases.</p>
+<p class="paragraph normal">The original concept was approximately:</p>
+<p class="paragraph normal">20 per successful sale/release, depending on the project and services involved.</p>
+<p class="paragraph normal">That contribution supports things such as:</p>
+<p class="paragraph normal">development;</p>
+<p class="paragraph normal">design;</p>
+<p class="paragraph normal">testing;</p>
+<p class="paragraph normal">infrastructure;</p>
+<p class="paragraph normal">marketing;</p>
+<p class="paragraph normal">exposure;</p>
+<p class="paragraph normal">technical support;</p>
+<p class="paragraph normal">continued studio operations.</p>
+<p class="paragraph normal">The exact structure can vary by project and should be agreed upon before work begins.</p>
+<p class="paragraph normal">The fundamental principle remains:</p>
+<p class="paragraph normal">Creators should understand exactly where the money goes and retain ownership of what they create.</p>
+<h1>14. Business Model</h1>
+<p class="paragraph normal">CYN-X Studio uses a diversified model rather than depending on one revenue stream.</p>
+<p class="paragraph normal">Potential revenue sources include:</p>
+<h3>Product Sales</h3>
+<p class="paragraph normal">Software, hardware, digital products, physical products, and creator products.</p>
+<h3>Subscriptions</h3>
+<p class="paragraph normal">Recurring subscriptions for software, services, infrastructure, or premium functionality.</p>
+<h3>Licensing</h3>
+<p class="paragraph normal">Licensing CYN-X technology and other studio-developed intellectual property.</p>
+<h3>Sponsorships</h3>
+<p class="paragraph normal">Partnerships with organizations interested in supporting technology, education, creativity, or community projects.</p>
+<h3>Grants</h3>
+<p class="paragraph normal">Research, technology, education, accessibility, community, and economic-development grants.</p>
+<h3>Crowdfunding</h3>
+<p class="paragraph normal">Community-funded development of experimental or creator-led projects.</p>
+<h3>Memberships</h3>
+<p class="paragraph normal">Membership programs providing access to studio resources, community events, workshops, equipment, or development infrastructure.</p>
+<h3>Services</h3>
+<p class="paragraph normal">Development, prototyping, engineering, technical consulting, and creative technology services.</p>
+<h3>Creator Revenue Sharing</h3>
+<p class="paragraph normal">Transparent contributions from successful creator releases supported by the studio.</p>
+<h1>15. Reinvestment</h1>
+<p class="paragraph normal">Revenue should not simply disappear into corporate overhead.</p>
+<p class="paragraph normal">A portion of successful projects can be reinvested into:</p>
+<p class="paragraph normal">new equipment;</p>
+<p class="paragraph normal">research;</p>
+<p class="paragraph normal">software infrastructure;</p>
+<p class="paragraph normal">creator support;</p>
+<p class="paragraph normal">employee/contractor compensation;</p>
+<p class="paragraph normal">education;</p>
+<p class="paragraph normal">community programs;</p>
+<p class="paragraph normal">new prototypes;</p>
+<p class="paragraph normal">studio operations.</p>
+<p class="paragraph normal">The goal is a positive development cycle:</p>
+<p class="paragraph normal">Revenue → Reinvestment → Better Tools → Better Projects → More Revenue → More Opportunity</p>
+<h1>16. Community Model</h1>
+<p class="paragraph normal">CYN-X Studio is intended to function as an ecosystem rather than merely an office.</p>
+<p class="paragraph normal">The community can include:</p>
+<p class="paragraph normal">programmers;</p>
+<p class="paragraph normal">engineers;</p>
+<p class="paragraph normal">artists;</p>
+<p class="paragraph normal">musicians;</p>
+<p class="paragraph normal">streamers;</p>
+<p class="paragraph normal">gamers;</p>
+<p class="paragraph normal">designers;</p>
+<p class="paragraph normal">hardware enthusiasts;</p>
+<p class="paragraph normal">students;</p>
+<p class="paragraph normal">researchers;</p>
+<p class="paragraph normal">creators;</p>
+<p class="paragraph normal">entrepreneurs;</p>
+<p class="paragraph normal">hobbyists.</p>
+<p class="paragraph normal">People do not need to be experts to participate.</p>
+<p class="paragraph normal">The studio can provide opportunities for people to learn through real projects.</p>
+<h1>17. Education</h1>
+<p class="paragraph normal">CYN-X&#x27;s educational philosophy is:</p>
+<p class="paragraph normal">Learn by building.</p>
+<p class="paragraph normal">Instead of separating education completely from practical work, participants can learn STEM and technology concepts while working on actual projects.</p>
+<p class="paragraph normal">Possible educational activities include:</p>
+<p class="paragraph normal">coding workshops;</p>
+<p class="paragraph normal">electronics workshops;</p>
+<p class="paragraph normal">AI experimentation;</p>
+<p class="paragraph normal">robotics;</p>
+<p class="paragraph normal">3D printing;</p>
+<p class="paragraph normal">computer vision;</p>
+<p class="paragraph normal">game development;</p>
+<p class="paragraph normal">hardware design;</p>
+<p class="paragraph normal">software architecture;</p>
+<p class="paragraph normal">documentation;</p>
+<p class="paragraph normal">project management.</p>
+<p class="paragraph normal">Mentorship can connect experienced builders with people who are just beginning.</p>
+<h1>18. Studio Environment</h1>
+<p class="paragraph normal">The physical CYN-X Studio is envisioned as a flexible technology and creative environment.</p>
+<p class="paragraph normal">Potential areas include:</p>
+<h3>Engineering Lab</h3>
+<p class="paragraph normal">Computers, development equipment, electronics, test equipment, and prototyping tools.</p>
+<h3>Maker Space</h3>
+<p class="paragraph normal">Hardware experimentation, robotics, fabrication, and physical prototyping.</p>
+<h3>AI Lab</h3>
+<p class="paragraph normal">Local AI systems, GPU hardware, model experimentation, and research.</p>
+<h3>Creator Studio</h3>
+<p class="paragraph normal">Streaming, recording, photography, video, and media production.</p>
+<h3>Collaboration Space</h3>
+<p class="paragraph normal">Tables, whiteboards, project areas, and group development.</p>
+<h3>Community Space</h3>
+<p class="paragraph normal">Gaming, social events, showcases, workshops, and informal interaction.</p>
+<h3>Recovery/Quiet Space</h3>
+<p class="paragraph normal">A lower-stimulation environment where people can step away from active work.</p>
+<p class="paragraph normal">The studio should feel like a place where people want to create, rather than a place where they are pressured to constantly produce.</p>
+<h1>19. Working Philosophy</h1>
+<p class="paragraph normal">CYN-X does not define contribution solely through hours spent at a desk.</p>
+<p class="paragraph normal">The organization should recognize:</p>
+<p class="paragraph normal">project output;</p>
+<p class="paragraph normal">creativity;</p>
+<p class="paragraph normal">problem-solving;</p>
+<p class="paragraph normal">research;</p>
+<p class="paragraph normal">documentation;</p>
+<p class="paragraph normal">mentorship;</p>
+<p class="paragraph normal">community contribution;</p>
+<p class="paragraph normal">experimentation;</p>
+<p class="paragraph normal">maintenance;</p>
+<p class="paragraph normal">collaboration.</p>
+<p class="paragraph normal">People have different capacities.</p>
+<p class="paragraph normal">A sustainable organization should be able to accommodate different working patterns when practical.</p>
+<p class="paragraph normal">The goal is sustainable productivity, not maximum extraction.</p>
+<h1>20. Organizational Structure</h1>
+<p class="paragraph normal">CYN-X Studio can be organized into interconnected teams.</p>
+<h3>AI</h3>
+<p class="paragraph normal">CYN-X, machine learning, local AI, assistants, intelligent systems.</p>
+<h3>Software Engineering</h3>
+<p class="paragraph normal">Applications, APIs, infrastructure, developer tools.</p>
+<h3>Embedded Systems</h3>
+<p class="paragraph normal">Microcontrollers, sensors, automation, Smart Garden.</p>
+<h3>Computer Vision</h3>
+<p class="paragraph normal">SecuServe, visual AI, object detection, environmental awareness.</p>
+<h3>Creative Technology</h3>
+<p class="paragraph normal">Interactive systems, creator tools, experimental projects.</p>
+<h3>Hardware &amp; Robotics</h3>
+<p class="paragraph normal">Physical computing, robotics, interfaces, prototypes.</p>
+<h3>Media &amp; Streaming</h3>
+<p class="paragraph normal">Video, streaming, demonstrations, documentation, community media.</p>
+<h3>Community &amp; Education</h3>
+<p class="paragraph normal">Workshops, mentorship, events, outreach.</p>
+<h3>Operations</h3>
+<p class="paragraph normal">Finance, administration, partnerships, legal/compliance, infrastructure.</p>
+<p class="paragraph normal">Teams can overlap rather than becoming isolated departments.</p>
+<h1>21. Recruitment</h1>
+<p class="paragraph normal">CYN-X should recruit based on:</p>
+<p class="paragraph normal">curiosity;</p>
+<p class="paragraph normal">passion;</p>
+<p class="paragraph normal">skills;</p>
+<p class="paragraph normal">willingness to learn;</p>
+<p class="paragraph normal">collaboration;</p>
+<p class="paragraph normal">mission alignment;</p>
+<p class="paragraph normal">craftsmanship.</p>
+<p class="paragraph normal">A traditional résumé should not necessarily be the only way someone demonstrates ability.</p>
+<p class="paragraph normal">Projects, prototypes, GitHub repositories, creative work, demonstrations, and practical skills can also demonstrate capability.</p>
+<h1>22. Intellectual Property</h1>
+<p class="paragraph normal">CYN-X should establish clear ownership agreements before collaborative development begins.</p>
+<p class="paragraph normal">The general philosophy is:</p>
+<p class="paragraph normal">Creators retain ownership whenever possible.</p>
+<p class="paragraph normal">CYN-X may retain ownership of:</p>
+<p class="paragraph normal">internally developed infrastructure;</p>
+<p class="paragraph normal">studio-owned products;</p>
+<p class="paragraph normal">shared technology;</p>
+<p class="paragraph normal">independently developed intellectual property;</p>
+<p class="paragraph normal">systems specifically commissioned as studio property.</p>
+<p class="paragraph normal">Creator projects should have explicit agreements defining:</p>
+<p class="paragraph normal">ownership;</p>
+<p class="paragraph normal">licensing;</p>
+<p class="paragraph normal">revenue sharing;</p>
+<p class="paragraph normal">responsibilities;</p>
+<p class="paragraph normal">maintenance;</p>
+<p class="paragraph normal">distribution rights.</p>
+<p class="paragraph normal">No ambiguity should be allowed to develop around ownership.</p>
+<h1>23. Development Lifecycle</h1>
+<p class="paragraph normal">CYN-X uses a practical development pipeline:</p>
+<h3>1. Idea</h3>
+<p class="paragraph normal">Identify a problem, opportunity, or creative concept.</p>
+<h3>2. Research</h3>
+<p class="paragraph normal">Determine what already exists and what is technically possible.</p>
+<h3>3. Experiment</h3>
+<p class="paragraph normal">Test assumptions cheaply.</p>
+<h3>4. Prototype</h3>
+<p class="paragraph normal">Build the smallest useful demonstration.</p>
+<h3>5. Community Testing</h3>
+<p class="paragraph normal">Let real users interact with the system.</p>
+<h3>6. Engineering</h3>
+<p class="paragraph normal">Improve reliability, usability, security, and maintainability.</p>
+<h3>7. Productization</h3>
+<p class="paragraph normal">Prepare the system for real-world use.</p>
+<h3>8. Release</h3>
+<p class="paragraph normal">Publish, sell, license, or deploy the project.</p>
+<h3>9. Feedback</h3>
+<p class="paragraph normal">Collect real-world information.</p>
+<h3>10. Continued Development</h3>
+<p class="paragraph normal">Improve the product based on actual use.</p>
+<h1>24. Documentation</h1>
+<p class="paragraph normal">Documentation is considered part of engineering rather than optional paperwork.</p>
+<p class="paragraph normal">Projects should document:</p>
+<p class="paragraph normal">goals;</p>
+<p class="paragraph normal">architecture;</p>
+<p class="paragraph normal">requirements;</p>
+<p class="paragraph normal">design decisions;</p>
+<p class="paragraph normal">hardware;</p>
+<p class="paragraph normal">software;</p>
+<p class="paragraph normal">APIs;</p>
+<p class="paragraph normal">testing;</p>
+<p class="paragraph normal">known limitations;</p>
+<p class="paragraph normal">setup instructions;</p>
+<p class="paragraph normal">troubleshooting;</p>
+<p class="paragraph normal">future plans.</p>
+<p class="paragraph normal">The purpose is to make projects understandable and maintainable even as people change roles.</p>
+<h1>25. Technology Infrastructure</h1>
+<p class="paragraph normal">The long-term CYN-X infrastructure may include:</p>
+<p class="paragraph normal">local AI servers;</p>
+<p class="paragraph normal">GPU computing;</p>
+<p class="paragraph normal">development workstations;</p>
+<p class="paragraph normal">private cloud services;</p>
+<p class="paragraph normal">version control;</p>
+<p class="paragraph normal">CI/CD;</p>
+<p class="paragraph normal">databases;</p>
+<p class="paragraph normal">internal APIs;</p>
+<p class="paragraph normal">networking;</p>
+<p class="paragraph normal">monitoring;</p>
+<p class="paragraph normal">backup systems;</p>
+<p class="paragraph normal">hardware laboratories;</p>
+<p class="paragraph normal">testing environments.</p>
+<p class="paragraph normal">Where practical, CYN-X can favor local and self-hosted infrastructure to improve control, privacy, experimentation, and resilience.</p>
+<h1>26. Community Events</h1>
+<p class="paragraph normal">Potential events include:</p>
+<p class="paragraph normal">project showcases;</p>
+<p class="paragraph normal">hackathons;</p>
+<p class="paragraph normal">maker nights;</p>
+<p class="paragraph normal">coding sessions;</p>
+<p class="paragraph normal">gaming nights;</p>
+<p class="paragraph normal">AI demonstrations;</p>
+<p class="paragraph normal">robotics demonstrations;</p>
+<p class="paragraph normal">creator showcases;</p>
+<p class="paragraph normal">workshops;</p>
+<p class="paragraph normal">open studio days;</p>
+<p class="paragraph normal">community technology discussions.</p>
+<p class="paragraph normal">The purpose is not simply networking.</p>
+<p class="paragraph normal">It is to create opportunities for people to meet, learn, build, and make things together.</p>
+<h1>27. Detroit Focus</h1>
+<p class="paragraph normal">CYN-X Studio is fundamentally envisioned as a Detroit-based organization.</p>
+<p class="paragraph normal">Detroit provides the environment for the studio&#x27;s long-term identity and community development.</p>
+<p class="paragraph normal">The goal is not simply to build technology somewhere and attach “Detroit” to it afterward.</p>
+<p class="paragraph normal">CYN-X should participate in the local ecosystem through:</p>
+<p class="paragraph normal">education;</p>
+<p class="paragraph normal">technology development;</p>
+<p class="paragraph normal">creator support;</p>
+<p class="paragraph normal">community events;</p>
+<p class="paragraph normal">local partnerships;</p>
+<p class="paragraph normal">maker activities;</p>
+<p class="paragraph normal">entrepreneurship;</p>
+<p class="paragraph normal">employment and contracting opportunities;</p>
+<p class="paragraph normal">technology demonstrations.</p>
+<p class="paragraph normal">The long-term vision is for CYN-X to become part of Detroit&#x27;s technology and creative ecosystem.</p>
+<h1>28. Community Impact</h1>
+<p class="paragraph normal">CYN-X can measure success through more than financial performance.</p>
+<p class="paragraph normal">Potential measures include:</p>
+<p class="paragraph normal">creators supported;</p>
+<p class="paragraph normal">projects completed;</p>
+<p class="paragraph normal">people trained;</p>
+<p class="paragraph normal">prototypes developed;</p>
+<p class="paragraph normal">open-source contributions;</p>
+<p class="paragraph normal">community events held;</p>
+<p class="paragraph normal">educational hours;</p>
+<p class="paragraph normal">new businesses/projects launched;</p>
+<p class="paragraph normal">technology donated or deployed;</p>
+<p class="paragraph normal">local partnerships;</p>
+<p class="paragraph normal">creator revenue generated;</p>
+<p class="paragraph normal">accessibility improvements.</p>
+<p class="paragraph normal">Financial sustainability matters, but it is not the only measure of success.</p>
+<h1>29. Five-Year Vision</h1>
+<h2>Year 1 — Foundation</h2>
+<p class="paragraph normal">Establish CYN-X Studio identity.</p>
+<p class="paragraph normal">Build core software infrastructure.</p>
+<p class="paragraph normal">Continue CYN-X AI development.</p>
+<p class="paragraph normal">Establish documentation standards.</p>
+<p class="paragraph normal">Develop initial creator-support model.</p>
+<p class="paragraph normal">Prototype initial hardware/software projects.</p>
+<p class="paragraph normal">Begin building a community.</p>
+<h2>Year 2 — Prototyping</h2>
+<p class="paragraph normal">Expand CYN-X.</p>
+<p class="paragraph normal">Develop Smart Garden.</p>
+<p class="paragraph normal">Advance SecuServe.</p>
+<p class="paragraph normal">Develop creator tools.</p>
+<p class="paragraph normal">Establish regular workshops.</p>
+<p class="paragraph normal">Expand equipment and infrastructure.</p>
+<h2>Year 3 — Products</h2>
+<p class="paragraph normal">Release first commercial products.</p>
+<p class="paragraph normal">Establish licensing/subscription opportunities.</p>
+<p class="paragraph normal">Expand creator partnerships.</p>
+<p class="paragraph normal">Establish stronger revenue streams.</p>
+<p class="paragraph normal">Grow technical teams.</p>
+<h2>Year 4 — Ecosystem</h2>
+<p class="paragraph normal">Expand the physical studio.</p>
+<p class="paragraph normal">Increase education programs.</p>
+<p class="paragraph normal">Establish larger community events.</p>
+<p class="paragraph normal">Increase hardware and AI research.</p>
+<p class="paragraph normal">Develop partnerships.</p>
+<h2>Year 5 — Detroit Technology Ecosystem</h2>
+<p class="paragraph normal">CYN-X Studio becomes a mature Detroit-based technology ecosystem supporting:</p>
+<p class="paragraph normal">AI;</p>
+<p class="paragraph normal">software;</p>
+<p class="paragraph normal">hardware;</p>
+<p class="paragraph normal">creators;</p>
+<p class="paragraph normal">education;</p>
+<p class="paragraph normal">research;</p>
+<p class="paragraph normal">community development;</p>
+<p class="paragraph normal">entrepreneurship.</p>
+<h1>30. Long-Term Possibilities</h1>
+<p class="paragraph normal">CYN-X could eventually develop into a broader network of:</p>
+<p class="paragraph normal">technology labs;</p>
+<p class="paragraph normal">creator studios;</p>
+<p class="paragraph normal">maker spaces;</p>
+<p class="paragraph normal">educational programs;</p>
+<p class="paragraph normal">AI infrastructure;</p>
+<p class="paragraph normal">hardware development;</p>
+<p class="paragraph normal">community technology programs.</p>
+<p class="paragraph normal">The organization could eventually support independent teams operating under the CYN-X ecosystem while retaining their own creative identities.</p>
+<h1>31. Competitive Philosophy</h1>
+<p class="paragraph normal">CYN-X does not need to compete solely by attempting to become another giant technology corporation.</p>
+<p class="paragraph normal">Its advantage is its combination of:</p>
+<p class="paragraph normal">AI + Engineering + Hardware + Creativity + Community + Education + Human-Centered Design</p>
+<p class="paragraph normal">The studio can focus on projects that larger companies may overlook because they are too experimental, too specialized, too community-oriented, or too early-stage.</p>
+<h1>32. Ethical Technology</h1>
+<p class="paragraph normal">CYN-X should consider ethical consequences throughout development.</p>
+<p class="paragraph normal">Important areas include:</p>
+<p class="paragraph normal">privacy;</p>
+<p class="paragraph normal">security;</p>
+<p class="paragraph normal">informed consent;</p>
+<p class="paragraph normal">accessibility;</p>
+<p class="paragraph normal">transparency;</p>
+<p class="paragraph normal">responsible AI;</p>
+<p class="paragraph normal">human oversight;</p>
+<p class="paragraph normal">data minimization;</p>
+<p class="paragraph normal">creator ownership;</p>
+<p class="paragraph normal">fair compensation.</p>
+<p class="paragraph normal">Technology should not be deployed simply because it can be built.</p>
+<p class="paragraph normal">The question should also be:</p>
+<p class="paragraph normal">Should this technology exist, and how should it be used responsibly?</p>
+<h1>33. Sustainability</h1>
+<p class="paragraph normal">CYN-X should be designed to remain sustainable for both the organization and its people.</p>
+<p class="paragraph normal">That means:</p>
+<p class="paragraph normal">realistic project scopes;</p>
+<p class="paragraph normal">sustainable workloads;</p>
+<p class="paragraph normal">documentation;</p>
+<p class="paragraph normal">automation;</p>
+<p class="paragraph normal">good infrastructure;</p>
+<p class="paragraph normal">diversified revenue;</p>
+<p class="paragraph normal">reasonable operating costs;</p>
+<p class="paragraph normal">reinvestment;</p>
+<p class="paragraph normal">adequate recovery time;</p>
+<p class="paragraph normal">avoiding unnecessary bureaucracy.</p>
+<p class="paragraph normal">A company that burns out its creators eventually destroys its own creative capacity.</p>
+<h1>34. The CYN-X Loop</h1>
+<p class="paragraph normal">The entire ecosystem can be summarized as:</p>
+<p class="paragraph normal">People → Ideas → Experiments → Technology → Community → Products → Revenue → Reinvestment → More Ideas</p>
+<p class="paragraph normal">This creates a self-reinforcing ecosystem.</p>
+<p class="paragraph normal">The purpose of revenue is not merely extraction.</p>
+<p class="paragraph normal">Revenue provides the resources necessary to continue creating.</p>
+<h1>35. The CYN-X Promise</h1>
+<p class="paragraph normal">CYN-X Studio seeks to create an environment where:</p>
+<p class="paragraph normal">Your idea matters.</p>
+<p class="paragraph normal">Your creativity matters.</p>
+<p class="paragraph normal">Your time matters.</p>
+<p class="paragraph normal">Your ownership matters.</p>
+<p class="paragraph normal">Your accessibility matters.</p>
+<p class="paragraph normal">Your well-being matters.</p>
+<p class="paragraph normal">Technology exists to expand human capability—not replace human value.</p>
+<h1>36. Final Vision</h1>
+<p class="paragraph normal">CYN-X Studio is ultimately an attempt to build the kind of technology organization that treats people as people.</p>
+<p class="paragraph normal">It is a place where an engineer can experiment.</p>
+<p class="paragraph normal">Where a creator can develop an idea.</p>
+<p class="paragraph normal">Where a student can learn by building.</p>
+<p class="paragraph normal">Where an artist can collaborate with technology.</p>
+<p class="paragraph normal">Where a hardware enthusiast can prototype something strange.</p>
+<p class="paragraph normal">Where an AI system can become an actual research project.</p>
+<p class="paragraph normal">Where a community can gather around technology without needing to already belong to the technology industry.</p>
+<p class="paragraph normal">And where the fundamental question is not:</p>
+<p class="paragraph normal">“How much can we extract from this person?”</p>
+<p class="paragraph normal">but:</p>
+<p class="paragraph normal">“What could this person create if we gave them the tools, support, time, and environment to do it?”</p>
+<p class="paragraph normal">CYN-X Studio</p>
+<h3>Where imagination becomes engineering.</h3>
+<h3>Technology should adapt to humans.</h3>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>

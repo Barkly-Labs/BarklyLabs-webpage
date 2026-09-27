@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>🌿 Smart Irrigation System — Functional Requirements (v2) — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            🌿 Smart Irrigation System — Functional Requirements (v2)
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\🌿 Smart Irrigation System — Functional Requirements (v2) (2).docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>🌿 Smart Irrigation System — Functional Requirements (v2)</h1>
+<h2>1. System Purpose</h2>
+<p class="paragraph normal">The system SHALL automatically monitor soil moisture across multiple plant beds, make localized watering decisions per bed using averaged sensor data, and provide real-time monitoring and control via a centralized Raspberry Pi web server.</p>
+<h2>2. System Architecture</h2>
+<h3>2.1 Distributed Bed Nodes</h3>
+<p class="paragraph normal">Each plant bed SHALL operate as an independent embedded node using an ESP32 microcontroller.</p>
+<p class="paragraph normal">Each bed node SHALL include:</p>
+<p class="paragraph normal">1 × ESP32</p>
+<p class="paragraph normal">5 × soil moisture sensors</p>
+<p class="paragraph normal">1 × water control actuator (relay + valve or pump)</p>
+<p class="paragraph normal">WiFi communication module (built-in)</p>
+<h3>2.2 Central Server</h3>
+<p class="paragraph normal">The system SHALL include a Raspberry Pi running a local web server that:</p>
+<p class="paragraph normal">Receives sensor data from all bed nodes</p>
+<p class="paragraph normal">Stores and processes incoming data</p>
+<p class="paragraph normal">Hosts a real-time monitoring dashboard</p>
+<p class="paragraph normal">Provides system-wide visibility</p>
+<h2>3. Bed Node Functional Requirements</h2>
+<h3>3.1 Sensor Data Acquisition</h3>
+<p class="paragraph normal">Each bed node SHALL:</p>
+<p class="paragraph normal">Read moisture values from 5 soil sensors</p>
+<p class="paragraph normal">Sample sensors at a fixed interval (configurable)</p>
+<p class="paragraph normal">Validate readings to remove invalid or out-of-range values</p>
+<h3>3.2 Moisture Calculation</h3>
+<p class="paragraph normal">Each bed node SHALL:</p>
+<p class="paragraph normal">Compute the arithmetic mean of all 5 sensor readings:</p>
+<p class="paragraph normal">Use the computed average as the bed moisture indicator</p>
+<h3>3.3 Watering Decision Logic</h3>
+<p class="paragraph normal">Each bed node SHALL:</p>
+<p class="paragraph normal">Compare average moisture against a configurable threshold</p>
+<p class="paragraph normal">If average indicates dryness:</p>
+<p class="paragraph normal">Activate water valve for a defined duration</p>
+<p class="paragraph normal">If moisture is sufficient:</p>
+<p class="paragraph normal">Keep valve OFF</p>
+<h3>3.4 Watering Safety Controls</h3>
+<p class="paragraph normal">Each bed node SHALL:</p>
+<p class="paragraph normal">Enforce a cooldown period between watering cycles</p>
+<p class="paragraph normal">Prevent continuous activation beyond maximum duration</p>
+<p class="paragraph normal">Default valve state SHALL be OFF on startup or failure</p>
+<h2>4. Communication Requirements</h2>
+<h3>4.1 Network Connectivity</h3>
+<p class="paragraph normal">Each ESP32 node SHALL:</p>
+<p class="paragraph normal">Connect to WiFi automatically on boot</p>
+<p class="paragraph normal">Reconnect if connection is lost</p>
+<p class="paragraph normal">Continue local irrigation logic without network dependency</p>
+<h3>4.2 Data Transmission</h3>
+<p class="paragraph normal">Each node SHALL send periodic updates to the Raspberry Pi server including:</p>
+<p class="paragraph normal">Bed identifier</p>
+<p class="paragraph normal">Timestamp (ISO 8601)</p>
+<p class="paragraph normal">Individual sensor readings</p>
+<p class="paragraph normal">Average moisture value</p>
+<p class="paragraph normal">Valve state</p>
+<p class="paragraph normal">Signal strength (optional)</p>
+<p class="paragraph normal">Example payload:</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">&quot;bed_id&quot;: &quot;bed_1&quot;,</p>
+<p class="paragraph normal">&quot;timestamp&quot;: &quot;2026-04-09T12:00:00Z&quot;,</p>
+<p class="paragraph normal">&quot;sensors&quot;: [410, 395, 480, 420, 390],</p>
+<p class="paragraph normal">&quot;average&quot;: 419,</p>
+<p class="paragraph normal">&quot;valve_state&quot;: &quot;OFF&quot;,</p>
+<p class="paragraph normal">&quot;rssi&quot;: -60</p>
+<p class="paragraph normal">}</p>
+<h3>4.3 Communication Protocol</h3>
+<p class="paragraph normal">The system SHALL support:</p>
+<p class="paragraph normal">HTTP POST (primary implementation)</p>
+<p class="paragraph normal">Optional MQTT compatibility for scaling</p>
+<h2>5. Raspberry Pi Server Requirements</h2>
+<h3>5.1 Data Ingestion</h3>
+<p class="paragraph normal">The server SHALL:</p>
+<p class="paragraph normal">Accept incoming data from all bed nodes</p>
+<p class="paragraph normal">Validate payload structure</p>
+<p class="paragraph normal">Associate data with correct bed ID</p>
+<h3>5.2 Data Storage</h3>
+<p class="paragraph normal">The server MAY:</p>
+<p class="paragraph normal">Store historical readings per bed</p>
+<p class="paragraph normal">Maintain time-series logs for analysis</p>
+<h3>5.3 Real-Time Processing</h3>
+<p class="paragraph normal">The server SHALL:</p>
+<p class="paragraph normal">Maintain latest state per bed</p>
+<p class="paragraph normal">Update dashboard data within near real-time latency</p>
+<h2>6. Web Dashboard Requirements</h2>
+<h3>6.1 System Overview View</h3>
+<p class="paragraph normal">The dashboard SHALL display:</p>
+<p class="paragraph normal">All beds in a grid layout</p>
+<p class="paragraph normal">Current moisture average per bed</p>
+<p class="paragraph normal">Valve state (ON/OFF)</p>
+<p class="paragraph normal">Last update timestamp</p>
+<h3>6.2 Bed Detail View</h3>
+<p class="paragraph normal">Each bed SHALL have a detail panel showing:</p>
+<p class="paragraph normal">Individual sensor values</p>
+<p class="paragraph normal">Average moisture trend</p>
+<p class="paragraph normal">Watering history</p>
+<p class="paragraph normal">Connection status</p>
+<h3>6.3 Real-Time Updates</h3>
+<p class="paragraph normal">The dashboard SHALL:</p>
+<p class="paragraph normal">Update automatically without manual refresh</p>
+<p class="paragraph normal">Reflect changes within seconds of ESP32 updates</p>
+<h2>7. Configuration Requirements</h2>
+<h3>7.1 Per-Bed Configuration</h3>
+<p class="paragraph normal">Each bed SHALL support:</p>
+<p class="paragraph normal">Moisture threshold value</p>
+<p class="paragraph normal">Watering duration</p>
+<p class="paragraph normal">Sampling interval</p>
+<p class="paragraph normal">Cooldown period</p>
+<h3>7.2 System Configuration</h3>
+<p class="paragraph normal">The system SHALL allow configuration of:</p>
+<p class="paragraph normal">WiFi credentials</p>
+<p class="paragraph normal">Server endpoint</p>
+<p class="paragraph normal">Global update interval defaults</p>
+<h2>8. Reliability Requirements</h2>
+<p class="paragraph normal">The system SHALL:</p>
+<p class="paragraph normal">Continue irrigation logic if server becomes unavailable</p>
+<p class="paragraph normal">Recover automatically from network failure</p>
+<p class="paragraph normal">Default to safe OFF state for all actuators on reboot</p>
+<p class="paragraph normal">Prevent stuck-on valve conditions using timeout safeguards</p>
+<h2>9. Power Requirements</h2>
+<p class="paragraph normal">The system SHALL:</p>
+<p class="paragraph normal">Use separate power supply for actuators (pump/valves)</p>
+<p class="paragraph normal">Ensure ESP32 is not directly powering high-load components</p>
+<p class="paragraph normal">Maintain stable 5V regulated supply for controllers</p>
+<h2>10. System Behavior Summary</h2>
+<p class="paragraph normal">Each bed node SHALL function as:</p>
+<p class="paragraph normal">an autonomous moisture monitoring and watering controller</p>
+<p class="paragraph normal">The Raspberry Pi SHALL function as:</p>
+<p class="paragraph normal">a centralized monitoring, logging, and visualization system</p>
+<h2>🧸 Final Shape of Your System</h2>
+<p class="paragraph normal">You’ve basically built:</p>
+<p class="paragraph normal">🧠 distributed embedded control (ESP32 beds)</p>
+<p class="paragraph normal">💧 local decision-making (averaging logic)</p>
+<p class="paragraph normal">🌐 centralized observability (Raspberry Pi dashboard)</p>
+<p class="paragraph normal">📡 live telemetry pipeline (WiFi data streaming</p>
+<p class="paragraph normal">Hardware</p>
+<p class="paragraph normal">Moisture sensors (5 pack) https://a.co/d/08jgp9i0 -&gt; 12.99$</p>
+<p class="paragraph normal">Esp 32 (1 pack) https://a.co/d/0gWkgj1d -&gt; 10$</p>
+<p class="paragraph normal">Electronic waterproof box://a.co/d/0bZPKaHF  -&gt; 15$</p>
+<p class="paragraph normal">Proto bord https://a.co/d/084GUDtd -&gt; 10$</p>
+<p class="paragraph normal">Soldering iron kit https://a.co/d/0blNSt7l -&gt; 27$</p>
+<p class="paragraph normal">Boost converter https://a.co/d/06VqAMKu -&gt; 5$</p>
+<p class="paragraph normal">USB c pd https://a.co/d/0aFaKluF -&gt; 8$</p>
+<p class="paragraph normal">Solid core wire https://a.co/d/0d2wdwJW -&gt; 13$</p>
+<p class="paragraph normal">3 conductor wire https://a.co/d/0aJJDiKh -&gt; 14$</p>
+<p class="paragraph normal">Battery bank https://a.co/d/0cTmBX93 -&gt; 24$</p>
+<p class="paragraph normal">Water solidnoid https://a.co/d/0fcChfRU -&gt; 41$</p>
+<p class="paragraph normal">Raspi 3 https://a.co/d/0iV00K1j -&gt; 90$</p>
+<p class="paragraph normal">Hose adapter https://a.co/d/08PHq3U3 -&gt; 16$</p>
+<p class="paragraph normal">Relay bord https://a.co/d/00JKLzu1 -&gt; 6$</p>
+<p class="paragraph normal">Irrigation hose https://a.co/d/0ir0gQr8 -&gt; 18$</p>
+<p class="paragraph normal">Terminal block https://a.co/d/09clhrCy -&gt; 6$</p>
+<p class="paragraph normal">Volt meter https://a.co/d/01X2x7zS -&gt; 15$</p>
+<p class="paragraph normal">Solar Panel Amazon.com : FUTUREZEN Solar Panel for Security Camera, 10W Solar Charger with DC 5.5x2.1mm, USB-C &amp; Micro USB Port, IP66 Waterproof, 360° Adjustable Mount, 7.2FT Cable : Patio, Lawn &amp; Garden  -&gt; 39.99$</p>
+<p class="paragraph normal">Continuous current draw  need and total energy needed</p>
+<p class="paragraph normal">Idle current ~0.08 – 0.1A (80–100 mA) at 12V</p>
+<p class="paragraph normal">Solenoid active current 0.5–1A @ 12V</p>
+<p class="paragraph normal">I want to start with one garden bed as a prototype for my smart irrigation system. I’ll use it as a dev setup to test everything, and once it’s working reliably, I’ll expand it to the rest.”</p>
+<p class="paragraph normal">Tracking the sun exposure of plants</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>

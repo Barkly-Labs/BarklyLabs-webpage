@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>CYN-X Robot — Functional Requirements Specification — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            CYN-X Robot — Functional Requirements Specification
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\CYN-X Robot — Functional Requirements Specification.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>CYN-X Robot — Functional Requirements Specification</h1>
+<p class="paragraph normal">Version: 0.1 — Initial Robot Architecture
+ Status: Living / Development Specification
+ Target: 2–3 ft humanoid robotic skeleton
+ Primary computer: Variscite DART-MX93 / NXP i.MX93
+ Architecture: Distributed actuator + sensor system</p>
+<h2>1. System Purpose</h2>
+<p class="paragraph normal">CYN-X shall be a small humanoid robotic platform designed to provide a physical embodiment for the CYN-X software/AI system.</p>
+<p class="paragraph normal">The robot shall prioritize:</p>
+<p class="paragraph normal">Modularity</p>
+<p class="paragraph normal">Accessible development</p>
+<p class="paragraph normal">Replaceable components</p>
+<p class="paragraph normal">Distributed real-time control</p>
+<p class="paragraph normal">High-level AI autonomy</p>
+<p class="paragraph normal">Safe actuator control</p>
+<p class="paragraph normal">Open software interfaces</p>
+<p class="paragraph normal">Incremental development</p>
+<p class="paragraph normal">The first-generation robot is not required to be a fully autonomous walking humanoid.</p>
+<p class="paragraph normal">It shall instead provide a scalable physical platform in which increasingly sophisticated capabilities can be developed.</p>
+<h1>2. Overall Architecture</h1>
+<p class="paragraph normal">CYN-X shall use a layered architecture:</p>
+<p class="paragraph normal">CYN-X ROBOT</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌────────────┴────────────┐</p>
+<p class="paragraph normal">│                         │</p>
+<p class="paragraph normal">High-Level Computer       Real-Time Hardware</p>
+<p class="paragraph normal">DART-MX93                    │</p>
+<p class="paragraph normal">│                         │</p>
+<p class="paragraph normal">Linux / CYN-X OS               │</p>
+<p class="paragraph normal">│                         │</p>
+<p class="paragraph normal">AI / Planning                  │</p>
+<p class="paragraph normal">Vision                         │</p>
+<p class="paragraph normal">Robotics API                  │</p>
+<p class="paragraph normal">│                         │</p>
+<p class="paragraph normal">└──────────┬──────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">Robot Bus</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────┼──────────┐</p>
+<p class="paragraph normal">▼          ▼          ▼</p>
+<p class="paragraph normal">Actuator    Actuator   Actuator</p>
+<p class="paragraph normal">Controller  Controller Controller</p>
+<p class="paragraph normal">│          │          │</p>
+<p class="paragraph normal">Motor      Motor      Motor</p>
+<p class="paragraph normal">│          │          │</p>
+<p class="paragraph normal">Joint      Joint      Joint</p>
+<h3>FR-ARCH-001</h3>
+<p class="paragraph normal">The robot shall separate high-level computation from real-time actuator control.</p>
+<h3>FR-ARCH-002</h3>
+<p class="paragraph normal">The DART-MX93 shall not be required to directly generate motor PWM for every actuator.</p>
+<h3>FR-ARCH-003</h3>
+<p class="paragraph normal">Motor controllers shall perform low-level motor-control functions where supported.</p>
+<h3>FR-ARCH-004</h3>
+<p class="paragraph normal">The CYN-X software shall communicate with actuators through a standardized hardware abstraction layer.</p>
+<h1>3. Main Computer</h1>
+<h3>FR-CMP-001</h3>
+<p class="paragraph normal">The robot shall use the DART-MX93 as the primary high-level computer.</p>
+<h3>FR-CMP-002</h3>
+<p class="paragraph normal">The primary computer shall run a Linux-based operating system.</p>
+<h3>FR-CMP-003</h3>
+<p class="paragraph normal">The computer shall provide the runtime environment for CYN-X software.</p>
+<h3>FR-CMP-004</h3>
+<p class="paragraph normal">The computer shall provide interfaces for:</p>
+<p class="paragraph normal">robot control</p>
+<p class="paragraph normal">sensor processing</p>
+<p class="paragraph normal">communications</p>
+<p class="paragraph normal">networking</p>
+<p class="paragraph normal">AI inference</p>
+<p class="paragraph normal">diagnostics</p>
+<p class="paragraph normal">logging</p>
+<p class="paragraph normal">configuration</p>
+<h3>FR-CMP-005</h3>
+<p class="paragraph normal">The architecture shall permit replacement of the main computer without requiring replacement of every actuator controller.</p>
+<h1>4. CYN-X Robot Software</h1>
+<p class="paragraph normal">CYN-X shall not directly expose hardware-specific implementation details to higher-level behaviors.</p>
+<p class="paragraph normal">Instead:</p>
+<p class="paragraph normal">CYN</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">Robot API</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">Hardware Abstraction Layer</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── REV actuator</p>
+<p class="paragraph normal">├── Other actuator</p>
+<p class="paragraph normal">├── Servo</p>
+<p class="paragraph normal">├── Sensor</p>
+<p class="paragraph normal">└── Custom CYN-X hardware</p>
+<h3>FR-SW-001</h3>
+<p class="paragraph normal">The robot shall provide a unified software API for actuators.</p>
+<h3>FR-SW-002</h3>
+<p class="paragraph normal">The API shall support commands including:</p>
+<p class="paragraph normal">enable</p>
+<p class="paragraph normal">disable</p>
+<p class="paragraph normal">stop</p>
+<p class="paragraph normal">velocity</p>
+<p class="paragraph normal">position</p>
+<p class="paragraph normal">current/torque limit where supported</p>
+<p class="paragraph normal">acceleration limits where supported</p>
+<h3>FR-SW-003</h3>
+<p class="paragraph normal">The API shall provide actuator telemetry including, where available:</p>
+<p class="paragraph normal">position</p>
+<p class="paragraph normal">velocity</p>
+<p class="paragraph normal">current</p>
+<p class="paragraph normal">voltage</p>
+<p class="paragraph normal">temperature</p>
+<p class="paragraph normal">controller state</p>
+<p class="paragraph normal">fault state</p>
+<p class="paragraph normal">encoder state</p>
+<h3>FR-SW-004</h3>
+<p class="paragraph normal">Hardware-specific APIs shall be isolated behind adapters.</p>
+<p class="paragraph normal">This means CYN-X can eventually change from a REV controller to a custom CYN-X controller without rewriting the entire robotics stack.</p>
+<h1>5. Actuator System</h1>
+<p class="paragraph normal">The robot shall use electronically controlled motors for major joints.</p>
+<p class="paragraph normal">Potential joint classes include:</p>
+<p class="paragraph normal">shoulder</p>
+<p class="paragraph normal">elbow</p>
+<p class="paragraph normal">wrist</p>
+<p class="paragraph normal">hip</p>
+<p class="paragraph normal">knee</p>
+<p class="paragraph normal">ankle</p>
+<p class="paragraph normal">neck</p>
+<p class="paragraph normal">The initial prototype does not need all of these.</p>
+<h3>FR-ACT-001</h3>
+<p class="paragraph normal">Each powered joint shall have an electronically controllable actuator.</p>
+<h3>FR-ACT-002</h3>
+<p class="paragraph normal">Each actuator shall have a defined control interface.</p>
+<h3>FR-ACT-003</h3>
+<p class="paragraph normal">The actuator system shall support closed-loop control where the selected controller provides it.</p>
+<h3>FR-ACT-004</h3>
+<p class="paragraph normal">The robot shall obtain joint feedback through integrated or external encoders.</p>
+<h3>FR-ACT-005</h3>
+<p class="paragraph normal">The system shall detect actuator faults where supported.</p>
+<h3>FR-ACT-006</h3>
+<p class="paragraph normal">A failed actuator shall not prevent the rest of the system from reporting the failure.</p>
+<h1>6. REV / FTC Ecosystem Compatibility</h1>
+<p class="paragraph normal">CYN-X shall leverage existing robotics infrastructure rather than recreate it unnecessarily.</p>
+<p class="paragraph normal">REV already provides motor-controller hardware with CAN, USB and PWM interfaces, and SPARK MAX/Flex have documented software/API resources.</p>
+<h3>FR-REV-001</h3>
+<p class="paragraph normal">The CYN-X architecture shall permit the use of REV motor controllers.</p>
+<h3>FR-REV-002</h3>
+<p class="paragraph normal">The CYN-X software shall isolate REV-specific communication behind a driver/adapter.</p>
+<h3>FR-REV-003</h3>
+<p class="paragraph normal">The robot shall not require the REV Hardware Client to remain running during normal robot operation.</p>
+<h3>FR-REV-004</h3>
+<p class="paragraph normal">The REV Hardware Client may be used for initial configuration, firmware management, diagnostics, and development, but shall not constitute the CYN-X runtime.</p>
+<p class="paragraph normal">REV documents CAN operation for SPARK MAX/Flex and provides API resources; this makes that class of controller particularly suitable for a direct CYN-X actuator layer.</p>
+<h3>FR-REV-005</h3>
+<p class="paragraph normal">The system shall not make the CYN-X architecture dependent upon the FTC competition Robot Controller application.</p>
+<p class="paragraph normal">This distinction matters because FTC&#x27;s official control system normally uses a Control Hub or Android device + Expansion Hub as its robot controller.</p>
+<h1>7. Robot Communications Bus</h1>
+<p class="paragraph normal">The robot shall use a deterministic device communications bus for distributed hardware.</p>
+<h3>FR-CAN-001</h3>
+<p class="paragraph normal">The actuator network shall support CAN-compatible communication.</p>
+<h3>FR-CAN-002</h3>
+<p class="paragraph normal">Each networked actuator shall have a unique device identifier.</p>
+<h3>FR-CAN-003</h3>
+<p class="paragraph normal">The system shall support bidirectional communication.</p>
+<h3>FR-CAN-004</h3>
+<p class="paragraph normal">The robot computer shall be able to:</p>
+<p class="paragraph normal">send commands</p>
+<p class="paragraph normal">receive telemetry</p>
+<p class="paragraph normal">receive faults</p>
+<p class="paragraph normal">discover/configure devices where supported</p>
+<h3>FR-CAN-005</h3>
+<p class="paragraph normal">The communications layer shall be abstracted from the robot API.</p>
+<p class="paragraph normal">CYN-X API</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Actuator HAL</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">CAN Driver</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Controller</p>
+<h3>FR-CAN-006</h3>
+<p class="paragraph normal">The protocol architecture shall permit future migration to CAN-FD or another higher-bandwidth bus without requiring redesign of the high-level robot API.</p>
+<h1>8. Joint Model</h1>
+<p class="paragraph normal">CYN-X shall represent the physical robot as a collection of joints.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">CYN-X</p>
+<p class="paragraph normal">├── head</p>
+<p class="paragraph normal">│   └── neck_yaw</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── left_arm</p>
+<p class="paragraph normal">│   ├── shoulder</p>
+<p class="paragraph normal">│   ├── elbow</p>
+<p class="paragraph normal">│   └── wrist</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── right_arm</p>
+<p class="paragraph normal">│   ├── shoulder</p>
+<p class="paragraph normal">│   ├── elbow</p>
+<p class="paragraph normal">│   └── wrist</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── left_leg</p>
+<p class="paragraph normal">│   ├── hip</p>
+<p class="paragraph normal">│   ├── knee</p>
+<p class="paragraph normal">│   └── ankle</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└── right_leg</p>
+<p class="paragraph normal">├── hip</p>
+<p class="paragraph normal">├── knee</p>
+<p class="paragraph normal">└── ankle</p>
+<h3>FR-JNT-001</h3>
+<p class="paragraph normal">Every controllable joint shall have a unique software identifier.</p>
+<h3>FR-JNT-002</h3>
+<p class="paragraph normal">Each joint shall expose its capabilities to the CYN-X software.</p>
+<h3>FR-JNT-003</h3>
+<p class="paragraph normal">The system shall support joint limits.</p>
+<h3>FR-JNT-004</h3>
+<p class="paragraph normal">The system shall support configurable direction/inversion.</p>
+<h3>FR-JNT-005</h3>
+<p class="paragraph normal">The system shall support calibration procedures.</p>
+<h3>FR-JNT-006</h3>
+<p class="paragraph normal">The system shall maintain a logical relationship between joint position and physical position.</p>
+<h1>9. Sensors</h1>
+<p class="paragraph normal">The robot shall support distributed sensors.</p>
+<p class="paragraph normal">Initial sensor categories:</p>
+<p class="paragraph normal">joint encoders</p>
+<p class="paragraph normal">IMU</p>
+<p class="paragraph normal">cameras</p>
+<p class="paragraph normal">motor telemetry</p>
+<p class="paragraph normal">temperature</p>
+<p class="paragraph normal">battery voltage/current</p>
+<h3>FR-SEN-001</h3>
+<p class="paragraph normal">The robot shall provide an IMU interface.</p>
+<h3>FR-SEN-002</h3>
+<p class="paragraph normal">The robot shall provide joint-position feedback.</p>
+<h3>FR-SEN-003</h3>
+<p class="paragraph normal">The robot shall support at least one camera interface.</p>
+<h3>FR-SEN-004</h3>
+<p class="paragraph normal">Sensor drivers shall be modular.</p>
+<h3>FR-SEN-005</h3>
+<p class="paragraph normal">Sensor data shall be available to CYN-X&#x27;s perception and control systems.</p>
+<h1>10. Power System</h1>
+<h3>FR-PWR-001</h3>
+<p class="paragraph normal">The robot shall use a centralized battery/power architecture appropriate for the selected motors and controllers.</p>
+<h3>FR-PWR-002</h3>
+<p class="paragraph normal">The system shall monitor battery voltage.</p>
+<h3>FR-PWR-003</h3>
+<p class="paragraph normal">The system shall monitor power faults where hardware supports such monitoring.</p>
+<h3>FR-PWR-004</h3>
+<p class="paragraph normal">The system shall provide a physical means of disabling actuator power.</p>
+<h3>FR-PWR-005</h3>
+<p class="paragraph normal">The main computer shall not be the sole mechanism for emergency actuator shutdown.</p>
+<p class="paragraph normal">That&#x27;s important for a physical robot: software can fail.</p>
+<h1>11. Safety</h1>
+<p class="paragraph normal">This gets a big section because CYN-X will eventually have moving limbs.</p>
+<h3>FR-SAF-001</h3>
+<p class="paragraph normal">The robot shall have a physical emergency-stop mechanism.</p>
+<h3>FR-SAF-002</h3>
+<p class="paragraph normal">Emergency stop shall remove or inhibit actuator power independently of normal high-level software.</p>
+<h3>FR-SAF-003</h3>
+<p class="paragraph normal">The robot shall have configurable joint limits.</p>
+<h3>FR-SAF-004</h3>
+<p class="paragraph normal">The robot shall support configurable velocity limits.</p>
+<h3>FR-SAF-005</h3>
+<p class="paragraph normal">The robot shall support configurable current/torque limits where supported.</p>
+<h3>FR-SAF-006</h3>
+<p class="paragraph normal">The robot shall detect loss of communication with actuator controllers.</p>
+<h3>FR-SAF-007</h3>
+<p class="paragraph normal">Loss of high-level computer communication shall cause actuators to enter a defined safe state.</p>
+<h3>FR-SAF-008</h3>
+<p class="paragraph normal">The robot shall prevent unintended motion during startup.</p>
+<h1>12. Diagnostics</h1>
+<h3>FR-DIA-001</h3>
+<p class="paragraph normal">CYN-X shall provide a system health state.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">CYN-X HEALTH</p>
+<p class="paragraph normal">─────────────</p>
+<p class="paragraph normal">Computer       OK</p>
+<p class="paragraph normal">CAN            OK</p>
+<p class="paragraph normal">Battery        87%</p>
+<p class="paragraph normal">IMU            OK</p>
+<p class="paragraph normal">Left shoulder  OK</p>
+<p class="paragraph normal">Right shoulder OK</p>
+<p class="paragraph normal">Left knee      WARNING</p>
+<p class="paragraph normal">Camera         OK</p>
+<h3>FR-DIA-002</h3>
+<p class="paragraph normal">The robot shall log actuator faults.</p>
+<h3>FR-DIA-003</h3>
+<p class="paragraph normal">The robot shall log communications faults.</p>
+<h3>FR-DIA-004</h3>
+<p class="paragraph normal">The robot shall log sensor failures.</p>
+<h3>FR-DIA-005</h3>
+<p class="paragraph normal">The robot shall provide diagnostic information without requiring the REV Hardware Client during normal operation.</p>
+<h1>13. Development Architecture</h1>
+<p class="paragraph normal">CYN-X shall be designed so that development can happen incrementally.</p>
+<h3>FR-DEV-001</h3>
+<p class="paragraph normal">The first prototype shall be operable with a single actuator.</p>
+<h3>FR-DEV-002</h3>
+<p class="paragraph normal">The software shall support simulated actuators.</p>
+<h3>FR-DEV-003</h3>
+<p class="paragraph normal">A simulated robot shall be usable without physical motors.</p>
+<h3>FR-DEV-004</h3>
+<p class="paragraph normal">Individual joints shall be testable independently.</p>
+<h3>FR-DEV-005</h3>
+<p class="paragraph normal">Hardware drivers shall be replaceable without modifying high-level behavior code.</p>
+<h1>14. Incremental Prototype Requirements</h1>
+<p class="paragraph normal">I really like this part for CYN-X.</p>
+<h3>Prototype 0 — Software</h3>
+<p class="paragraph normal">DART-MX93</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">CYN-X software</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">simulated joints</p>
+<p class="paragraph normal">Goal: prove the software architecture.</p>
+<h3>Prototype 1 — One actuator</h3>
+<p class="paragraph normal">DART</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">controller</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">motor</p>
+<p class="paragraph normal">Goal: prove the complete command → controller → motor → telemetry loop.</p>
+<h3>Prototype 2 — Arm</h3>
+<p class="paragraph normal">shoulder</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">elbow</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">wrist</p>
+<p class="paragraph normal">Goal: prove coordinated joints.</p>
+<h3>Prototype 3 — Torso + arms</h3>
+<p class="paragraph normal">Goal: prove multi-joint coordination.</p>
+<h3>Prototype 4 — Legs</h3>
+<p class="paragraph normal">Goal: develop balance and locomotion systems.</p>
+<h3>Prototype 5 — Full 2–3 ft CYN-X</h3>
+<p class="paragraph normal">Goal: integrated robot.</p>
+<h1>15. High-Level CYN-X Interface</h1>
+<p class="paragraph normal">Ultimately, the AI shouldn&#x27;t need to know anything about CAN frames.</p>
+<p class="paragraph normal">It should be able to reason at this level:</p>
+<p class="paragraph normal">cyn.robot.left_arm.shoulder.move_to(45)</p>
+<p class="paragraph normal">cyn.robot.right_arm.elbow.set_velocity(0.5)</p>
+<p class="paragraph normal">cyn.robot.head.look_at(target)</p>
+<p class="paragraph normal">cyn.robot.stop()</p>
+<p class="paragraph normal">The stack underneath handles:</p>
+<p class="paragraph normal">AI intent</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Robot behavior</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Motion planning</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Joint controller</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Actuator abstraction</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">REV/CAN driver</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Motor controller</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Motor</p>
+<p class="paragraph normal">That is the core CYN-X idea I&#x27;d preserve.</p>
+<h1>16. Future Requirements</h1>
+<p class="paragraph normal">The architecture shall not prevent future additions including:</p>
+<p class="paragraph normal">autonomous walking</p>
+<p class="paragraph normal">computer vision</p>
+<p class="paragraph normal">speech</p>
+<p class="paragraph normal">manipulation</p>
+<p class="paragraph normal">balance control</p>
+<p class="paragraph normal">force sensing</p>
+<p class="paragraph normal">tactile sensing</p>
+<p class="paragraph normal">mapping</p>
+<p class="paragraph normal">navigation</p>
+<p class="paragraph normal">local AI inference</p>
+<p class="paragraph normal">remote teleoperation</p>
+<p class="paragraph normal">simulation</p>
+<p class="paragraph normal">additional CAN devices</p>
+<p class="paragraph normal">custom CYN-X motor controllers</p>
+<p class="paragraph normal">custom sensor boards</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>

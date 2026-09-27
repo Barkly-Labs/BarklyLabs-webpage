@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Functional Requirements fursuit monitoring voice system — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Functional Requirements fursuit monitoring voice system
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Functional Requirements (your “fursuit monitoring voice system”).docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Functional Requirements fursuit monitoring voice system</h1>
+<p class="paragraph normal">Think of this like you’re designing a real-time wearable audio OS module.</p>
+<h2>🎤 Core Audio Requirements</h2>
+<p class="paragraph normal">FR1 — Real-time microphone capture</p>
+<p class="paragraph normal">System must capture audio from a microphone in real time</p>
+<p class="paragraph normal">Target latency: &lt; 30ms end-to-end</p>
+<p class="paragraph normal">Sample rate: 44.1kHz or 48kHz</p>
+<p class="paragraph normal">Mono input preferred (saves CPU)</p>
+<p class="paragraph normal">FR2 — Live DSP processing pipeline
+ System must support chained effects:</p>
+<p class="paragraph normal">Minimum pipeline:</p>
+<p class="paragraph normal">Noise gate / suppression</p>
+<p class="paragraph normal">Pitch shift (identity change / character voice)</p>
+<p class="paragraph normal">Optional formant shift (important for “non-chipmunk” voices)</p>
+<p class="paragraph normal">Gain normalization</p>
+<p class="paragraph normal">FR3 — Low-latency streaming output</p>
+<p class="paragraph normal">Processed audio must be output continuously</p>
+<p class="paragraph normal">No file buffering allowed</p>
+<p class="paragraph normal">Must support Linux ALSA / PulseAudio AND Windows WASAPI</p>
+<p class="paragraph normal">FR4 — Modular effects system
+ You should be able to do:</p>
+<p class="paragraph normal">set_pitch(1.3f);</p>
+<p class="paragraph normal">set_formant(-0.2f);</p>
+<p class="paragraph normal">enable_glitch_mode(true);</p>
+<h2>🌐 API / Network Requirements (your future suit brain idea)</h2>
+<p class="paragraph normal">FR5 — Remote control API</p>
+<p class="paragraph normal">REST or WebSocket server running on Pi or companion device</p>
+<p class="paragraph normal">Must allow live parameter updates:</p>
+<p class="paragraph normal">pitch</p>
+<p class="paragraph normal">distortion level</p>
+<p class="paragraph normal">EQ curve</p>
+<p class="paragraph normal">“character presets”</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">&quot;pitch&quot;: 1.2,</p>
+<p class="paragraph normal">&quot;formant&quot;: -0.3,</p>
+<p class="paragraph normal">&quot;glitch&quot;: true</p>
+<p class="paragraph normal">}</p>
+<p class="paragraph normal">FR6 — Stream control endpoint</p>
+<p class="paragraph normal">Start / stop DSP stream remotely</p>
+<p class="paragraph normal">Switch profiles instantly:</p>
+<p class="paragraph normal">“normal”</p>
+<p class="paragraph normal">“crasher glitch mode”</p>
+<p class="paragraph normal">“juice world haze mode” (your aesthetic presets fit here really well)</p>
+<h2>🧠 System Architecture Requirement</h2>
+<p class="paragraph normal">FR7 — Separation of concerns
+ Your system should be split like:</p>
+<p class="paragraph normal">[Audio Input]</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">[Ring Buffer]</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">[DSP Engine (C++)]</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">[Output Device]</p>
+<p class="paragraph normal">AND</p>
+<p class="paragraph normal">[API Server] → updates DSP parameters live</p>
+<h2>🧩 Future Suit Monitoring Extensions</h2>
+<p class="paragraph normal">Since you said “fursuit monitoring system”, we can extend later with:</p>
+<p class="paragraph normal">temperature sensors</p>
+<p class="paragraph normal">heart rate / stress detection</p>
+<p class="paragraph normal">movement tracking (IMU)</p>
+<p class="paragraph normal">mic-based “crowd reaction detection”</p>
+<p class="paragraph normal">battery/power state reporting</p>
+<p class="paragraph normal">But we’ll keep v1 audio-only.</p>
+<h1>🧪 2. Minimal C++ DSP Prototype (cross-platform idea)</h1>
+<p class="paragraph normal">We’ll use:</p>
+<h3>🎧 Library choice (important)</h3>
+<p class="paragraph normal">For your goal:</p>
+<p class="paragraph normal">👉 SoundTouch = easiest cross-platform pitch shifting
+ 👉 PortAudio = cross-platform audio I/O</p>
+<p class="paragraph normal">This combo is basically the “starter Voicemod kit”.</p>
+<h2>🔧 Install deps</h2>
+<h3>Linux:</h3>
+<p class="paragraph normal">sudo apt install portaudio19-dev</p>
+<p class="paragraph normal">Build SoundTouch:</p>
+<p class="paragraph normal">git clone https://gitlab.com/soundtouch/soundtouch.git</p>
+<h3>Windows:</h3>
+<p class="paragraph normal">vcpkg:</p>
+<p class="paragraph normal">vcpkg install portaudio soundtouch</p>
+<h2>🧠 Minimal real-time voice changer (concept code)</h2>
+<p class="paragraph normal">This is simplified but functional architecture:</p>
+<p class="paragraph normal">#include &lt;portaudio.h&gt;</p>
+<p class="paragraph normal">#include &quot;SoundTouch.h&quot;</p>
+<p class="paragraph normal">using namespace soundtouch;</p>
+<p class="paragraph normal">SoundTouch soundTouch;</p>
+<p class="paragraph normal">#define SAMPLE_RATE 48000</p>
+<p class="paragraph normal">#define FRAMES_PER_BUFFER 256</p>
+<p class="paragraph normal">static int audioCallback(const void* inputBuffer,</p>
+<p class="paragraph normal">void* outputBuffer,</p>
+<p class="paragraph normal">unsigned long framesPerBuffer,</p>
+<p class="paragraph normal">const PaStreamCallbackTimeInfo* timeInfo,</p>
+<p class="paragraph normal">PaStreamCallbackFlags statusFlags,</p>
+<p class="paragraph normal">void* userData)</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">float* in = (float*)inputBuffer;</p>
+<p class="paragraph normal">float* out = (float*)outputBuffer;</p>
+<p class="paragraph normal">SoundTouch* st = (SoundTouch*)userData;</p>
+<p class="paragraph normal">st-&gt;putSamples(in, framesPerBuffer);</p>
+<p class="paragraph normal">int received = st-&gt;receiveSamples(out, framesPerBuffer);</p>
+<p class="paragraph normal">// if not enough samples, fill silence</p>
+<p class="paragraph normal">for (int i = received; i &lt; (int)framesPerBuffer; i++)</p>
+<p class="paragraph normal">out[i] = 0.0f;</p>
+<p class="paragraph normal">return paContinue;</p>
+<p class="paragraph normal">}</p>
+<p class="paragraph normal">int main()</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">Pa_Initialize();</p>
+<p class="paragraph normal">soundTouch.setSampleRate(SAMPLE_RATE);</p>
+<p class="paragraph normal">soundTouch.setChannels(1);</p>
+<p class="paragraph normal">soundTouch.setPitch(1.2f);   // voice shift</p>
+<p class="paragraph normal">soundTouch.setTempo(1.0f);</p>
+<p class="paragraph normal">PaStream* stream;</p>
+<p class="paragraph normal">Pa_OpenDefaultStream(</p>
+<p class="paragraph normal">&amp;stream,</p>
+<p class="paragraph normal">1, // input</p>
+<p class="paragraph normal">1, // output</p>
+<p class="paragraph normal">paFloat32,</p>
+<p class="paragraph normal">SAMPLE_RATE,</p>
+<p class="paragraph normal">FRAMES_PER_BUFFER,</p>
+<p class="paragraph normal">audioCallback,</p>
+<p class="paragraph normal">&amp;soundTouch</p>
+<p class="paragraph normal">);</p>
+<p class="paragraph normal">Pa_StartStream(stream);</p>
+<p class="paragraph normal">while (true)</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">// later: API updates go here</p>
+<p class="paragraph normal">Pa_Sleep(1000);</p>
+<p class="paragraph normal">}</p>
+<p class="paragraph normal">Pa_StopStream(stream);</p>
+<p class="paragraph normal">Pa_CloseStream(stream);</p>
+<p class="paragraph normal">Pa_Terminate();</p>
+<p class="paragraph normal">}</p>
+<h1>🌐 3. Where your API system plugs in</h1>
+<p class="paragraph normal">Later you add something like:</p>
+<p class="paragraph normal">cpp-httplib (tiny HTTP server)
+ or</p>
+<p class="paragraph normal">WebSocket server</p>
+<p class="paragraph normal">Then:</p>
+<p class="paragraph normal">soundTouch.setPitch(newPitch);</p>
+<p class="paragraph normal">soundTouch.setTempo(newTempo);</p>
+<p class="paragraph normal">So your suit can literally do:</p>
+<p class="paragraph normal">phone → sends JSON → voice instantly changes in helmet</p>
+<h1>⚡ Key insight (this is the Voicemod secret)</h1>
+<p class="paragraph normal">What you’re building is NOT:</p>
+<p class="paragraph normal">“audio processing program”</p>
+<p class="paragraph normal">It is:</p>
+<p class="paragraph normal">a real-time state machine controlling a DSP pipeline</p>
+<p class="paragraph normal">That’s why latency matters more than features.</p>
+<h1>🐾 If you want next step</h1>
+<p class="paragraph normal">I can help you level this up into:</p>
+<h3>🧠 “Fursuit Brain v1”</h3>
+<p class="paragraph normal">Raspberry Pi audio pipeline</p>
+<p class="paragraph normal">WebSocket control server</p>
+<p class="paragraph normal">Preset system (“modes”)</p>
+<p class="paragraph normal">glitch/crash voice effect layer (your aesthetic fits PERFECTLY here)</p>
+<p class="paragraph normal">overlay monitoring system (temp + stress + audio reactive LEDs)</p>
+<p class="paragraph normal">Just tell me and I’ll help you turn this into a real modular system instead of just a</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
