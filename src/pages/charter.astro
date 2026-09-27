@@ -1,0 +1,1162 @@
+---
+const principles = [
+  {
+    number: "01",
+    title: "HUMAN FIRST",
+    description:
+      "Technology exists to serve people. Systems should be understandable, accessible, useful, and designed around the humans who depend on them.",
+  },
+  {
+    number: "02",
+    title: "BUILD OPEN",
+    description:
+      "Knowledge should be shareable. Whenever practical, Barkly Labs builds with open tools, public documentation, reusable systems, and community contribution in mind.",
+  },
+  {
+    number: "03",
+    title: "MAKE IT USEFUL",
+    description:
+      "Complexity is not the goal. We build systems that solve real problems, reduce friction, and make difficult things easier to understand.",
+  },
+  {
+    number: "04",
+    title: "DESIGN FOR HUMANS",
+    description:
+      "People are not edge cases. Accessibility, clarity, autonomy, dignity, and different ways of thinking belong in the design from the beginning.",
+  },
+  {
+    number: "05",
+    title: "EXPERIMENT",
+    description:
+      "Research requires room to try strange ideas. Barkly Labs supports experimentation, iteration, failure, learning, and rebuilding.",
+  },
+];
+
+const practices = [
+  ["DOCUMENT", "Systems should leave behind understandable documentation."],
+  ["SHARE", "Useful knowledge should have a path back to the community."],
+  ["ITERATE", "Projects are allowed to change as we learn."],
+  ["REUSE", "Good infrastructure should be reusable instead of rebuilt endlessly."],
+  ["CONNECT", "Projects should be able to work together as part of a larger ecosystem."],
+  ["RESPECT", "Technology should preserve human dignity and agency."],
+];
+---
+
+<svelte:head>
+  <title>Barkly Labs — Charter</title>
+  <meta
+    name="description"
+    content="The Barkly Labs Charter — mission, principles, practices, and direction."
+  />
+</svelte:head>
+
+<div class="page">
+
+  <!-- HEADER -->
+
+  <header class="site-header">
+
+    <div class="header-brand">
+      <a href="/">BARKLY LABS</a>
+    </div>
+
+    <div class="header-document">
+      <span>BARKLY LABS</span>
+      <span>/</span>
+      <span>CHARTER</span>
+      <span>/</span>
+      <span>DOCUMENT 001</span>
+    </div>
+
+  </header>
+
+
+  <!-- SIDE NAV -->
+
+  <aside class="side-nav">
+
+    <a href="#purpose">
+      <span>01</span>
+      PURPOSE
+    </a>
+
+    <a href="#mission">
+      <span>02</span>
+      MISSION
+    </a>
+
+    <a href="#principles">
+      <span>03</span>
+      PRINCIPLES
+    </a>
+
+    <a href="#practice">
+      <span>04</span>
+      HOW WE BUILD
+    </a>
+
+    <a href="#direction">
+      <span>05</span>
+      DIRECTION
+    </a>
+
+  </aside>
+
+
+  <main>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+      <div class="section-meta">
+        <span>01</span>
+        <span>THE FOUNDATION</span>
+      </div>
+
+      <div class="hero-title">
+        <h1>
+          BUILT FOR<br />
+          <span>PEOPLE.</span>
+        </h1>
+      </div>
+
+      <div class="hero-bottom">
+
+        <p class="hero-copy">
+          Barkly Labs exists to build technology that is useful to
+          humans, understandable to humans, and shaped by the people
+          who use it.
+        </p>
+
+        <div class="hero-mark">
+          HUMAN<br />
+          FIRST
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PURPOSE -->
+
+    <section class="content-section" id="purpose">
+
+      <div class="section-heading">
+
+        <div class="section-number">01</div>
+
+        <div>
+          <span class="eyebrow">PURPOSE</span>
+
+          <h2>
+            TECHNOLOGY<br />
+            SHOULD <span>HELP.</span>
+          </h2>
+        </div>
+
+      </div>
+
+      <div class="section-body">
+
+        <p class="large-copy">
+          Barkly Labs is a place for building, experimenting,
+          documenting, and sharing technology.
+        </p>
+
+        <p>
+          The purpose is not to create technology for its own sake.
+          It is to create systems that people can actually use,
+          understand, modify, and build upon.
+        </p>
+
+        <p>
+          Barkly brings research, software, artificial intelligence,
+          documentation, experimentation, and human-centered design
+          into one connected ecosystem.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- MISSION -->
+
+    <section class="content-section mission-section" id="mission">
+
+      <div class="section-heading">
+
+        <div class="section-number">02</div>
+
+        <div>
+          <span class="eyebrow">MISSION</span>
+
+          <h2>
+            MAKE THE<br />
+            <span>COMPLEX</span> USEFUL.
+          </h2>
+        </div>
+
+      </div>
+
+      <div class="mission-grid">
+
+        <div class="mission-statement">
+          <p>
+            Barkly Labs builds human-centered systems that make
+            technology more accessible, creative, understandable,
+            and useful.
+          </p>
+        </div>
+
+        <div class="mission-details">
+
+          <div>
+            <span>01</span>
+            <p>
+              Build practical tools for real people and real problems.
+            </p>
+          </div>
+
+          <div>
+            <span>02</span>
+            <p>
+              Create infrastructure that other people can build upon.
+            </p>
+          </div>
+
+          <div>
+            <span>03</span>
+            <p>
+              Document the work so knowledge does not disappear.
+            </p>
+          </div>
+
+          <div>
+            <span>04</span>
+            <p>
+              Keep humans at the center of the systems we create.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PRINCIPLES -->
+
+    <section class="content-section" id="principles">
+
+      <div class="section-heading">
+
+        <div class="section-number">03</div>
+
+        <div>
+          <span class="eyebrow">PRINCIPLES</span>
+
+          <h2>
+            HOW WE<br />
+            <span>THINK.</span>
+          </h2>
+        </div>
+
+      </div>
+
+      <div class="principles-list">
+
+        {principles.map((principle) => (
+          <article class="principle">
+
+            <div class="principle-number">
+              {principle.number}
+            </div>
+
+            <div class="principle-title">
+              {principle.title}
+            </div>
+
+            <p>
+              {principle.description}
+            </p>
+
+          </article>
+        ))}
+
+      </div>
+
+    </section>
+
+
+    <!-- HOW WE BUILD -->
+
+    <section class="content-section" id="practice">
+
+      <div class="section-heading">
+
+        <div class="section-number">04</div>
+
+        <div>
+          <span class="eyebrow">PRACTICE</span>
+
+          <h2>
+            BUILD<br />
+            <span>TOGETHER.</span>
+          </h2>
+        </div>
+
+      </div>
+
+      <div class="flow-grid">
+
+        {practices.map(([title, description]) => (
+          <div class="flow-item">
+
+            <span>{title}</span>
+
+            <p>{description}</p>
+
+          </div>
+        ))}
+
+      </div>
+
+    </section>
+
+
+    <!-- ECOSYSTEM -->
+
+    <section class="content-section ecosystem-section">
+
+      <div class="section-heading">
+
+        <div class="section-number">05</div>
+
+        <div>
+          <span class="eyebrow">ECOSYSTEM</span>
+
+          <h2>
+            ONE LAB.<br />
+            <span>MANY SYSTEMS.</span>
+          </h2>
+        </div>
+
+      </div>
+
+      <div class="ecosystem-copy">
+
+        <p class="large-copy">
+          Barkly Labs is designed as an ecosystem rather than a
+          collection of disconnected projects.
+        </p>
+
+        <p>
+          CYN-X provides intelligence and experimentation.
+          Barkly Docs makes systems understandable.
+          Laboratory as a Service provides infrastructure and
+          experimental environments.
+        </p>
+
+        <p>
+          New projects can become part of the ecosystem while
+          remaining independently useful, documented, and
+          reusable.
+        </p>
+
+      </div>
+
+      <div class="system-map">
+
+        <div class="system-node">
+          <span>CYN-X</span>
+          <small>INTELLIGENCE</small>
+        </div>
+
+        <div class="system-line"></div>
+
+        <div class="system-node">
+          <span>BARKLY DOCS</span>
+          <small>DOCUMENTATION</small>
+        </div>
+
+        <div class="system-line"></div>
+
+        <div class="system-node">
+          <span>LAAS</span>
+          <small>LABORATORY</small>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- DIRECTION -->
+
+    <section class="content-section direction-section" id="direction">
+
+      <div class="section-heading">
+
+        <div class="section-number">06</div>
+
+        <div>
+          <span class="eyebrow">DIRECTION</span>
+
+          <h2>
+            KEEP<br />
+            <span>BUILDING.</span>
+          </h2>
+        </div>
+
+      </div>
+
+      <div class="direction-grid">
+
+        <div>
+          <span class="direction-label">NOW</span>
+
+          <p>
+            Build useful systems. Document them. Test them.
+            Make them better.
+          </p>
+        </div>
+
+        <div>
+          <span class="direction-label">NEXT</span>
+
+          <p>
+            Connect projects into infrastructure that other
+            builders can use.
+          </p>
+        </div>
+
+        <div>
+          <span class="direction-label">LATER</span>
+
+          <p>
+            Grow Barkly into a sustainable laboratory and
+            open technology ecosystem.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- FINAL -->
+
+    <section class="final-section">
+
+      <div class="final-label">
+        BARKLY LABS
+      </div>
+
+      <h2>
+        BUILD THE<br />
+        <span>FUTURE.</span>
+      </h2>
+
+      <p>
+        Human first. Open when possible. Curious always.
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer class="site-footer">
+
+    <div>
+      BARKLY LABS // CHARTER
+    </div>
+
+    <div>
+      DOCUMENT 001 // 2026
+    </div>
+
+  </footer>
+
+</div>
+
+
+<style>
+
+:global(*) {
+  box-sizing: border-box;
+}
+
+:global(html) {
+  scroll-behavior: smooth;
+}
+
+:global(body) {
+  margin: 0;
+  background: #050505;
+  color: #f1f1f1;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+  --bg: #050505;
+  --panel: #0a0a0a;
+  --panel-raised: #0f0f0f;
+
+  --text: #f1f1f1;
+  --white: #f1f1f1;
+
+  --muted: #a1a1a1;
+  --dim: #686868;
+  --faint: #444;
+
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.25);
+
+  --pink: #ff2f92;
+  --pink-soft: rgba(255, 47, 146, 0.10);
+  --pink-line: rgba(255, 47, 146, 0.42);
+
+  --max: 1500px;
+}
+
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+
+/* HEADER */
+
+.site-header {
+  height: 72px;
+  border-bottom: 1px solid var(--line);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 4vw;
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.header-brand a {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.header-document {
+  display: flex;
+  gap: 10px;
+  color: var(--dim);
+}
+
+.header-document span:nth-child(3) {
+  color: var(--pink);
+}
+
+
+/* SIDE NAV */
+
+.side-nav {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.side-nav a {
+  display: flex;
+  gap: 9px;
+
+  color: var(--dim);
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.side-nav a span {
+  color: var(--pink);
+}
+
+.side-nav a:hover {
+  color: var(--white);
+  transform: translateX(3px);
+}
+
+
+/* HERO */
+
+.hero {
+  max-width: var(--max);
+  margin: 0 auto;
+
+  min-height: 720px;
+
+  padding:
+    55px
+    10vw
+    100px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.section-meta {
+  display: flex;
+  gap: 110px;
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+}
+
+.section-meta span:first-child {
+  color: var(--pink);
+}
+
+.hero-title {
+  margin-top: 35px;
+}
+
+.hero-title h1 {
+  margin: 0;
+
+  font-size: clamp(76px, 10vw, 150px);
+  line-height: 0.88;
+  letter-spacing: -0.075em;
+  font-weight: 800;
+}
+
+.hero-title h1 span {
+  color: var(--pink);
+}
+
+.hero-bottom {
+  margin-top: 90px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 760px) 1fr;
+  gap: 80px;
+
+  align-items: end;
+}
+
+.hero-copy {
+  margin: 0;
+
+  max-width: 800px;
+
+  color: var(--muted);
+
+  font-size: clamp(20px, 2vw, 29px);
+  line-height: 1.55;
+}
+
+.hero-mark {
+  justify-self: end;
+
+  color: var(--pink);
+
+  font-size: 32px;
+  line-height: 0.9;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+
+/* GENERAL SECTIONS */
+
+.content-section {
+  max-width: var(--max);
+  margin: 0 auto;
+
+  padding:
+    130px
+    10vw;
+
+  border-top: 1px solid var(--line);
+
+  display: grid;
+  grid-template-columns: 32% 68%;
+}
+
+.section-heading {
+  display: flex;
+  gap: 25px;
+}
+
+.section-number {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 20px;
+
+  color: var(--dim);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.section-heading h2 {
+  margin: 0;
+
+  font-size: clamp(45px, 5vw, 78px);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.section-heading h2 span {
+  color: var(--pink);
+}
+
+.section-body {
+  max-width: 760px;
+}
+
+.section-body p,
+.ecosystem-copy p,
+.direction-grid p {
+  color: var(--muted);
+
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.large-copy {
+  color: var(--white) !important;
+
+  font-size: 30px !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.02em;
+}
+
+
+/* MISSION */
+
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+}
+
+.mission-statement p {
+  margin: 0;
+
+  color: var(--white);
+
+  font-size: clamp(30px, 3vw, 46px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.mission-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.mission-details > div {
+  padding: 22px 0;
+
+  border-top: 1px solid var(--line);
+
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  gap: 20px;
+}
+
+.mission-details > div:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.mission-details span {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+}
+
+.mission-details p {
+  margin: 0;
+
+  color: var(--muted);
+
+  line-height: 1.5;
+}
+
+
+/* PRINCIPLES */
+
+.principles-list {
+  border-top: 1px solid var(--line);
+}
+
+.principle {
+  display: grid;
+  grid-template-columns: 55px 240px 1fr;
+  gap: 25px;
+
+  padding: 30px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  transition:
+    background 0.2s ease,
+    padding-left 0.2s ease;
+}
+
+.principle:hover {
+  background: var(--pink-soft);
+  padding-left: 15px;
+}
+
+.principle-number {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+}
+
+.principle-title {
+  color: var(--white);
+
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.principle p {
+  margin: 0;
+
+  max-width: 600px;
+
+  color: var(--muted);
+
+  line-height: 1.6;
+}
+
+
+/* PRACTICE */
+
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.flow-item {
+  min-height: 190px;
+
+  padding: 30px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.flow-item span {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.flow-item p {
+  max-width: 420px;
+
+  margin-top: 45px;
+
+  color: var(--muted);
+
+  line-height: 1.55;
+}
+
+
+/* ECOSYSTEM */
+
+.ecosystem-copy {
+  max-width: 750px;
+}
+
+.system-map {
+  margin-top: 80px;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.system-node {
+  min-width: 170px;
+
+  padding: 25px;
+
+  border: 1px solid var(--line);
+
+  background: var(--panel);
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.system-node span {
+  color: var(--white);
+
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.system-node small {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.system-line {
+  width: 60px;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+
+/* DIRECTION */
+
+.direction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.direction-grid > div {
+  padding-top: 25px;
+
+  border-top: 1px solid var(--line);
+}
+
+.direction-label {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+
+/* FINAL */
+
+.final-section {
+  max-width: var(--max);
+  margin: 0 auto;
+
+  padding:
+    170px
+    10vw
+    190px;
+
+  border-top: 1px solid var(--line);
+
+  text-align: left;
+}
+
+.final-label {
+  margin-bottom: 35px;
+
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.final-section h2 {
+  margin: 0;
+
+  font-size: clamp(70px, 11vw, 160px);
+  line-height: 0.85;
+  letter-spacing: -0.075em;
+}
+
+.final-section h2 span {
+  color: var(--pink);
+}
+
+.final-section p {
+  margin-top: 55px;
+
+  color: var(--dim);
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+
+/* FOOTER */
+
+.site-footer {
+  max-width: var(--max);
+  margin: 0 auto;
+
+  padding: 30px 10vw;
+
+  border-top: 1px solid var(--line);
+
+  display: flex;
+  justify-content: space-between;
+
+  color: var(--dim);
+
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+  .side-nav {
+    display: none;
+  }
+
+  .hero {
+    padding:
+      50px 7vw 90px;
+  }
+
+  .hero-bottom {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .hero-mark {
+    justify-self: start;
+  }
+
+  .content-section {
+    padding:
+      90px 7vw;
+
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .mission-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .principle {
+    grid-template-columns: 45px 1fr;
+  }
+
+  .principle p {
+    grid-column: 2;
+  }
+
+  .direction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .system-map {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .system-line {
+    width: 1px;
+    height: 35px;
+    margin-left: 30px;
+  }
+
+  .final-section {
+    padding:
+      120px 7vw;
+  }
+
+  .site-footer {
+    padding:
+      25px 7vw;
+
+    flex-direction: column;
+    gap: 10px;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .site-header {
+    padding: 0 20px;
+  }
+
+  .header-document {
+    display: none;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .hero-title h1 {
+    font-size: 20vw;
+  }
+
+  .hero-bottom {
+    margin-top: 60px;
+  }
+
+  .hero-copy {
+    font-size: 19px;
+  }
+
+  .section-heading h2 {
+    font-size: 48px;
+  }
+
+  .flow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .final-section h2 {
+    font-size: 21vw;
+  }
+
+}
+
+</style>
