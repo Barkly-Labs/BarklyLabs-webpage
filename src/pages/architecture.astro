@@ -1,0 +1,1059 @@
+---
+const layers = [
+  {
+    id: "01",
+    name: "INTERFACE",
+    description: "Where humans, applications, and devices communicate with CYN-X.",
+    components: ["CHAT", "WEB UI", "VOICE", "VISION", "API"],
+  },
+  {
+    id: "02",
+    name: "ORCHESTRATION",
+    description: "Coordinates context, models, tools, memory, and actions.",
+    components: ["ROUTER", "CONTEXT", "TASKS", "TOOLS", "EVENTS"],
+  },
+  {
+    id: "03",
+    name: "INTELLIGENCE",
+    description: "The reasoning and generation layer responsible for interpreting and solving problems.",
+    components: ["MODEL", "REASONING", "PLANNING", "GENERATION"],
+  },
+  {
+    id: "04",
+    name: "MEMORY",
+    description: "Provides continuity between interactions, projects, and systems.",
+    components: ["SESSION", "PROJECT", "PERSISTENT", "CONTEXT"],
+  },
+  {
+    id: "05",
+    name: "SYSTEM",
+    description: "The underlying runtime connecting CYN-X to machines, files, services, and hardware.",
+    components: ["PYTHON", "FASTAPI", "OLLAMA", "FILES", "DEVICES"],
+  },
+];
+
+const flows = [
+  ["INPUT", "Human or machine input enters the system."],
+  ["CONTEXT", "Relevant information is assembled."],
+  ["REASON", "The intelligence layer interprets the task."],
+  ["EXECUTE", "Tools or external systems are invoked."],
+  ["OUTPUT", "The result is returned to the interface."],
+  ["REMEMBER", "Useful context can continue forward."],
+];
+---
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CYN-X ARCHITECTURE // BARKLY LABS</title>
+
+  <style>
+    :global(*) {
+      box-sizing: border-box;
+    }
+
+    :global(html) {
+      scroll-behavior: smooth;
+    }
+
+    :global(body) {
+      margin: 0;
+      background: #050505;
+      color: #f1f1f1;
+      font-family:
+        "IBM Plex Mono",
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+    }
+
+    :global(a) {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :root {
+      --bg: #050505;
+      --panel: #090909;
+      --line: #252525;
+      --strong: #454545;
+      --white: #f1f1f1;
+      --muted: #777;
+      --max: 1500px;
+    }
+
+    body {
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* HEADER */
+
+    .header {
+      height: 64px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 28px;
+
+      background: rgba(5,5,5,.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+    }
+
+    .mark {
+      width: 9px;
+      height: 9px;
+      border: 1px solid white;
+      transform: rotate(45deg);
+    }
+
+    .header-info {
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .14em;
+    }
+
+    /* DOCUMENT NAV */
+
+    .side-nav {
+      position: fixed;
+      left: 0;
+      top: 64px;
+      bottom: 0;
+
+      width: 190px;
+
+      border-right: 1px solid var(--line);
+      padding: 30px 20px;
+
+      z-index: 20;
+    }
+
+    .side-label {
+      color: #555;
+      font-size: 8px;
+      letter-spacing: .15em;
+      margin-bottom: 25px;
+    }
+
+    .side-nav a {
+      display: block;
+      padding: 9px 0;
+
+      color: #666;
+      font-size: 9px;
+      letter-spacing: .08em;
+
+      transition: color .2s;
+    }
+
+    .side-nav a:hover {
+      color: white;
+    }
+
+    /* MAIN */
+
+    main {
+      margin-left: 190px;
+    }
+
+    section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 90px));
+      margin: auto;
+    }
+
+    /* ARCHITECTURE HEADER */
+
+    .architecture-head {
+      padding: 145px 0 100px;
+      min-height: 78vh;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .document-meta {
+      display: flex;
+      justify-content: space-between;
+
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .13em;
+    }
+
+    .architecture-head h1 {
+      margin: 90px 0 35px;
+
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(5rem, 12vw, 12rem);
+      line-height: .76;
+      letter-spacing: -.075em;
+    }
+
+    .architecture-head h1 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px #666;
+    }
+
+    .head-description {
+      max-width: 720px;
+
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* SYSTEM MAP */
+
+    .map-section {
+      padding: 110px 0;
+    }
+
+    .section-label {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .15em;
+
+      margin-bottom: 45px;
+    }
+
+    .section-label::after {
+      content: "";
+      height: 1px;
+      background: var(--line);
+      flex: 1;
+    }
+
+    .system-map {
+      border: 1px solid var(--line);
+      min-height: 650px;
+
+      position: relative;
+      overflow: hidden;
+
+      background:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+
+      background-size: 55px 55px;
+    }
+
+    .map-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+
+      width: 260px;
+      height: 180px;
+
+      border: 1px solid white;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      background: #050505;
+
+      z-index: 3;
+    }
+
+    .map-center strong {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 34px;
+      letter-spacing: -.05em;
+    }
+
+    .map-center span {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 8px;
+      letter-spacing: .15em;
+    }
+
+    .map-node {
+      position: absolute;
+
+      width: 190px;
+      min-height: 100px;
+
+      border: 1px solid var(--line);
+      background: rgba(5,5,5,.9);
+
+      padding: 18px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .map-node strong {
+      font-size: 11px;
+      letter-spacing: .1em;
+    }
+
+    .map-node small {
+      color: #666;
+      font-size: 8px;
+      line-height: 1.6;
+    }
+
+    .node-input {
+      left: 7%;
+      top: 15%;
+    }
+
+    .node-memory {
+      right: 7%;
+      top: 15%;
+    }
+
+    .node-tools {
+      left: 7%;
+      bottom: 15%;
+    }
+
+    .node-output {
+      right: 7%;
+      bottom: 15%;
+    }
+
+    .connection {
+      position: absolute;
+      height: 1px;
+      background: #333;
+
+      transform-origin: left center;
+      z-index: 1;
+    }
+
+    .connection.a {
+      width: 330px;
+      left: 20%;
+      top: 30%;
+      transform: rotate(20deg);
+    }
+
+    .connection.b {
+      width: 330px;
+      right: 20%;
+      top: 30%;
+      transform: rotate(160deg);
+    }
+
+    .connection.c {
+      width: 330px;
+      left: 20%;
+      bottom: 30%;
+      transform: rotate(-20deg);
+    }
+
+    .connection.d {
+      width: 330px;
+      right: 20%;
+      bottom: 30%;
+      transform: rotate(-160deg);
+    }
+
+    /* LAYERS */
+
+    .layers {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-top: 1px solid var(--line);
+    }
+
+    .layer {
+      display: grid;
+      grid-template-columns: 90px 300px 1fr;
+
+      min-height: 180px;
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .layer:last-child {
+      border-bottom: 0;
+    }
+
+    .layer-id {
+      padding: 28px;
+      color: var(--muted);
+      font-size: 10px;
+      border-right: 1px solid var(--line);
+    }
+
+    .layer-name {
+      padding: 28px;
+      border-right: 1px solid var(--line);
+
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 25px;
+      letter-spacing: -.04em;
+    }
+
+    .layer-content {
+      padding: 28px;
+    }
+
+    .layer-description {
+      max-width: 620px;
+
+      color: #999;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .component-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 25px;
+    }
+
+    .component {
+      padding: 7px 9px;
+      border: 1px solid #303030;
+
+      color: #999;
+      font-size: 8px;
+      letter-spacing: .08em;
+    }
+
+    /* FLOW */
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .flow-step {
+      min-height: 240px;
+
+      padding: 25px;
+
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .flow-number {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .flow-step strong {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 21px;
+      letter-spacing: -.04em;
+    }
+
+    .flow-step p {
+      margin: 0;
+
+      color: #666;
+      font-size: 9px;
+      line-height: 1.7;
+    }
+
+    /* RUNTIME */
+
+    .runtime {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      border: 1px solid var(--line);
+    }
+
+    .runtime-panel {
+      min-height: 330px;
+      padding: 35px;
+    }
+
+    .runtime-panel + .runtime-panel {
+      border-left: 1px solid var(--line);
+    }
+
+    .runtime-panel h3 {
+      margin: 0 0 30px;
+
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 32px;
+      letter-spacing: -.05em;
+    }
+
+    .runtime-panel p {
+      max-width: 500px;
+
+      color: #888;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .runtime-code {
+      margin-top: 30px;
+
+      padding: 20px;
+
+      border: 1px solid var(--line);
+
+      color: #aaa;
+      font-size: 10px;
+      line-height: 1.9;
+    }
+
+    /* FINAL */
+
+    .final {
+      min-height: 70vh;
+
+      padding: 120px 0;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .final h2 {
+      margin: 0;
+
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(4rem, 10vw, 10rem);
+      line-height: .78;
+      letter-spacing: -.075em;
+    }
+
+    .final h2 span {
+      display: block;
+
+      color: transparent;
+      -webkit-text-stroke: 1px #666;
+    }
+
+    .final p {
+      max-width: 600px;
+
+      margin-top: 55px;
+
+      color: #888;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 28px;
+
+      display: flex;
+      justify-content: space-between;
+
+      color: #555;
+      font-size: 8px;
+      letter-spacing: .1em;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+      .side-nav {
+        display: none;
+      }
+
+      main {
+        margin-left: 0;
+      }
+
+      .container {
+        width: calc(100% - 40px);
+      }
+
+      .system-map {
+        min-height: 600px;
+      }
+
+      .map-node {
+        width: 145px;
+      }
+
+      .connection {
+        display: none;
+      }
+
+      .layer {
+        grid-template-columns: 60px 1fr;
+      }
+
+      .layer-content {
+        grid-column: 2;
+        border-top: 1px solid var(--line);
+      }
+
+      .flow {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .runtime {
+        grid-template-columns: 1fr;
+      }
+
+      .runtime-panel + .runtime-panel {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .architecture-head {
+        padding: 120px 0 70px;
+      }
+
+      .architecture-head h1 {
+        font-size: 20vw;
+        margin: 80px 0 45px;
+      }
+
+      .map-center {
+        width: 190px;
+        height: 140px;
+      }
+
+      .map-center strong {
+        font-size: 25px;
+      }
+
+      .map-node {
+        width: 125px;
+        min-height: 85px;
+        padding: 12px;
+      }
+
+      .node-input {
+        left: 4%;
+        top: 8%;
+      }
+
+      .node-memory {
+        right: 4%;
+        top: 8%;
+      }
+
+      .node-tools {
+        left: 4%;
+        bottom: 8%;
+      }
+
+      .node-output {
+        right: 4%;
+        bottom: 8%;
+      }
+
+      .layer {
+        display: block;
+      }
+
+      .layer-id,
+      .layer-name {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <a href="/" class="brand">
+      <span class="mark"></span>
+      BARKLY LABS
+    </a>
+
+    <div class="header-info">
+      CYN-X / ARCHITECTURE / DOCUMENT 002
+    </div>
+  </header>
+
+  <nav class="side-nav">
+    <div class="side-label">DOCUMENT INDEX</div>
+
+    <a href="#map">01 / SYSTEM MAP</a>
+    <a href="#layers">02 / LAYERS</a>
+    <a href="#flow">03 / DATA FLOW</a>
+    <a href="#runtime">04 / RUNTIME</a>
+    <a href="#principles">05 / PRINCIPLES</a>
+  </nav>
+
+  <main>
+
+    <!-- HEADER -->
+
+    <section>
+      <div class="container architecture-head">
+
+        <div class="document-meta">
+          <span>CYN-X ARCHITECTURE</span>
+          <span>DOC. 002</span>
+        </div>
+
+        <div>
+          <h1>
+            INSIDE
+            <span>THE SYSTEM.</span>
+          </h1>
+
+          <p class="head-description">
+            CYN-X is designed as a modular intelligence system.
+            Models, memory, tools, interfaces, and external systems
+            connect through an architecture intended to remain
+            understandable, extensible, and human-controlled.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SYSTEM MAP -->
+
+    <section id="map">
+      <div class="container map-section">
+
+        <div class="section-label">
+          01 / SYSTEM MAP
+        </div>
+
+        <div class="system-map">
+
+          <div class="map-node node-input">
+            <strong>INPUT</strong>
+            <small>
+              Humans / Applications / Devices / Data
+            </small>
+          </div>
+
+          <div class="map-node node-memory">
+            <strong>MEMORY</strong>
+            <small>
+              Session / Projects / Persistent Context
+            </small>
+          </div>
+
+          <div class="map-node node-tools">
+            <strong>TOOLS</strong>
+            <small>
+              Files / APIs / Services / Automation
+            </small>
+          </div>
+
+          <div class="map-node node-output">
+            <strong>OUTPUT</strong>
+            <small>
+              Responses / Actions / Interfaces / Artifacts
+            </small>
+          </div>
+
+          <div class="map-center">
+            <strong>CYN-X</strong>
+            <span>INTELLIGENCE CORE</span>
+          </div>
+
+          <div class="connection a"></div>
+          <div class="connection b"></div>
+          <div class="connection c"></div>
+          <div class="connection d"></div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LAYERS -->
+
+    <section id="layers">
+      <div class="container map-section">
+
+        <div class="section-label">
+          02 / ARCHITECTURE
+        </div>
+
+        <div class="layers">
+
+          {layers.map((layer) => (
+            <article class="layer">
+
+              <div class="layer-id">
+                {layer.id}
+              </div>
+
+              <div class="layer-name">
+                {layer.name}
+              </div>
+
+              <div class="layer-content">
+
+                <div class="layer-description">
+                  {layer.description}
+                </div>
+
+                <div class="component-list">
+                  {layer.components.map((component) => (
+                    <span class="component">
+                      {component}
+                    </span>
+                  ))}
+                </div>
+
+              </div>
+
+            </article>
+          ))}
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DATA FLOW -->
+
+    <section id="flow">
+      <div class="container map-section">
+
+        <div class="section-label">
+          03 / DATA FLOW
+        </div>
+
+        <div class="flow">
+
+          {flows.map((flow, index) => (
+            <article class="flow-step">
+
+              <span class="flow-number">
+                0{index + 1}
+              </span>
+
+              <strong>
+                {flow[0]}
+              </strong>
+
+              <p>
+                {flow[1]}
+              </p>
+
+            </article>
+          ))}
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RUNTIME -->
+
+    <section id="runtime">
+      <div class="container map-section">
+
+        <div class="section-label">
+          04 / RUNTIME
+        </div>
+
+        <div class="runtime">
+
+          <div class="runtime-panel">
+
+            <h3>LOCAL<br />INTELLIGENCE.</h3>
+
+            <p>
+              CYN-X can use local model infrastructure so intelligence
+              can remain close to the machine and the person using it.
+              The architecture is intentionally compatible with local
+              inference systems.
+            </p>
+
+            <div class="runtime-code">
+              CYN-X CORE<br />
+              &nbsp;&nbsp;↓<br />
+              OLLAMA<br />
+              &nbsp;&nbsp;↓<br />
+              LOCAL MODEL<br />
+              &nbsp;&nbsp;↓<br />
+              RESPONSE
+            </div>
+
+          </div>
+
+          <div class="runtime-panel">
+
+            <h3>SYSTEM<br />INTEGRATION.</h3>
+
+            <p>
+              CYN-X can sit between humans and external systems,
+              allowing intelligence to operate through applications,
+              files, APIs, devices, and future hardware.
+            </p>
+
+            <div class="runtime-code">
+              INPUT<br />
+              &nbsp;&nbsp;↓<br />
+              CYN-X<br />
+              &nbsp;&nbsp;↓<br />
+              TOOL / API / FILE<br />
+              &nbsp;&nbsp;↓<br />
+              ACTION
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PRINCIPLES -->
+
+    <section id="principles">
+      <div class="container map-section">
+
+        <div class="section-label">
+          05 / PRINCIPLES
+        </div>
+
+        <div class="layers">
+
+          <div class="layer">
+            <div class="layer-id">01</div>
+            <div class="layer-name">MODULAR</div>
+            <div class="layer-content">
+              <div class="layer-description">
+                Components should be replaceable, extendable, and
+                understandable instead of locked into one monolithic
+                system.
+              </div>
+            </div>
+          </div>
+
+          <div class="layer">
+            <div class="layer-id">02</div>
+            <div class="layer-name">HUMAN</div>
+            <div class="layer-content">
+              <div class="layer-description">
+                The architecture exists to serve human goals.
+                Technology should adapt to the person using it.
+              </div>
+            </div>
+          </div>
+
+          <div class="layer">
+            <div class="layer-id">03</div>
+            <div class="layer-name">EXTENSIBLE</div>
+            <div class="layer-content">
+              <div class="layer-description">
+                CYN-X is intended to become infrastructure that other
+                applications, interfaces, and experiments can build on.
+              </div>
+            </div>
+          </div>
+
+          <div class="layer">
+            <div class="layer-id">04</div>
+            <div class="layer-name">EXPERIMENTAL</div>
+            <div class="layer-content">
+              <div class="layer-description">
+                The architecture is a living research environment.
+                New models, tools, interfaces, and hardware can become
+                part of the system over time.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FINAL -->
+
+    <section>
+      <div class="container final">
+
+        <div>
+
+          <h2>
+            BUILD THE
+            <span>SYSTEM.</span>
+          </h2>
+
+          <p>
+            CYN-X is not one application. It is an intelligence
+            architecture designed to become the layer between humans,
+            software, machines, and the systems they create.
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>CYN-X // BARKLY LABS</span>
+    <span>ARCHITECTURE / DOCUMENT 002 / 2026</span>
+  </footer>
+
+</body>
+</html>
