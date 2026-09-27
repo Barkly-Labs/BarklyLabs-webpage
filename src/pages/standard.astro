@@ -86,7 +86,15 @@ const standardRules = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>BARKLY STANDARD // BARKLY LABS</title>
+
+  <meta
+    name="description"
+    content="The Barkly Standard — a living collection of principles, practices, and engineering decisions for human-centered technology."
+  />
+
+  <meta name="theme-color" content="#050505" />
 
   <style>
     :global(*) {
@@ -95,13 +103,20 @@ const standardRules = [
 
     :global(html) {
       scroll-behavior: smooth;
+      background: #050505;
     }
 
     :global(body) {
       margin: 0;
       background: #050505;
       color: #f1f1f1;
-      font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+      font-family:
+        "IBM Plex Mono",
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+      overflow-x: hidden;
     }
 
     :global(a) {
@@ -112,22 +127,46 @@ const standardRules = [
     :root {
       --bg: #050505;
       --panel: #090909;
-      --line: #252525;
-      --strong: #454545;
+      --panel-soft: #0c0c0c;
+
+      --line: rgba(255, 255, 255, 0.11);
+      --line-strong: rgba(255, 255, 255, 0.24);
+
       --white: #f1f1f1;
       --muted: #777;
       --dim: #555;
+      --dark: #333;
+
+      /* BARKLY PINK */
+      --pink: #ff4fa3;
+      --pink-soft: rgba(255, 79, 163, 0.65);
+      --pink-faint: rgba(255, 79, 163, 0.08);
+
       --max: 1500px;
     }
 
-    body {
+    :global(::selection) {
+      background: var(--pink);
+      color: #050505;
+    }
+
+    :global(body) {
       background-image:
-        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+        linear-gradient(
+          rgba(255, 255, 255, 0.018) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.018) 1px,
+          transparent 1px
+        );
       background-size: 40px 40px;
     }
 
-    /* HEADER */
+    /* =========================================================
+       HEADER
+       ========================================================= */
 
     .header {
       height: 64px;
@@ -136,12 +175,16 @@ const standardRules = [
       left: 0;
       right: 0;
       z-index: 100;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       padding: 0 28px;
-      background: rgba(5,5,5,.94);
+
+      background: rgba(5, 5, 5, 0.94);
       border-bottom: 1px solid var(--line);
+
       backdrop-filter: blur(10px);
     }
 
@@ -149,80 +192,110 @@ const standardRules = [
       display: flex;
       align-items: center;
       gap: 14px;
+
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: .14em;
+      letter-spacing: 0.14em;
     }
 
     .mark {
       width: 9px;
       height: 9px;
-      border: 1px solid white;
+
+      border: 1px solid var(--pink);
+
       transform: rotate(45deg);
+
+      box-shadow: 0 0 10px rgba(255, 79, 163, 0.18);
     }
 
     .header-info {
       color: var(--muted);
       font-size: 9px;
-      letter-spacing: .14em;
+      letter-spacing: 0.14em;
     }
 
-    /* SIDE NAV */
+    /* =========================================================
+       SIDE NAV
+       ========================================================= */
 
     .side-nav {
       position: fixed;
       left: 0;
       top: 64px;
       bottom: 0;
+
       width: 190px;
+
       border-right: 1px solid var(--line);
+
       padding: 30px 20px;
+
       z-index: 20;
     }
 
     .side-label {
-      color: #555;
+      color: var(--dim);
       font-size: 8px;
-      letter-spacing: .15em;
+      letter-spacing: 0.15em;
       margin-bottom: 25px;
     }
 
     .side-nav a {
       display: block;
+
       padding: 9px 0;
+
       color: #666;
+
       font-size: 9px;
-      letter-spacing: .08em;
-      transition: color .2s;
+      letter-spacing: 0.08em;
+
+      transition:
+        color 0.2s ease,
+        padding-left 0.2s ease;
     }
 
     .side-nav a:hover {
-      color: white;
+      color: var(--pink);
+      padding-left: 5px;
     }
 
     .side-status {
       position: absolute;
+
       left: 20px;
       right: 20px;
       bottom: 30px;
+
       padding-top: 20px;
+
       border-top: 1px solid var(--line);
+
       color: #555;
+
       font-size: 8px;
       line-height: 1.8;
-      letter-spacing: .08em;
+      letter-spacing: 0.08em;
     }
 
     .status-dot {
       display: inline-block;
+
       width: 5px;
       height: 5px;
+
       margin-right: 7px;
-      border: 1px solid #aaa;
+
+      border: 1px solid var(--pink);
       border-radius: 50%;
+
+      box-shadow: 0 0 8px rgba(255, 79, 163, 0.45);
     }
 
-    /* MAIN */
+    /* =========================================================
+       MAIN
+       ========================================================= */
 
     main {
       margin-left: 190px;
@@ -237,11 +310,15 @@ const standardRules = [
       margin: auto;
     }
 
-    /* HERO */
+    /* =========================================================
+       HERO
+       ========================================================= */
 
     .standard-head {
       min-height: 86vh;
+
       padding: 145px 0 105px;
+
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -250,113 +327,160 @@ const standardRules = [
     .document-meta {
       display: flex;
       justify-content: space-between;
+
       color: var(--muted);
+
       font-size: 9px;
-      letter-spacing: .13em;
+      letter-spacing: 0.13em;
     }
 
     .standard-head h1 {
       margin: 90px 0 40px;
+
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: clamp(5rem, 12vw, 12rem);
-      line-height: .74;
-      letter-spacing: -.08em;
+      line-height: 0.74;
+      letter-spacing: -0.08em;
     }
+
+    /*
+      PRIMARY WORD = WHITE
+      SECONDARY WORD = PINK
+    */
 
     .standard-head h1 span {
       display: block;
-      color: transparent;
-      -webkit-text-stroke: 1px #666;
+
+      color: var(--pink);
+
+      -webkit-text-stroke: 0;
     }
 
     .hero-grid {
       display: grid;
       grid-template-columns: 1fr 300px;
+
       gap: 70px;
+
       align-items: end;
     }
 
     .head-description {
       max-width: 760px;
+
       color: #aaa;
+
       font-size: 13px;
       line-height: 1.85;
     }
 
     .version-card {
       border: 1px solid var(--line);
+
       padding: 22px;
+
       min-height: 150px;
+
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
+      background: rgba(255, 255, 255, 0.012);
     }
 
     .version-card small {
-      color: #555;
+      color: var(--dim);
+
       font-size: 8px;
-      letter-spacing: .14em;
+      letter-spacing: 0.14em;
     }
 
     .version-card strong {
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: 42px;
-      letter-spacing: -.06em;
+      letter-spacing: -0.06em;
+
+      color: var(--pink);
     }
 
     .version-card span {
       color: #777;
+
       font-size: 8px;
-      letter-spacing: .1em;
+      letter-spacing: 0.1em;
     }
 
-    /* INTRO */
-
-    .intro {
-      padding: 105px 0;
-    }
+    /* =========================================================
+       SECTION LABEL
+       ========================================================= */
 
     .section-label {
       display: flex;
       gap: 25px;
+
       align-items: center;
+
       color: var(--muted);
+
       font-size: 9px;
-      letter-spacing: .15em;
+      letter-spacing: 0.15em;
+
       margin-bottom: 45px;
     }
 
     .section-label::after {
       content: "";
+
       height: 1px;
+
       background: var(--line);
+
       flex: 1;
+    }
+
+    /* =========================================================
+       INTRO
+       ========================================================= */
+
+    .intro {
+      padding: 105px 0;
     }
 
     .intro-grid {
       display: grid;
+
       grid-template-columns: 1fr 1fr;
+
       gap: 70px;
     }
 
     .intro h2 {
       margin: 0;
+
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: clamp(3rem, 6vw, 6rem);
-      line-height: .82;
-      letter-spacing: -.07em;
+
+      line-height: 0.82;
+      letter-spacing: -0.07em;
     }
 
     .intro h2 span {
       display: block;
-      color: transparent;
-      -webkit-text-stroke: 1px #666;
+
+      color: var(--pink);
+
+      -webkit-text-stroke: 0;
     }
 
     .intro-copy {
       color: #999;
+
       font-size: 11px;
       line-height: 1.9;
+
       max-width: 650px;
     }
 
@@ -366,14 +490,26 @@ const standardRules = [
 
     .quote {
       margin-top: 40px;
+
       padding: 25px;
-      border-left: 1px solid #777;
+
+      border-left: 1px solid var(--pink);
+
       color: #ddd;
+
       font-size: 12px;
       line-height: 1.8;
+
+      background: linear-gradient(
+        90deg,
+        var(--pink-faint),
+        transparent
+      );
     }
 
-    /* PRINCIPLES */
+    /* =========================================================
+       PRINCIPLES
+       ========================================================= */
 
     .principles {
       padding: 105px 0;
@@ -381,30 +517,54 @@ const standardRules = [
 
     .principle-grid {
       display: grid;
+
       grid-template-columns: 1fr;
+
       border-top: 1px solid var(--line);
     }
 
     .principle {
       display: grid;
+
       grid-template-columns: 85px 300px 1fr;
+
       min-height: 190px;
+
       border-bottom: 1px solid var(--line);
+
+      transition: background 0.2s ease;
+    }
+
+    .principle:hover {
+      background: var(--pink-faint);
     }
 
     .principle-id {
       padding: 28px;
+
       color: var(--muted);
+
       font-size: 10px;
+
       border-right: 1px solid var(--line);
     }
 
     .principle-name {
       padding: 28px;
+
       border-right: 1px solid var(--line);
+
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: 25px;
-      letter-spacing: -.04em;
+
+      letter-spacing: -0.04em;
+
+      color: var(--white);
+    }
+
+    .principle:hover .principle-name {
+      color: var(--pink);
     }
 
     .principle-content {
@@ -413,20 +573,27 @@ const standardRules = [
 
     .principle-short {
       max-width: 650px;
+
       color: #aaa;
+
       font-size: 12px;
       line-height: 1.7;
     }
 
     .principle-detail {
       max-width: 720px;
+
       margin-top: 20px;
+
       color: #666;
+
       font-size: 10px;
       line-height: 1.8;
     }
 
-    /* CORE PRINCIPLE */
+    /* =========================================================
+       CORE PRINCIPLE
+       ========================================================= */
 
     .core {
       padding: 120px 0;
@@ -434,80 +601,149 @@ const standardRules = [
 
     .core-box {
       border: 1px solid #383838;
+
       min-height: 570px;
+
       padding: 70px;
+
       position: relative;
+
       overflow: hidden;
+
       background:
-        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+        linear-gradient(
+          rgba(255, 255, 255, 0.02) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.02) 1px,
+          transparent 1px
+        );
+
       background-size: 55px 55px;
+    }
+
+    .core-box::after {
+      content: "";
+
+      position: absolute;
+
+      width: 400px;
+      height: 400px;
+
+      right: -200px;
+      top: -200px;
+
+      border: 1px solid rgba(255, 79, 163, 0.12);
+
+      border-radius: 50%;
+
+      pointer-events: none;
     }
 
     .core-index {
       position: absolute;
+
       top: 25px;
       left: 30px;
+
       color: #555;
+
       font-size: 8px;
-      letter-spacing: .14em;
+      letter-spacing: 0.14em;
     }
 
     .core-title {
       max-width: 1000px;
+
       margin: 70px auto 0;
+
       text-align: center;
+
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: clamp(3rem, 7vw, 7rem);
-      line-height: .8;
-      letter-spacing: -.08em;
+
+      line-height: 0.8;
+
+      letter-spacing: -0.08em;
     }
 
     .core-title span {
       display: block;
-      color: transparent;
-      -webkit-text-stroke: 1px #666;
+
+      color: var(--pink);
+
+      -webkit-text-stroke: 0;
     }
 
     .core-subtitle {
       max-width: 620px;
+
       margin: 55px auto 0;
+
       text-align: center;
+
       color: #888;
+
       font-size: 11px;
       line-height: 1.9;
     }
 
     .core-flow {
       display: grid;
+
       grid-template-columns: repeat(5, 1fr);
+
       margin-top: 70px;
+
       border-top: 1px solid var(--line);
       border-left: 1px solid var(--line);
     }
 
     .core-step {
       min-height: 130px;
+
       padding: 20px;
+
       border-right: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
+
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .core-step:hover {
+      background: var(--pink-faint);
     }
 
     .core-step span {
       color: #555;
+
       font-size: 8px;
     }
 
     .core-step strong {
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: 18px;
-      letter-spacing: -.04em;
+
+      letter-spacing: -0.04em;
     }
 
-    /* WORKFLOW */
+    .core-step:hover strong {
+      color: var(--pink);
+    }
+
+    /* =========================================================
+       WORKFLOW
+       ========================================================= */
 
     .workflow {
       padding: 105px 0;
@@ -515,40 +751,62 @@ const standardRules = [
 
     .workflow-grid {
       display: grid;
+
       grid-template-columns: repeat(7, 1fr);
+
       border-top: 1px solid var(--line);
       border-left: 1px solid var(--line);
     }
 
     .workflow-step {
       min-height: 270px;
+
       padding: 24px;
+
       border-right: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
+
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
+      transition: background 0.2s ease;
+    }
+
+    .workflow-step:hover {
+      background: var(--pink-faint);
     }
 
     .workflow-step .number {
       color: #555;
+
       font-size: 8px;
     }
 
     .workflow-step strong {
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: 22px;
-      letter-spacing: -.05em;
+
+      letter-spacing: -0.05em;
+    }
+
+    .workflow-step:hover strong {
+      color: var(--pink);
     }
 
     .workflow-step p {
       margin: 0;
+
       color: #666;
+
       font-size: 9px;
       line-height: 1.75;
     }
 
-    /* RULES */
+    /* =========================================================
+       RULES
+       ========================================================= */
 
     .rules {
       padding: 105px 0;
@@ -556,45 +814,77 @@ const standardRules = [
 
     .rules-layout {
       display: grid;
+
       grid-template-columns: 1fr 1fr;
+
       border: 1px solid var(--line);
     }
 
     .rules-intro {
       padding: 45px;
+
       border-right: 1px solid var(--line);
     }
 
     .rules-intro h3 {
       margin: 0 0 30px;
+
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: 42px;
-      line-height: .85;
-      letter-spacing: -.06em;
+
+      line-height: 0.85;
+
+      letter-spacing: -0.06em;
+    }
+
+    .rules-intro h3 br:nth-of-type(2) {
+      /* intentional spacing only */
     }
 
     .rules-intro p {
       color: #777;
+
       font-size: 10px;
+
       line-height: 1.9;
+
       max-width: 500px;
     }
 
     .rules-list {
       margin: 0;
+
       padding: 0;
+
       list-style: none;
     }
 
     .rules-list li {
       display: grid;
+
       grid-template-columns: 35px 1fr;
+
       gap: 15px;
+
       padding: 18px 25px;
+
       border-bottom: 1px solid var(--line);
+
       color: #999;
+
       font-size: 9px;
+
       line-height: 1.7;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .rules-list li:hover {
+      background: var(--pink-faint);
+      color: #ddd;
     }
 
     .rules-list li:last-child {
@@ -602,10 +892,12 @@ const standardRules = [
     }
 
     .rule-number {
-      color: #555;
+      color: var(--pink);
     }
 
-    /* LIVING STANDARD */
+    /* =========================================================
+       LIVING STANDARD
+       ========================================================= */
 
     .living {
       padding: 105px 0;
@@ -613,101 +905,162 @@ const standardRules = [
 
     .living-grid {
       display: grid;
+
       grid-template-columns: 1fr 1fr;
+
       gap: 70px;
     }
 
     .living-panel {
       border: 1px solid var(--line);
+
       padding: 35px;
+
       min-height: 320px;
+
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .living-panel:hover {
+      border-color: rgba(255, 79, 163, 0.35);
+
+      background: var(--pink-faint);
     }
 
     .living-panel h3 {
       margin: 0 0 35px;
+
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: 34px;
-      letter-spacing: -.05em;
+
+      letter-spacing: -0.05em;
     }
 
     .living-panel p {
       color: #777;
+
       font-size: 10px;
+
       line-height: 1.9;
+
       max-width: 580px;
     }
 
     .revision {
       margin-top: 30px;
+
       padding-top: 20px;
+
       border-top: 1px solid var(--line);
+
       color: #666;
+
       font-size: 8px;
+
       line-height: 1.8;
     }
 
     .revision strong {
-      color: #aaa;
+      color: var(--pink);
+
       font-weight: normal;
     }
 
-    /* FINAL */
+    /* =========================================================
+       FINAL
+       ========================================================= */
 
     .final {
       min-height: 75vh;
+
       padding: 120px 0;
+
       display: flex;
       align-items: center;
     }
 
     .final h2 {
       margin: 0;
+
       font-family: Arial, Helvetica, sans-serif;
+
       font-size: clamp(4rem, 10vw, 10rem);
-      line-height: .77;
-      letter-spacing: -.08em;
+
+      line-height: 0.77;
+
+      letter-spacing: -0.08em;
     }
 
     .final h2 span {
       display: block;
-      color: transparent;
-      -webkit-text-stroke: 1px #666;
+
+      color: var(--pink);
+
+      -webkit-text-stroke: 0;
     }
 
     .final p {
       max-width: 650px;
+
       margin-top: 55px;
+
       color: #888;
+
       font-size: 11px;
+
       line-height: 1.9;
     }
 
     .final-link {
       display: inline-block;
+
       margin-top: 35px;
+
       padding: 14px 18px;
+
       border: 1px solid #444;
+
       color: #aaa;
+
       font-size: 9px;
-      letter-spacing: .1em;
-      transition: all .2s;
+
+      letter-spacing: 0.1em;
+
+      transition:
+        all 0.2s ease;
     }
 
     .final-link:hover {
-      border-color: white;
-      color: white;
+      border-color: var(--pink);
+
+      color: var(--pink);
+
+      background: var(--pink-faint);
     }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
 
     footer {
       padding: 28px;
+
       display: flex;
       justify-content: space-between;
+
       color: #555;
+
       font-size: 8px;
-      letter-spacing: .1em;
+
+      letter-spacing: 0.1em;
     }
 
-    /* TABLET */
+    /* =========================================================
+       TABLET
+       ========================================================= */
 
     @media (max-width: 1100px) {
       .hero-grid {
@@ -727,7 +1080,9 @@ const standardRules = [
       }
     }
 
-    /* MOBILE */
+    /* =========================================================
+       MOBILE
+       ========================================================= */
 
     @media (max-width: 900px) {
       .side-nav {
@@ -750,6 +1105,7 @@ const standardRules = [
 
       .rules-intro {
         border-right: 0;
+
         border-bottom: 1px solid var(--line);
       }
 
@@ -759,6 +1115,7 @@ const standardRules = [
 
       .principle-content {
         grid-column: 2;
+
         border-top: 1px solid var(--line);
       }
 
@@ -790,6 +1147,7 @@ const standardRules = [
 
       .standard-head h1 {
         font-size: 20vw;
+
         margin: 80px 0 45px;
       }
 
@@ -809,6 +1167,7 @@ const standardRules = [
       .principle-id,
       .principle-name {
         border-right: 0;
+
         border-bottom: 1px solid var(--line);
       }
 
@@ -819,6 +1178,7 @@ const standardRules = [
 
       footer {
         flex-direction: column;
+
         gap: 10px;
       }
     }
@@ -827,7 +1187,12 @@ const standardRules = [
 
 <body>
 
+  <!-- =========================================================
+       HEADER
+       ========================================================= -->
+
   <header class="header">
+
     <a href="/" class="brand">
       <span class="mark"></span>
       BARKLY LABS
@@ -836,40 +1201,85 @@ const standardRules = [
     <div class="header-info">
       STANDARD / LIVING DOCUMENT / 0.1
     </div>
+
   </header>
 
-  <nav class="side-nav">
-    <div class="side-label">STANDARD INDEX</div>
 
-    <a href="#intro">01 / OVERVIEW</a>
-    <a href="#principles">02 / PRINCIPLES</a>
-    <a href="#core">03 / CORE RULE</a>
-    <a href="#workflow">04 / WORKFLOW</a>
-    <a href="#rules">05 / PRACTICES</a>
-    <a href="#living">06 / LIVING STANDARD</a>
+  <!-- =========================================================
+       SIDE NAVIGATION
+       ========================================================= -->
+
+  <nav class="side-nav">
+
+    <div class="side-label">
+      STANDARD INDEX
+    </div>
+
+    <a href="#intro">
+      01 / OVERVIEW
+    </a>
+
+    <a href="#principles">
+      02 / PRINCIPLES
+    </a>
+
+    <a href="#core">
+      03 / CORE RULE
+    </a>
+
+    <a href="#workflow">
+      04 / WORKFLOW
+    </a>
+
+    <a href="#rules">
+      05 / PRACTICES
+    </a>
+
+    <a href="#living">
+      06 / LIVING STANDARD
+    </a>
 
     <div class="side-status">
+
       <span class="status-dot"></span>
-      STANDARD ACTIVE<br />
+
+      STANDARD ACTIVE
+      <br />
+
       CONTINUOUSLY UPDATED
+
     </div>
+
   </nav>
+
 
   <main>
 
-    <!-- HERO -->
+    <!-- =======================================================
+         HERO
+         ======================================================= -->
 
     <section>
+
       <div class="container standard-head">
 
         <div class="document-meta">
-          <span>BARKLY STANDARD</span>
-          <span>DOC. 003</span>
+
+          <span>
+            BARKLY STANDARD
+          </span>
+
+          <span>
+            DOC. 003
+          </span>
+
         </div>
+
 
         <div class="hero-grid">
 
           <div>
+
             <h1>
               BUILD
               <span>HUMAN.</span>
@@ -881,36 +1291,57 @@ const standardRules = [
               Barkly Labs to build technology that humans can understand,
               modify, contribute to, and make their own.
             </p>
+
           </div>
 
+
           <div class="version-card">
-            <small>CURRENT VERSION</small>
-            <strong>0.1</strong>
-            <span>FOUNDATION / LIVING STANDARD</span>
+
+            <small>
+              CURRENT VERSION
+            </small>
+
+            <strong>
+              0.1
+            </strong>
+
+            <span>
+              FOUNDATION / LIVING STANDARD
+            </span>
+
           </div>
 
         </div>
 
       </div>
+
     </section>
 
-    <!-- OVERVIEW -->
+
+    <!-- =======================================================
+         OVERVIEW
+         ======================================================= -->
 
     <section id="intro">
+
       <div class="container intro">
 
         <div class="section-label">
           01 / OVERVIEW
         </div>
 
+
         <div class="intro-grid">
 
           <div>
+
             <h2>
               TECHNOLOGY
               <span>SHOULD EXPLAIN.</span>
             </h2>
+
           </div>
+
 
           <div class="intro-copy">
 
@@ -935,6 +1366,7 @@ const standardRules = [
               is expected to learn with it.
             </p>
 
+
             <div class="quote">
               “Show the shape first. Reveal the details when the
               human asks for them.”
@@ -945,58 +1377,72 @@ const standardRules = [
         </div>
 
       </div>
+
     </section>
 
-    <!-- PRINCIPLES -->
+
+    <!-- =======================================================
+         PRINCIPLES
+         ======================================================= -->
 
     <section id="principles">
+
       <div class="container principles">
 
         <div class="section-label">
           02 / PRINCIPLES
         </div>
 
+
         <div class="principle-grid">
 
-          {principles.map((principle) => (
-            <article class="principle">
+          {
+            principles.map((principle) => (
+              <article class="principle">
 
-              <div class="principle-id">
-                {principle.id}
-              </div>
-
-              <div class="principle-name">
-                {principle.name}
-              </div>
-
-              <div class="principle-content">
-
-                <div class="principle-short">
-                  {principle.short}
+                <div class="principle-id">
+                  {principle.id}
                 </div>
 
-                <div class="principle-detail">
-                  {principle.detail}
+                <div class="principle-name">
+                  {principle.name}
                 </div>
 
-              </div>
+                <div class="principle-content">
 
-            </article>
-          ))}
+                  <div class="principle-short">
+                    {principle.short}
+                  </div>
+
+                  <div class="principle-detail">
+                    {principle.detail}
+                  </div>
+
+                </div>
+
+              </article>
+            ))
+          }
 
         </div>
 
       </div>
+
     </section>
 
-    <!-- CORE PRINCIPLE -->
+
+    <!-- =======================================================
+         CORE PRINCIPLE
+         ======================================================= -->
 
     <section id="core">
+
       <div class="container core">
 
         <div class="section-label">
           03 / CORE PRINCIPLE
         </div>
+
 
         <div class="core-box">
 
@@ -1004,10 +1450,12 @@ const standardRules = [
             BARKLY / PRINCIPLE 001
           </div>
 
+
           <div class="core-title">
             SHOW THE
             <span>SHAPE FIRST.</span>
           </div>
+
 
           <div class="core-subtitle">
             Complex systems should reveal their structure before
@@ -1015,6 +1463,7 @@ const standardRules = [
             implementation details. The goal is not to remove
             complexity. The goal is to make complexity navigable.
           </div>
+
 
           <div class="core-flow">
 
@@ -1048,50 +1497,64 @@ const standardRules = [
         </div>
 
       </div>
+
     </section>
 
-    <!-- WORKFLOW -->
+
+    <!-- =======================================================
+         WORKFLOW
+         ======================================================= -->
 
     <section id="workflow">
+
       <div class="container workflow">
 
         <div class="section-label">
           04 / DEVELOPMENT LOOP
         </div>
 
+
         <div class="workflow-grid">
 
-          {workflow.map((step) => (
-            <article class="workflow-step">
+          {
+            workflow.map((step) => (
+              <article class="workflow-step">
 
-              <span class="number">
-                {step[0]}
-              </span>
+                <span class="number">
+                  {step[0]}
+                </span>
 
-              <strong>
-                {step[1]}
-              </strong>
+                <strong>
+                  {step[1]}
+                </strong>
 
-              <p>
-                {step[2]}
-              </p>
+                <p>
+                  {step[2]}
+                </p>
 
-            </article>
-          ))}
+              </article>
+            ))
+          }
 
         </div>
 
       </div>
+
     </section>
 
-    <!-- PRACTICES -->
+
+    <!-- =======================================================
+         PRACTICES
+         ======================================================= -->
 
     <section id="rules">
+
       <div class="container rules">
 
         <div class="section-label">
           05 / PRACTICES
         </div>
+
 
         <div class="rules-layout">
 
@@ -1119,35 +1582,46 @@ const standardRules = [
 
           </div>
 
+
           <ol class="rules-list">
 
-            {standardRules.map((rule, index) => (
-              <li>
-                <span class="rule-number">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+            {
+              standardRules.map((rule, index) => (
+                <li>
 
-                <span>
-                  {rule}
-                </span>
-              </li>
-            ))}
+                  <span class="rule-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span>
+                    {rule}
+                  </span>
+
+                </li>
+              ))
+            }
 
           </ol>
 
         </div>
 
       </div>
+
     </section>
 
-    <!-- LIVING STANDARD -->
+
+    <!-- =======================================================
+         LIVING STANDARD
+         ======================================================= -->
 
     <section id="living">
+
       <div class="container living">
 
         <div class="section-label">
           06 / LIVING STANDARD
         </div>
+
 
         <div class="living-grid">
 
@@ -1172,13 +1646,21 @@ const standardRules = [
             </p>
 
             <div class="revision">
-              <strong>0.1 / FOUNDATION</strong><br />
+
+              <strong>
+                0.1 / FOUNDATION
+              </strong>
+
+              <br />
+
               Initial principles established for human-centered
               engineering, documentation, experimentation,
               openness, accessibility, and progressive disclosure.
+
             </div>
 
           </article>
+
 
           <article class="living-panel">
 
@@ -1199,10 +1681,17 @@ const standardRules = [
             </p>
 
             <div class="revision">
-              <strong>THE TEST</strong><br />
+
+              <strong>
+                THE TEST
+              </strong>
+
+              <br />
+
               Can another human understand what exists,
               why it exists, how it works, and where they
               can contribute?
+
             </div>
 
           </article>
@@ -1210,11 +1699,16 @@ const standardRules = [
         </div>
 
       </div>
+
     </section>
 
-    <!-- FINAL -->
+
+    <!-- =======================================================
+         FINAL
+         ======================================================= -->
 
     <section>
+
       <div class="container final">
 
         <div>
@@ -1223,6 +1717,7 @@ const standardRules = [
             BUILD
             <span>YOUR OWN.</span>
           </h2>
+
 
           <p>
             Barkly Labs does not exist to make everyone build
@@ -1233,20 +1728,37 @@ const standardRules = [
             contribution, and exploration.
           </p>
 
-          <a class="final-link" href="/standardfull">
+
+          <a
+            class="final-link"
+            href="/standardfull"
+          >
             READ THE FULL STANDARD →
           </a>
 
         </div>
 
       </div>
+
     </section>
 
   </main>
 
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+
   <footer>
-    <span>BARKLY LABS // BARKLY STANDARD</span>
-    <span>DOCUMENT 003 / VERSION 0.1 / 2026</span>
+
+    <span>
+      BARKLY LABS // BARKLY STANDARD
+    </span>
+
+    <span>
+      DOCUMENT 003 / VERSION 0.1 / 2026
+    </span>
+
   </footer>
 
 </body>
