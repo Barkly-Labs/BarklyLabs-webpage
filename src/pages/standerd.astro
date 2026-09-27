@@ -1,0 +1,1253 @@
+---
+const principles = [
+  {
+    id: "01",
+    name: "HUMAN FIRST",
+    short: "Technology should remain understandable and controllable by the people using it.",
+    detail:
+      "Barkly systems are designed around human understanding, agency, accessibility, and meaningful control. Technical capability alone is not enough if the human cannot understand what the system is doing."
+  },
+  {
+    id: "02",
+    name: "SHAPE FIRST",
+    short: "Show the structure before requiring the human to understand the implementation.",
+    detail:
+      "Complex systems should reveal their major components, relationships, and purpose before exposing deeper implementation details. Complexity should be navigable rather than hidden."
+  },
+  {
+    id: "03",
+    name: "INSPECTABLE",
+    short: "Systems should provide a path toward understanding how they work.",
+    detail:
+      "Projects should make their architecture, components, behavior, dependencies, assumptions, and limitations discoverable whenever practical."
+  },
+  {
+    id: "04",
+    name: "DOCUMENTED",
+    short: "Important knowledge should not exist only inside someone's head.",
+    detail:
+      "Documentation is treated as part of the system itself. Projects should preserve not only what they do, but why important decisions were made."
+  },
+  {
+    id: "05",
+    name: "EXPERIMENTAL",
+    short: "A laboratory must have room for ideas that might fail.",
+    detail:
+      "Experiments are allowed to be incomplete, strange, or unsuccessful. What matters is clearly identifying experimental work and preserving useful knowledge from it."
+  },
+  {
+    id: "06",
+    name: "OPEN",
+    short: "Knowledge should be shareable, inspectable, and extendable whenever practical.",
+    detail:
+      "Barkly favors open development, reusable knowledge, and systems that other people can inspect, modify, fork, and contribute to."
+  },
+  {
+    id: "07",
+    name: "ACCESSIBLE",
+    short: "Accessibility includes cognitive clarity as well as technical accessibility.",
+    detail:
+      "Barkly considers cognitive load, discoverability, clarity, navigation, and different ways humans interact with technology."
+  },
+  {
+    id: "08",
+    name: "EVOLVING",
+    short: "The standard itself is allowed to change as the laboratory learns.",
+    detail:
+      "The Barkly Standard is a living document. New discoveries, failures, experiments, and better practices can change the standard over time."
+  },
+];
+
+const workflow = [
+  ["01", "ORIENT", "Understand what exists before diving into implementation."],
+  ["02", "STRUCTURE", "Identify the major systems, components, and relationships."],
+  ["03", "BUILD", "Implement the system while preserving understandable boundaries."],
+  ["04", "DOCUMENT", "Record behavior, reasoning, limitations, and important decisions."],
+  ["05", "TEST", "Verify that the system behaves as intended."],
+  ["06", "LEARN", "Use results, failures, and discoveries to improve the system."],
+  ["07", "EVOLVE", "Update the standard when the laboratory learns something new."],
+];
+
+const standardRules = [
+  "Show the shape before the details.",
+  "Make complexity navigable instead of unnecessarily hiding it.",
+  "Document the reasoning behind important decisions.",
+  "Preserve human understanding and agency.",
+  "Treat documentation as part of engineering.",
+  "Allow experiments to fail without pretending they are production systems.",
+  "Make limitations and boundaries visible.",
+  "Use AI as a tool while keeping humans responsible for the resulting system.",
+  "Prefer openness when security, privacy, safety, and licensing permit it.",
+  "Question the standard when following it makes the work worse.",
+];
+---
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BARKLY STANDARD // BARKLY LABS</title>
+
+  <style>
+    :global(*) {
+      box-sizing: border-box;
+    }
+
+    :global(html) {
+      scroll-behavior: smooth;
+    }
+
+    :global(body) {
+      margin: 0;
+      background: #050505;
+      color: #f1f1f1;
+      font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    }
+
+    :global(a) {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :root {
+      --bg: #050505;
+      --panel: #090909;
+      --line: #252525;
+      --strong: #454545;
+      --white: #f1f1f1;
+      --muted: #777;
+      --dim: #555;
+      --max: 1500px;
+    }
+
+    body {
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* HEADER */
+
+    .header {
+      height: 64px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(5,5,5,.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+    }
+
+    .mark {
+      width: 9px;
+      height: 9px;
+      border: 1px solid white;
+      transform: rotate(45deg);
+    }
+
+    .header-info {
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .14em;
+    }
+
+    /* SIDE NAV */
+
+    .side-nav {
+      position: fixed;
+      left: 0;
+      top: 64px;
+      bottom: 0;
+      width: 190px;
+      border-right: 1px solid var(--line);
+      padding: 30px 20px;
+      z-index: 20;
+    }
+
+    .side-label {
+      color: #555;
+      font-size: 8px;
+      letter-spacing: .15em;
+      margin-bottom: 25px;
+    }
+
+    .side-nav a {
+      display: block;
+      padding: 9px 0;
+      color: #666;
+      font-size: 9px;
+      letter-spacing: .08em;
+      transition: color .2s;
+    }
+
+    .side-nav a:hover {
+      color: white;
+    }
+
+    .side-status {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: #555;
+      font-size: 8px;
+      line-height: 1.8;
+      letter-spacing: .08em;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      margin-right: 7px;
+      border: 1px solid #aaa;
+      border-radius: 50%;
+    }
+
+    /* MAIN */
+
+    main {
+      margin-left: 190px;
+    }
+
+    section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 90px));
+      margin: auto;
+    }
+
+    /* HERO */
+
+    .standard-head {
+      min-height: 86vh;
+      padding: 145px 0 105px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .document-meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .13em;
+    }
+
+    .standard-head h1 {
+      margin: 90px 0 40px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(5rem, 12vw, 12rem);
+      line-height: .74;
+      letter-spacing: -.08em;
+    }
+
+    .standard-head h1 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px #666;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 70px;
+      align-items: end;
+    }
+
+    .head-description {
+      max-width: 760px;
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.85;
+    }
+
+    .version-card {
+      border: 1px solid var(--line);
+      padding: 22px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .version-card small {
+      color: #555;
+      font-size: 8px;
+      letter-spacing: .14em;
+    }
+
+    .version-card strong {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 42px;
+      letter-spacing: -.06em;
+    }
+
+    .version-card span {
+      color: #777;
+      font-size: 8px;
+      letter-spacing: .1em;
+    }
+
+    /* INTRO */
+
+    .intro {
+      padding: 105px 0;
+    }
+
+    .section-label {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .15em;
+      margin-bottom: 45px;
+    }
+
+    .section-label::after {
+      content: "";
+      height: 1px;
+      background: var(--line);
+      flex: 1;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+    }
+
+    .intro h2 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(3rem, 6vw, 6rem);
+      line-height: .82;
+      letter-spacing: -.07em;
+    }
+
+    .intro h2 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px #666;
+    }
+
+    .intro-copy {
+      color: #999;
+      font-size: 11px;
+      line-height: 1.9;
+      max-width: 650px;
+    }
+
+    .intro-copy p {
+      margin: 0 0 25px;
+    }
+
+    .quote {
+      margin-top: 40px;
+      padding: 25px;
+      border-left: 1px solid #777;
+      color: #ddd;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    /* PRINCIPLES */
+
+    .principles {
+      padding: 105px 0;
+    }
+
+    .principle-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-top: 1px solid var(--line);
+    }
+
+    .principle {
+      display: grid;
+      grid-template-columns: 85px 300px 1fr;
+      min-height: 190px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .principle-id {
+      padding: 28px;
+      color: var(--muted);
+      font-size: 10px;
+      border-right: 1px solid var(--line);
+    }
+
+    .principle-name {
+      padding: 28px;
+      border-right: 1px solid var(--line);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 25px;
+      letter-spacing: -.04em;
+    }
+
+    .principle-content {
+      padding: 28px;
+    }
+
+    .principle-short {
+      max-width: 650px;
+      color: #aaa;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .principle-detail {
+      max-width: 720px;
+      margin-top: 20px;
+      color: #666;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    /* CORE PRINCIPLE */
+
+    .core {
+      padding: 120px 0;
+    }
+
+    .core-box {
+      border: 1px solid #383838;
+      min-height: 570px;
+      padding: 70px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size: 55px 55px;
+    }
+
+    .core-index {
+      position: absolute;
+      top: 25px;
+      left: 30px;
+      color: #555;
+      font-size: 8px;
+      letter-spacing: .14em;
+    }
+
+    .core-title {
+      max-width: 1000px;
+      margin: 70px auto 0;
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(3rem, 7vw, 7rem);
+      line-height: .8;
+      letter-spacing: -.08em;
+    }
+
+    .core-title span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px #666;
+    }
+
+    .core-subtitle {
+      max-width: 620px;
+      margin: 55px auto 0;
+      text-align: center;
+      color: #888;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    .core-flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 70px;
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .core-step {
+      min-height: 130px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .core-step span {
+      color: #555;
+      font-size: 8px;
+    }
+
+    .core-step strong {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+
+    /* WORKFLOW */
+
+    .workflow {
+      padding: 105px 0;
+    }
+
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .workflow-step {
+      min-height: 270px;
+      padding: 24px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .workflow-step .number {
+      color: #555;
+      font-size: 8px;
+    }
+
+    .workflow-step strong {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 22px;
+      letter-spacing: -.05em;
+    }
+
+    .workflow-step p {
+      margin: 0;
+      color: #666;
+      font-size: 9px;
+      line-height: 1.75;
+    }
+
+    /* RULES */
+
+    .rules {
+      padding: 105px 0;
+    }
+
+    .rules-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+    }
+
+    .rules-intro {
+      padding: 45px;
+      border-right: 1px solid var(--line);
+    }
+
+    .rules-intro h3 {
+      margin: 0 0 30px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 42px;
+      line-height: .85;
+      letter-spacing: -.06em;
+    }
+
+    .rules-intro p {
+      color: #777;
+      font-size: 10px;
+      line-height: 1.9;
+      max-width: 500px;
+    }
+
+    .rules-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .rules-list li {
+      display: grid;
+      grid-template-columns: 35px 1fr;
+      gap: 15px;
+      padding: 18px 25px;
+      border-bottom: 1px solid var(--line);
+      color: #999;
+      font-size: 9px;
+      line-height: 1.7;
+    }
+
+    .rules-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .rule-number {
+      color: #555;
+    }
+
+    /* LIVING STANDARD */
+
+    .living {
+      padding: 105px 0;
+    }
+
+    .living-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+    }
+
+    .living-panel {
+      border: 1px solid var(--line);
+      padding: 35px;
+      min-height: 320px;
+    }
+
+    .living-panel h3 {
+      margin: 0 0 35px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 34px;
+      letter-spacing: -.05em;
+    }
+
+    .living-panel p {
+      color: #777;
+      font-size: 10px;
+      line-height: 1.9;
+      max-width: 580px;
+    }
+
+    .revision {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: #666;
+      font-size: 8px;
+      line-height: 1.8;
+    }
+
+    .revision strong {
+      color: #aaa;
+      font-weight: normal;
+    }
+
+    /* FINAL */
+
+    .final {
+      min-height: 75vh;
+      padding: 120px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .final h2 {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(4rem, 10vw, 10rem);
+      line-height: .77;
+      letter-spacing: -.08em;
+    }
+
+    .final h2 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px #666;
+    }
+
+    .final p {
+      max-width: 650px;
+      margin-top: 55px;
+      color: #888;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    .final-link {
+      display: inline-block;
+      margin-top: 35px;
+      padding: 14px 18px;
+      border: 1px solid #444;
+      color: #aaa;
+      font-size: 9px;
+      letter-spacing: .1em;
+      transition: all .2s;
+    }
+
+    .final-link:hover {
+      border-color: white;
+      color: white;
+    }
+
+    footer {
+      padding: 28px;
+      display: flex;
+      justify-content: space-between;
+      color: #555;
+      font-size: 8px;
+      letter-spacing: .1em;
+    }
+
+    /* TABLET */
+
+    @media (max-width: 1100px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .version-card {
+        max-width: 300px;
+      }
+
+      .workflow-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .core-flow {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+      .side-nav {
+        display: none;
+      }
+
+      main {
+        margin-left: 0;
+      }
+
+      .container {
+        width: calc(100% - 40px);
+      }
+
+      .intro-grid,
+      .living-grid,
+      .rules-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .rules-intro {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .principle {
+        grid-template-columns: 60px 1fr;
+      }
+
+      .principle-content {
+        grid-column: 2;
+        border-top: 1px solid var(--line);
+      }
+
+      .workflow-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .core-box {
+        padding: 45px 25px;
+      }
+
+      .core-flow {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        padding: 0 16px;
+      }
+
+      .header-info {
+        display: none;
+      }
+
+      .standard-head {
+        padding: 120px 0 70px;
+      }
+
+      .standard-head h1 {
+        font-size: 20vw;
+        margin: 80px 0 45px;
+      }
+
+      .intro,
+      .principles,
+      .core,
+      .workflow,
+      .rules,
+      .living {
+        padding: 75px 0;
+      }
+
+      .principle {
+        display: block;
+      }
+
+      .principle-id,
+      .principle-name {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .workflow-grid,
+      .core-flow {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <a href="/" class="brand">
+      <span class="mark"></span>
+      BARKLY LABS
+    </a>
+
+    <div class="header-info">
+      STANDARD / LIVING DOCUMENT / 0.1
+    </div>
+  </header>
+
+  <nav class="side-nav">
+    <div class="side-label">STANDARD INDEX</div>
+
+    <a href="#intro">01 / OVERVIEW</a>
+    <a href="#principles">02 / PRINCIPLES</a>
+    <a href="#core">03 / CORE RULE</a>
+    <a href="#workflow">04 / WORKFLOW</a>
+    <a href="#rules">05 / PRACTICES</a>
+    <a href="#living">06 / LIVING STANDARD</a>
+
+    <div class="side-status">
+      <span class="status-dot"></span>
+      STANDARD ACTIVE<br />
+      CONTINUOUSLY UPDATED
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+
+    <section>
+      <div class="container standard-head">
+
+        <div class="document-meta">
+          <span>BARKLY STANDARD</span>
+          <span>DOC. 003</span>
+        </div>
+
+        <div class="hero-grid">
+
+          <div>
+            <h1>
+              BUILD
+              <span>HUMAN.</span>
+            </h1>
+
+            <p class="head-description">
+              The Barkly Standard is a living collection of principles,
+              practices, and engineering decisions used throughout
+              Barkly Labs to build technology that humans can understand,
+              modify, contribute to, and make their own.
+            </p>
+          </div>
+
+          <div class="version-card">
+            <small>CURRENT VERSION</small>
+            <strong>0.1</strong>
+            <span>FOUNDATION / LIVING STANDARD</span>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- OVERVIEW -->
+
+    <section id="intro">
+      <div class="container intro">
+
+        <div class="section-label">
+          01 / OVERVIEW
+        </div>
+
+        <div class="intro-grid">
+
+          <div>
+            <h2>
+              TECHNOLOGY
+              <span>SHOULD EXPLAIN.</span>
+            </h2>
+          </div>
+
+          <div class="intro-copy">
+
+            <p>
+              Barkly Labs builds software, research, tools, and
+              experimental systems around a simple idea:
+              humans should be able to understand the technology
+              they use, build, and contribute to.
+            </p>
+
+            <p>
+              The Barkly Standard turns that idea into practical
+              engineering principles. It guides architecture,
+              interfaces, documentation, AI-assisted development,
+              research, accessibility, experimentation, and
+              collaboration.
+            </p>
+
+            <p>
+              It is intentionally not a finished rulebook.
+              The laboratory is expected to learn, and the standard
+              is expected to learn with it.
+            </p>
+
+            <div class="quote">
+              “Show the shape first. Reveal the details when the
+              human asks for them.”
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PRINCIPLES -->
+
+    <section id="principles">
+      <div class="container principles">
+
+        <div class="section-label">
+          02 / PRINCIPLES
+        </div>
+
+        <div class="principle-grid">
+
+          {principles.map((principle) => (
+            <article class="principle">
+
+              <div class="principle-id">
+                {principle.id}
+              </div>
+
+              <div class="principle-name">
+                {principle.name}
+              </div>
+
+              <div class="principle-content">
+
+                <div class="principle-short">
+                  {principle.short}
+                </div>
+
+                <div class="principle-detail">
+                  {principle.detail}
+                </div>
+
+              </div>
+
+            </article>
+          ))}
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CORE PRINCIPLE -->
+
+    <section id="core">
+      <div class="container core">
+
+        <div class="section-label">
+          03 / CORE PRINCIPLE
+        </div>
+
+        <div class="core-box">
+
+          <div class="core-index">
+            BARKLY / PRINCIPLE 001
+          </div>
+
+          <div class="core-title">
+            SHOW THE
+            <span>SHAPE FIRST.</span>
+          </div>
+
+          <div class="core-subtitle">
+            Complex systems should reveal their structure before
+            demanding that humans understand their deepest
+            implementation details. The goal is not to remove
+            complexity. The goal is to make complexity navigable.
+          </div>
+
+          <div class="core-flow">
+
+            <div class="core-step">
+              <span>01</span>
+              <strong>SYSTEM</strong>
+            </div>
+
+            <div class="core-step">
+              <span>02</span>
+              <strong>STRUCTURE</strong>
+            </div>
+
+            <div class="core-step">
+              <span>03</span>
+              <strong>BEHAVIOR</strong>
+            </div>
+
+            <div class="core-step">
+              <span>04</span>
+              <strong>IMPLEMENTATION</strong>
+            </div>
+
+            <div class="core-step">
+              <span>05</span>
+              <strong>DETAIL</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- WORKFLOW -->
+
+    <section id="workflow">
+      <div class="container workflow">
+
+        <div class="section-label">
+          04 / DEVELOPMENT LOOP
+        </div>
+
+        <div class="workflow-grid">
+
+          {workflow.map((step) => (
+            <article class="workflow-step">
+
+              <span class="number">
+                {step[0]}
+              </span>
+
+              <strong>
+                {step[1]}
+              </strong>
+
+              <p>
+                {step[2]}
+              </p>
+
+            </article>
+          ))}
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PRACTICES -->
+
+    <section id="rules">
+      <div class="container rules">
+
+        <div class="section-label">
+          05 / PRACTICES
+        </div>
+
+        <div class="rules-layout">
+
+          <div class="rules-intro">
+
+            <h3>
+              THE<br />
+              WORKING<br />
+              RULES.
+            </h3>
+
+            <p>
+              The Standard becomes useful when it changes how
+              systems are actually built. These practices translate
+              the underlying philosophy into everyday engineering
+              decisions.
+            </p>
+
+            <p>
+              They are guidelines rather than bureaucracy.
+              If following a rule makes the work less understandable,
+              less accessible, or less useful, the rule should be
+              questioned.
+            </p>
+
+          </div>
+
+          <ol class="rules-list">
+
+            {standardRules.map((rule, index) => (
+              <li>
+                <span class="rule-number">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                <span>
+                  {rule}
+                </span>
+              </li>
+            ))}
+
+          </ol>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LIVING STANDARD -->
+
+    <section id="living">
+      <div class="container living">
+
+        <div class="section-label">
+          06 / LIVING STANDARD
+        </div>
+
+        <div class="living-grid">
+
+          <article class="living-panel">
+
+            <h3>
+              ALWAYS<br />
+              EVOLVING.
+            </h3>
+
+            <p>
+              The Barkly Standard is intentionally versioned.
+              New projects, experiments, failures, discoveries,
+              and contributions can change how the laboratory
+              understands good engineering.
+            </p>
+
+            <p>
+              A future version may disagree with this one.
+              That is not a failure of the standard.
+              It is evidence that the laboratory learned something.
+            </p>
+
+            <div class="revision">
+              <strong>0.1 / FOUNDATION</strong><br />
+              Initial principles established for human-centered
+              engineering, documentation, experimentation,
+              openness, accessibility, and progressive disclosure.
+            </div>
+
+          </article>
+
+          <article class="living-panel">
+
+            <h3>
+              PRACTICE<br />
+              THE STANDARD.
+            </h3>
+
+            <p>
+              The Standard is not intended to sit on a shelf.
+              Barkly projects should demonstrate it in practice.
+            </p>
+
+            <p>
+              Barkly Docs, research projects, software systems,
+              interfaces, and future experiments should all
+              provide evidence of the principles being applied.
+            </p>
+
+            <div class="revision">
+              <strong>THE TEST</strong><br />
+              Can another human understand what exists,
+              why it exists, how it works, and where they
+              can contribute?
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FINAL -->
+
+    <section>
+      <div class="container final">
+
+        <div>
+
+          <h2>
+            BUILD
+            <span>YOUR OWN.</span>
+          </h2>
+
+          <p>
+            Barkly Labs does not exist to make everyone build
+            the same things. The Standard exists to create a
+            foundation where people can bring their own ideas,
+            skills, identities, experiments, and ways of thinking
+            into an environment designed for understanding,
+            contribution, and exploration.
+          </p>
+
+          <a class="final-link" href="/standard/full">
+            READ THE FULL STANDARD →
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>BARKLY LABS // BARKLY STANDARD</span>
+    <span>DOCUMENT 003 / VERSION 0.1 / 2026</span>
+  </footer>
+
+</body>
+</html>

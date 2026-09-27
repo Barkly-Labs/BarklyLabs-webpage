@@ -237,45 +237,82 @@ const ethics = [
         </div>
       </section>
 
-      <!-- =======================================================
-           PRINCIPLES
-           ======================================================= -->
+  <!-- =======================================================
+     PRINCIPLES
+     ======================================================= -->
 
-      <section id="principles" class="section principles">
-        <div class="section-heading">
-          <div class="section-number">02</div>
+<section id="principles" class="section principles">
 
-          <div>
-            <span class="section-kicker">THE FOUNDATION</span>
-            <h2>
-              BUILT FOR
-              <span>PEOPLE.</span>
-            </h2>
-          </div>
-        </div>
+  <div class="section-heading">
 
-        <div class="principles-intro">
-          <p>
-            Human-centered technology is the foundation of Barkly Labs.
-            The goal isn't simply to make technology more powerful.
-            It is to make technology more useful, accessible, creative,
-            understandable, and human.
-          </p>
+    <div class="section-number">02</div>
 
-          <span class="principles-mark">HUMAN<br />FIRST</span>
-        </div>
+    <div>
+      <span class="section-kicker">THE FOUNDATION</span>
 
-        <div class="principles-grid">
-          {principles.map((principle, index) => (
-            <article class="principle-card">
-              <span class="card-number">0{index + 1}</span>
-              <h3>{principle.title}</h3>
-              <p>{principle.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      <h2>
+        BUILT FOR
+        <span>PEOPLE.</span>
+      </h2>
+    </div>
 
+  </div>
+
+
+  <div class="principles-intro">
+
+    <div class="principles-intro-copy">
+
+      <p>
+        Human-centered technology is the foundation of Barkly Labs.
+        The goal isn't simply to make technology more powerful.
+        It is to make technology more useful, accessible, creative,
+        understandable, and human.
+      </p>
+
+      <div class="principles-actions">
+        <a href="/standard" class="button button-primary">
+          READ THE BARKLY STANDARD
+          <span>↗</span>
+        </a>
+      </div>
+
+    </div>
+
+
+    <span class="principles-mark">
+      HUMAN<br />
+      FIRST
+    </span>
+
+  </div>
+
+
+  <div class="principles-grid">
+
+    {principles.map((principle, index) => (
+
+      <article class="principle-card">
+
+        <span class="card-number">
+          0{index + 1}
+        </span>
+
+        <h3>
+          {principle.title}
+        </h3>
+
+        <p>
+          {principle.text}
+        </p>
+
+      </article>
+
+    ))}
+
+  </div>
+
+</section>
       <!-- =======================================================
            CYN-X
            ======================================================= -->
