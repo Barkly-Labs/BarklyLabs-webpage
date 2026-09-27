@@ -41,14 +41,13 @@ const practices = [
   ["RESPECT", "Technology should preserve human dignity and agency."],
 ];
 ---
-
-<svelte:head>
+<head>
   <title>Barkly Labs — Charter</title>
   <meta
     name="description"
     content="The Barkly Labs Charter — mission, principles, practices, and direction."
   />
-</svelte:head>
+</head>
 
 <div class="page">
 
@@ -693,14 +692,52 @@ const practices = [
   max-width: var(--max);
   margin: 0 auto;
 
-  padding:
-    130px
-    10vw;
+  padding: 130px 10vw;
 
   border-top: 1px solid var(--line);
 
   display: grid;
-  grid-template-columns: 32% 68%;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+  gap: 80px;
+}
+
+#purpose {
+  grid-template-columns: minmax(340px, 0.9fr) minmax(0, 1.1fr);
+}
+
+#purpose .section-heading h2 {
+  font-size: clamp(40px, 4.2vw, 68px);
+  max-width: 320px;
+}
+
+.section-heading {
+  display: flex;
+  gap: 25px;
+  min-width: 0;
+}
+
+.section-heading > div:last-child {
+  min-width: 0;
+}
+
+.section-heading h2 {
+  margin: 0;
+
+  font-size: clamp(42px, 4.5vw, 72px);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+
+  max-width: 100%;
+}
+
+.section-body p {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.section-body {
+  min-width: 0;
+  max-width: 760px;
 }
 
 .section-heading {
@@ -763,11 +800,21 @@ const practices = [
 
 
 /* MISSION */
+/* MISSION */
 
-.mission-grid {
+.mission-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 30% minmax(0, 1fr);
   gap: 80px;
+}
+
+.mission-content {
+  min-width: 0;
+}
+
+.mission-statement {
+  max-width: 850px;
+  margin-bottom: 70px;
 }
 
 .mission-statement p {
@@ -775,7 +822,7 @@ const practices = [
 
   color: var(--white);
 
-  font-size: clamp(30px, 3vw, 46px);
+  font-size: clamp(30px, 3vw, 48px);
   line-height: 1.2;
   letter-spacing: -0.035em;
 }
@@ -783,20 +830,18 @@ const practices = [
 .mission-details {
   display: flex;
   flex-direction: column;
+
+  border-top: 1px solid var(--line);
 }
 
 .mission-details > div {
-  padding: 22px 0;
+  padding: 24px 0;
 
-  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 
   display: grid;
-  grid-template-columns: 45px 1fr;
-  gap: 20px;
-}
-
-.mission-details > div:last-child {
-  border-bottom: 1px solid var(--line);
+  grid-template-columns: 55px minmax(0, 1fr);
+  gap: 25px;
 }
 
 .mission-details span {
@@ -809,11 +854,12 @@ const practices = [
 .mission-details p {
   margin: 0;
 
+  max-width: 700px;
+
   color: var(--muted);
 
   line-height: 1.5;
 }
-
 
 /* PRINCIPLES */
 
