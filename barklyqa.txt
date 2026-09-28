@@ -1,4 +1,0 @@
-BARKLY LABS — PAGE QA REPORT
-======================================================================
-
-NO BROKEN PAGE LINKS FOUND.

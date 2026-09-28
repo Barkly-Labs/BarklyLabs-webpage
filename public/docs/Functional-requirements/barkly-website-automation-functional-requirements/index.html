@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Website Automation — Functional Requirements — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Website Automation — Functional Requirements
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barkly Website Automation — Functional Requirements.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Website Automation — Functional Requirements</h1>
+<h2>FR-01 — Source-controlled deployment</h2>
+<p class="paragraph normal">The system SHALL deploy the website from the committed source repository.</p>
+<p class="paragraph normal">The deployment system SHALL:</p>
+<p class="paragraph normal">identify the commit being deployed</p>
+<p class="paragraph normal">retrieve the requested Git revision</p>
+<p class="paragraph normal">preserve the deployed commit identifier</p>
+<p class="paragraph normal">report the deployed revision</p>
+<p class="paragraph normal">fail if the requested revision cannot be retrieved</p>
+<h2>FR-02 — Website build</h2>
+<p class="paragraph normal">The deployment system SHALL build the Astro website before publishing it.</p>
+<p class="paragraph normal">The system SHALL:</p>
+<p class="paragraph normal">install or verify required dependencies</p>
+<p class="paragraph normal">execute the project&#x27;s defined build command</p>
+<p class="paragraph normal">capture build output</p>
+<p class="paragraph normal">detect build failures</p>
+<p class="paragraph normal">prevent publication when the build fails</p>
+<p class="paragraph normal">Requirement: A failed build SHALL NOT replace the currently deployed website.</p>
+<h2>FR-03 — Deployment staging</h2>
+<p class="paragraph normal">The system SHALL build the website in a staging location before replacing the live website.</p>
+<p class="paragraph normal">repository</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">source</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">build</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">staging/dist</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">validation</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">live website</p>
+<p class="paragraph normal">The live website SHALL only be modified after a successful build and validation.</p>
+<h1>Barkly QA</h1>
+<h2>FR-04 — Recursive page discovery</h2>
+<p class="paragraph normal">Barkly QA SHALL recursively discover website pages beginning from the configured site root.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">/</p>
+<p class="paragraph normal">├── about</p>
+<p class="paragraph normal">├── architecture</p>
+<p class="paragraph normal">├── charter</p>
+<p class="paragraph normal">├── cyn-x</p>
+<p class="paragraph normal">├── docs</p>
+<p class="paragraph normal">├── funding</p>
+<p class="paragraph normal">├── laas</p>
+<p class="paragraph normal">├── projects</p>
+<p class="paragraph normal">└── standard</p>
+<p class="paragraph normal">The system SHALL discover additional pages through valid webpage links rather than requiring a manually maintained page list.</p>
+<h2>FR-05 — Navigation link validation</h2>
+<p class="paragraph normal">Barkly QA SHALL inspect actual webpage navigation links.</p>
+<p class="paragraph normal">The system SHALL validate:</p>
+<p class="paragraph normal">&lt;a href=&quot;...&quot;&gt;</p>
+<p class="paragraph normal">links.</p>
+<p class="paragraph normal">The system SHALL NOT treat the following as webpage navigation:</p>
+<p class="paragraph normal">JavaScript resources</p>
+<p class="paragraph normal">CSS resources</p>
+<p class="paragraph normal">images</p>
+<p class="paragraph normal">Astro development resources</p>
+<p class="paragraph normal">Vite resources</p>
+<p class="paragraph normal">source files</p>
+<h2>FR-06 — Broken-link detection</h2>
+<p class="paragraph normal">Barkly QA SHALL identify links that cannot successfully resolve.</p>
+<p class="paragraph normal">The system SHALL report:</p>
+<p class="paragraph normal">source page</p>
+<p class="paragraph normal">target URL</p>
+<p class="paragraph normal">HTTP status or connection error</p>
+<p class="paragraph normal">failure type</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">BROKEN LINK</p>
+<p class="paragraph normal">Target: /old-project</p>
+<p class="paragraph normal">Found on: /projects</p>
+<p class="paragraph normal">Status: HTTP 404</p>
+<h2>FR-07 — Internal URL normalization</h2>
+<p class="paragraph normal">Barkly QA SHALL resolve relative links against the configured website root.</p>
+<p class="paragraph normal">The system SHALL support:</p>
+<p class="paragraph normal">/about</p>
+<p class="paragraph normal">/docs</p>
+<p class="paragraph normal">/projects</p>
+<p class="paragraph normal">without requiring a repository-specific deployment prefix such as:</p>
+<p class="paragraph normal">/BarklyLabs-webpage/</p>
+<p class="paragraph normal">The crawler SHALL support configurable deployment roots so the same QA system can operate locally and on the production VPS.</p>
+<h2>FR-08 — Recursive crawl protection</h2>
+<p class="paragraph normal">Barkly QA SHALL prevent infinite crawling.</p>
+<p class="paragraph normal">The system SHALL:</p>
+<p class="paragraph normal">maintain a visited-page set</p>
+<p class="paragraph normal">avoid repeatedly crawling the same normalized URL</p>
+<p class="paragraph normal">remove URL fragments when determining page identity</p>
+<p class="paragraph normal">support a configurable maximum page count</p>
+<h2>FR-09 — QA failure status</h2>
+<p class="paragraph normal">Barkly QA SHALL return a non-zero process exit status when required validation fails.</p>
+<p class="paragraph normal">This SHALL allow deployment automation to use QA as a deployment gate.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">Build</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">QA</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PASS → Deploy</p>
+<p class="paragraph normal">FAIL → Stop</p>
+<h1>Barkly Deployment + QA Integration</h1>
+<h2>FR-10 — Pre-publication QA</h2>
+<p class="paragraph normal">The deployment system SHALL execute required QA checks before replacing the live website.</p>
+<p class="paragraph normal">A deployment SHALL NOT be considered successful if required QA checks fail.</p>
+<h2>FR-11 — Deployment report</h2>
+<p class="paragraph normal">Each deployment SHALL produce a machine-readable and human-readable result containing at minimum:</p>
+<p class="paragraph normal">Commit</p>
+<p class="paragraph normal">Build status</p>
+<p class="paragraph normal">Pages discovered</p>
+<p class="paragraph normal">Links checked</p>
+<p class="paragraph normal">Broken links</p>
+<p class="paragraph normal">QA status</p>
+<p class="paragraph normal">Deployment status</p>
+<p class="paragraph normal">Timestamp</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">BARKLY DEPLOYMENT</p>
+<p class="paragraph normal">Commit: a83f91c</p>
+<p class="paragraph normal">Build: PASS</p>
+<p class="paragraph normal">QA:</p>
+<p class="paragraph normal">Pages: 17</p>
+<p class="paragraph normal">Links: 64</p>
+<p class="paragraph normal">Broken: 0</p>
+<p class="paragraph normal">Status: PASS</p>
+<p class="paragraph normal">Deployment: PASS</p>
+<p class="paragraph normal">Published revision: a83f91c</p>
+<h2>FR-12 — Failure preservation</h2>
+<p class="paragraph normal">If any required deployment stage fails:</p>
+<p class="paragraph normal">Git</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Build</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">QA</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Publish</p>
+<p class="paragraph normal">the currently live version SHALL remain available.</p>
+<p class="paragraph normal">This gives you the really important safety property:</p>
+<p class="paragraph normal">A broken commit cannot automatically destroy the working website.</p>
+<h2>FR-13 — Deployment logging</h2>
+<p class="paragraph normal">The system SHALL maintain deployment history containing:</p>
+<p class="paragraph normal">timestamp</p>
+<p class="paragraph normal">commit</p>
+<p class="paragraph normal">build result</p>
+<p class="paragraph normal">QA result</p>
+<p class="paragraph normal">deployment result</p>
+<p class="paragraph normal">failure information where applicable</p>
+<p class="paragraph normal">That gives Barkly a little history of what version was actually live.</p>
+<h2>FR-14 — Dry-run mode</h2>
+<p class="paragraph normal">Both Barkly Deploy and Barkly QA SHOULD support a dry-run mode.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">python barkly_deploy.py --dry-run</p>
+<p class="paragraph normal">The system SHALL report the actions it would perform without modifying the live deployment.</p>
+<h2>FR-15 — Local development support</h2>
+<p class="paragraph normal">The system SHALL support testing against a local Astro development or preview server.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">localhost:4321</p>
+<p class="paragraph normal">without confusing Astro/Vite development resources with website pages.</p>
+<h2>FR-16 — Production support</h2>
+<p class="paragraph normal">The same QA system SHALL support the production website hosted at the VPS domain.</p>
+<p class="paragraph normal">Therefore:</p>
+<p class="paragraph normal">LOCAL</p>
+<p class="paragraph normal">localhost:4321/</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">QA</p>
+<p class="paragraph normal">PRODUCTION</p>
+<p class="paragraph normal">barkly-labs.org/</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">QA</p>
+<p class="paragraph normal">should use the same underlying QA logic.</p>
+<h1>The really important architectural requirement</h1>
+<p class="paragraph normal">I&#x27;d make this an explicit Barkly principle:</p>
+<p class="paragraph normal">Deployment automation SHALL treat build, validation, and publication as separate stages.</p>
+<p class="paragraph normal">So you&#x27;re not building one giant scary script.</p>
+<p class="paragraph normal">Barkly Deploy</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Source</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Build</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── QA</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── Publish</p>
+<p class="paragraph normal">│</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
