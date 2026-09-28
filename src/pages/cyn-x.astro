@@ -198,15 +198,15 @@ const year = 2026;
 
     <!-- NAVIGATION -->
     <header class="site-header">
-      <a class="brand" href="/">
+      <a class="brand" href={import.meta.env.BASE_URL + ""}>
         <span>BARKLY</span>
         <span>LABS</span>
       </a>
       <nav>
-        <a href="/core">CORE</a>
-        <a href="/capabilities">CAPABILITIES</a>
-        <a href="/architecture">ARCHITECTURE</a>
-        <a href="/principles">PRINCIPLES</a>
+        <a href={import.meta.env.BASE_URL + "core"}>CORE</a>
+        <a href={import.meta.env.BASE_URL + "capabilities"}>CAPABILITIES</a>
+        <a href={import.meta.env.BASE_URL + "architecture"}>ARCHITECTURE</a>
+        <a href={import.meta.env.BASE_URL + "principles"}>PRINCIPLES</a>
       </nav>
       <div class="status">
         <span class="status-dot"></span>
@@ -447,22 +447,22 @@ const year = 2026;
           </p>
         </div>
         <div class="ecosystem-grid reveal">
-          <a class="ecosystem-card" href="/projects">
+          <a class="ecosystem-card" href={import.meta.env.BASE_URL + "projects"}>
             <span>01</span>
             <strong>CYN-X</strong>
             <small>INTELLIGENT SYSTEM</small>
           </a>
-          <a class="ecosystem-card" href="/projects">
+          <a class="ecosystem-card" href={import.meta.env.BASE_URL + "projects"}>
             <span>02</span>
             <strong>SECUSERVE</strong>
             <small>COMPUTER VISION</small>
           </a>
-          <a class="ecosystem-card" href="/projects">
+          <a class="ecosystem-card" href={import.meta.env.BASE_URL + "projects"}>
             <span>03</span>
             <strong>SMART GARDEN</strong>
             <small>EMBEDDED SYSTEMS</small>
           </a>
-          <a class="ecosystem-card" href="/projects">
+          <a class="ecosystem-card" href={import.meta.env.BASE_URL + "projects"}>
             <span>04</span>
             <strong>PAWBOARD</strong>
             <small>HUMAN-CENTERED INTERFACE</small>
@@ -503,11 +503,11 @@ const year = 2026;
           <span>INTELLIGENCE.</span>
         </h2>
         <div class="cta-actions">
-          <a href="/docs" class="button primary">
+          <a href={import.meta.env.BASE_URL + "docs"} class="button primary">
             READ THE DOCUMENTATION
             <span>→</span>
           </a>
-          <a href="/projects" class="button secondary">
+          <a href={import.meta.env.BASE_URL + "projects"} class="button secondary">
             EXPLORE PROJECTS
             <span>↗</span>
           </a>

@@ -194,7 +194,7 @@ const practices = [
 
   <header class="topbar">
 
-    <a href="/" class="brand">
+    <a href={import.meta.env.BASE_URL + ""} class="brand">
       <span class="mark">◆</span>
       BARKLY LABS
     </a>
@@ -203,7 +203,7 @@ const practices = [
       STANDARD / HUMAN-CENTERED ENGINEERING
     </span>
 
-    <a href="/" class="back">
+    <a href={import.meta.env.BASE_URL + ""} class="back">
       ← RETURN TO LABS
     </a>
 
@@ -249,7 +249,7 @@ const practices = [
 
         <div class="actions">
 
-          <a class="primary" href="/standard">
+          <a class="primary" href={import.meta.env.BASE_URL + "standard"}>
             READ THE STANDARD ↗
           </a>
 
@@ -484,7 +484,7 @@ const practices = [
 
       <div class="actions">
 
-        <a class="primary" href="/financial">
+        <a class="primary" href={import.meta.env.BASE_URL + "financial"}>
           SEE THE RESOURCE BREAKDOWN
         </a>
 
@@ -954,11 +954,11 @@ const practices = [
 
       <div class="actions">
 
-        <a class="primary" href="/standard">
+        <a class="primary" href={import.meta.env.BASE_URL + "standard"}>
           READ THE BARKLY STANDARD ↗
         </a>
 
-        <a href="/about">
+        <a href={import.meta.env.BASE_URL + "about"}>
           ABOUT BARKLY LABS
         </a>
 

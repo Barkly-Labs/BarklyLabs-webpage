@@ -91,7 +91,7 @@ const principles = [
 
     <header class="site-header">
       <a
-        href="/"
+        href={import.meta.env.BASE_URL + ""}
         class="header-logo"
         aria-label="Barkly Labs home"
       >
@@ -400,7 +400,7 @@ const principles = [
               </p>
 
               <a
-                href="/about"
+                href={import.meta.env.BASE_URL + "about"}
                 class="launch-button"
               >
                 See our mission~
@@ -485,7 +485,7 @@ const principles = [
   </p>
 
   <a
-    href="/financial"
+    href={import.meta.env.BASE_URL + "financial"}
     class="final-system-button"
   >
     OPEN FINANCIAL SYSTEM

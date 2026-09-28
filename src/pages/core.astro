@@ -155,7 +155,7 @@ const year = 2026;
   <body>
     <!-- NAVIGATION -->
     <header class="site-header">
-      <a class="brand" href="/">
+      <a class="brand" href={import.meta.env.BASE_URL + ""}>
         <span>BARKLY</span>
         <span>LABS</span>
       </a>
@@ -576,12 +576,12 @@ const year = 2026;
         </h2>
 
         <div class="cta-actions">
-          <a href="/docs" class="button primary">
+          <a href={import.meta.env.BASE_URL + "docs"} class="button primary">
             READ THE DOCUMENTATION
             <span>→</span>
           </a>
 
-          <a href="/projects" class="button secondary">
+          <a href={import.meta.env.BASE_URL + "projects"} class="button secondary">
             EXPLORE CYN-X
             <span>↗</span>
           </a>

@@ -1193,7 +1193,7 @@ const standardRules = [
 
   <header class="header">
 
-    <a href="/" class="brand">
+    <a href={import.meta.env.BASE_URL + ""} class="brand">
       <span class="mark"></span>
       BARKLY LABS
     </a>
@@ -1731,7 +1731,7 @@ const standardRules = [
 
           <a
             class="final-link"
-            href="/standardfull"
+            href={import.meta.env.BASE_URL + "standardfull"}
           >
             READ THE FULL STANDARD →
           </a>
