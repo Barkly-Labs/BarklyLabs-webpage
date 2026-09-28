@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>BARKLY SYSTEM IDEAS LIBRARY — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            BARKLY SYSTEM IDEAS LIBRARY
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\BARKLY SYSTEM IDEAS LIBRARY.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>BARKLY SYSTEM IDEAS LIBRARY</h1>
+<h3>Functional Requirements — Draft 0.1</h3>
+<p class="paragraph normal">System: Barkly Labs System Ideas Library
+ Document Type: Functional Requirements
+ Status: Draft
+ Version: 0.1</p>
+<h2>Purpose</h2>
+<p class="paragraph normal">The Barkly System Ideas Library SHALL provide a persistent, human-readable system for capturing, organizing, exploring, documenting, relating, and preserving ideas for future Barkly systems, projects, research, tools, infrastructure, and workflows.</p>
+<p class="paragraph normal">The system SHALL allow ideas to exist independently of immediate implementation.</p>
+<p class="paragraph normal">The system is intended to preserve institutional knowledge and provide a path from an initial idea toward experimentation, requirements, design, implementation, documentation, or archival.</p>
+<p class="paragraph normal">Core idea:</p>
+<p class="paragraph normal">Capture → Understand → Explore → Design → Decide → Build → Document → Learn</p>
+<h1>01 — Idea Intake</h1>
+<h2>FR-001 — Create an Idea</h2>
+<p class="paragraph normal">The system SHALL allow an authorized contributor to create a new system idea.</p>
+<p class="paragraph normal">A new idea SHALL receive a unique identifier.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">idea-2026-0001</p>
+<h2>FR-002 — Minimum Idea Creation</h2>
+<p class="paragraph normal">The system SHALL allow an idea to be created with minimal information.</p>
+<p class="paragraph normal">At minimum, an idea SHOULD require:</p>
+<p class="paragraph normal">name</p>
+<p class="paragraph normal">short description</p>
+<p class="paragraph normal">creator</p>
+<p class="paragraph normal">creation date</p>
+<p class="paragraph normal">status</p>
+<p class="paragraph normal">The system SHALL NOT require a complete technical specification when an idea is initially captured.</p>
+<h2>FR-003 — Capture Incomplete Ideas</h2>
+<p class="paragraph normal">The system SHALL allow contributors to record incomplete, uncertain, speculative, or exploratory ideas.</p>
+<p class="paragraph normal">An idea MAY contain unresolved questions.</p>
+<p class="paragraph normal">An idea MAY contain incomplete requirements.</p>
+<p class="paragraph normal">An idea MAY contain no implementation plan.</p>
+<h2>FR-004 — Idea Metadata</h2>
+<p class="paragraph normal">Each idea SHOULD support:</p>
+<p class="paragraph normal">idea ID</p>
+<p class="paragraph normal">title</p>
+<p class="paragraph normal">description</p>
+<p class="paragraph normal">creator</p>
+<p class="paragraph normal">contributors</p>
+<p class="paragraph normal">creation date</p>
+<p class="paragraph normal">last modified date</p>
+<p class="paragraph normal">status</p>
+<p class="paragraph normal">category</p>
+<p class="paragraph normal">tags</p>
+<p class="paragraph normal">priority</p>
+<p class="paragraph normal">related systems</p>
+<p class="paragraph normal">related projects</p>
+<p class="paragraph normal">related ideas</p>
+<h1>02 — Problem Definition</h1>
+<h2>FR-005 — Problem Statement</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to document the problem an idea is intended to address.</p>
+<h2>FR-006 — User Need</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to describe who may benefit from the proposed system.</p>
+<h2>FR-007 — Purpose</h2>
+<p class="paragraph normal">Each idea SHOULD contain a human-readable purpose statement.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">Help people document technical work without requiring them to manually maintain complex documentation.</p>
+<h2>FR-008 — Intended Outcome</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to describe what successful implementation would accomplish.</p>
+<h1>03 — System Concept</h1>
+<h2>FR-009 — Concept Description</h2>
+<p class="paragraph normal">Each idea SHOULD support a system concept describing what the proposed system would do.</p>
+<h2>FR-010 — Inputs</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to document expected inputs.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">documents</p>
+<p class="paragraph normal">source code</p>
+<p class="paragraph normal">financial records</p>
+<p class="paragraph normal">measurements</p>
+<p class="paragraph normal">images</p>
+<p class="paragraph normal">user input</p>
+<p class="paragraph normal">experimental results</p>
+<h2>FR-011 — Processing</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to describe how information would be processed.</p>
+<h2>FR-012 — Outputs</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to document expected outputs.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">reports</p>
+<p class="paragraph normal">datasets</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">dashboards</p>
+<p class="paragraph normal">APIs</p>
+<p class="paragraph normal">generated files</p>
+<p class="paragraph normal">research results</p>
+<h2>FR-013 — Users</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to identify intended users.</p>
+<h2>FR-014 — Boundaries</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to document what the proposed system is not intended to do.</p>
+<p class="paragraph normal">This SHOULD prevent scope from silently expanding during development.</p>
+<h1>04 — Idea Status</h1>
+<h2>FR-015 — Lifecycle Status</h2>
+<p class="paragraph normal">Each idea SHALL have a lifecycle status.</p>
+<p class="paragraph normal">The system SHALL support at minimum:</p>
+<p class="paragraph normal">IDEA</p>
+<p class="paragraph normal">EXPLORING</p>
+<p class="paragraph normal">DESIGNED</p>
+<p class="paragraph normal">PLANNED</p>
+<p class="paragraph normal">ACTIVE</p>
+<p class="paragraph normal">COMPLETED</p>
+<p class="paragraph normal">PAUSED</p>
+<p class="paragraph normal">ARCHIVED</p>
+<h2>FR-016 — Status Transitions</h2>
+<p class="paragraph normal">The system SHOULD record meaningful status transitions.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">IDEA</p>
+<p class="paragraph normal">2026-09-28</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">EXPLORING</p>
+<p class="paragraph normal">2026-10-04</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DESIGNED</p>
+<p class="paragraph normal">2026-10-21</p>
+<h2>FR-017 — Ideas May Remain Ideas</h2>
+<p class="paragraph normal">The system SHALL allow an idea to remain in the IDEA state indefinitely.</p>
+<p class="paragraph normal">Ideas SHALL NOT be required to become active projects.</p>
+<h2>FR-018 — Pause</h2>
+<p class="paragraph normal">An idea MAY be placed into PAUSED.</p>
+<p class="paragraph normal">The system SHOULD allow a reason for the pause to be recorded.</p>
+<h2>FR-019 — Archive</h2>
+<p class="paragraph normal">An idea MAY be archived without being implemented.</p>
+<p class="paragraph normal">Archived ideas SHOULD remain discoverable.</p>
+<h1>05 — Exploration</h1>
+<h2>FR-020 — Exploration Notes</h2>
+<p class="paragraph normal">Contributors SHOULD be able to record research, observations, experiments, questions, and discoveries associated with an idea.</p>
+<h2>FR-021 — Open Questions</h2>
+<p class="paragraph normal">Each idea SHOULD support a list of unresolved questions.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">OPEN QUESTIONS</p>
+<p class="paragraph normal">Can this operate locally?</p>
+<p class="paragraph normal">What data should be retained?</p>
+<p class="paragraph normal">What should remain private?</p>
+<p class="paragraph normal">What would human review look like?</p>
+<p class="paragraph normal">Can this integrate with Barkly Docs?</p>
+<h2>FR-022 — Assumptions</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to record assumptions underlying the idea.</p>
+<h2>FR-023 — Constraints</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to document known constraints.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">hardware</p>
+<p class="paragraph normal">funding</p>
+<p class="paragraph normal">time</p>
+<p class="paragraph normal">accessibility</p>
+<p class="paragraph normal">privacy</p>
+<p class="paragraph normal">legal requirements</p>
+<p class="paragraph normal">technical limitations</p>
+<h2>FR-024 — Research References</h2>
+<p class="paragraph normal">The system SHOULD allow contributors to associate references and source material with an idea.</p>
+<h1>06 — Requirements Development</h1>
+<h2>FR-025 — Convert Idea Into Requirements</h2>
+<p class="paragraph normal">An idea SHOULD be capable of being expanded into a formal Functional Requirements document.</p>
+<h2>FR-026 — Requirements Association</h2>
+<p class="paragraph normal">Requirements SHALL be associated with the idea or resulting project.</p>
+<h2>FR-027 — Requirement Status</h2>
+<p class="paragraph normal">Requirements SHOULD support states such as:</p>
+<p class="paragraph normal">PROPOSED</p>
+<p class="paragraph normal">ACCEPTED</p>
+<p class="paragraph normal">IMPLEMENTED</p>
+<p class="paragraph normal">DEFERRED</p>
+<p class="paragraph normal">REJECTED</p>
+<h2>FR-028 — Preserve Original Concept</h2>
+<p class="paragraph normal">Converting an idea into requirements SHALL NOT destroy the original idea record.</p>
+<p class="paragraph normal">The original concept SHALL remain part of the system history.</p>
+<h1>07 — System Design</h1>
+<h2>FR-029 — Architecture Notes</h2>
+<p class="paragraph normal">An idea SHOULD support architectural notes.</p>
+<h2>FR-030 — Components</h2>
+<p class="paragraph normal">Contributors SHOULD be able to identify potential system components.</p>
+<h2>FR-031 — Dependencies</h2>
+<p class="paragraph normal">The system SHOULD allow potential dependencies to be documented.</p>
+<h2>FR-032 — Interfaces</h2>
+<p class="paragraph normal">The system SHOULD allow proposed interfaces to be documented.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">web interface</p>
+<p class="paragraph normal">API</p>
+<p class="paragraph normal">CLI</p>
+<p class="paragraph normal">file format</p>
+<p class="paragraph normal">hardware interface</p>
+<h2>FR-033 — Architecture Evolution</h2>
+<p class="paragraph normal">Architectural concepts SHOULD be allowed to change as the idea develops.</p>
+<p class="paragraph normal">Meaningful changes SHOULD be preserved in the idea history.</p>
+<h1>08 — Relationships</h1>
+<h2>FR-034 — Link Ideas</h2>
+<p class="paragraph normal">The system SHALL allow ideas to reference other ideas.</p>
+<h2>FR-035 — Link Projects</h2>
+<p class="paragraph normal">Ideas SHOULD be linkable to Barkly projects.</p>
+<h2>FR-036 — Link Systems</h2>
+<p class="paragraph normal">Ideas SHOULD be linkable to existing Barkly systems.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">Barkly Docs</p>
+<p class="paragraph normal">CYN-X</p>
+<p class="paragraph normal">PAW-HC</p>
+<p class="paragraph normal">Financial System</p>
+<p class="paragraph normal">LAAS</p>
+<h2>FR-037 — Relationship Types</h2>
+<p class="paragraph normal">The system SHOULD support relationships such as:</p>
+<p class="paragraph normal">RELATED TO</p>
+<p class="paragraph normal">DEPENDS ON</p>
+<p class="paragraph normal">EXTENDS</p>
+<p class="paragraph normal">REPLACES</p>
+<p class="paragraph normal">INSPIRED BY</p>
+<p class="paragraph normal">GENERATED FROM</p>
+<p class="paragraph normal">USED BY</p>
+<p class="paragraph normal">PART OF</p>
+<h1>09 — Ecosystem Mapping</h1>
+<h2>FR-038 — System Map</h2>
+<p class="paragraph normal">The system SHOULD be capable of representing relationships between Barkly systems and ideas.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">BARKLY LABS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌─────────────┼─────────────┐</p>
+<p class="paragraph normal">│             │             │</p>
+<p class="paragraph normal">BARKLY DOCS      CYN-X        PAW-HC</p>
+<p class="paragraph normal">│             │             │</p>
+<p class="paragraph normal">└─────────────┼─────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">FUTURE SYSTEM</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">IDEA RECORD</p>
+<h2>FR-039 — Dependency Visibility</h2>
+<p class="paragraph normal">The system SHOULD make important dependencies between systems understandable to humans.</p>
+<h2>FR-040 — Ecosystem Context</h2>
+<p class="paragraph normal">An idea SHOULD be capable of explaining how it may contribute to the broader Barkly ecosystem.</p>
+<h1>10 — Experiments</h1>
+<h2>FR-041 — Record Experiments</h2>
+<p class="paragraph normal">An idea SHOULD support associated experiments.</p>
+<h2>FR-042 — Experiment Definition</h2>
+<p class="paragraph normal">An experiment SHOULD support:</p>
+<p class="paragraph normal">experiment ID</p>
+<p class="paragraph normal">purpose</p>
+<p class="paragraph normal">hypothesis</p>
+<p class="paragraph normal">inputs</p>
+<p class="paragraph normal">procedure</p>
+<p class="paragraph normal">results</p>
+<p class="paragraph normal">conclusion</p>
+<p class="paragraph normal">date</p>
+<p class="paragraph normal">contributors</p>
+<h2>FR-043 — Experiment Results</h2>
+<p class="paragraph normal">Experiment results SHOULD remain associated with the originating idea.</p>
+<h2>FR-044 — Failed Experiments</h2>
+<p class="paragraph normal">The system SHALL allow unsuccessful experiments to be documented.</p>
+<p class="paragraph normal">Failure SHALL NOT require deletion of the experiment record.</p>
+<h1>11 — Decision Records</h1>
+<h2>FR-045 — Record Decisions</h2>
+<p class="paragraph normal">The system SHOULD allow important decisions concerning an idea to be recorded.</p>
+<h2>FR-046 — Decision Metadata</h2>
+<p class="paragraph normal">A decision record SHOULD include:</p>
+<p class="paragraph normal">decision</p>
+<p class="paragraph normal">date</p>
+<p class="paragraph normal">responsible person</p>
+<p class="paragraph normal">reasoning</p>
+<p class="paragraph normal">alternatives considered</p>
+<p class="paragraph normal">resulting action</p>
+<h2>FR-047 — Human Decision Authority</h2>
+<p class="paragraph normal">The system SHALL preserve human responsibility for significant decisions concerning whether an idea becomes an active Barkly system.</p>
+<p class="paragraph normal">Automation MAY provide recommendations or summaries.</p>
+<p class="paragraph normal">Automation SHALL NOT silently make the final organizational decision.</p>
+<h1>12 — Contribution</h1>
+<h2>FR-048 — Multiple Contributors</h2>
+<p class="paragraph normal">An idea SHOULD support multiple contributors.</p>
+<h2>FR-049 — Contributor Attribution</h2>
+<p class="paragraph normal">The system SHOULD preserve attribution for meaningful contributions.</p>
+<h2>FR-050 — Contribution Records</h2>
+<p class="paragraph normal">The system MAY record contributions such as:</p>
+<p class="paragraph normal">research</p>
+<p class="paragraph normal">writing</p>
+<p class="paragraph normal">design</p>
+<p class="paragraph normal">engineering</p>
+<p class="paragraph normal">testing</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">review</p>
+<h1>13 — Version History</h1>
+<h2>FR-051 — Idea History</h2>
+<p class="paragraph normal">The system SHOULD preserve meaningful revisions to an idea.</p>
+<h2>FR-052 — Change Records</h2>
+<p class="paragraph normal">A change record SHOULD contain:</p>
+<p class="paragraph normal">date</p>
+<p class="paragraph normal">contributor</p>
+<p class="paragraph normal">change</p>
+<p class="paragraph normal">previous value where appropriate</p>
+<p class="paragraph normal">new value where appropriate</p>
+<h2>FR-053 — Original Preservation</h2>
+<p class="paragraph normal">The system SHALL NOT silently overwrite the historical development of an idea.</p>
+<h1>14 — Documentation</h1>
+<h2>FR-054 — Human-Readable Documentation</h2>
+<p class="paragraph normal">Every idea SHALL have a human-readable representation.</p>
+<h2>FR-055 — Machine-Readable Representation</h2>
+<p class="paragraph normal">Ideas SHOULD be representable in structured formats.</p>
+<p class="paragraph normal">Supported formats MAY include:</p>
+<p class="paragraph normal">JSON</p>
+<p class="paragraph normal">YAML</p>
+<p class="paragraph normal">Markdown</p>
+<h2>FR-056 — Automatic Documentation</h2>
+<p class="paragraph normal">The system MAY generate documentation from structured idea records.</p>
+<h2>FR-057 — Generated Content Identification</h2>
+<p class="paragraph normal">Automatically generated content SHOULD be distinguishable from human-authored decisions and statements.</p>
+<h1>15 — Barkly Docs Integration</h1>
+<h2>FR-058 — Documentation Handoff</h2>
+<p class="paragraph normal">An idea SHOULD be capable of becoming a Barkly Docs project.</p>
+<h2>FR-059 — Automatic Project Documentation</h2>
+<p class="paragraph normal">When an idea becomes an implementation, relevant system metadata SHOULD be available to Barkly Docs.</p>
+<h2>FR-060 — Documentation Continuity</h2>
+<p class="paragraph normal">The system SHOULD allow the relationship between:</p>
+<p class="paragraph normal">IDEA</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">REQUIREMENTS</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PROJECT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">CODE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DOCUMENTATION</p>
+<p class="paragraph normal">to remain discoverable.</p>
+<h1>16 — CYN-X Integration</h1>
+<h2>FR-061 — AI Assistance</h2>
+<p class="paragraph normal">CYN-X MAY assist contributors with idea organization and exploration.</p>
+<h2>FR-062 — Suggested Relationships</h2>
+<p class="paragraph normal">CYN-X MAY suggest potentially related:</p>
+<p class="paragraph normal">ideas</p>
+<p class="paragraph normal">projects</p>
+<p class="paragraph normal">systems</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">requirements</p>
+<h2>FR-063 — Documentation Assistance</h2>
+<p class="paragraph normal">CYN-X MAY assist with generating drafts of:</p>
+<p class="paragraph normal">problem statements</p>
+<p class="paragraph normal">requirements</p>
+<p class="paragraph normal">architecture descriptions</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">open questions</p>
+<h2>FR-064 — Human Verification of AI Output</h2>
+<p class="paragraph normal">AI-generated information SHALL remain distinguishable from human-approved information where the distinction is relevant.</p>
+<h1>17 — Search and Discovery</h1>
+<h2>FR-065 — Search</h2>
+<p class="paragraph normal">The system SHALL allow contributors to search the idea library.</p>
+<p class="paragraph normal">Search SHOULD support:</p>
+<p class="paragraph normal">title</p>
+<p class="paragraph normal">description</p>
+<p class="paragraph normal">tags</p>
+<p class="paragraph normal">category</p>
+<p class="paragraph normal">status</p>
+<p class="paragraph normal">contributor</p>
+<p class="paragraph normal">related systems</p>
+<p class="paragraph normal">related projects</p>
+<h2>FR-066 — Filtering</h2>
+<p class="paragraph normal">The system SHOULD allow filtering by:</p>
+<p class="paragraph normal">status</p>
+<p class="paragraph normal">category</p>
+<p class="paragraph normal">contributor</p>
+<p class="paragraph normal">date</p>
+<p class="paragraph normal">system</p>
+<p class="paragraph normal">project</p>
+<h2>FR-067 — Related Ideas</h2>
+<p class="paragraph normal">The system SHOULD surface potentially related ideas.</p>
+<h2>FR-068 — Idea Categories</h2>
+<p class="paragraph normal">The system SHOULD support categories such as:</p>
+<p class="paragraph normal">SOFTWARE</p>
+<p class="paragraph normal">HARDWARE</p>
+<p class="paragraph normal">AI</p>
+<p class="paragraph normal">RESEARCH</p>
+<p class="paragraph normal">DOCUMENTATION</p>
+<p class="paragraph normal">INFRASTRUCTURE</p>
+<p class="paragraph normal">COMMUNITY</p>
+<p class="paragraph normal">ACCESSIBILITY</p>
+<p class="paragraph normal">FINANCIAL</p>
+<p class="paragraph normal">LABORATORY</p>
+<p class="paragraph normal">EXPERIMENTAL</p>
+<p class="paragraph normal">OTHER</p>
+<p class="paragraph normal">Categories SHOULD be extensible.</p>
+<h1>18 — Public and Private Information</h1>
+<h2>FR-069 — Visibility</h2>
+<p class="paragraph normal">Ideas SHOULD support visibility states.</p>
+<p class="paragraph normal">For example:</p>
+<p class="paragraph normal">PRIVATE</p>
+<p class="paragraph normal">INTERNAL</p>
+<p class="paragraph normal">PUBLIC</p>
+<h2>FR-070 — Public Ideas</h2>
+<p class="paragraph normal">Ideas marked public MAY be displayed through Barkly&#x27;s public website.</p>
+<h2>FR-071 — Private Ideas</h2>
+<p class="paragraph normal">Private ideas SHALL NOT be published through public interfaces.</p>
+<h2>FR-072 — Sensitive Information</h2>
+<p class="paragraph normal">The system SHALL provide a mechanism for preventing sensitive information from being included in public idea records.</p>
+<h1>19 — Public Idea Presentation</h1>
+<h2>FR-073 — Public Idea Index</h2>
+<p class="paragraph normal">The system MAY provide a public index of Barkly ideas.</p>
+<h2>FR-074 — Public Idea Page</h2>
+<p class="paragraph normal">A public idea MAY display:</p>
+<p class="paragraph normal">name</p>
+<p class="paragraph normal">purpose</p>
+<p class="paragraph normal">problem</p>
+<p class="paragraph normal">status</p>
+<p class="paragraph normal">description</p>
+<p class="paragraph normal">related systems</p>
+<p class="paragraph normal">development history</p>
+<p class="paragraph normal">contributors</p>
+<p class="paragraph normal">documentation</p>
+<h2>FR-075 — Public Roadmap</h2>
+<p class="paragraph normal">The system MAY provide a public representation of ideas currently being explored or planned.</p>
+<h1>20 — Accessibility</h1>
+<h2>FR-076 — Human-First Interface</h2>
+<p class="paragraph normal">The interface SHALL prioritize human comprehension over unnecessary technical complexity.</p>
+<h2>FR-077 — Keyboard Access</h2>
+<p class="paragraph normal">The interface SHOULD support keyboard navigation.</p>
+<h2>FR-078 — Screen Readers</h2>
+<p class="paragraph normal">The interface SHOULD support screen-reader technologies.</p>
+<h2>FR-079 — Responsive Design</h2>
+<p class="paragraph normal">The interface SHOULD remain usable across desktop, tablet, and mobile displays.</p>
+<h2>FR-080 — Plain Language</h2>
+<p class="paragraph normal">Ideas SHOULD be explainable without requiring specialized technical knowledge.</p>
+<h1>21 — Data Integrity</h1>
+<h2>FR-081 — Unique Identifiers</h2>
+<p class="paragraph normal">Each idea SHALL have a unique identifier.</p>
+<h2>FR-082 — Required Metadata</h2>
+<p class="paragraph normal">The system SHALL validate required metadata before an idea is considered valid.</p>
+<h2>FR-083 — Relationship Integrity</h2>
+<p class="paragraph normal">References to other ideas, systems, and projects SHOULD resolve to valid records.</p>
+<h2>FR-084 — No Silent Data Loss</h2>
+<p class="paragraph normal">The system SHALL NOT silently discard idea records, history, decisions, experiments, or associated documentation.</p>
+<h1>22 — Automation</h1>
+<h2>FR-085 — Automated Classification</h2>
+<p class="paragraph normal">The system MAY suggest categories and tags.</p>
+<h2>FR-086 — Automated Summaries</h2>
+<p class="paragraph normal">The system MAY generate summaries of large idea records.</p>
+<h2>FR-087 — Automated Relationship Discovery</h2>
+<p class="paragraph normal">The system MAY identify potentially related records.</p>
+<h2>FR-088 — Automated Lifecycle Assistance</h2>
+<p class="paragraph normal">The system MAY identify ideas that appear ready for:</p>
+<p class="paragraph normal">requirements development</p>
+<p class="paragraph normal">experimentation</p>
+<p class="paragraph normal">project planning</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">The system SHALL NOT automatically activate an idea solely because an automated system recommends doing so.</p>
+<h1>23 — Integration Architecture</h1>
+<h2>FR-089 — API</h2>
+<p class="paragraph normal">The system SHOULD be capable of exposing structured idea records through an API.</p>
+<h2>FR-090 — Structured Export</h2>
+<p class="paragraph normal">The system SHOULD support exporting idea records in machine-readable formats.</p>
+<h2>FR-091 — Import</h2>
+<p class="paragraph normal">The system MAY support importing ideas from structured sources.</p>
+<h2>FR-092 — External Tool Integration</h2>
+<p class="paragraph normal">The architecture SHOULD leave room for integration with:</p>
+<p class="paragraph normal">Git repositories</p>
+<p class="paragraph normal">Barkly Docs</p>
+<p class="paragraph normal">CYN-X</p>
+<p class="paragraph normal">project-management systems</p>
+<p class="paragraph normal">research tools</p>
+<p class="paragraph normal">public website infrastructure</p>
+<h1>24 — Institutional Memory</h1>
+<h2>FR-093 — Preserve Knowledge</h2>
+<p class="paragraph normal">The system SHALL preserve ideas that contribute to Barkly&#x27;s institutional history.</p>
+<h2>FR-094 — Revisit Historical Ideas</h2>
+<p class="paragraph normal">Contributors SHOULD be able to rediscover previously archived or paused ideas.</p>
+<h2>FR-095 — Idea Evolution</h2>
+<p class="paragraph normal">The system SHOULD make it possible to understand how an idea changed over time.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">IDEA</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">QUESTION</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">RESEARCH</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">EXPERIMENT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DESIGN</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">SYSTEM</p>
+<h1>25 — Future Extensions</h1>
+<p class="paragraph normal">These features are not required for Draft 0.1, but the architecture SHOULD leave room for:</p>
+<p class="paragraph normal">semantic search</p>
+<p class="paragraph normal">AI-assisted brainstorming</p>
+<p class="paragraph normal">automatic idea clustering</p>
+<p class="paragraph normal">dependency graphs</p>
+<p class="paragraph normal">system relationship graphs</p>
+<p class="paragraph normal">automatic requirements generation</p>
+<p class="paragraph normal">automatic architecture diagrams</p>
+<p class="paragraph normal">project generation</p>
+<p class="paragraph normal">contributor matching</p>
+<p class="paragraph normal">public discussion</p>
+<p class="paragraph normal">community proposals</p>
+<p class="paragraph normal">public voting</p>
+<p class="paragraph normal">experiment dashboards</p>
+<p class="paragraph normal">research notebooks</p>
+<p class="paragraph normal">automatic changelogs</p>
+<p class="paragraph normal">automatic Barkly Docs generation</p>
+<p class="paragraph normal">automatic project scaffolding</p>
+<p class="paragraph normal">public API</p>
+<p class="paragraph normal">JSON Schema</p>
+<p class="paragraph normal">multi-organization support</p>
+<h1>26 — Core System Pipeline</h1>
+<p class="paragraph normal">The conceptual pipeline SHALL support:</p>
+<p class="paragraph normal">IDEA</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">CAPTURE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">DESCRIBE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">EXPLORE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌────────┴────────┐</p>
+<p class="paragraph normal">▼                 ▼</p>
+<p class="paragraph normal">RESEARCH          EXPERIMENT</p>
+<p class="paragraph normal">│                 │</p>
+<p class="paragraph normal">└────────┬────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">DESIGN</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">REQUIREMENTS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">DECIDE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌────────┴────────┐</p>
+<p class="paragraph normal">│                 │</p>
+<p class="paragraph normal">PAUSE              BUILD</p>
+<p class="paragraph normal">│                 │</p>
+<p class="paragraph normal">▼                 ▼</p>
+<p class="paragraph normal">ARCHIVE             PROJECT</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">BARKLY DOCS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">ACTIVE SYSTEM</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">LEARN</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└──────► NEXT IDEA</p>
+<h1>27 — Core Data Model</h1>
+<p class="paragraph normal">A conceptual idea record SHOULD resemble:</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">&quot;id&quot;: &quot;idea-2026-0001&quot;,</p>
+<p class="paragraph normal">&quot;name&quot;: &quot;Research Evidence System&quot;,</p>
+<p class="paragraph normal">&quot;status&quot;: &quot;IDEA&quot;,</p>
+<p class="paragraph normal">&quot;visibility&quot;: &quot;INTERNAL&quot;,</p>
+<p class="paragraph normal">&quot;creator&quot;: &quot;contributor-id&quot;,</p>
+<p class="paragraph normal">&quot;created&quot;: &quot;2026-09-28&quot;,</p>
+<p class="paragraph normal">&quot;updated&quot;: &quot;2026-09-28&quot;,</p>
+<p class="paragraph normal">&quot;category&quot;: &quot;RESEARCH&quot;,</p>
+<p class="paragraph normal">&quot;tags&quot;: [</p>
+<p class="paragraph normal">&quot;evidence&quot;,</p>
+<p class="paragraph normal">&quot;documentation&quot;,</p>
+<p class="paragraph normal">&quot;research&quot;</p>
+<p class="paragraph normal">],</p>
+<p class="paragraph normal">&quot;problem&quot;: &quot;...&quot;,</p>
+<p class="paragraph normal">&quot;purpose&quot;: &quot;...&quot;,</p>
+<p class="paragraph normal">&quot;description&quot;: &quot;...&quot;,</p>
+<p class="paragraph normal">&quot;inputs&quot;: [],</p>
+<p class="paragraph normal">&quot;processing&quot;: [],</p>
+<p class="paragraph normal">&quot;outputs&quot;: [],</p>
+<p class="paragraph normal">&quot;users&quot;: [],</p>
+<p class="paragraph normal">&quot;constraints&quot;: [],</p>
+<p class="paragraph normal">&quot;open_questions&quot;: [],</p>
+<p class="paragraph normal">&quot;assumptions&quot;: [],</p>
+<p class="paragraph normal">&quot;experiments&quot;: [],</p>
+<p class="paragraph normal">&quot;requirements&quot;: [],</p>
+<p class="paragraph normal">&quot;decisions&quot;: [],</p>
+<p class="paragraph normal">&quot;relationships&quot;: [],</p>
+<p class="paragraph normal">&quot;contributors&quot;: [],</p>
+<p class="paragraph normal">&quot;history&quot;: []</p>
+<p class="paragraph normal">}</p>
+<h1>28 — Barkly Principle</h1>
+<p class="paragraph normal">The System Ideas Library SHALL follow the following principle:</p>
+<p class="paragraph normal">Ideas are allowed to exist before they are ready to become systems.</p>
+<p class="paragraph normal">The system SHALL optimize for preserving human creativity and institutional memory, rather than forcing every idea into immediate execution.</p>
+<p class="paragraph normal">Automation SHALL reduce the burden of organizing and documenting ideas.</p>
+<p class="paragraph normal">Human contributors SHALL retain responsibility for deciding what ideas become projects, experiments, or systems.</p>
+<h1>Core Philosophy</h1>
+<p class="paragraph normal">CAPTURE THE IDEA.</p>
+<p class="paragraph normal">DON&#x27;T LOSE THE QUESTION.</p>
+<p class="paragraph normal">EXPLORE IT.</p>
+<p class="paragraph normal">DOCUMENT WHAT YOU LEARN.</p>
+<p class="paragraph normal">BUILD IT WHEN IT&#x27;S READY.</p>
+<p class="paragraph normal">KEEP THE HISTORY.</p>
+<p class="paragraph normal">LET THE NEXT IDEA BEGIN.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
