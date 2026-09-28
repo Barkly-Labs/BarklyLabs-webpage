@@ -1,0 +1,116 @@
+---
+const path = Astro.url.pathname;
+
+const pages = {
+  "/": {
+    title: "Barkly Labs — Human-Centered Technology",
+    description:
+      "Barkly Labs is an independent technology laboratory building human-centered software, AI, hardware, interfaces, documentation, and experimental systems.",
+  },
+
+  "/about": {
+    title: "About Barkly Labs — Human-Centered Technology Laboratory",
+    description:
+      "Learn what Barkly Labs is, why it exists, how the laboratory works, and how its human-centered technology ecosystem is built.",
+  },
+
+  "/registry": {
+    title: "Project Registry — Barkly Labs",
+    description:
+      "Explore the Barkly Labs project registry and discover the software, hardware, research, documentation, interfaces, and infrastructure being built in the lab.",
+  },
+
+  "/docs": {
+    title: "Barkly Docs — Technical Documentation",
+    description:
+      "Explore Barkly Labs technical documentation, system architecture, project structure, APIs, modules, functions, Git history, and engineering knowledge.",
+  },
+
+  "/standard": {
+    title: "PAW-HC — Human-Centered AI Engineering Standard",
+    description:
+      "PAW-HC is Barkly Labs' proposed human-centered AI engineering standard for accessibility, autonomy, privacy, safety, transparency, and understandable systems.",
+  },
+
+  "/laas": {
+    title: "LAAS — Laboratory as a Service | Barkly Labs",
+    description:
+      "Laboratory as a Service provides infrastructure, environments, tools, and technical capability for experimentation and building technology.",
+  },
+
+  "/cyn-x": {
+    title: "CYN-X — Human-Centered AI Systems | Barkly Labs",
+    description:
+      "CYN-X is Barkly Labs' intelligent-systems project exploring local AI, human-centered interaction, vision, tools, interfaces, and experimental computing.",
+  },
+};
+
+const fallbackTitle =
+  path === "/"
+    ? "Barkly Labs — Human-Centered Technology"
+    : `${path
+        .replace(/^\/|\/$/g, "")
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase())} — Barkly Labs`;
+
+const metadata = pages[path] ?? {
+  title: fallbackTitle,
+  description:
+    "Barkly Labs builds human-centered technology, open systems, experimental tools, research infrastructure, and creative technology.",
+};
+
+const siteUrl =
+  Astro.site?.toString().replace(/\/$/, "") ??
+  Astro.url.origin;
+
+const canonical = new URL(path, siteUrl).toString();
+---
+
+<title>{metadata.title}</title>
+
+<meta
+  name="description"
+  content={metadata.description}
+/>
+
+<meta name="robots" content="index, follow" />
+
+<link
+  rel="canonical"
+  href={canonical}
+/>
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Barkly Labs" />
+<meta property="og:title" content={metadata.title} />
+<meta
+  property="og:description"
+  content={metadata.description}
+/>
+<meta property="og:url" content={canonical} />
+
+<meta
+  name="twitter:card"
+  content="summary_large_image"
+/>
+<meta
+  name="twitter:title"
+  content={metadata.title}
+/>
+<meta
+  name="twitter:description"
+  content={metadata.description}
+/>
+
+<meta name="theme-color" content="#050505" />
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Barkly Labs",
+    url: siteUrl,
+    description: metadata.description,
+  })}
+/>
