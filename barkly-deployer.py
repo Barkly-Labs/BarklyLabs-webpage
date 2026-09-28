@@ -4,7 +4,7 @@ BARKLY DEPLOY
 
 Human-friendly automatic deployment system for Barkly Labs.
 
-Pipeline:
+Normal pipeline:
 
     Git
       ↓
@@ -28,14 +28,44 @@ Pipeline:
       ↓
     Deployment complete
 
+
+Bootstrap pipeline:
+
+    Server provisioning
+      ↓
+    Git
+      ↓
+    npm ci
+      ↓
+    Astro build
+      ↓
+    Immutable release
+      ↓
+    Atomic current symlink
+      ↓
+    Nginx reload
+      ↓
+    Deployment complete
+
+Bootstrap mode intentionally skips QA for the initial server setup.
+
+After the bootstrap deployment succeeds, watch mode automatically
+returns to the normal QA-protected deployment pipeline.
+
 Safety:
 
     - The live release is never replaced unless the new build
-      passes local QA.
+      passes local QA during normal deployments.
     - Public QA failure automatically rolls the live release back.
     - A missing / empty releases directory automatically triggers
-      the first deployment.
+      the first deployment filesystem setup.
     - A missing current symlink automatically triggers deployment.
+    - Bootstrap mode is explicit and intended for first-time setup.
+    - Bootstrap mode is automatically disabled after a successful
+      deployment when running in watch mode.
+    - Nginx is never reloaded without configuration validation.
+    - Releases are immutable once created.
+    - The current symlink is atomically replaced.
 """
 
 from __future__ import annotations
@@ -49,6 +79,7 @@ import socket
 import subprocess
 import sys
 import time
+
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -132,6 +163,7 @@ def run(
     )
 
     if result.stdout:
+
         print(
             result.stdout,
             end="",
@@ -278,7 +310,10 @@ def prepare_release_directories(
         exist_ok=True,
     )
 
-    if not current.exists() and not current.is_symlink():
+    if (
+        not current.exists()
+        and not current.is_symlink()
+    ):
 
         log(
             "No current release is configured."
@@ -725,6 +760,10 @@ def qa_public(
     """
     Test the published deployment from the public
     server IP while forcing the Barkly Host header.
+
+    The URL remains the IP address.
+
+    The Host header selects the Nginx virtual host.
     """
 
     script = (
@@ -746,9 +785,7 @@ def qa_public(
             "python3",
             QA_SCRIPT,
             "--target",
-            f"public=http://{PUBLIC_IP}/",
-            "--host",
-            DOMAIN,
+            f"public=http://{PUBLIC_IP}/|{DOMAIN}",
         ],
         cwd=project,
     )
@@ -781,9 +818,7 @@ def qa_domain(
             "python3",
             QA_SCRIPT,
             "--target",
-            f"domain=http://{DOMAIN}/",
-            "--host",
-            DOMAIN,
+            f"domain=http://{DOMAIN}/|{DOMAIN}",
         ],
         cwd=project,
     )
@@ -816,9 +851,7 @@ def qa_www(
             "python3",
             QA_SCRIPT,
             "--target",
-            f"www=http://{WWW_DOMAIN}/",
-            "--host",
-            WWW_DOMAIN,
+            f"www=http://{WWW_DOMAIN}/|{WWW_DOMAIN}",
         ],
         cwd=project,
     )
@@ -833,8 +866,6 @@ def qa_public_deployment(
 ) -> None:
     """
     Run all post-publication deployment checks.
-
-    These are intentionally separate from local QA.
 
     Local QA proves that the newly generated build works.
 
@@ -1008,7 +1039,8 @@ def publish(
 
     temporary_link = (
         current_link.parent
-        / (
+        /
+        (
             f".current-{os.getpid()}-"
             f"{time.time_ns()}"
         )
@@ -1086,7 +1118,8 @@ def rollback(
 
     temporary_link = (
         current_link.parent
-        / (
+        /
+        (
             f".rollback-{os.getpid()}-"
             f"{time.time_ns()}"
         )
@@ -1244,6 +1277,7 @@ def deploy(
     current: Path,
     branch: str,
     keep_releases: int,
+    skip_qa: bool = False,
 ) -> bool:
 
     log(
@@ -1276,6 +1310,23 @@ def deploy(
             current,
         )
     )
+
+    if first_deployment:
+
+        log(
+            "This deployment is the initial "
+            "Barkly release."
+        )
+
+    if skip_qa:
+
+        log(
+            "BOOTSTRAP MODE REQUESTED."
+        )
+
+        log(
+            "QA will be skipped for this deployment only."
+        )
 
     # ---------------------------------------------------------------
     # Git state
@@ -1320,6 +1371,7 @@ def deploy(
 
     if (
         not first_deployment
+        and not skip_qa
         and local_commit == remote
         and live_commit == remote
     ):
@@ -1387,26 +1439,58 @@ def deploy(
     # LOCAL QA
     # ---------------------------------------------------------------
 
-    qa_server: subprocess.Popen[str] | None = None
+    if skip_qa:
 
-    try:
-
-        qa_server = start_qa_server(
-            dist
+        log(
+            "=" * 40
         )
 
-        qa_local(
-            project
+        log(
+            "BARKLY BOOTSTRAP"
         )
 
-    finally:
-
-        stop_qa_server(
-            qa_server
+        log(
+            "=" * 40
         )
+
+        log(
+            "Skipping temporary QA server."
+        )
+
+        log(
+            "Skipping local Barkly QA."
+        )
+
+        log(
+            "Fresh build will be published directly."
+        )
+
+        log(
+            "=" * 40
+        )
+
+    else:
+
+        qa_server: subprocess.Popen[str] | None = None
+
+        try:
+
+            qa_server = start_qa_server(
+                dist
+            )
+
+            qa_local(
+                project
+            )
+
+        finally:
+
+            stop_qa_server(
+                qa_server
+            )
 
     # ---------------------------------------------------------------
-    # Local QA passed.
+    # Local QA passed, or bootstrap explicitly skipped QA.
     # The release may now be created.
     # ---------------------------------------------------------------
 
@@ -1456,52 +1540,72 @@ def deploy(
     # PUBLIC QA
     # ---------------------------------------------------------------
 
-    try:
-
-        qa_public_deployment(
-            project
-        )
-
-    except Exception as error:
+    if skip_qa:
 
         log(
             "=" * 40
         )
 
         log(
-            "PUBLIC QA FAILED"
+            "BOOTSTRAP DEPLOYMENT COMPLETE"
         )
 
         log(
-            str(error)
+            "Public deployment QA intentionally skipped."
         )
 
         log(
-            "Rolling back live release..."
+            "=" * 40
         )
 
-        rollback(
-            previous_release,
-            current,
-        )
+    else:
 
         try:
 
-            reload_nginx(
+            qa_public_deployment(
                 project
             )
 
-        except Exception as reload_error:
+        except Exception as error:
 
             log(
-                "WARNING: Nginx reload after "
-                f"rollback failed: {reload_error}"
+                "=" * 40
             )
 
-        raise RuntimeError(
-            "Public deployment QA failed. "
-            "Live release was rolled back."
-        ) from error
+            log(
+                "PUBLIC QA FAILED"
+            )
+
+            log(
+                str(error)
+            )
+
+            log(
+                "Rolling back live release..."
+            )
+
+            rollback(
+                previous_release,
+                current,
+            )
+
+            try:
+
+                reload_nginx(
+                    project
+                )
+
+            except Exception as reload_error:
+
+                log(
+                    "WARNING: Nginx reload after "
+                    f"rollback failed: {reload_error}"
+                )
+
+            raise RuntimeError(
+                "Public deployment QA failed. "
+                "Live release was rolled back."
+            ) from error
 
     # ---------------------------------------------------------------
     # Cleanup
@@ -1520,9 +1624,17 @@ def deploy(
         "=" * 40
     )
 
-    log(
-        "DEPLOYMENT SUCCESSFUL"
-    )
+    if skip_qa:
+
+        log(
+            "BOOTSTRAP DEPLOYMENT SUCCESSFUL"
+        )
+
+    else:
+
+        log(
+            "DEPLOYMENT SUCCESSFUL"
+        )
 
     log(
         "=" * 40
@@ -1555,6 +1667,18 @@ def deploy(
         f"http://{WWW_DOMAIN}/"
     )
 
+    if skip_qa:
+
+        log(
+            "QA:       SKIPPED FOR BOOTSTRAP"
+        )
+
+    else:
+
+        log(
+            "QA:       PASSED"
+        )
+
     log(
         "=" * 40
     )
@@ -1573,6 +1697,7 @@ def watch(
     branch: str,
     interval: int,
     keep_releases: int,
+    bootstrap: bool = False,
 ) -> None:
 
     log(
@@ -1599,6 +1724,23 @@ def watch(
         f"Current: {current}"
     )
 
+    if bootstrap:
+
+        log(
+            "Bootstrap mode: ENABLED"
+        )
+
+        log(
+            "QA will be skipped for the first "
+            "successful deployment only."
+        )
+
+    else:
+
+        log(
+            "Bootstrap mode: disabled"
+        )
+
     log(
         "=" * 40
     )
@@ -1607,13 +1749,43 @@ def watch(
 
         try:
 
-            deploy(
+            deployed = deploy(
                 project=project,
                 releases=releases,
                 current=current,
                 branch=branch,
                 keep_releases=keep_releases,
+                skip_qa=bootstrap,
             )
+
+            # -------------------------------------------------------
+            # Bootstrap is intentionally ONE TIME only.
+            #
+            # It is disabled only after the deployment succeeds.
+            #
+            # If bootstrap deployment fails, it remains enabled
+            # so the next watch cycle can continue setup.
+            # -------------------------------------------------------
+
+            if bootstrap and deployed:
+
+                log(
+                    "=" * 40
+                )
+
+                log(
+                    "INITIAL BOOTSTRAP SUCCEEDED"
+                )
+
+                log(
+                    "Re-enabling full QA pipeline."
+                )
+
+                log(
+                    "=" * 40
+                )
+
+                bootstrap = False
 
         except KeyboardInterrupt:
 
@@ -1731,6 +1903,17 @@ def parse_args() -> argparse.Namespace:
         ),
     )
 
+    parser.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help=(
+            "Perform the initial server deployment "
+            "without local or public QA. In watch "
+            "mode this applies only to the first "
+            "successful deployment."
+        ),
+    )
+
     return parser.parse_args()
 
 
@@ -1781,6 +1964,7 @@ def main() -> int:
                 current=current,
                 branch=args.branch,
                 keep_releases=args.keep_releases,
+                skip_qa=args.bootstrap,
             )
 
             return 0
@@ -1845,6 +2029,23 @@ def main() -> int:
         f"Current: {current}"
     )
 
+    if args.bootstrap:
+
+        log(
+            "Bootstrap: ENABLED"
+        )
+
+        log(
+            "QA will be skipped for the first "
+            "successful deployment only."
+        )
+
+    else:
+
+        log(
+            "Bootstrap: disabled"
+        )
+
     log(
         "=" * 40
     )
@@ -1856,6 +2057,7 @@ def main() -> int:
         branch=args.branch,
         interval=args.interval,
         keep_releases=args.keep_releases,
+        bootstrap=args.bootstrap,
     )
 
     return 0
