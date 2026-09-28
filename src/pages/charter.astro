@@ -33,38 +33,71 @@ const principles = [
 ];
 
 const practices = [
-  ["DOCUMENT", "Systems should leave behind understandable documentation."],
-  ["SHARE", "Useful knowledge should have a path back to the community."],
-  ["ITERATE", "Projects are allowed to change as we learn."],
-  ["REUSE", "Good infrastructure should be reusable instead of rebuilt endlessly."],
-  ["CONNECT", "Projects should be able to work together as part of a larger ecosystem."],
-  ["RESPECT", "Technology should preserve human dignity and agency."],
+  [
+    "DOCUMENT",
+    "Systems should leave behind understandable documentation. The work should explain what was built, why it exists, and what someone else would need to know to continue it.",
+  ],
+  [
+    "SHARE",
+    "Useful knowledge should have a path back to the community. Tools, discoveries, and lessons should be made available whenever doing so is practical and responsible.",
+  ],
+  [
+    "ITERATE",
+    "Projects are allowed to change as we learn. Experiments can fail, systems can be rebuilt, and earlier decisions can be questioned when new information appears.",
+  ],
+  [
+    "REUSE",
+    "Good infrastructure should be reusable instead of rebuilt endlessly. A useful system should become a foundation that makes the next project easier to create.",
+  ],
+  [
+    "CONNECT",
+    "Projects should be able to work together as part of a larger ecosystem while remaining independently useful, understandable, and maintainable.",
+  ],
+  [
+    "RESPECT",
+    "Technology should preserve human dignity and agency. People should remain able to understand the systems they use and retain meaningful control over their participation.",
+  ],
 ];
 
 const continuity = [
   [
+    "BELONG",
+    "Barkly exists as part of a community, not apart from it.",
+  ],
+  [
+    "SHARE",
+    "Knowledge, tools, and discoveries should have a path back to the people who can use them.",
+  ],
+  [
+    "CONTRIBUTE",
+    "People should be able to participate, build, experiment, and leave their own work within the ecosystem.",
+  ],
+  [
     "PRESERVE",
-    "Barkly should preserve its mission, principles, knowledge, and institutional memory across generations.",
+    "The community should be able to preserve the knowledge and history that would otherwise be lost.",
   ],
   [
-    "SUCCESSION",
-    "Leadership should have a documented path forward so Barkly does not depend on one individual to continue.",
-  ],
-  [
-    "STEWARD",
-    "Future stewards should protect the purpose of Barkly while allowing the systems and projects to evolve.",
-  ],
-  [
-    "DOCUMENT",
-    "Important decisions, systems, responsibilities, and knowledge should be documented so they can be understood by those who come next.",
+    "EVOLVE",
+    "Barkly should change as its community changes. New people should be able to question, improve, and reshape what came before.",
   ],
   [
     "CONTINUE",
-    "Barkly should be built to remain useful beyond the people who originally created it.",
+    "What one generation builds should become a foundation another generation can build upon.",
+  ],
+];
+
+const direction = [
+  [
+    "NOW",
+    "Build useful systems. Document them. Test them. Make them better.",
   ],
   [
-    "GROW",
-    "Each generation should be able to extend the ecosystem without having to recreate the foundation beneath it.",
+    "NEXT",
+    "Connect projects into infrastructure that other builders can use.",
+  ],
+  [
+    "LATER",
+    "Grow Barkly into a sustainable laboratory and open technology ecosystem.",
   ],
 ];
 ---
@@ -99,6 +132,7 @@ const continuity = [
   <!-- SIDE NAV -->
 
   <aside class="side-nav">
+
     <a href="#purpose">
       <span>01</span>
       PURPOSE
@@ -133,6 +167,7 @@ const continuity = [
       <span>07</span>
       DIRECTION
     </a>
+
   </aside>
 
 
@@ -148,10 +183,12 @@ const continuity = [
       </div>
 
       <div class="hero-title">
+
         <h1>
           BUILT FOR<br />
           <span>PEOPLE.</span>
         </h1>
+
       </div>
 
       <div class="hero-bottom">
@@ -190,6 +227,7 @@ const continuity = [
         </div>
 
       </div>
+
 
       <div class="section-body">
 
@@ -235,6 +273,7 @@ const continuity = [
 
       </div>
 
+
       <div class="mission-content">
 
         <div class="mission-statement">
@@ -247,10 +286,12 @@ const continuity = [
 
         </div>
 
+
         <div class="mission-details">
 
           <div>
             <span>01</span>
+
             <p>
               Build practical tools for real people and real problems.
             </p>
@@ -258,6 +299,7 @@ const continuity = [
 
           <div>
             <span>02</span>
+
             <p>
               Create infrastructure that other people can build upon.
             </p>
@@ -265,6 +307,7 @@ const continuity = [
 
           <div>
             <span>03</span>
+
             <p>
               Document the work so knowledge does not disappear.
             </p>
@@ -272,6 +315,7 @@ const continuity = [
 
           <div>
             <span>04</span>
+
             <p>
               Keep humans at the center of the systems we create.
             </p>
@@ -303,6 +347,7 @@ const continuity = [
 
       </div>
 
+
       <div class="principles-list">
 
         {principles.map((principle) => (
@@ -332,7 +377,7 @@ const continuity = [
 
     <!-- HOW WE BUILD -->
 
-    <section class="content-section" id="practice">
+    <section class="content-section practice-section" id="practice">
 
       <div class="section-heading">
 
@@ -349,19 +394,77 @@ const continuity = [
 
       </div>
 
-      <div class="flow-grid">
 
-        {practices.map(([title, description]) => (
+      <div class="practice-copy">
 
-          <div class="flow-item">
+        <p class="large-copy">
+          Barkly Labs builds through documentation,
+          experimentation, reuse, and collaboration.
+        </p>
 
-            <span>{title}</span>
+        <p>
+          The systems we create should leave something useful behind
+          for the people who work with them next.
+        </p>
 
-            <p>{description}</p>
+      </div>
 
-          </div>
 
-        ))}
+      <div class="practice-grid">
+
+        <div class="practice-item">
+          <span>DOCUMENT</span>
+          <p>
+            Systems should leave behind understandable documentation.
+            The work should explain what was built, why it exists,
+            and what someone else would need to know to continue it.
+          </p>
+        </div>
+
+        <div class="practice-item">
+          <span>SHARE</span>
+          <p>
+            Useful knowledge should have a path back to the community.
+            Tools, discoveries, and lessons should be made available
+            whenever doing so is practical and responsible.
+          </p>
+        </div>
+
+        <div class="practice-item">
+          <span>ITERATE</span>
+          <p>
+            Projects are allowed to change as we learn. Experiments
+            can fail, systems can be rebuilt, and earlier decisions
+            can be questioned when new information appears.
+          </p>
+        </div>
+
+        <div class="practice-item">
+          <span>REUSE</span>
+          <p>
+            Good infrastructure should be reusable instead of rebuilt
+            endlessly. A useful system should become a foundation
+            that makes the next project easier to create.
+          </p>
+        </div>
+
+        <div class="practice-item">
+          <span>CONNECT</span>
+          <p>
+            Projects should be able to work together as part of a
+            larger ecosystem while remaining independently useful,
+            understandable, and maintainable.
+          </p>
+        </div>
+
+        <div class="practice-item">
+          <span>RESPECT</span>
+          <p>
+            Technology should preserve human dignity and agency.
+            People should remain able to understand the systems they
+            use and retain meaningful control over their participation.
+          </p>
+        </div>
 
       </div>
 
@@ -387,6 +490,7 @@ const continuity = [
 
       </div>
 
+
       <div class="ecosystem-copy">
 
         <p class="large-copy">
@@ -403,11 +507,11 @@ const continuity = [
 
         <p>
           New projects can become part of the ecosystem while
-          remaining independently useful, documented, and
-          reusable.
+          remaining independently useful, documented, and reusable.
         </p>
 
       </div>
+
 
       <div class="system-map">
 
@@ -435,100 +539,103 @@ const continuity = [
     </section>
 
 
-   <!-- CONTINUITY -->
+    <!-- CONTINUITY -->
 
-<section class="content-section continuity-section" id="continuity">
+    <section class="content-section continuity-section" id="continuity">
 
-  <div class="section-heading">
+      <div class="section-heading">
 
-    <div class="section-number">06</div>
+        <div class="section-number">06</div>
 
-    <div>
-      <span class="eyebrow">CONTINUITY</span>
+        <div>
+          <span class="eyebrow">CONTINUITY</span>
 
-      <h2>
-        BUILD<br />
-        <span>BEYOND.</span>
-      </h2>
-    </div>
+          <h2>
+            BUILD<br />
+            <span>BEYOND.</span>
+          </h2>
+        </div>
 
-  </div>
+      </div>
 
-  <div class="continuity-copy">
 
-    <p class="large-copy">
-      Barkly Labs is built for the community.
-    </p>
+      <div class="continuity-copy">
 
-    <p>
-      Barkly should grow beyond any one person, including the
-      people who begin it. Its knowledge, systems, tools, and
-      principles should remain available to the people who
-      build with them, contribute to them, and carry them forward.
-    </p>
+        <p class="large-copy">
+          Barkly Labs is built for the community.
+        </p>
 
-    <p>
-      The future of Barkly should belong to the community around
-      it. People should be able to learn from what came before,
-      improve what exists, create what comes next, and leave
-      something useful behind for the people who follow.
-    </p>
+        <p>
+          Barkly should grow beyond any one person, including the
+          people who begin it. Its knowledge, systems, tools, and
+          principles should remain available to the people who
+          build with them, contribute to them, and carry them forward.
+        </p>
 
-  </div>
+        <p>
+          The future of Barkly should belong to the community around
+          it. People should be able to learn from what came before,
+          improve what exists, create what comes next, and leave
+          something useful behind for the people who follow.
+        </p>
 
-  <div class="continuity-grid">
+      </div>
 
-    <div class="continuity-item">
-      <span>BELONG</span>
-      <p>
-        Barkly exists as part of a community, not apart from it.
-      </p>
-    </div>
 
-    <div class="continuity-item">
-      <span>SHARE</span>
-      <p>
-        Knowledge, tools, and discoveries should have a path
-        back to the people who can use them.
-      </p>
-    </div>
+      <div class="continuity-grid">
 
-    <div class="continuity-item">
-      <span>CONTRIBUTE</span>
-      <p>
-        People should be able to participate, build, experiment,
-        and leave their own work within the ecosystem.
-      </p>
-    </div>
+        <div class="continuity-item">
+          <span>BELONG</span>
+          <p>
+            Barkly exists as part of a community, not apart from it.
+          </p>
+        </div>
 
-    <div class="continuity-item">
-      <span>PRESERVE</span>
-      <p>
-        The community should be able to preserve the knowledge
-        and history that would otherwise be lost.
-      </p>
-    </div>
+        <div class="continuity-item">
+          <span>SHARE</span>
+          <p>
+            Knowledge, tools, and discoveries should have a path
+            back to the people who can use them.
+          </p>
+        </div>
 
-    <div class="continuity-item">
-      <span>EVOLVE</span>
-      <p>
-        Barkly should change as its community changes. New people
-        should be able to question, improve, and reshape what
-        came before.
-      </p>
-    </div>
+        <div class="continuity-item">
+          <span>CONTRIBUTE</span>
+          <p>
+            People should be able to participate, build, experiment,
+            and leave their own work within the ecosystem.
+          </p>
+        </div>
 
-    <div class="continuity-item">
-      <span>CONTINUE</span>
-      <p>
-        What one generation builds should become a foundation
-        another generation can build upon.
-      </p>
-    </div>
+        <div class="continuity-item">
+          <span>PRESERVE</span>
+          <p>
+            The community should be able to preserve the knowledge
+            and history that would otherwise be lost.
+          </p>
+        </div>
 
-  </div>
+        <div class="continuity-item">
+          <span>EVOLVE</span>
+          <p>
+            Barkly should change as its community changes. New people
+            should be able to question, improve, and reshape what
+            came before.
+          </p>
+        </div>
 
-</section>
+        <div class="continuity-item">
+          <span>CONTINUE</span>
+          <p>
+            What one generation builds should become a foundation
+            another generation can build upon.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
 
     <!-- DIRECTION -->
 
@@ -549,39 +656,46 @@ const continuity = [
 
       </div>
 
+
+      <div class="direction-copy">
+
+        <p class="large-copy">
+          Barkly does not need to know everything it will become.
+          It needs to keep building useful things.
+        </p>
+
+        <p>
+          The direction of the laboratory can evolve as its work,
+          technology, and community evolve.
+        </p>
+
+      </div>
+
+
       <div class="direction-grid">
 
-        <div>
-
-          <span class="direction-label">NOW</span>
-
+        <div class="direction-item">
+          <span>NOW</span>
           <p>
             Build useful systems. Document them. Test them.
             Make them better.
           </p>
-
         </div>
 
-        <div>
-
-          <span class="direction-label">NEXT</span>
-
+        <div class="direction-item">
+          <span>NEXT</span>
           <p>
             Connect projects into infrastructure that other
             builders can use.
           </p>
-
         </div>
 
-        <div>
-
-          <span class="direction-label">LATER</span>
-
+        <div class="direction-item">
+          <span>LATER</span>
           <p>
             Grow Barkly into a sustainable laboratory and
             open technology ecosystem.
           </p>
-
         </div>
 
       </div>
@@ -627,6 +741,7 @@ const continuity = [
 
 </div>
 
+
 <style>
 
 :global(*) {
@@ -649,38 +764,25 @@ const continuity = [
   --panel: #0a0a0a;
   --panel-raised: #0f0f0f;
   --panel-hover: #131313;
-
   --text: #f1f1f1;
   --white: #f1f1f1;
-
   --muted: #a1a1a1;
   --dim: #686868;
   --faint: #444;
-
   --line: rgba(255, 255, 255, 0.12);
   --line-strong: rgba(255, 255, 255, 0.25);
-
   --pink: #ff2f92;
   --pink-soft: rgba(255, 47, 146, 0.10);
   --pink-line: rgba(255, 47, 146, 0.42);
-
   --max: 1500px;
 }
 
-.page {
-  min-height: 100vh;
-  background: var(--bg);
-}
 
-
-/* =========================================================
-   HEADER
-   ========================================================= */
+/* HEADER */
 
 .site-header {
   height: 72px;
   padding: 0 4vw;
-
   border-bottom: 1px solid var(--line);
 
   display: flex;
@@ -708,9 +810,7 @@ const continuity = [
 }
 
 
-/* =========================================================
-   SIDE NAVIGATION
-   ========================================================= */
+/* SIDE NAVIGATION */
 
 .side-nav {
   position: fixed;
@@ -751,9 +851,7 @@ const continuity = [
 }
 
 
-/* =========================================================
-   HERO
-   ========================================================= */
+/* HERO */
 
 .hero {
   max-width: var(--max);
@@ -790,6 +888,7 @@ const continuity = [
 
   font-size: clamp(76px, 10vw, 150px);
   line-height: 0.88;
+
   letter-spacing: -0.075em;
   font-weight: 800;
 }
@@ -802,7 +901,10 @@ const continuity = [
   margin-top: 90px;
 
   display: grid;
-  grid-template-columns: minmax(0, 760px) minmax(0, 1fr);
+  grid-template-columns:
+    minmax(0, 760px)
+    minmax(0, 1fr);
+
   gap: 80px;
 
   align-items: end;
@@ -825,14 +927,13 @@ const continuity = [
 
   font-size: 32px;
   line-height: 0.9;
+
   font-weight: 800;
   letter-spacing: -0.05em;
 }
 
 
-/* =========================================================
-   GENERAL CONTENT SECTIONS
-   ========================================================= */
+/* GENERAL CONTENT SECTIONS */
 
 .content-section {
   max-width: var(--max);
@@ -843,6 +944,7 @@ const continuity = [
   border-top: 1px solid var(--line);
 
   display: grid;
+
   grid-template-columns:
     minmax(280px, 0.8fr)
     minmax(0, 1.2fr);
@@ -851,9 +953,7 @@ const continuity = [
 }
 
 
-/* =========================================================
-   SECTION HEADINGS
-   ========================================================= */
+/* SECTION HEADINGS */
 
 .section-heading {
   min-width: 0;
@@ -894,6 +994,7 @@ const continuity = [
 
   font-size: clamp(45px, 5vw, 78px);
   line-height: 0.92;
+
   letter-spacing: -0.06em;
 }
 
@@ -902,9 +1003,7 @@ const continuity = [
 }
 
 
-/* =========================================================
-   PURPOSE
-   ========================================================= */
+/* PURPOSE */
 
 #purpose {
   grid-template-columns:
@@ -914,7 +1013,6 @@ const continuity = [
 
 #purpose .section-heading h2 {
   max-width: 320px;
-
   font-size: clamp(40px, 4.2vw, 68px);
 }
 
@@ -925,6 +1023,7 @@ const continuity = [
 
 .section-body p {
   max-width: 100%;
+
   margin-top: 0;
 
   color: var(--muted);
@@ -947,9 +1046,7 @@ const continuity = [
 }
 
 
-/* =========================================================
-   MISSION
-   ========================================================= */
+/* MISSION */
 
 .mission-section {
   grid-template-columns:
@@ -976,6 +1073,7 @@ const continuity = [
 
   font-size: clamp(30px, 3vw, 48px);
   line-height: 1.2;
+
   letter-spacing: -0.035em;
 }
 
@@ -988,12 +1086,17 @@ const continuity = [
 
 .mission-details > div {
   min-height: 105px;
+
   padding: 30px 0;
 
   border-bottom: 1px solid var(--line);
 
   display: grid;
-  grid-template-columns: 55px minmax(0, 1fr);
+
+  grid-template-columns:
+    55px
+    minmax(0, 1fr);
+
   gap: 25px;
 
   align-items: center;
@@ -1008,6 +1111,7 @@ const continuity = [
 
 .mission-details p {
   max-width: 700px;
+
   margin: 0;
 
   color: var(--muted);
@@ -1016,9 +1120,7 @@ const continuity = [
 }
 
 
-/* =========================================================
-   PRINCIPLES
-   ========================================================= */
+/* PRINCIPLES */
 
 .principles-list {
   border-top: 1px solid var(--line);
@@ -1026,7 +1128,12 @@ const continuity = [
 
 .principle {
   display: grid;
-  grid-template-columns: 55px 240px minmax(0, 1fr);
+
+  grid-template-columns:
+    55px
+    240px
+    minmax(0, 1fr);
+
   gap: 25px;
 
   padding: 30px 0;
@@ -1055,11 +1162,13 @@ const continuity = [
 
   font-size: 18px;
   font-weight: 700;
+
   letter-spacing: 0.02em;
 }
 
 .principle p {
   max-width: 600px;
+
   margin: 0;
 
   color: var(--muted);
@@ -1068,38 +1177,73 @@ const continuity = [
 }
 
 
-/* =========================================================
-   HOW WE BUILD
-   ========================================================= */
+/* HOW WE BUILD */
 
-.flow-grid {
+.practice-copy {
+  grid-column: 2;
+
+  min-width: 0;
+  max-width: 750px;
+}
+
+.practice-copy p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.practice-copy p + p {
+  margin-top: 28px;
+}
+
+.practice-copy .large-copy {
+  color: var(--white);
+}
+
+.practice-grid {
+  grid-column: 1 / -1;
+
+  margin-top: 80px;
+
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
 }
 
-.flow-item {
+.practice-item {
   min-height: 190px;
+
   padding: 30px;
 
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+
+  display: flex;
+  flex-direction: column;
 }
 
-.flow-item span {
+.practice-item span {
   color: var(--pink);
 
-  font-family: "Courier New", monospace;
+  font-family:
+    "Courier New",
+    monospace;
+
   font-size: 11px;
   letter-spacing: 0.12em;
 }
 
-.flow-item p {
+.practice-item p {
   max-width: 420px;
 
-  margin: 45px 0 0;
+  margin: auto 0 0;
 
   color: var(--muted);
 
@@ -1107,9 +1251,7 @@ const continuity = [
 }
 
 
-/* =========================================================
-   ECOSYSTEM
-   ========================================================= */
+/* ECOSYSTEM */
 
 .ecosystem-copy {
   min-width: 0;
@@ -1134,18 +1276,22 @@ const continuity = [
 
   display: flex;
   align-items: center;
+
   gap: 20px;
 }
 
 .system-node {
   min-width: 170px;
+
   padding: 25px;
 
   border: 1px solid var(--line);
+
   background: var(--panel);
 
   display: flex;
   flex-direction: column;
+
   gap: 8px;
 }
 
@@ -1160,6 +1306,7 @@ const continuity = [
   color: var(--pink);
 
   font-family: "Courier New", monospace;
+
   font-size: 9px;
   letter-spacing: 0.08em;
 }
@@ -1173,9 +1320,8 @@ const continuity = [
   background: var(--line-strong);
 }
 
-/* =========================================================
-   CONTINUITY
-   ========================================================= */
+
+/* CONTINUITY */
 
 .continuity-copy {
   grid-column: 2;
@@ -1201,16 +1347,15 @@ const continuity = [
   color: var(--white);
 }
 
-
-/* FULL-WIDTH CONTINUITY GRID */
-
 .continuity-grid {
   grid-column: 1 / -1;
 
   margin-top: 80px;
 
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
@@ -1218,6 +1363,7 @@ const continuity = [
 
 .continuity-item {
   min-height: 190px;
+
   padding: 30px;
 
   border-right: 1px solid var(--line);
@@ -1247,46 +1393,89 @@ const continuity = [
 
   line-height: 1.55;
 }
-/* =========================================================
-   DIRECTION
-   ========================================================= */
 
-.direction-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 30px;
+
+/* DIRECTION */
+
+.direction-copy {
+  grid-column: 2;
+
+  min-width: 0;
+  max-width: 750px;
 }
 
-.direction-grid > div {
-  padding-top: 25px;
+.direction-copy p {
+  margin: 0;
 
-  border-top: 1px solid var(--line);
-}
-
-.direction-label {
-  color: var(--pink);
-
-  font-family: "Courier New", monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-}
-
-.direction-grid p {
   color: var(--muted);
 
   font-size: 18px;
   line-height: 1.7;
 }
 
+.direction-copy p + p {
+  margin-top: 28px;
+}
 
-/* =========================================================
-   FINAL
-   ========================================================= */
+.direction-copy .large-copy {
+  color: var(--white);
+}
+
+.direction-grid {
+  grid-column: 1 / -1;
+
+  margin-top: 80px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.direction-item {
+  min-height: 190px;
+
+  padding: 30px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.direction-item span {
+  color: var(--pink);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.direction-item p {
+  max-width: 420px;
+
+  margin: auto 0 0;
+
+  color: var(--muted);
+
+  line-height: 1.55;
+}
+
+
+/* FINAL */
 
 .final-section {
   max-width: var(--max);
 
   margin: 0 auto;
+
   padding: 170px 10vw 190px;
 
   border-top: 1px solid var(--line);
@@ -1300,6 +1489,7 @@ const continuity = [
   color: var(--pink);
 
   font-family: "Courier New", monospace;
+
   font-size: 10px;
   letter-spacing: 0.14em;
 }
@@ -1308,7 +1498,9 @@ const continuity = [
   margin: 0;
 
   font-size: clamp(70px, 11vw, 160px);
+
   line-height: 0.85;
+
   letter-spacing: -0.075em;
 }
 
@@ -1322,37 +1514,39 @@ const continuity = [
   color: var(--dim);
 
   font-family: "Courier New", monospace;
+
   font-size: 11px;
+
   letter-spacing: 0.08em;
 }
 
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
+/* FOOTER */
 
 .site-footer {
   max-width: var(--max);
 
   margin: 0 auto;
+
   padding: 30px 10vw;
 
   border-top: 1px solid var(--line);
 
   display: flex;
+
   justify-content: space-between;
 
   color: var(--dim);
 
   font-family: "Courier New", monospace;
+
   font-size: 9px;
+
   letter-spacing: 0.1em;
 }
 
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* RESPONSIVE */
 
 @media (max-width: 1100px) {
 
@@ -1380,16 +1574,15 @@ const continuity = [
     display: none;
   }
 
-
-  /* HERO */
-
   .hero {
     min-height: auto;
+
     padding: 50px 7vw 90px;
   }
 
   .hero-bottom {
     grid-template-columns: 1fr;
+
     gap: 45px;
   }
 
@@ -1397,18 +1590,13 @@ const continuity = [
     justify-self: start;
   }
 
-
-  /* GENERAL SECTIONS */
-
   .content-section {
     padding: 90px 7vw;
 
     grid-template-columns: 1fr;
+
     gap: 60px;
   }
-
-
-  /* PURPOSE */
 
   #purpose {
     grid-template-columns: 1fr;
@@ -1418,11 +1606,9 @@ const continuity = [
     max-width: none;
   }
 
-
-  /* MISSION */
-
   .mission-section {
     grid-template-columns: 1fr;
+
     gap: 60px;
   }
 
@@ -1433,9 +1619,6 @@ const continuity = [
   .mission-statement {
     margin-bottom: 55px;
   }
-
-
-  /* PRINCIPLES */
 
   .principle {
     grid-template-columns:
@@ -1454,10 +1637,19 @@ const continuity = [
   }
 
 
-  /* PRACTICE */
+  /* HOW WE BUILD */
 
-  .flow-grid {
-    grid-template-columns: 1fr;
+  .practice-copy {
+    grid-column: auto;
+  }
+
+  .practice-grid {
+    grid-column: 1 / -1;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    margin-top: 60px;
   }
 
 
@@ -1467,6 +1659,7 @@ const continuity = [
     grid-column: auto;
 
     flex-direction: column;
+
     align-items: stretch;
 
     margin-top: 60px;
@@ -1474,6 +1667,7 @@ const continuity = [
 
   .system-line {
     width: 1px;
+
     height: 35px;
 
     margin-left: 30px;
@@ -1482,10 +1676,15 @@ const continuity = [
 
   /* CONTINUITY */
 
-  .continuity-grid {
+  .continuity-copy {
     grid-column: auto;
+  }
 
-    grid-template-columns: 1fr;
+  .continuity-grid {
+    grid-column: 1 / -1;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
 
     margin-top: 60px;
   }
@@ -1493,25 +1692,29 @@ const continuity = [
 
   /* DIRECTION */
 
-  .direction-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
+  .direction-copy {
+    grid-column: auto;
   }
 
+  .direction-grid {
+    grid-column: 1 / -1;
 
-  /* FINAL */
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    margin-top: 60px;
+  }
+
 
   .final-section {
     padding: 120px 7vw;
   }
 
-
-  /* FOOTER */
-
   .site-footer {
     padding: 25px 7vw;
 
     flex-direction: column;
+
     gap: 10px;
   }
 
@@ -1528,9 +1731,6 @@ const continuity = [
     display: none;
   }
 
-
-  /* HERO */
-
   .hero-title h1 {
     font-size: 20vw;
   }
@@ -1542,9 +1742,6 @@ const continuity = [
   .hero-copy {
     font-size: 19px;
   }
-
-
-  /* SECTIONS */
 
   .section-heading {
     gap: 18px;
@@ -1558,15 +1755,9 @@ const continuity = [
     font-size: 10px;
   }
 
-
-  /* PURPOSE */
-
   #purpose .section-heading h2 {
     font-size: 48px;
   }
-
-
-  /* MISSION */
 
   .mission-statement p {
     font-size: 30px;
@@ -1574,6 +1765,7 @@ const continuity = [
 
   .mission-details > div {
     min-height: 90px;
+
     padding: 25px 0;
 
     grid-template-columns:
@@ -1582,9 +1774,6 @@ const continuity = [
 
     gap: 15px;
   }
-
-
-  /* PRINCIPLES */
 
   .principle {
     padding: 25px 0;
@@ -1595,31 +1784,29 @@ const continuity = [
   }
 
 
-  /* PRACTICE */
+  /*
+    Practice, continuity, and direction
+    use the same card layout as BUILD BEYOND.
+  */
 
-  .flow-item {
+  .practice-grid,
+  .continuity-grid,
+  .direction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .practice-item,
+  .continuity-item,
+  .direction-item {
     min-height: 160px;
     padding: 25px;
   }
 
-
-  /* ECOSYSTEM */
 
   .system-node {
     min-width: 0;
     width: 100%;
   }
-
-
-  /* CONTINUITY */
-
-  .continuity-item {
-    min-height: 160px;
-    padding: 25px;
-  }
-
-
-  /* FINAL */
 
   .final-section h2 {
     font-size: 21vw;
