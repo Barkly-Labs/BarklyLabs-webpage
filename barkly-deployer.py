@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -47,7 +48,6 @@ DEFAULT_INTERVAL = 30
 
 BUILD_COMMAND = ["npm", "run", "build"]
 
-# Barkly QA should be available from the project directory.
 QA_COMMAND = [
     "python3",
     "barkly_qa.py",
@@ -339,6 +339,67 @@ def create_release(
 
 
 # ============================================================================
+# CURRENT RELEASE DETECTION
+# ============================================================================
+
+def deployed_commit(
+    current_link: Path,
+) -> str | None:
+    """
+    Return the Git commit currently published by /current.
+
+    The current path is intentionally NOT resolved before this function.
+    We need to preserve the symlink itself.
+    """
+
+    if not current_link.exists() and not current_link.is_symlink():
+        return None
+
+    if not current_link.is_symlink():
+        log(
+            f"WARNING: current path exists but is not a symlink: "
+            f"{current_link}"
+        )
+        return None
+
+    release = current_link.resolve()
+
+    metadata_file = (
+        release
+        / ".barkly-release.json"
+    )
+
+    if not metadata_file.exists():
+        log(
+            "Current release has no .barkly-release.json metadata."
+        )
+        return None
+
+    try:
+
+        metadata = json.loads(
+            metadata_file.read_text(
+                encoding="utf-8"
+            )
+        )
+
+        commit = metadata.get("commit")
+
+        if not commit:
+            return None
+
+        return str(commit)
+
+    except Exception as error:
+
+        log(
+            f"Unable to read current release metadata: {error}"
+        )
+
+        return None
+
+
+# ============================================================================
 # ATOMIC PUBLICATION
 # ============================================================================
 
@@ -368,10 +429,6 @@ def publish(
         target_is_directory=True,
     )
 
-    # os.replace() is atomic when both paths
-    # are on the same filesystem.
-    import os
-
     os.replace(
         temporary_link,
         current_link,
@@ -391,6 +448,9 @@ def cleanup_releases(
     keep: int,
 ) -> None:
 
+    if not releases_directory.exists():
+        return
+
     releases = sorted(
         [
             path
@@ -402,6 +462,7 @@ def cleanup_releases(
     )
 
     for old_release in releases[keep:]:
+
         log(
             f"Removing old release: "
             f"{old_release.name}"
@@ -452,7 +513,7 @@ def write_report(
         reports
         / (
             datetime.now(timezone.utc)
-            .strftime("%Y%m%d-%H%M%S")
+            .strftime("%Y%m%d-%H%M%S-%f")
             + ".json"
         )
     )
@@ -496,40 +557,108 @@ def deploy(
         f"Remote repository: {remote}"
     )
 
-    if local_commit == remote:
-        log(
-            "No new commit. Nothing to deploy."
-        )
-        return False
+    # ------------------------------------------------------------------------
+    # Determine what is actually live.
+    # ------------------------------------------------------------------------
 
-    log(
-        "New commit detected."
+    live_commit = deployed_commit(
+        current_link
     )
 
+    if live_commit:
+        log(
+            f"Live release commit: {live_commit}"
+        )
+    else:
+        log(
+            "No valid live release detected."
+        )
+
+    # ------------------------------------------------------------------------
+    # The repository may already be current while the website is not
+    # published yet. In that case we MUST still deploy.
+    # ------------------------------------------------------------------------
+
+    if (
+        local_commit == remote
+        and live_commit == remote
+    ):
+
+        log(
+            "Repository and live release are already current."
+        )
+
+        log(
+            "No deployment required."
+        )
+
+        return False
+
+    if local_commit != remote:
+
+        log(
+            "New commit detected."
+        )
+
+    elif live_commit != remote:
+
+        log(
+            "Repository is current, "
+            "but the live release is not."
+        )
+
+        log(
+            "Initial publication or repair deployment required."
+        )
+
     if dry_run:
+
         log(
             "DRY RUN: deployment would begin."
         )
+
         return True
 
     try:
 
-        commit = update_repository(
-            project,
-            branch,
-        )
+        # --------------------------------------------------------------------
+        # Synchronize repository only when it is behind the remote.
+        # --------------------------------------------------------------------
+
+        if local_commit != remote:
+
+            commit = update_repository(
+                project,
+                branch,
+            )
+
+        else:
+
+            commit = local_commit
 
         log(
             f"Preparing commit: {commit}"
         )
 
+        # --------------------------------------------------------------------
+        # Build
+        # --------------------------------------------------------------------
+
         build(
             project,
         )
 
+        # --------------------------------------------------------------------
+        # QA
+        # --------------------------------------------------------------------
+
         qa(
             project,
         )
+
+        # --------------------------------------------------------------------
+        # Create immutable release
+        # --------------------------------------------------------------------
 
         release = create_release(
             project,
@@ -537,15 +666,27 @@ def deploy(
             commit,
         )
 
+        # --------------------------------------------------------------------
+        # Atomically make the new release live
+        # --------------------------------------------------------------------
+
         publish(
             release,
             current_link,
         )
 
+        # --------------------------------------------------------------------
+        # Cleanup old releases
+        # --------------------------------------------------------------------
+
         cleanup_releases(
             releases_directory,
             keep_releases,
         )
+
+        # --------------------------------------------------------------------
+        # Record successful deployment
+        # --------------------------------------------------------------------
 
         write_report(
             project,
@@ -559,6 +700,7 @@ def deploy(
         log("DEPLOYMENT SUCCESSFUL")
         log(f"Commit:  {commit}")
         log(f"Release: {release.name}")
+        log(f"Live:    {current_link}")
         log("========================================")
         log("")
 
@@ -606,6 +748,7 @@ def watch(
     log(f"Branch: {branch}")
     log(f"Interval: {interval}s")
     log(f"Releases kept: {keep_releases}")
+    log(f"Current: {current_link}")
     log("========================================")
 
     while True:
@@ -626,6 +769,7 @@ def watch(
             log(
                 "Barkly Deploy stopped."
             )
+
             break
 
         except Exception as error:
@@ -682,7 +826,7 @@ def main() -> None:
     parser.add_argument(
         "--interval",
         type=int,
-        default=30,
+        default=DEFAULT_INTERVAL,
         help="Seconds between checks.",
     )
 
@@ -707,9 +851,17 @@ def main() -> None:
 
     args = parser.parse_args()
 
+    # ------------------------------------------------------------------------
+    # IMPORTANT:
+    #
+    # Do NOT call .resolve() on current.
+    #
+    # current is supposed to be the symlink itself.
+    # ------------------------------------------------------------------------
+
     project = args.project.resolve()
     releases = args.releases.resolve()
-    current = args.current.resolve()
+    current = args.current.absolute()
 
     if not project.exists():
         raise SystemExit(
