@@ -1,5 +1,6 @@
 ---
 import SEO from "../components/SEO.astro";
+
 export const prerender = true;
 
 const GITHUB_ORG = "Barkly-Labs";
@@ -23,6 +24,35 @@ const GITHUB_ORG = "Barkly-Labs";
 const STALE_DAYS = 365;
 const STALE_MS = STALE_DAYS * 24 * 60 * 60 * 1000;
 
+/*
+ * GitHub API authentication
+ *
+ * The VPS may provide:
+ *
+ * GITHUB_TOKEN=...
+ *
+ * Authenticated GitHub API requests receive a much higher
+ * rate limit than anonymous requests.
+ *
+ * The registry still works without a token.
+ */
+
+const GITHUB_TOKEN =
+  import.meta.env.GITHUB_TOKEN?.trim() || "";
+
+function githubHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+
+  if (GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
+  }
+
+  return headers;
+}
+
 type GitHubRepository = {
   id: number;
   name: string;
@@ -36,6 +66,7 @@ type GitHubRepository = {
   open_issues_count: number;
   updated_at: string;
   created_at: string;
+  pushed_at: string | null;
   archived: boolean;
   fork: boolean;
   topics?: string[];
@@ -78,10 +109,7 @@ async function getLatestCommit(
     const response = await fetch(
       `https://api.github.com/repos/${repo.full_name}/commits?per_page=1`,
       {
-        headers: {
-          Accept: "application/vnd.github+json",
-          "X-GitHub-Api-Version": "2022-11-28",
-        },
+        headers: githubHeaders(),
       },
     );
 
@@ -90,33 +118,55 @@ async function getLatestCommit(
         `GitHub commit API error for ${repo.name}: ${response.status} ${response.statusText}`,
       );
 
+      /*
+       * GitHub may rate-limit an unauthenticated request.
+       *
+       * Do not pretend that repository metadata is a real commit.
+       * The pushed_at timestamp is retained only as a graceful
+       * availability fallback so the public registry can still build.
+       */
       return {
-        latestCommitDate: null,
+        latestCommitDate: repo.pushed_at ?? repo.updated_at,
         latestCommitSha: null,
         latestCommitMessage: null,
       };
     }
 
-    const data = (await response.json()) as GitHubCommit[];
-    const latest = data[0];
+    const data = (await response.json()) as unknown;
+
+    if (!Array.isArray(data)) {
+      console.error(
+        `GitHub commit API returned unexpected data for ${repo.name}.`,
+      );
+
+      return {
+        latestCommitDate: repo.pushed_at ?? repo.updated_at,
+        latestCommitSha: null,
+        latestCommitMessage: null,
+      };
+    }
+
+    const latest = data[0] as GitHubCommit | undefined;
 
     if (!latest) {
       return {
-        latestCommitDate: null,
+        latestCommitDate: repo.pushed_at ?? repo.updated_at,
         latestCommitSha: null,
         latestCommitMessage: null,
       };
     }
 
     const latestCommitDate =
-      latest.commit.author?.date ??
-      latest.commit.committer?.date ??
-      null;
+      latest.commit?.author?.date ??
+      latest.commit?.committer?.date ??
+      repo.pushed_at ??
+      repo.updated_at;
 
     return {
       latestCommitDate,
-      latestCommitSha: latest.sha,
-      latestCommitMessage: latest.commit.message,
+      latestCommitSha: latest.sha ?? null,
+      latestCommitMessage:
+        latest.commit?.message ?? null,
     };
   } catch (error) {
     console.error(
@@ -125,7 +175,7 @@ async function getLatestCommit(
     );
 
     return {
-      latestCommitDate: null,
+      latestCommitDate: repo.pushed_at ?? repo.updated_at,
       latestCommitSha: null,
       latestCommitMessage: null,
     };
@@ -143,10 +193,7 @@ async function getRepositories(): Promise<Project[]> {
       const response = await fetch(
         `https://api.github.com/orgs/${GITHUB_ORG}/repos?per_page=${perPage}&page=${page}&sort=updated&direction=desc`,
         {
-          headers: {
-            Accept: "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-          },
+          headers: githubHeaders(),
         },
       );
 
@@ -155,16 +202,46 @@ async function getRepositories(): Promise<Project[]> {
           `GitHub API error: ${response.status} ${response.statusText}`,
         );
 
+        /*
+         * GitHub returns an object such as:
+         *
+         * {
+         *   "message": "API rate limit exceeded..."
+         * }
+         *
+         * Do not cast that object into GitHubRepository[].
+         * That was the source of the TypeError you saw when
+         * piping the API response into Python.
+         */
+
         break;
       }
 
-      const data = (await response.json()) as GitHubRepository[];
+      const data = (await response.json()) as unknown;
 
-      if (!Array.isArray(data) || data.length === 0) {
+      if (!Array.isArray(data)) {
+        console.error(
+          "GitHub repository API returned unexpected data.",
+        );
+
         break;
       }
 
-      repositories.push(...data);
+      if (data.length === 0) {
+        break;
+      }
+
+      const validRepositories =
+        data.filter(
+          (repo): repo is GitHubRepository =>
+            typeof repo === "object" &&
+            repo !== null &&
+            "name" in repo &&
+            "full_name" in repo &&
+            "html_url" in repo,
+        );
+
+      repositories.push(...validRepositories);
 
       if (data.length < perPage) {
         break;
@@ -209,6 +286,7 @@ function getProjectType(
   repo: GitHubRepository,
 ): string {
   const name = repo.name.toLowerCase();
+
   const description = (
     repo.description ?? ""
   ).toLowerCase();
@@ -424,10 +502,7 @@ const lastUpdated =
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   />
-    <SEO />
-
-
-  
+  <SEO />
 </head>
 
 <body>
@@ -453,9 +528,7 @@ const lastUpdated =
   </header>
 
   <main>
-
     <!-- HERO -->
-
     <section class="hero">
       <div class="hero-grid"></div>
 
@@ -463,7 +536,6 @@ const lastUpdated =
       <div class="hero-orbit orbit-two"></div>
 
       <div class="hero-content">
-
         <div class="eyebrow">
           <span>01</span>
           BARKLY PROJECT REGISTRY
@@ -518,7 +590,6 @@ const lastUpdated =
     </section>
 
     <!-- CENTRAL QUESTION -->
-
     <section class="section question">
       <header class="section-header">
         <small>02</small>
@@ -560,7 +631,6 @@ const lastUpdated =
     </section>
 
     <!-- REGISTRY -->
-
     <section id="registry" class="section">
       <header class="section-header">
         <small>03</small>
@@ -576,9 +646,7 @@ const lastUpdated =
       </header>
 
       <!-- STATS -->
-
       <div class="stats">
-
         <div class="stat">
           <span class="stat-number">
             {repositories.length}
@@ -618,19 +686,15 @@ const lastUpdated =
             STARS
           </span>
         </div>
-
       </div>
 
       <!-- ACTIVITY -->
-
       <div class="activity-strip">
-
         <div class="activity-title">
           PROJECT ACTIVITY
         </div>
 
         <div class="activity-list">
-
           <span class="activity active">
             <b>{activeRepositories.length}</b>
             ACTIVE
@@ -650,20 +714,16 @@ const lastUpdated =
             <b>{forkedRepositories.length}</b>
             FORKS
           </span>
-
         </div>
 
         <div class="activity-rule">
           STALE = NO COMMIT FOR {STALE_DAYS} DAYS
         </div>
-
       </div>
 
       <!-- LANGUAGES -->
-
       {languages.length > 0 && (
         <div class="language-strip">
-
           <div class="language-title">
             DETECTED LANGUAGES
           </div>
@@ -672,7 +732,6 @@ const lastUpdated =
             {languages.map(
               ([language, count]) => (
                 <span class="language">
-
                   <b>{language}</b>
 
                   <small>
@@ -681,146 +740,154 @@ const lastUpdated =
                       ? " REPO"
                       : " REPOS"}
                   </small>
-
                 </span>
               ),
             )}
           </div>
-
         </div>
       )}
 
       <!-- PROJECT CARDS -->
-
       {repositories.length > 0 ? (
-  <div class="project-grid">
-    {repositories.map((project, index) => (
-      <a
-        class="project-card"
-        href={project.html_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Open ${project.name} repository on GitHub`}
-      >
-        <!-- IDENTITY -->
-        <div class="project-top">
-          <span class="project-number">
-            {String(index + 1).padStart(2, "0")}
-          </span>
+        <div class="project-grid">
+          {repositories.map((project, index) => (
+            <a
+              class="project-card"
+              href={project.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${project.name} repository on GitHub`}
+            >
+              <!-- IDENTITY -->
+              <div class="project-top">
+                <span class="project-number">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
 
-          <span class={`status ${project.statusClass}`}>
-            {project.projectStatus}
-          </span>
+                <span
+                  class={`status ${project.statusClass}`}
+                >
+                  {project.projectStatus}
+                </span>
+              </div>
+
+              <!-- TYPE -->
+              <div class="project-type">
+                {project.projectType}
+              </div>
+
+              <!-- PROJECT -->
+              <h3>
+                {project.name}
+              </h3>
+
+              <p class="project-description">
+                {project.description ||
+                  "No repository description has been provided yet."}
+              </p>
+
+              <!-- METADATA -->
+              <div class="project-meta">
+                <div>
+                  <span>LANGUAGE</span>
+
+                  <strong>
+                    {project.language || "—"}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>LAST COMMIT</span>
+
+                  <strong>
+                    {project.latestCommitDate
+                      ? formatDate(
+                          project.latestCommitDate,
+                        )
+                      : "UNKNOWN"}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>STARS</span>
+
+                  <strong>
+                    {project.stargazers_count}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>FORKS</span>
+
+                  <strong>
+                    {project.forks_count}
+                  </strong>
+                </div>
+              </div>
+
+              <!-- GIT HISTORY -->
+              <div class="commit-info">
+                <span>GIT HISTORY</span>
+
+                <strong>
+                  {project.latestCommitDate
+                    ? new Date(
+                        project.latestCommitDate,
+                      ).getFullYear()
+                    : "UNKNOWN"}
+                </strong>
+              </div>
+
+              <!-- TOPICS -->
+              {project.topics &&
+                project.topics.length > 0 && (
+                  <div class="topics">
+                    {project.topics
+                      .slice(0, 6)
+                      .map((topic) => (
+                        <span>
+                          #{topic}
+                        </span>
+                      ))}
+                  </div>
+                )}
+
+              <!-- ACTION -->
+              <div class="project-link">
+                <span>VIEW REPOSITORY</span>
+
+                <span
+                  class="project-link-arrow"
+                  aria-hidden="true"
+                >
+                  ↗
+                </span>
+              </div>
+            </a>
+          ))}
         </div>
-
-        <!-- TYPE -->
-        <div class="project-type">
-          {project.projectType}
-        </div>
-
-        <!-- PROJECT -->
-        <h3>
-          {project.name}
-        </h3>
-
-        <p class="project-description">
-          {project.description ||
-            "No repository description has been provided yet."}
-        </p>
-
-        <!-- METADATA -->
-        <div class="project-meta">
-          <div>
-            <span>LANGUAGE</span>
-            <strong>
-              {project.language || "—"}
-            </strong>
+      ) : (
+        <div class="empty">
+          <div class="empty-mark">
+            [ ! ]
           </div>
 
-          <div>
-            <span>LAST COMMIT</span>
-            <strong>
-              {project.latestCommitDate
-                ? formatDate(project.latestCommitDate)
-                : "UNKNOWN"}
-            </strong>
-          </div>
+          <h3>
+            NO REPOSITORIES RETURNED.
+          </h3>
 
-          <div>
-            <span>STARS</span>
-            <strong>
-              {project.stargazers_count}
-            </strong>
-          </div>
-
-          <div>
-            <span>FORKS</span>
-            <strong>
-              {project.forks_count}
-            </strong>
-          </div>
+          <p>
+            GitHub did not return any public
+            repositories for the Barkly Labs
+            organization.
+          </p>
         </div>
+      )}
+    </section>
 
-        <!-- GIT HISTORY -->
-        <div class="commit-info">
-          <span>GIT HISTORY</span>
-
-          <strong>
-            {project.latestCommitDate
-              ? new Date(
-                  project.latestCommitDate,
-                ).getFullYear()
-              : "UNKNOWN"}
-          </strong>
-        </div>
-
-        <!-- TOPICS -->
-        {project.topics &&
-          project.topics.length > 0 && (
-            <div class="topics">
-              {project.topics
-                .slice(0, 6)
-                .map((topic) => (
-                  <span>
-                    #{topic}
-                  </span>
-                ))}
-            </div>
-          )}
-
-        <!-- ACTION -->
-        <div class="project-link">
-          <span>VIEW REPOSITORY</span>
-          <span class="project-link-arrow" aria-hidden="true">
-            ↗
-          </span>
-        </div>
-      </a>
-    ))}
-  </div>
-) : (
-  <div class="empty">
-    <div class="empty-mark">
-      [ ! ]
-    </div>
-
-    <h3>
-      NO REPOSITORIES RETURNED.
-    </h3>
-
-    <p>
-      GitHub did not return any public
-      repositories for the Barkly Labs
-      organization.
-    </p>
-  </div>
-)}
-</section>
     <!-- ARCHITECTURE -->
-
     <section class="section architecture">
       <header class="section-header">
-
         <small>04</small>
 
         <div>
@@ -831,13 +898,10 @@ const lastUpdated =
             <span>→ BARKLY.</span>
           </h2>
         </div>
-
       </header>
 
       <div class="pipeline">
-
         <div class="pipeline-node">
-
           <span>01</span>
 
           <strong>
@@ -849,7 +913,6 @@ const lastUpdated =
             descriptions, metadata,
             languages, topics, and history.
           </p>
-
         </div>
 
         <div class="pipeline-arrow">
@@ -857,7 +920,6 @@ const lastUpdated =
         </div>
 
         <div class="pipeline-node">
-
           <span>02</span>
 
           <strong>
@@ -869,7 +931,6 @@ const lastUpdated =
             latest commit to determine
             current project activity.
           </p>
-
         </div>
 
         <div class="pipeline-arrow">
@@ -877,7 +938,6 @@ const lastUpdated =
         </div>
 
         <div class="pipeline-node">
-
           <span>03</span>
 
           <strong>
@@ -889,18 +949,13 @@ const lastUpdated =
             a human-readable research
             registry.
           </p>
-
         </div>
-
       </div>
     </section>
 
     <!-- METADATA -->
-
     <section class="section metadata">
-
       <header class="section-header">
-
         <small>05</small>
 
         <div>
@@ -913,11 +968,9 @@ const lastUpdated =
             <span>SHAPE.</span>
           </h2>
         </div>
-
       </header>
 
       <div class="metadata-grid">
-
         <article>
           <span>01</span>
 
@@ -970,16 +1023,12 @@ const lastUpdated =
             participation signals.
           </p>
         </article>
-
       </div>
     </section>
 
     <!-- BARKLY STANDARD -->
-
     <section class="section standard">
-
       <header class="section-header">
-
         <small>06</small>
 
         <div>
@@ -992,17 +1041,14 @@ const lastUpdated =
             <span>MACHINE LEGIBLE.</span>
           </h2>
         </div>
-
       </header>
 
       <div class="standard-grid">
-
         <div class="standard-statement">
           Show the shape first.
         </div>
 
         <div class="standard-copy">
-
           <p>
             GitHub contains enormous amounts
             of technical information, but humans
@@ -1021,19 +1067,13 @@ const lastUpdated =
             The computer already has the data.
             Barkly makes the data understandable.
           </p>
-
         </div>
-
       </div>
-
     </section>
 
     <!-- FOOTER -->
-
     <footer>
-
       <div class="footer-brand">
-
         <strong>
           BARKLY
           <span>LABS</span>
@@ -1042,11 +1082,9 @@ const lastUpdated =
         <p>
           PUBLIC PROJECT REGISTRY
         </p>
-
       </div>
 
       <div class="footer-links">
-
         <a
           href={import.meta.env.BASE_URL}
         >
@@ -1069,11 +1107,9 @@ const lastUpdated =
         >
           DOCUMENTATION
         </a>
-
       </div>
 
       <div class="footer-meta">
-
         <span>
           {activeRepositories.length}
           ACTIVE
@@ -1103,16 +1139,13 @@ const lastUpdated =
             )}
           </span>
         )}
-
       </div>
 
       <p class="copyright">
         © 2026 BARKLY LABS ·
         TECHNOLOGY SHOULD ADAPT TO HUMANS.
       </p>
-
     </footer>
-
   </main>
 </body>
 </html>
