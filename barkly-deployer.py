@@ -50,7 +50,7 @@ BUILD_COMMAND = ["npm", "run", "build"]
 
 QA_COMMAND = [
     "python3",
-    "barkly_qa.py",
+    "Barkly-qa.py",
     "http://localhost:4321/",
 ]
 
