@@ -1,8 +1,8 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 
-// https://astro.build/config
 export default defineConfig({
-  site: 'https://barkly-labs.github.io',
-  base: '/',
+  site: "https://barklylabs.space",
+  integrations: [sitemap()],
 });
