@@ -1,5 +1,6 @@
 ---
 import SEO from "../components/SEO.astro";
+import BarklyStructuredData from "../components/BarklyStructuredData.astro";
 const year = 2026;
 
 
@@ -96,9 +97,35 @@ const ethics = [
 <!doctype html>
 <html lang="en">
   <head>
+    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <SEO />
+
+    ---
+import BarklyStructuredData from "../components/BarklyStructuredData.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="description"
+      content="Barkly Labs is a Detroit-based human-centered technology laboratory exploring AI, software, hardware, robotics, computer vision, creative technology, education, and community."
+    />
+
+    <meta
+      name="robots"
+      content="index, follow"
+    />
+
+    <link
+      rel="canonical"
+      href="https://www.barklylabs.space/"
+    />
+
+    <BarklyStructuredData />
 
 
     

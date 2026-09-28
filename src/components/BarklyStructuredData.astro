@@ -1,0 +1,42 @@
+---
+import { barklyDiscovery } from "../data/barkly-discovery";
+
+const { organization, projects } = barklyDiscovery;
+
+const structuredData = {
+  "@context": "https://schema.org",
+
+  "@type": "Organization",
+
+  "@id": `${organization.url}#organization`,
+
+  name: organization.name,
+
+  url: organization.url,
+
+  description: organization.description,
+
+  slogan: organization.tagline,
+
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: organization.location.city,
+    addressRegion: organization.location.state,
+    addressCountry: organization.location.country,
+  },
+
+  knowsAbout: organization.topics,
+
+  subOrganization: projects.map((project) => ({
+    "@type": "ResearchProject",
+    name: project.name,
+    description: project.description,
+    url: project.url,
+  })),
+};
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(structuredData)}
+></script>
