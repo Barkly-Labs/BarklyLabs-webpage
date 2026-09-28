@@ -496,50 +496,47 @@ const ethics = [
       <!-- =======================================================
            DEVELOPMENT PROCESS
            ======================================================= -->
+  <section id="process" class="section process-section">
+    <div class="section-heading">
+      <div class="section-number">06</div>
 
-      <section id="process" class="section process-section">
-        <div class="section-heading">
-          <div class="section-number">06</div>
+      <div>
+        <span class="section-kicker">HOW WE BUILD</span>
+        <h2>
+          IDEA →
+          <span>REALITY.</span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="process-intro">
+      <p class="section-lead">
+        Ideas don't have to arrive finished. Barkly Labs provides a path
+        from experimentation to real-world technology.
+      </p>
+
+      <a class="primary-cta" href="#projects">
+        TAKE ME TO THE PROJECTS <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="lifecycle">
+      {lifecycle.map((step) => (
+        <article class="lifecycle-step">
+          <span class="lifecycle-number">{step[0]}</span>
 
           <div>
-            <span class="section-kicker">HOW WE BUILD</span>
-            <h2>
-              IDEA →
-              <span>REALITY.</span>
-            </h2>
+            <h3>{step[1]}</h3>
+            <p>{step[2]}</p>
           </div>
-        </div>
 
-        <p class="section-lead">
-          Ideas don't have to arrive finished. Barkly Labs provides a path
-          from experimentation to real-world technology.
-        </p>
+          <span class="lifecycle-arrow">→</span>
+        </article>
+      ))}
+    </div>
+  </section>
 
-
-        <div class="process-actions">
-        <a href="#projects" class="button button-primary">
-          TAKE ME TO THE PROJECTS
-          <span>↗</span>
-        </a>
-        </div>
-
-        <div class="lifecycle">
-          {lifecycle.map((step) => (
-            <article class="lifecycle-step">
-              <span class="lifecycle-number">{step[0]}</span>
-
-              <div>
-                <h3>{step[1]}</h3>
-                <p>{step[2]}</p>
-              </div>
-
-              <span class="lifecycle-arrow">→</span>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <!-- =======================================================
+        <!-- =======================================================
            CREATOR OWNERSHIP
            ======================================================= -->
 
