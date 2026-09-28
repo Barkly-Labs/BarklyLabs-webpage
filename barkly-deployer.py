@@ -22,7 +22,15 @@ Normal pipeline:
       ↓
     Atomic current symlink
       ↓
+    HTTP/HTTPS infrastructure
+      ↓
+    SSL certificate ensure/renewal
+      ↓
+    Nginx configuration validation
+      ↓
     Nginx reload
+      ↓
+    HTTPS deployment QA
       ↓
     Public deployment QA
       ↓
@@ -43,14 +51,20 @@ Bootstrap pipeline:
       ↓
     Atomic current symlink
       ↓
+    HTTP/HTTPS infrastructure
+      ↓
+    SSL certificate provisioning
+      ↓
     Nginx reload
       ↓
     Deployment complete
 
-Bootstrap mode intentionally skips QA for the initial server setup.
+Bootstrap mode intentionally skips application QA for the initial
+server setup.
 
 After the bootstrap deployment succeeds, watch mode automatically
 returns to the normal QA-protected deployment pipeline.
+
 
 Safety:
 
@@ -64,6 +78,11 @@ Safety:
     - Bootstrap mode is automatically disabled after a successful
       deployment when running in watch mode.
     - Nginx is never reloaded without configuration validation.
+    - HTTPS is required for a successful normal deployment.
+    - Let's Encrypt certificates are reused when available.
+    - Missing certificates are automatically provisioned.
+    - Existing certificates are checked for renewal.
+    - HTTP automatically redirects to HTTPS.
     - Releases are immutable once created.
     - The current symlink is atomically replaced.
 """
@@ -115,6 +134,23 @@ RELEASE_METADATA = ".barkly-release.json"
 
 QA_START_TIMEOUT = 15
 QA_START_POLL_INTERVAL = 0.25
+
+NGINX_CONFIG = Path(
+    "/etc/nginx/sites-enabled/barkly"
+)
+
+SSL_DIRECTORY = Path(
+    f"/etc/letsencrypt/live/{DOMAIN}"
+)
+
+SSL_CERT = SSL_DIRECTORY / "fullchain.pem"
+SSL_KEY = SSL_DIRECTORY / "privkey.pem"
+
+CERTBOT_EMAIL_ENV = "BARKLY_CERTBOT_EMAIL"
+
+CURRENT_RELEASE_ROOT = Path(
+    "/srv/barkly/current"
+)
 
 
 # ---------------------------------------------------------------------------
@@ -289,14 +325,6 @@ def prepare_release_directories(
     Ensure the deployment filesystem exists.
 
     Returns True when this is a first deployment.
-
-    A first deployment is detected when:
-
-        - releases does not exist
-        - releases exists but contains no releases
-        - current does not exist
-        - current exists but is not a symlink
-        - current is a broken symlink
     """
 
     first_deployment = False
@@ -576,10 +604,6 @@ def port_available(
 def start_qa_server(
     dist: Path,
 ) -> subprocess.Popen[str]:
-    """
-    Start a temporary static HTTP server against the freshly
-    generated Astro dist directory.
-    """
 
     if not port_available(
         QA_HOST,
@@ -761,9 +785,9 @@ def qa_public(
     Test the published deployment from the public
     server IP while forcing the Barkly Host header.
 
-    The URL remains the IP address.
+    This remains an HTTP infrastructure check.
 
-    The Host header selects the Nginx virtual host.
+    Domain and WWW checks below verify HTTPS.
     """
 
     script = (
@@ -795,6 +819,37 @@ def qa_public(
     )
 
 
+def qa_https(
+) -> None:
+    """
+    Verify that HTTPS is actually reachable.
+
+    This catches the exact failure where Nginx is alive
+    on port 80 but no service is listening on port 443.
+    """
+
+    log(
+        "Running HTTPS listener QA..."
+    )
+
+    run(
+        [
+            "curl",
+            "--fail",
+            "--silent",
+            "--show-error",
+            "--head",
+            "--max-time",
+            "15",
+            f"https://{DOMAIN}/",
+        ]
+    )
+
+    log(
+        "HTTPS listener QA passed."
+    )
+
+
 def qa_domain(
     project: Path,
 ) -> None:
@@ -810,7 +865,7 @@ def qa_domain(
         )
 
     log(
-        "Running domain Barkly QA..."
+        "Running HTTPS domain Barkly QA..."
     )
 
     run(
@@ -818,13 +873,13 @@ def qa_domain(
             "python3",
             QA_SCRIPT,
             "--target",
-            f"domain=http://{DOMAIN}/|{DOMAIN}",
+            f"domain=https://{DOMAIN}/|{DOMAIN}",
         ],
         cwd=project,
     )
 
     log(
-        "Domain Barkly QA passed."
+        "HTTPS domain Barkly QA passed."
     )
 
 
@@ -843,7 +898,7 @@ def qa_www(
         )
 
     log(
-        "Running WWW Barkly QA..."
+        "Running HTTPS WWW Barkly QA..."
     )
 
     run(
@@ -851,13 +906,13 @@ def qa_www(
             "python3",
             QA_SCRIPT,
             "--target",
-            f"www=http://{WWW_DOMAIN}/|{WWW_DOMAIN}",
+            f"www=https://{WWW_DOMAIN}/|{WWW_DOMAIN}",
         ],
         cwd=project,
     )
 
     log(
-        "WWW Barkly QA passed."
+        "HTTPS WWW Barkly QA passed."
     )
 
 
@@ -867,17 +922,14 @@ def qa_public_deployment(
     """
     Run all post-publication deployment checks.
 
-    Local QA proves that the newly generated build works.
-
-    Public QA proves that:
+    Public QA verifies:
 
         Nginx
         current symlink
         public IP
+        HTTPS listener
         domain
         WWW domain
-
-    all work after publication.
     """
 
     log(
@@ -891,6 +943,8 @@ def qa_public_deployment(
     log(
         "=" * 40
     )
+
+    qa_https()
 
     qa_public(
         project
@@ -1226,44 +1280,379 @@ def cleanup_releases(
 
 
 # ---------------------------------------------------------------------------
-# Nginx reload
+# Nginx / HTTPS
 # ---------------------------------------------------------------------------
 
-def reload_nginx(
-    project: Path,
+def nginx_http_config_text() -> str:
+    """
+    Return the temporary HTTP-only Nginx configuration.
+
+    This configuration exists so Let's Encrypt can complete
+    the HTTP-01 challenge before HTTPS is configured.
+    """
+
+    return f"""server {{
+    listen 80;
+    listen [::]:80;
+
+    server_name {DOMAIN} {WWW_DOMAIN};
+
+    root {CURRENT_RELEASE_ROOT};
+    index index.html;
+
+    location /.well-known/acme-challenge/ {{
+        root {CURRENT_RELEASE_ROOT};
+        try_files $uri =404;
+    }}
+
+    location / {{
+        try_files $uri $uri/ $uri.html =404;
+    }}
+
+    location ~* \\.(?:css|js|mjs|map|json|xml|txt|ico|png|jpg|jpeg|gif|svg|webp|avif|woff|woff2|ttf)$ {{
+        try_files $uri =404;
+    }}
+}}
+"""
+
+
+def nginx_https_config_text() -> str:
+    """
+    Return Barkly's canonical HTTPS Nginx configuration.
+
+    HTTP:
+        ACME challenge remains available.
+        Everything else redirects to HTTPS.
+
+    HTTPS:
+        Serves the immutable current release.
+    """
+
+    return f"""server {{
+    listen 80;
+    listen [::]:80;
+
+    server_name {DOMAIN} {WWW_DOMAIN};
+
+    root {CURRENT_RELEASE_ROOT};
+    index index.html;
+
+    location /.well-known/acme-challenge/ {{
+        root {CURRENT_RELEASE_ROOT};
+        try_files $uri =404;
+    }}
+
+    location / {{
+        return 301 https://$host$request_uri;
+    }}
+}}
+
+server {{
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name {DOMAIN} {WWW_DOMAIN};
+
+    root {CURRENT_RELEASE_ROOT};
+    index index.html;
+
+    ssl_certificate {SSL_CERT};
+    ssl_certificate_key {SSL_KEY};
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location /.well-known/acme-challenge/ {{
+        root {CURRENT_RELEASE_ROOT};
+        try_files $uri =404;
+    }}
+
+    location / {{
+        try_files $uri $uri/ $uri.html =404;
+    }}
+
+    location ~* \\.(?:css|js|mjs|map|json|xml|txt|ico|png|jpg|jpeg|gif|svg|webp|avif|woff|woff2|ttf)$ {{
+        try_files $uri =404;
+    }}
+}}
+"""
+
+
+def write_nginx_config(
+    config: str,
 ) -> None:
     """
-    Validate and reload Nginx through Barkly's
-    server management layer.
+    Atomically replace Barkly's Nginx site configuration.
     """
 
-    script = (
-        project / SERVER_SCRIPT
+    log(
+        f"Writing Nginx configuration: {NGINX_CONFIG}"
     )
 
-    if not script.exists():
+    temporary = Path(
+        f"/etc/nginx/sites-enabled/"
+        f".barkly-{os.getpid()}-{time.time_ns()}.tmp"
+    )
 
-        raise RuntimeError(
-            f"Server management script not found: "
-            f"{script}"
+    try:
+
+        temporary.write_text(
+            config,
+            encoding="utf-8",
         )
 
+        run(
+            [
+                "sudo",
+                "mv",
+                str(temporary),
+                str(NGINX_CONFIG),
+            ]
+        )
+
+    finally:
+
+        if (
+            temporary.exists()
+            or temporary.is_symlink()
+        ):
+
+            temporary.unlink()
+
+
+def validate_nginx() -> None:
+
     log(
-        "Reloading Nginx through "
-        "Barkly server manager..."
+        "Validating Nginx configuration..."
     )
 
     run(
         [
-            "python3",
-            SERVER_SCRIPT,
-            "--reload",
-        ],
-        cwd=project,
+            "sudo",
+            "nginx",
+            "-t",
+        ]
+
     )
 
     log(
-        "Nginx reload completed successfully."
+        "Nginx configuration is valid."
+    )
+
+
+def reload_nginx_service() -> None:
+
+    log(
+        "Reloading Nginx..."
+    )
+
+    run(
+        [
+            "sudo",
+            "systemctl",
+            "reload",
+            "nginx",
+        ]
+    )
+
+    log(
+        "Nginx reload completed."
+    )
+
+
+def configure_http_for_certificate() -> None:
+    """
+    Configure HTTP so Let's Encrypt can reach the ACME challenge.
+
+    This deliberately happens before the certificate exists.
+    """
+
+    log(
+        "Preparing HTTP configuration for "
+        "Let's Encrypt..."
+    )
+
+    write_nginx_config(
+        nginx_http_config_text()
+    )
+
+    validate_nginx()
+
+    reload_nginx_service()
+
+
+def ensure_ssl_certificate() -> None:
+    """
+    Ensure Barkly has a valid Let's Encrypt certificate.
+
+    Existing certificates are reused.
+
+    If a certificate exists, Certbot is allowed to renew it
+    when renewal is required.
+
+    If no certificate exists, a new certificate is requested.
+    """
+
+    email = os.environ.get(
+        CERTBOT_EMAIL_ENV
+    )
+
+    if not email:
+
+        raise RuntimeError(
+            "HTTPS certificate management requires "
+            f"the {CERTBOT_EMAIL_ENV} environment variable."
+        )
+
+    if (
+        SSL_CERT.exists()
+        and SSL_KEY.exists()
+    ):
+
+        log(
+            "Existing Barkly SSL certificate detected."
+        )
+
+        log(
+            "Checking Let's Encrypt renewal status..."
+        )
+
+        run(
+            [
+                "sudo",
+                "certbot",
+                "renew",
+                "--quiet",
+            ]
+        )
+
+        log(
+            "Let's Encrypt certificate check completed."
+        )
+
+        return
+
+    log(
+        "No Barkly SSL certificate detected."
+    )
+
+    log(
+        "Requesting Let's Encrypt certificate..."
+    )
+
+    run(
+        [
+            "sudo",
+            "certbot",
+            "certonly",
+            "--webroot",
+            "-w",
+            str(CURRENT_RELEASE_ROOT),
+            "--non-interactive",
+            "--agree-tos",
+            "--email",
+            email,
+            "--keep-until-expiring",
+            "-d",
+            DOMAIN,
+            "-d",
+            WWW_DOMAIN,
+        ]
+    )
+
+    if (
+        not SSL_CERT.exists()
+        or not SSL_KEY.exists()
+    ):
+
+        raise RuntimeError(
+            "Certbot completed but the expected "
+            "Barkly SSL certificate was not created."
+        )
+
+    log(
+        "Barkly SSL certificate is ready."
+    )
+
+
+def configure_https() -> None:
+    """
+    Install Barkly's complete HTTP + HTTPS configuration.
+
+    This function must only run after the certificate exists.
+    """
+
+    if (
+        not SSL_CERT.exists()
+        or not SSL_KEY.exists()
+    ):
+
+        raise RuntimeError(
+            "Cannot configure HTTPS because the "
+            "Let's Encrypt certificate does not exist."
+        )
+
+    log(
+        "Installing Barkly HTTPS Nginx configuration..."
+    )
+
+    write_nginx_config(
+        nginx_https_config_text()
+    )
+
+    validate_nginx()
+
+    reload_nginx_service()
+
+    log(
+        "Barkly HTTPS configuration is active."
+    )
+
+
+def ensure_https() -> None:
+    """
+    Make HTTPS infrastructure healthy.
+
+    Sequence:
+
+        HTTP configuration
+          ↓
+        certificate
+          ↓
+        HTTPS configuration
+          ↓
+        Nginx validation
+          ↓
+        Nginx reload
+    """
+
+    log(
+        "=" * 40
+    )
+
+    log(
+        "BARKLY HTTPS INFRASTRUCTURE"
+    )
+
+    log(
+        "=" * 40
+    )
+
+    configure_http_for_certificate()
+
+    ensure_ssl_certificate()
+
+    configure_https()
+
+    log(
+        "=" * 40
+    )
+
+    log(
+        "BARKLY HTTPS INFRASTRUCTURE READY"
+    )
+
+    log(
+        "=" * 40
     )
 
 
@@ -1325,7 +1714,8 @@ def deploy(
         )
 
         log(
-            "QA will be skipped for this deployment only."
+            "Application QA will be skipped "
+            "for this deployment only."
         )
 
     # ---------------------------------------------------------------
@@ -1382,8 +1772,23 @@ def deploy(
         )
 
         log(
-            "No deployment required."
+            "No application deployment required."
         )
+
+        # Even when application code is current,
+        # infrastructure may have drifted.
+        #
+        # This is important because today's outage
+        # was an infrastructure failure rather than
+        # a Git/build failure.
+
+        log(
+            "Checking Barkly HTTPS infrastructure..."
+        )
+
+        ensure_https()
+
+        qa_https()
 
         return False
 
@@ -1510,19 +1915,21 @@ def deploy(
     )
 
     # ---------------------------------------------------------------
-    # Nginx
+    # HTTPS / NGINX
     # ---------------------------------------------------------------
 
     try:
 
-        reload_nginx(
-            project
-        )
+        ensure_https()
 
-    except Exception:
+    except Exception as error:
 
         log(
-            "Nginx reload failed."
+            "HTTPS/Nginx infrastructure configuration failed."
+        )
+
+        log(
+            str(error)
         )
 
         log(
@@ -1547,11 +1954,22 @@ def deploy(
         )
 
         log(
-            "BOOTSTRAP DEPLOYMENT COMPLETE"
+            "BARKLY BOOTSTRAP DEPLOYMENT"
         )
 
         log(
-            "Public deployment QA intentionally skipped."
+            "=" * 40
+        )
+
+        log(
+            "Application public QA intentionally skipped."
+        )
+
+        # HTTPS itself is still required.
+        qa_https()
+
+        log(
+            "HTTPS infrastructure verified."
         )
 
         log(
@@ -1591,15 +2009,16 @@ def deploy(
 
             try:
 
-                reload_nginx(
-                    project
-                )
+                # Reconfigure HTTPS against the restored
+                # current release before testing again.
+
+                ensure_https()
 
             except Exception as reload_error:
 
                 log(
-                    "WARNING: Nginx reload after "
-                    f"rollback failed: {reload_error}"
+                    "WARNING: HTTPS/Nginx restoration "
+                    f"failed: {reload_error}"
                 )
 
             raise RuntimeError(
@@ -1658,19 +2077,19 @@ def deploy(
     )
 
     log(
-        "Domain:    "
-        f"http://{DOMAIN}/"
+        "HTTPS:     "
+        f"https://{DOMAIN}/"
     )
 
     log(
         "WWW:       "
-        f"http://{WWW_DOMAIN}/"
+        f"https://{WWW_DOMAIN}/"
     )
 
     if skip_qa:
 
         log(
-            "QA:       SKIPPED FOR BOOTSTRAP"
+            "QA:       BOOTSTRAP APPLICATION QA SKIPPED"
         )
 
     else:
@@ -1678,6 +2097,10 @@ def deploy(
         log(
             "QA:       PASSED"
         )
+
+    log(
+        "HTTPS:     VERIFIED"
+    )
 
     log(
         "=" * 40
@@ -1731,8 +2154,8 @@ def watch(
         )
 
         log(
-            "QA will be skipped for the first "
-            "successful deployment only."
+            "Application QA will be skipped for "
+            "the first successful deployment only."
         )
 
     else:
@@ -1908,9 +2331,8 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help=(
             "Perform the initial server deployment "
-            "without local or public QA. In watch "
-            "mode this applies only to the first "
-            "successful deployment."
+            "without application QA. HTTPS infrastructure "
+            "is still configured and verified."
         ),
     )
 
@@ -2036,8 +2458,8 @@ def main() -> int:
         )
 
         log(
-            "QA will be skipped for the first "
-            "successful deployment only."
+            "Application QA will be skipped for the "
+            "first successful deployment only."
         )
 
     else:
