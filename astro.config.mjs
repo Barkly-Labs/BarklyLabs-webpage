@@ -1,4 +1,4 @@
-import { defineConfig } from "astro";
+import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
