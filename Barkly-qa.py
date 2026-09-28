@@ -8,24 +8,42 @@ Checks actual webpage navigation links:
 
     <a href="...">
 
-Supports testing multiple deployment targets in one run:
+Supports testing multiple deployment targets in one run.
+
+Each target may optionally specify its HTTP Host header:
+
+    name=URL|HOST
+
+Example:
+
+    public=http://97.107.133.215/|barklylabs.space
+
+This means:
+
+    Connect to: 97.107.133.215
+    Send Host:  barklylabs.space
+
+This is useful for testing Nginx virtual-host routing through
+a public server IP.
+
+Supported deployment targets:
 
     1. Local temporary server
        http://127.0.0.1:4321/
 
     2. Public server IP
-       http://203.0.113.10/
-       with Host: barklylabs.space
+       http://203.0.113.10/|barklylabs.space
 
     3. Primary domain
-       http://barklylabs.space/
+       http://barklylabs.space/|barklylabs.space
 
     4. WWW domain
-       http://www.barklylabs.space/
+       http://www.barklylabs.space/|www.barklylabs.space
 
 Each target is crawled independently.
 
 Ignores:
+
     <script src="...">
     <link href="...">
     <img src="...">
@@ -43,6 +61,7 @@ Ignores:
     blob:
 
 Reports:
+
     - Which deployment target failed
     - Which page contains the broken link
     - The broken URL
@@ -68,18 +87,18 @@ Examples:
 
     # Public IP using Barkly hostname routing
     python3 Barkly-qa.py \
-        --target http://203.0.113.10/ \
-        --host barklylabs.space
+        --target public=http://203.0.113.10/|barklylabs.space
 
     # Named targets
     python3 Barkly-qa.py \
         --target local=http://127.0.0.1:4321/ \
-        --target public=http://203.0.113.10/ \
-        --target domain=http://barklylabs.space/ \
-        --target www=http://www.barklylabs.space/
+        --target public=http://203.0.113.10/|barklylabs.space \
+        --target domain=http://barklylabs.space/|barklylabs.space \
+        --target www=http://www.barklylabs.space/|www.barklylabs.space
 
     # Backwards-compatible positional URL
     python3 Barkly-qa.py http://127.0.0.1:4321/
+
 """
 
 from __future__ import annotations
@@ -108,7 +127,7 @@ from urllib.request import (
 # ---------------------------------------------------------------------------
 
 USER_AGENT = (
-    "BarklyLabs-PageQA/2.0 "
+    "BarklyLabs-PageQA/2.1 "
     "(website navigation quality checker)"
 )
 
@@ -146,7 +165,7 @@ class QATarget:
         Human-readable target name.
 
     url:
-        URL used to reach the target.
+        URL used for the actual network connection.
 
     host_header:
         Optional HTTP Host header.
@@ -293,6 +312,19 @@ def same_origin(
 ) -> bool:
     """
     Determine whether two URLs share scheme, hostname and port.
+
+    IMPORTANT:
+
+    This deliberately examines the URL hostname, NOT the HTTP Host
+    header.
+
+    Therefore:
+
+        http://97.107.133.215/about
+
+    remains part of the public-IP crawl even when the request sends:
+
+        Host: barklylabs.space
     """
 
     a = urlparse(first)
@@ -397,15 +429,23 @@ def build_request(
     """
     Build an HTTP request.
 
-    If host_header is supplied, it is sent as the HTTP Host header.
+    If host_header is supplied, it is sent ONLY as the HTTP Host header.
 
-    This allows:
+    The URL remains responsible for the actual network connection.
 
-        http://PUBLIC_IP/
+    Example:
 
-    to be tested as:
+        URL:
+            http://97.107.133.215/about
 
-        Host: barklylabs.space
+        Host header:
+            barklylabs.space
+
+    Network connection:
+        97.107.133.215
+
+    HTTP routing:
+        barklylabs.space
     """
 
     headers = {
@@ -436,6 +476,12 @@ def fetch(
         HTTP status
         Content-Type
         Response body
+
+    IMPORTANT:
+
+    host_header changes only the HTTP Host header.
+
+    It does NOT replace the hostname used for the connection.
     """
 
     request = build_request(
@@ -472,8 +518,19 @@ def fetch(
 
     except URLError as exc:
 
+        reason = exc.reason
+
+        if isinstance(
+            reason,
+            OSError,
+        ):
+
+            raise RuntimeError(
+                str(reason)
+            ) from exc
+
         raise RuntimeError(
-            str(exc.reason)
+            str(reason)
         ) from exc
 
     except TimeoutError:
@@ -529,6 +586,18 @@ def check_url(
     For same-origin URLs, the target's Host header is preserved.
 
     External links receive no custom Host header.
+
+    IMPORTANT:
+
+    Same-origin is determined from the actual URL hostname.
+
+    A public-IP target therefore continues using:
+
+        http://97.107.133.215/...
+
+    while sending:
+
+        Host: barklylabs.space
     """
 
     try:
@@ -863,9 +932,22 @@ def parse_target(
 
         local=http://127.0.0.1:4321/
 
-    The Host header may be specified separately with:
+        public=http://97.107.133.215/|barklylabs.space
 
-        --host barklylabs.space
+    The final |HOST portion is optional.
+
+    IMPORTANT:
+
+        URL|HOST
+
+    means:
+
+        connect to URL
+        send HOST as the HTTP Host header
+
+    It does NOT replace the URL hostname.
+
+    This makes public-IP virtual-host testing safe and explicit.
     """
 
     value = value.strip()
@@ -874,6 +956,44 @@ def parse_target(
         raise ValueError(
             "QA target cannot be empty."
         )
+
+    # ---------------------------------------------------------------
+    # Separate optional target Host header.
+    #
+    # Example:
+    #
+    # public=http://97.107.133.215/|barklylabs.space
+    # ---------------------------------------------------------------
+
+    host_header: str | None = None
+
+    if "|" in value:
+
+        value, host_header = value.split(
+            "|",
+            1,
+        )
+
+        value = value.strip()
+        host_header = host_header.strip()
+
+        if not host_header:
+
+            raise ValueError(
+                "Target Host header cannot be empty."
+            )
+
+        # Host headers should not contain URL schemes.
+        if "://" in host_header:
+
+            raise ValueError(
+                "Target Host header must be a hostname, "
+                "not a URL."
+            )
+
+    # ---------------------------------------------------------------
+    # Separate optional target name.
+    # ---------------------------------------------------------------
 
     if "=" in value:
 
@@ -886,6 +1006,7 @@ def parse_target(
         url = url.strip()
 
         if not name:
+
             raise ValueError(
                 f"Invalid target name: {value}"
             )
@@ -901,8 +1022,11 @@ def parse_target(
         hostname = parsed.hostname
 
         if hostname:
+
             name = hostname
+
         else:
+
             name = f"target-{index}"
 
     parsed = urlparse(
@@ -929,6 +1053,7 @@ def parse_target(
     return QATarget(
         name=name,
         url=normalize_url(url),
+        host_header=host_header,
     )
 
 
@@ -937,27 +1062,51 @@ def apply_host_headers(
     hosts: list[str],
 ) -> list[QATarget]:
     """
-    Apply --host values to targets.
+    Apply legacy --host values to targets.
+
+    Explicit URL|HOST target configuration always wins.
 
     Rules:
 
-        One target + one host:
+        Explicit target Host:
+            preserve it.
+
+        One target + one legacy --host:
             applies host to target.
 
-        Multiple targets + multiple hosts:
-            hosts are assigned by position.
+        Multiple targets + one legacy --host:
+            host applies to targets that do not already have
+            an explicit Host header.
 
-        Multiple targets + one host:
-            host is applied to every target.
+        Multiple targets + multiple legacy --host:
+            hosts are assigned by position only where the target
+            does not already have an explicit Host header.
 
         No hosts:
             targets remain unchanged.
+
+    The --host option remains for backwards compatibility.
+    New deployments should prefer:
+
+        name=URL|HOST
     """
 
     if not hosts:
         return targets
 
+    updated: list[QATarget] = []
+
     if len(targets) == 1:
+
+        target = targets[0]
+
+        if target.host_header:
+
+            updated.append(
+                target
+            )
+
+            return updated
 
         if len(hosts) != 1:
 
@@ -968,25 +1117,35 @@ def apply_host_headers(
 
         return [
             QATarget(
-                name=targets[0].name,
-                url=targets[0].url,
+                name=target.name,
+                url=target.url,
                 host_header=hosts[0],
             )
         ]
 
+    # Multiple targets + one Host:
+    #
+    # Preserve explicitly configured Hosts.
     if len(hosts) == 1:
 
         host = hosts[0]
 
-        return [
-            QATarget(
-                name=target.name,
-                url=target.url,
-                host_header=host,
-            )
-            for target in targets
-        ]
+        for target in targets:
 
+            updated.append(
+                QATarget(
+                    name=target.name,
+                    url=target.url,
+                    host_header=(
+                        target.host_header
+                        or host
+                    ),
+                )
+            )
+
+        return updated
+
+    # Multiple targets + multiple Hosts.
     if len(hosts) != len(targets):
 
         raise ValueError(
@@ -995,18 +1154,23 @@ def apply_host_headers(
             "the number of targets."
         )
 
-    return [
-        QATarget(
-            name=target.name,
-            url=target.url,
-            host_header=host,
+    for target, host in zip(
+        targets,
+        hosts,
+    ):
+
+        updated.append(
+            QATarget(
+                name=target.name,
+                url=target.url,
+                host_header=(
+                    target.host_header
+                    or host
+                ),
+            )
         )
-        for target, host
-        in zip(
-            targets,
-            hosts,
-        )
-    ]
+
+    return updated
 
 
 # ---------------------------------------------------------------------------
@@ -1243,8 +1407,8 @@ def main() -> int:
         default=[],
         help=(
             "Website target. May be supplied "
-            "multiple times. Optional form: "
-            "name=URL."
+            "multiple times. Forms: URL, "
+            "name=URL, or name=URL|HOST."
         ),
     )
 
@@ -1253,8 +1417,9 @@ def main() -> int:
         action="append",
         default=[],
         help=(
-            "HTTP Host header for target testing. "
-            "May be supplied multiple times."
+            "Legacy HTTP Host header option. "
+            "May be supplied multiple times. "
+            "Prefer name=URL|HOST."
         ),
     )
 
