@@ -1287,8 +1287,8 @@ def nginx_http_config_text() -> str:
     """
     Return the temporary HTTP-only Nginx configuration.
 
-    This configuration exists so Let's Encrypt can complete
-    the HTTP-01 challenge before HTTPS is configured.
+    This configuration exists only when Let's Encrypt needs
+    HTTP-01 challenge access before HTTPS is configured.
     """
 
     return f"""server {{
@@ -1431,7 +1431,6 @@ def validate_nginx() -> None:
             "nginx",
             "-t",
         ]
-
     )
 
     log(
@@ -1463,7 +1462,8 @@ def configure_http_for_certificate() -> None:
     """
     Configure HTTP so Let's Encrypt can reach the ACME challenge.
 
-    This deliberately happens before the certificate exists.
+    This deliberately happens only when a certificate does not
+    already exist.
     """
 
     log(
@@ -1482,14 +1482,15 @@ def configure_http_for_certificate() -> None:
 
 def ensure_ssl_certificate() -> None:
     """
-    Ensure Barkly has a valid Let's Encrypt certificate.
+    Ensure Barkly has a Let's Encrypt certificate.
 
     Existing certificates are reused.
 
-    If a certificate exists, Certbot is allowed to renew it
-    when renewal is required.
+    A missing certificate is provisioned through the HTTP-01
+    challenge.
 
-    If no certificate exists, a new certificate is requested.
+    Routine renewal is intentionally not performed here because
+    Certbot's system renewal timer is responsible for renewal.
     """
 
     email = os.environ.get(
@@ -1510,23 +1511,6 @@ def ensure_ssl_certificate() -> None:
 
         log(
             "Existing Barkly SSL certificate detected."
-        )
-
-        log(
-            "Checking Let's Encrypt renewal status..."
-        )
-
-        run(
-            [
-                "sudo",
-                "certbot",
-                "renew",
-                "--quiet",
-            ]
-        )
-
-        log(
-            "Let's Encrypt certificate check completed."
         )
 
         return
@@ -1578,7 +1562,10 @@ def configure_https() -> None:
     """
     Install Barkly's complete HTTP + HTTPS configuration.
 
-    This function must only run after the certificate exists.
+    HTTP redirects to HTTPS while preserving the ACME
+    challenge path.
+
+    HTTPS serves the immutable current release.
     """
 
     if (
@@ -1608,21 +1595,58 @@ def configure_https() -> None:
     )
 
 
+def verify_https_listener() -> None:
+    """
+    Verify that something is actually listening on HTTPS.
+
+    This catches the specific infrastructure failure where
+    Nginx is healthy on port 80 but port 443 is not active.
+    """
+
+    log(
+        "Checking HTTPS port 443..."
+    )
+
+    with socket.create_connection(
+        (
+            "127.0.0.1",
+            443,
+        ),
+        timeout=5,
+    ):
+
+        pass
+
+    log(
+        "HTTPS port 443 is listening."
+    )
+
+
 def ensure_https() -> None:
     """
     Make HTTPS infrastructure healthy.
 
-    Sequence:
+    Existing certificates:
+        HTTPS configuration
+          ↓
+        Nginx validation
+          ↓
+        Nginx reload
+          ↓
+        HTTPS listener verification
 
+    Missing certificates:
         HTTP configuration
           ↓
-        certificate
+        certificate provisioning
           ↓
         HTTPS configuration
           ↓
         Nginx validation
           ↓
         Nginx reload
+          ↓
+        HTTPS listener verification
     """
 
     log(
@@ -1637,11 +1661,26 @@ def ensure_https() -> None:
         "=" * 40
     )
 
-    configure_http_for_certificate()
+    certificate_exists = (
+        SSL_CERT.exists()
+        and SSL_KEY.exists()
+    )
 
-    ensure_ssl_certificate()
+    if not certificate_exists:
+
+        configure_http_for_certificate()
+
+        ensure_ssl_certificate()
+
+    else:
+
+        log(
+            "Barkly SSL certificate already exists."
+        )
 
     configure_https()
+
+    verify_https_listener()
 
     log(
         "=" * 40
@@ -1654,8 +1693,6 @@ def ensure_https() -> None:
     log(
         "=" * 40
     )
-
-
 # ---------------------------------------------------------------------------
 # Deployment
 # ---------------------------------------------------------------------------
