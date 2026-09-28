@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Financial Transparency System — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Financial Transparency System
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barkly Financial Transparency System.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Financial Transparency System</h1>
+<h3>Functional Requirements — Draft 0.1</h3>
+<p class="paragraph normal">Purpose:
+ Provide Barkly Labs with a human-readable, auditable system for importing financial documents, extracting structured financial records, requiring human verification, and automatically publishing approved financial information to the public website.</p>
+<p class="paragraph normal">Core idea:
+ Upload once → understand → verify → publish → automatically update.</p>
+<h2>01 — Document Intake</h2>
+<h3>FR-001 — Upload Financial Documents</h3>
+<p class="paragraph normal">The system SHALL allow authorized Barkly administrators to upload financial documents.</p>
+<p class="paragraph normal">Supported formats SHOULD include:</p>
+<p class="paragraph normal">PDF</p>
+<p class="paragraph normal">CSV</p>
+<p class="paragraph normal">XLSX</p>
+<p class="paragraph normal">TXT</p>
+<p class="paragraph normal">JSON</p>
+<p class="paragraph normal">image-based documents where practical</p>
+<h3>FR-002 — Preserve Original Documents</h3>
+<p class="paragraph normal">The system SHALL retain the original uploaded document as the source record.</p>
+<p class="paragraph normal">The original document SHALL NOT be modified during extraction.</p>
+<h3>FR-003 — Document Metadata</h3>
+<p class="paragraph normal">Each uploaded document SHALL receive metadata including:</p>
+<p class="paragraph normal">document ID</p>
+<p class="paragraph normal">upload timestamp</p>
+<p class="paragraph normal">document type</p>
+<p class="paragraph normal">reporting period</p>
+<p class="paragraph normal">source</p>
+<p class="paragraph normal">processing status</p>
+<p class="paragraph normal">verification status</p>
+<h1>02 — Document Understanding</h1>
+<h3>FR-004 — Extract Financial Records</h3>
+<p class="paragraph normal">The system SHALL attempt to identify financial information from uploaded documents.</p>
+<p class="paragraph normal">Possible records include:</p>
+<p class="paragraph normal">income</p>
+<p class="paragraph normal">donations</p>
+<p class="paragraph normal">grants</p>
+<p class="paragraph normal">sponsorships</p>
+<p class="paragraph normal">expenses</p>
+<p class="paragraph normal">purchases</p>
+<p class="paragraph normal">reimbursements</p>
+<p class="paragraph normal">transfers</p>
+<p class="paragraph normal">fees</p>
+<p class="paragraph normal">refunds</p>
+<h3>FR-005 — Normalize Records</h3>
+<p class="paragraph normal">Extracted information SHALL be converted into a consistent internal representation.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">{</p>
+<p class="paragraph normal">&quot;id&quot;: &quot;txn-2026-0001&quot;,</p>
+<p class="paragraph normal">&quot;date&quot;: &quot;2026-09-28&quot;,</p>
+<p class="paragraph normal">&quot;type&quot;: &quot;expense&quot;,</p>
+<p class="paragraph normal">&quot;category&quot;: &quot;equipment&quot;,</p>
+<p class="paragraph normal">&quot;amount&quot;: 842.17,</p>
+<p class="paragraph normal">&quot;currency&quot;: &quot;USD&quot;,</p>
+<p class="paragraph normal">&quot;description&quot;: &quot;Development hardware&quot;,</p>
+<p class="paragraph normal">&quot;source_document&quot;: &quot;invoice-2026-09-28.pdf&quot;</p>
+<p class="paragraph normal">}</p>
+<h3>FR-006 — Extraction Confidence</h3>
+<p class="paragraph normal">The system SHOULD indicate when extracted information is uncertain.</p>
+<p class="paragraph normal">For example:</p>
+<p class="paragraph normal">Amount        $842.17       ✓</p>
+<p class="paragraph normal">Date          09/28/2026    ✓</p>
+<p class="paragraph normal">Category      Equipment     ✓</p>
+<p class="paragraph normal">Description   Hardware      ?</p>
+<p class="paragraph normal">The system SHALL NOT silently invent missing financial information.</p>
+<h1>03 — Human Verification</h1>
+<h3>FR-007 — Human Review Required</h3>
+<p class="paragraph normal">Extracted financial records SHALL NOT automatically become public records.</p>
+<p class="paragraph normal">An authorized human SHALL be able to review the extracted information before publication.</p>
+<h3>FR-008 — Edit Extracted Records</h3>
+<p class="paragraph normal">The reviewer SHALL be able to correct:</p>
+<p class="paragraph normal">dates</p>
+<p class="paragraph normal">amounts</p>
+<p class="paragraph normal">categories</p>
+<p class="paragraph normal">descriptions</p>
+<p class="paragraph normal">document associations</p>
+<p class="paragraph normal">record types</p>
+<h3>FR-009 — Approve Records</h3>
+<p class="paragraph normal">The reviewer SHALL be able to mark records as:</p>
+<p class="paragraph normal">Pending</p>
+<p class="paragraph normal">Reviewed</p>
+<p class="paragraph normal">Approved</p>
+<p class="paragraph normal">Rejected</p>
+<p class="paragraph normal">Needs Correction</p>
+<h3>FR-010 — Preserve Review History</h3>
+<p class="paragraph normal">The system SHOULD maintain an audit trail showing:</p>
+<p class="paragraph normal">what changed</p>
+<p class="paragraph normal">when it changed</p>
+<p class="paragraph normal">who approved it</p>
+<p class="paragraph normal">previous values where appropriate</p>
+<h1>04 — Financial Data Model</h1>
+<h3>FR-011 — Canonical Financial Record</h3>
+<p class="paragraph normal">Every approved transaction SHOULD conform to a common schema.</p>
+<p class="paragraph normal">Minimum fields:</p>
+<p class="paragraph normal">ID</p>
+<p class="paragraph normal">Date</p>
+<p class="paragraph normal">Type</p>
+<p class="paragraph normal">Amount</p>
+<p class="paragraph normal">Currency</p>
+<p class="paragraph normal">Category</p>
+<p class="paragraph normal">Description</p>
+<p class="paragraph normal">Source Document</p>
+<p class="paragraph normal">Status</p>
+<p class="paragraph normal">Optional fields MAY include:</p>
+<p class="paragraph normal">Project</p>
+<p class="paragraph normal">Funding Source</p>
+<p class="paragraph normal">Vendor</p>
+<p class="paragraph normal">Grant</p>
+<p class="paragraph normal">Receipt</p>
+<p class="paragraph normal">Invoice</p>
+<p class="paragraph normal">Notes</p>
+<p class="paragraph normal">Reporting Period</p>
+<h1>05 — Public Transparency</h1>
+<h3>FR-012 — Public Financial Dataset</h3>
+<p class="paragraph normal">Approved records SHALL be available through a public-facing financial transparency interface.</p>
+<h3>FR-013 — Human-Readable Presentation</h3>
+<p class="paragraph normal">The public interface SHOULD provide:</p>
+<p class="paragraph normal">total income</p>
+<p class="paragraph normal">total expenses</p>
+<p class="paragraph normal">current balance where appropriate</p>
+<p class="paragraph normal">spending categories</p>
+<p class="paragraph normal">funding sources</p>
+<p class="paragraph normal">reporting periods</p>
+<p class="paragraph normal">individual approved records</p>
+<h3>FR-014 — Raw Data Access</h3>
+<p class="paragraph normal">The system SHOULD provide downloadable machine-readable data such as:</p>
+<p class="paragraph normal">financials.json</p>
+<p class="paragraph normal">financials.csv</p>
+<p class="paragraph normal">This allows other people to independently analyze or visualize Barkly&#x27;s public financial information.</p>
+<h1>06 — Automatic Website Generation</h1>
+<h3>FR-015 — Financial Page Generation</h3>
+<p class="paragraph normal">The public financial webpage SHALL be generated from the structured financial dataset rather than requiring manual editing of individual webpage entries.</p>
+<h3>FR-016 — Automatic Updates</h3>
+<p class="paragraph normal">When approved financial records are added or modified, the public financial interface SHOULD update automatically during the next deployment/build.</p>
+<p class="paragraph normal">New Document</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Extraction</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Human Approval</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">financials.json</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Astro Build</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Updated Public Page</p>
+<h3>FR-017 — No Duplicate Data Entry</h3>
+<p class="paragraph normal">Administrators SHOULD NOT have to manually enter the same financial information into both the financial system and the website.</p>
+<p class="paragraph normal">The structured financial record SHALL be the source of truth.</p>
+<h1>07 — Privacy &amp; Safety</h1>
+<h3>FR-018 — Public/Private Separation</h3>
+<p class="paragraph normal">The system SHALL distinguish between information required for financial transparency and information that should remain private.</p>
+<p class="paragraph normal">The public system SHALL NOT expose sensitive information such as:</p>
+<p class="paragraph normal">bank account numbers</p>
+<p class="paragraph normal">passwords</p>
+<p class="paragraph normal">authentication credentials</p>
+<p class="paragraph normal">private addresses</p>
+<p class="paragraph normal">payment-card information</p>
+<p class="paragraph normal">unnecessary personal information</p>
+<h3>FR-019 — Public Redaction</h3>
+<p class="paragraph normal">The system SHOULD support redaction or exclusion of sensitive fields before publication.</p>
+<h3>FR-020 — Original Document Protection</h3>
+<p class="paragraph normal">Original financial documents MAY contain information that cannot be publicly released.</p>
+<p class="paragraph normal">The system SHALL allow the public record to contain a sanitized representation rather than exposing the original document.</p>
+<h1>08 — Auditability</h1>
+<h3>FR-021 — Source Traceability</h3>
+<p class="paragraph normal">Every published financial record SHOULD be traceable back to its source document.</p>
+<p class="paragraph normal">Public Transaction</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Record ID</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Source Document</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Original Evidence</p>
+<h3>FR-022 — Immutable Published History</h3>
+<p class="paragraph normal">Once a financial reporting period has been formally published, changes SHOULD be recorded rather than silently overwriting history.</p>
+<p class="paragraph normal">For example:</p>
+<p class="paragraph normal">Original:</p>
+<p class="paragraph normal">$842.17</p>
+<p class="paragraph normal">Correction:</p>
+<p class="paragraph normal">$847.17</p>
+<p class="paragraph normal">Reason:</p>
+<p class="paragraph normal">Invoice transcription correction</p>
+<h1>09 — Accessibility</h1>
+<h3>FR-023 — Human-First Interface</h3>
+<p class="paragraph normal">The financial interface SHALL prioritize human comprehension over accounting complexity.</p>
+<h3>FR-024 — Accessible Presentation</h3>
+<p class="paragraph normal">The public interface SHOULD support:</p>
+<p class="paragraph normal">keyboard navigation</p>
+<p class="paragraph normal">screen readers</p>
+<p class="paragraph normal">readable typography</p>
+<p class="paragraph normal">sufficient contrast</p>
+<p class="paragraph normal">responsive layouts</p>
+<p class="paragraph normal">plain-language explanations</p>
+<p class="paragraph normal">accessible tables</p>
+<p class="paragraph normal">downloadable data</p>
+<h3>FR-025 — Explain the Numbers</h3>
+<p class="paragraph normal">The system SHOULD explain financial categories and summaries in ordinary language.</p>
+<p class="paragraph normal">Not merely:</p>
+<p class="paragraph normal">Operating Expenses: $4,281.19</p>
+<p class="paragraph normal">but:</p>
+<p class="paragraph normal">Operating expenses — $4,281.19
+ Money spent keeping Barkly Labs running, including hosting, supplies, software, and administrative costs.</p>
+<h1>10 — Automation</h1>
+<h3>FR-026 — Processing Pipeline</h3>
+<p class="paragraph normal">The system SHOULD support an automated pipeline:</p>
+<p class="paragraph normal">INGEST</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PARSE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">EXTRACT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">NORMALIZE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">VALIDATE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">HUMAN REVIEW</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">APPROVE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PUBLISH</p>
+<h3>FR-027 — Processing Status</h3>
+<p class="paragraph normal">Documents SHOULD expose their current state:</p>
+<p class="paragraph normal">UPLOADED</p>
+<p class="paragraph normal">PROCESSING</p>
+<p class="paragraph normal">EXTRACTED</p>
+<p class="paragraph normal">NEEDS REVIEW</p>
+<p class="paragraph normal">APPROVED</p>
+<p class="paragraph normal">PUBLISHED</p>
+<p class="paragraph normal">ARCHIVED</p>
+<h3>FR-028 — Failure Visibility</h3>
+<p class="paragraph normal">If processing fails, the system SHALL clearly explain that processing failed.</p>
+<p class="paragraph normal">It SHALL NOT silently discard the document.</p>
+<h1>11 — Barkly Standard Requirements</h1>
+<h3>FR-029 — Transparency</h3>
+<p class="paragraph normal">Financial information intended to demonstrate organizational accountability SHALL be publicly accessible in an understandable form.</p>
+<h3>FR-030 — Human Oversight</h3>
+<p class="paragraph normal">Automation SHALL assist financial documentation but SHALL NOT replace human responsibility for publication.</p>
+<h3>FR-031 — Understandability</h3>
+<p class="paragraph normal">Financial information SHALL be presented so that a person without accounting expertise can reasonably understand it.</p>
+<h3>FR-032 — Reproducibility</h3>
+<p class="paragraph normal">The public financial dataset SHOULD allow another person to reproduce the major published totals.</p>
+<h3>FR-033 — Open Data</h3>
+<p class="paragraph normal">Where legally and practically appropriate, financial data SHOULD be published in open machine-readable formats.</p>
+<h3>FR-034 — No Hidden Automation</h3>
+<p class="paragraph normal">Automated extraction SHALL be distinguishable from human verification.</p>
+<h1>12 — Future Extensions</h1>
+<p class="paragraph normal">These are not required for 0.1, but the architecture SHOULD leave room for:</p>
+<p class="paragraph normal">automatic receipt OCR</p>
+<p class="paragraph normal">bank-feed imports</p>
+<p class="paragraph normal">accounting-software imports</p>
+<p class="paragraph normal">grant tracking</p>
+<p class="paragraph normal">project budgets</p>
+<p class="paragraph normal">donation tracking</p>
+<p class="paragraph normal">recurring expenses</p>
+<p class="paragraph normal">financial dashboards</p>
+<p class="paragraph normal">yearly reports</p>
+<p class="paragraph normal">PDF annual-report generation</p>
+<p class="paragraph normal">public API</p>
+<p class="paragraph normal">JSON Schema</p>
+<p class="paragraph normal">automated consistency checks</p>
+<p class="paragraph normal">anomaly detection</p>
+<p class="paragraph normal">multi-organization support</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
