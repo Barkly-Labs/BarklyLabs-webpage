@@ -2,10 +2,28 @@
 """
 BARKLY PAGE QA
 
-Crawls an Astro website and checks actual webpage navigation links.
+Multi-target website navigation quality checker.
 
-Checks:
+Checks actual webpage navigation links:
+
     <a href="...">
+
+Supports testing multiple deployment targets in one run:
+
+    1. Local temporary server
+       http://127.0.0.1:4321/
+
+    2. Public server IP
+       http://203.0.113.10/
+       with Host: barklylabs.space
+
+    3. Primary domain
+       http://barklylabs.space/
+
+    4. WWW domain
+       http://www.barklylabs.space/
+
+Each target is crawled independently.
 
 Ignores:
     <script src="...">
@@ -15,24 +33,59 @@ Ignores:
     /@vite/...
     /@id/...
     /src/...
+    /node_modules/...
     /_astro/...
     ?astro=...
     mailto:
     tel:
     javascript:
     data:
+    blob:
 
 Reports:
+    - Which deployment target failed
     - Which page contains the broken link
     - The broken URL
     - HTTP status / connection error
+    - Pages checked
+    - Links checked
+    - Target pass/fail status
 
 Standard library only.
+
+Examples:
+
+    # Single target
+    python3 Barkly-qa.py \
+        --target http://127.0.0.1:4321/
+
+    # Multiple targets
+    python3 Barkly-qa.py \
+        --target http://127.0.0.1:4321/ \
+        --target http://203.0.113.10/ \
+        --target http://barklylabs.space/ \
+        --target http://www.barklylabs.space/
+
+    # Public IP using Barkly hostname routing
+    python3 Barkly-qa.py \
+        --target http://203.0.113.10/ \
+        --host barklylabs.space
+
+    # Named targets
+    python3 Barkly-qa.py \
+        --target local=http://127.0.0.1:4321/ \
+        --target public=http://203.0.113.10/ \
+        --target domain=http://barklylabs.space/ \
+        --target www=http://www.barklylabs.space/
+
+    # Backwards-compatible positional URL
+    python3 Barkly-qa.py http://127.0.0.1:4321/
 """
 
 from __future__ import annotations
 
 import argparse
+import sys
 import time
 
 from collections import deque
@@ -50,11 +103,14 @@ from urllib.request import (
 )
 
 
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+
 USER_AGENT = (
-    "BarklyLabs-PageQA/1.0 "
+    "BarklyLabs-PageQA/2.0 "
     "(website navigation quality checker)"
 )
-
 
 IGNORED_SCHEMES = {
     "mailto",
@@ -64,7 +120,6 @@ IGNORED_SCHEMES = {
     "blob",
 }
 
-
 IGNORED_PATH_PREFIXES = (
     "/@vite/",
     "/@id/",
@@ -73,14 +128,69 @@ IGNORED_PATH_PREFIXES = (
     "/_astro/",
 )
 
+DEFAULT_MAX_PAGES = 500
+DEFAULT_TIMEOUT = 10.0
+DEFAULT_DELAY = 0.1
+
+
+# ---------------------------------------------------------------------------
+# Data structures
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class QATarget:
+    """
+    One independently tested deployment target.
+
+    name:
+        Human-readable target name.
+
+    url:
+        URL used to reach the target.
+
+    host_header:
+        Optional HTTP Host header.
+
+        This is particularly useful when testing a public IP while
+        still asking Nginx to route the request to the Barkly virtual host.
+    """
+
+    name: str
+    url: str
+    host_header: str | None = None
+
 
 @dataclass
 class LinkResult:
+    """
+    Result of checking one webpage link.
+    """
+
     source_page: str
     target_url: str
     status: str
     detail: str
 
+
+@dataclass
+class TargetResult:
+    """
+    Complete result for one QA target.
+    """
+
+    target: QATarget
+    broken: list[LinkResult]
+    pages_checked: int
+    links_checked: int
+
+    @property
+    def passed(self) -> bool:
+        return not self.broken
+
+
+# ---------------------------------------------------------------------------
+# HTML parsing
+# ---------------------------------------------------------------------------
 
 class PageLinkParser(HTMLParser):
     """
@@ -106,12 +216,23 @@ class PageLinkParser(HTMLParser):
         href = attributes.get("href")
 
         if href:
-            self.links.append(href.strip())
+            self.links.append(
+                href.strip()
+            )
 
 
-def normalize_url(url: str) -> str:
+# ---------------------------------------------------------------------------
+# URL handling
+# ---------------------------------------------------------------------------
+
+def normalize_url(
+    url: str,
+) -> str:
     """
     Normalize URLs so duplicates are not checked repeatedly.
+
+    Fragments are removed because they do not represent separate HTTP
+    resources.
     """
 
     parsed = urlparse(url)
@@ -156,6 +277,9 @@ def normalize_url(url: str) -> str:
 def default_port(
     scheme: str,
 ) -> int:
+    """
+    Return the default HTTP port for a scheme.
+    """
 
     if scheme.lower() == "https":
         return 443
@@ -167,6 +291,9 @@ def same_origin(
     first: str,
     second: str,
 ) -> bool:
+    """
+    Determine whether two URLs share scheme, hostname and port.
+    """
 
     a = urlparse(first)
     b = urlparse(second)
@@ -194,6 +321,9 @@ def same_origin(
 def is_ignored_url(
     url: str,
 ) -> bool:
+    """
+    Determine whether a URL belongs to ignored infrastructure.
+    """
 
     parsed = urlparse(url)
 
@@ -220,6 +350,9 @@ def clean_link(
     source_page: str,
     raw_link: str,
 ) -> str | None:
+    """
+    Resolve and normalize a raw href from a webpage.
+    """
 
     raw_link = raw_link.strip()
 
@@ -253,18 +386,61 @@ def clean_link(
     return target
 
 
+# ---------------------------------------------------------------------------
+# HTTP
+# ---------------------------------------------------------------------------
+
+def build_request(
+    url: str,
+    host_header: str | None = None,
+) -> Request:
+    """
+    Build an HTTP request.
+
+    If host_header is supplied, it is sent as the HTTP Host header.
+
+    This allows:
+
+        http://PUBLIC_IP/
+
+    to be tested as:
+
+        Host: barklylabs.space
+    """
+
+    headers = {
+        "User-Agent": USER_AGENT,
+        "Accept": "text/html,*/*;q=0.8",
+    }
+
+    if host_header:
+        headers["Host"] = host_header
+
+    return Request(
+        url,
+        headers=headers,
+        method="GET",
+    )
+
+
 def fetch(
     url: str,
     timeout: float,
+    host_header: str | None = None,
 ) -> tuple[int, str, bytes]:
+    """
+    Fetch a webpage.
 
-    request = Request(
+    Returns:
+
+        HTTP status
+        Content-Type
+        Response body
+    """
+
+    request = build_request(
         url,
-        headers={
-            "User-Agent": USER_AGENT,
-            "Accept": "text/html,*/*;q=0.8",
-        },
-        method="GET",
+        host_header,
     )
 
     try:
@@ -307,9 +483,16 @@ def fetch(
         )
 
 
+# ---------------------------------------------------------------------------
+# Page parsing
+# ---------------------------------------------------------------------------
+
 def parse_page_links(
     data: bytes,
 ) -> list[str]:
+    """
+    Parse webpage HTML and return its <a href=""> links.
+    """
 
     text = data.decode(
         "utf-8",
@@ -319,24 +502,78 @@ def parse_page_links(
     parser = PageLinkParser()
 
     try:
-        parser.feed(text)
+
+        parser.feed(
+            text
+        )
+
     except Exception:
         pass
 
     return parser.links
 
 
+# ---------------------------------------------------------------------------
+# Link checking
+# ---------------------------------------------------------------------------
+
 def check_url(
     source_page: str,
     target_url: str,
     timeout: float,
+    host_header: str | None,
 ) -> LinkResult:
+    """
+    Check one URL.
+
+    For same-origin URLs, the target's Host header is preserved.
+
+    External links receive no custom Host header.
+    """
 
     try:
+
+        parsed_target = urlparse(
+            target_url
+        )
+
+        parsed_source = urlparse(
+            source_page
+        )
+
+        target_is_same_host = (
+            (
+                parsed_target.hostname or ""
+            ).lower()
+            ==
+            (
+                parsed_source.hostname or ""
+            ).lower()
+            and (
+                parsed_target.port
+                or default_port(
+                    parsed_target.scheme
+                )
+            )
+            ==
+            (
+                parsed_source.port
+                or default_port(
+                    parsed_source.scheme
+                )
+            )
+        )
+
+        request_host = (
+            host_header
+            if target_is_same_host
+            else None
+        )
 
         status, _, _ = fetch(
             target_url,
             timeout,
+            request_host,
         )
 
         if 200 <= status < 400:
@@ -365,8 +602,12 @@ def check_url(
         )
 
 
+# ---------------------------------------------------------------------------
+# Crawling
+# ---------------------------------------------------------------------------
+
 def crawl(
-    start_url: str,
+    target: QATarget,
     *,
     internal_only: bool,
     max_pages: int,
@@ -377,9 +618,14 @@ def crawl(
     int,
     int,
 ]:
+    """
+    Crawl one QA target.
+
+    Each target gets its own independent crawl state.
+    """
 
     start_url = normalize_url(
-        start_url
+        target.url
     )
 
     queue = deque([
@@ -400,6 +646,7 @@ def crawl(
         if pages_checked >= max_pages:
 
             print()
+
             print(
                 f"Reached maximum page limit: "
                 f"{max_pages}"
@@ -426,6 +673,7 @@ def crawl(
             status, content_type, data = fetch(
                 page_url,
                 timeout,
+                target.host_header,
             )
 
         except Exception as exc:
@@ -478,35 +726,36 @@ def crawl(
 
         for raw_link in raw_links:
 
-            target = clean_link(
+            target_url = clean_link(
                 page_url,
                 raw_link,
             )
 
-            if not target:
+            if not target_url:
                 continue
 
             page_targets.add(
-                target
+                target_url
             )
 
-        for target in sorted(
+        for target_url in sorted(
             page_targets
         ):
 
             # Check each URL only once.
-            if target not in checked_links:
+            if target_url not in checked_links:
 
                 checked_links.add(
-                    target
+                    target_url
                 )
 
                 links_checked += 1
 
                 result = check_url(
                     page_url,
-                    target,
+                    target_url,
                     timeout,
+                    target.host_header,
                 )
 
                 if result.status == "BROKEN":
@@ -520,7 +769,7 @@ def crawl(
                     )
 
                     print(
-                        f"     {target}"
+                        f"     {target_url}"
                     )
 
                     print(
@@ -532,52 +781,50 @@ def crawl(
 
                     print(
                         "  ✓ "
-                        f"{target}"
+                        f"{target_url}"
                     )
 
             # Crawl only internal webpage links.
             if same_origin(
                 start_url,
-                target,
+                target_url,
             ):
 
                 parsed = urlparse(
-                    target
+                    target_url
                 )
 
                 # Never crawl ignored infrastructure.
                 if is_ignored_url(
-                    target
+                    target_url
                 ):
                     continue
 
                 # Only queue likely webpage URLs.
                 path = parsed.path.lower()
 
-                if (
-                    path.endswith(
-                        (
-                            ".js",
-                            ".css",
-                            ".png",
-                            ".jpg",
-                            ".jpeg",
-                            ".gif",
-                            ".svg",
-                            ".webp",
-                            ".ico",
-                            ".pdf",
-                            ".json",
-                            ".xml",
-                        )
+                if path.endswith(
+                    (
+                        ".js",
+                        ".css",
+                        ".png",
+                        ".jpg",
+                        ".jpeg",
+                        ".gif",
+                        ".svg",
+                        ".webp",
+                        ".ico",
+                        ".pdf",
+                        ".json",
+                        ".xml",
                     )
                 ):
                     continue
 
-                if target not in visited_pages:
+                if target_url not in visited_pages:
 
                     queue.append(
-                        target
+                        target_url
                     )
 
             elif not internal_only:
@@ -587,7 +834,10 @@ def crawl(
                 pass
 
         if delay > 0:
-            time.sleep(delay)
+
+            time.sleep(
+                delay
+            )
 
     return (
         broken,
@@ -596,10 +846,241 @@ def crawl(
     )
 
 
+# ---------------------------------------------------------------------------
+# Target parsing
+# ---------------------------------------------------------------------------
+
+def parse_target(
+    value: str,
+    index: int,
+) -> QATarget:
+    """
+    Parse a target supplied through --target.
+
+    Supported forms:
+
+        http://127.0.0.1:4321/
+
+        local=http://127.0.0.1:4321/
+
+    The Host header may be specified separately with:
+
+        --host barklylabs.space
+    """
+
+    value = value.strip()
+
+    if not value:
+        raise ValueError(
+            "QA target cannot be empty."
+        )
+
+    if "=" in value:
+
+        name, url = value.split(
+            "=",
+            1,
+        )
+
+        name = name.strip()
+        url = url.strip()
+
+        if not name:
+            raise ValueError(
+                f"Invalid target name: {value}"
+            )
+
+    else:
+
+        url = value
+
+        parsed = urlparse(
+            url
+        )
+
+        hostname = parsed.hostname
+
+        if hostname:
+            name = hostname
+        else:
+            name = f"target-{index}"
+
+    parsed = urlparse(
+        url
+    )
+
+    if parsed.scheme.lower() not in {
+        "http",
+        "https",
+    }:
+
+        raise ValueError(
+            f"Target must use http:// or https://: "
+            f"{url}"
+        )
+
+    if not parsed.hostname:
+
+        raise ValueError(
+            f"Target has no hostname: "
+            f"{url}"
+        )
+
+    return QATarget(
+        name=name,
+        url=normalize_url(url),
+    )
+
+
+def apply_host_headers(
+    targets: list[QATarget],
+    hosts: list[str],
+) -> list[QATarget]:
+    """
+    Apply --host values to targets.
+
+    Rules:
+
+        One target + one host:
+            applies host to target.
+
+        Multiple targets + multiple hosts:
+            hosts are assigned by position.
+
+        Multiple targets + one host:
+            host is applied to every target.
+
+        No hosts:
+            targets remain unchanged.
+    """
+
+    if not hosts:
+        return targets
+
+    if len(targets) == 1:
+
+        if len(hosts) != 1:
+
+            raise ValueError(
+                "A single target can only use "
+                "one --host value."
+            )
+
+        return [
+            QATarget(
+                name=targets[0].name,
+                url=targets[0].url,
+                host_header=hosts[0],
+            )
+        ]
+
+    if len(hosts) == 1:
+
+        host = hosts[0]
+
+        return [
+            QATarget(
+                name=target.name,
+                url=target.url,
+                host_header=host,
+            )
+            for target in targets
+        ]
+
+    if len(hosts) != len(targets):
+
+        raise ValueError(
+            "When multiple --host values are supplied, "
+            "the number of --host values must match "
+            "the number of targets."
+        )
+
+    return [
+        QATarget(
+            name=target.name,
+            url=target.url,
+            host_header=host,
+        )
+        for target, host
+        in zip(
+            targets,
+            hosts,
+        )
+    ]
+
+
+# ---------------------------------------------------------------------------
+# Reporting
+# ---------------------------------------------------------------------------
+
+def print_target_summary(
+    result: TargetResult,
+) -> None:
+    """
+    Print a concise target result.
+    """
+
+    target = result.target
+
+    print()
+
+    print(
+        "-" * 70
+    )
+
+    print(
+        f"TARGET: {target.name}"
+    )
+
+    print(
+        f"URL:    {target.url}"
+    )
+
+    if target.host_header:
+
+        print(
+            f"Host:   {target.host_header}"
+        )
+
+    print(
+        f"Pages checked : "
+        f"{result.pages_checked}"
+    )
+
+    print(
+        f"Links checked : "
+        f"{result.links_checked}"
+    )
+
+    print(
+        f"Broken links  : "
+        f"{len(result.broken)}"
+    )
+
+    if result.passed:
+
+        print(
+            "STATUS        : PASS ✓"
+        )
+
+    else:
+
+        print(
+            "STATUS        : FAIL ❌"
+        )
+
+    print(
+        "-" * 70
+    )
+
+
 def write_report(
     output: str,
-    broken: list[LinkResult],
+    results: list[TargetResult],
 ) -> None:
+    """
+    Write the complete multi-target QA report.
+    """
 
     lines: list[str] = []
 
@@ -613,41 +1094,114 @@ def write_report(
 
     lines.append("")
 
-    if not broken:
+    lines.append(
+        f"Targets tested: {len(results)}"
+    )
+
+    lines.append(
+        f"Targets passed: "
+        f"{sum(result.passed for result in results)}"
+    )
+
+    lines.append(
+        f"Targets failed: "
+        f"{sum(not result.passed for result in results)}"
+    )
+
+    lines.append("")
+
+    for result in results:
+
+        target = result.target
 
         lines.append(
-            "NO BROKEN PAGE LINKS FOUND."
+            "-" * 70
         )
 
-    else:
+        lines.append(
+            f"TARGET: {target.name}"
+        )
 
         lines.append(
-            f"Broken page links: "
-            f"{len(broken)}"
+            f"URL: {target.url}"
+        )
+
+        if target.host_header:
+
+            lines.append(
+                f"Host: {target.host_header}"
+            )
+
+        lines.append("")
+
+        lines.append(
+            f"Pages checked: "
+            f"{result.pages_checked}"
+        )
+
+        lines.append(
+            f"Links checked: "
+            f"{result.links_checked}"
+        )
+
+        lines.append(
+            f"Broken links: "
+            f"{len(result.broken)}"
+        )
+
+        lines.append(
+            f"Status: "
+            f"{'PASS' if result.passed else 'FAIL'}"
         )
 
         lines.append("")
 
-        for number, result in enumerate(
-            broken,
-            start=1,
-        ):
+        if result.broken:
+
+            for number, broken in enumerate(
+                result.broken,
+                start=1,
+            ):
+
+                lines.append(
+                    f"{number}. {broken.target_url}"
+                )
+
+                lines.append(
+                    f"   Found on: "
+                    f"{broken.source_page}"
+                )
+
+                lines.append(
+                    f"   Problem: "
+                    f"{broken.detail}"
+                )
+
+                lines.append("")
+
+        else:
 
             lines.append(
-                f"{number}. {result.target_url}"
-            )
-
-            lines.append(
-                f"   Found on: "
-                f"{result.source_page}"
-            )
-
-            lines.append(
-                f"   Problem: "
-                f"{result.detail}"
+                "No broken page links found."
             )
 
             lines.append("")
+
+    lines.append(
+        "=" * 70
+    )
+
+    lines.append(
+        "FINAL STATUS: "
+        + (
+            "PASS"
+            if all(
+                result.passed
+                for result in results
+            )
+            else "FAIL"
+        )
+    )
 
     with open(
         output,
@@ -660,18 +1214,48 @@ def write_report(
         )
 
 
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
 def main() -> int:
 
     parser = argparse.ArgumentParser(
         description=(
-            "Check an Astro website for "
-            "broken webpage navigation links."
+            "Check one or more Barkly website "
+            "deployment targets for broken "
+            "webpage navigation links."
         )
     )
 
     parser.add_argument(
         "url",
-        help="Website URL to crawl.",
+        nargs="?",
+        help=(
+            "Backwards-compatible single "
+            "website URL."
+        ),
+    )
+
+    parser.add_argument(
+        "--target",
+        action="append",
+        default=[],
+        help=(
+            "Website target. May be supplied "
+            "multiple times. Optional form: "
+            "name=URL."
+        ),
+    )
+
+    parser.add_argument(
+        "--host",
+        action="append",
+        default=[],
+        help=(
+            "HTTP Host header for target testing. "
+            "May be supplied multiple times."
+        ),
     )
 
     parser.add_argument(
@@ -679,37 +1263,37 @@ def main() -> int:
         action="store_true",
         help=(
             "Only check links belonging "
-            "to this website."
+            "to the target website."
         ),
     )
 
     parser.add_argument(
         "--max-pages",
         type=int,
-        default=500,
+        default=DEFAULT_MAX_PAGES,
         help=(
-            "Maximum pages to crawl "
-            "(default: 500)."
+            f"Maximum pages per target "
+            f"(default: {DEFAULT_MAX_PAGES})."
         ),
     )
 
     parser.add_argument(
         "--timeout",
         type=float,
-        default=10,
+        default=DEFAULT_TIMEOUT,
         help=(
-            "HTTP timeout in seconds "
-            "(default: 10)."
+            f"HTTP timeout in seconds "
+            f"(default: {DEFAULT_TIMEOUT})."
         ),
     )
 
     parser.add_argument(
         "--delay",
         type=float,
-        default=0.1,
+        default=DEFAULT_DELAY,
         help=(
-            "Delay between pages "
-            "(default: 0.1)."
+            f"Delay between pages "
+            f"(default: {DEFAULT_DELAY})."
         ),
     )
 
@@ -724,16 +1308,78 @@ def main() -> int:
 
     args = parser.parse_args()
 
+    # ---------------------------------------------------------------
+    # Build target list.
+    # ---------------------------------------------------------------
+
+    target_values = list(
+        args.target
+    )
+
+    # Preserve backwards compatibility:
+    #
+    # python3 Barkly-qa.py http://localhost:4321/
+    #
+    if args.url:
+
+        if target_values:
+
+            parser.error(
+                "Do not combine the positional URL "
+                "with --target."
+            )
+
+        target_values.append(
+            args.url
+        )
+
+    if not target_values:
+
+        parser.error(
+            "At least one target is required."
+        )
+
+    try:
+
+        targets = [
+            parse_target(
+                value,
+                index,
+            )
+            for index, value
+            in enumerate(
+                target_values,
+                start=1,
+            )
+        ]
+
+        targets = apply_host_headers(
+            targets,
+            args.host,
+        )
+
+    except ValueError as exc:
+
+        parser.error(
+            str(exc)
+        )
+
+    # ---------------------------------------------------------------
+    # Header.
+    # ---------------------------------------------------------------
+
     print()
+
     print(
         "🐾 BARKLY LABS PAGE QA"
     )
+
     print(
         "=" * 70
     )
 
     print(
-        f"Website      : {args.url}"
+        f"Targets      : {len(targets)}"
     )
 
     print(
@@ -746,75 +1392,211 @@ def main() -> int:
 
     print()
 
-    broken, pages, links = crawl(
-        args.url,
-        internal_only=args.internal_only,
-        max_pages=args.max_pages,
-        timeout=args.timeout,
-        delay=args.delay,
-    )
+    # ---------------------------------------------------------------
+    # Run each target independently.
+    # ---------------------------------------------------------------
+
+    results: list[TargetResult] = []
+
+    for target_number, target in enumerate(
+        targets,
+        start=1,
+    ):
+
+        print()
+
+        print(
+            "=" * 70
+        )
+
+        print(
+            f"TARGET {target_number}/{len(targets)}"
+        )
+
+        print(
+            f"Name : {target.name}"
+        )
+
+        print(
+            f"URL  : {target.url}"
+        )
+
+        if target.host_header:
+
+            print(
+                f"Host : {target.host_header}"
+            )
+
+        print(
+            "=" * 70
+        )
+
+        broken, pages, links = crawl(
+            target,
+            internal_only=args.internal_only,
+            max_pages=args.max_pages,
+            timeout=args.timeout,
+            delay=args.delay,
+        )
+
+        result = TargetResult(
+            target=target,
+            broken=broken,
+            pages_checked=pages,
+            links_checked=links,
+        )
+
+        results.append(
+            result
+        )
+
+        print_target_summary(
+            result
+        )
+
+    # ---------------------------------------------------------------
+    # Final report.
+    # ---------------------------------------------------------------
 
     print()
+
     print(
         "=" * 70
     )
+
     print(
         "BARKLY PAGE QA COMPLETE"
     )
+
     print(
         "=" * 70
     )
 
-    print(
-        f"Pages checked : {pages}"
+    passed_targets = sum(
+        result.passed
+        for result in results
+    )
+
+    failed_targets = len(results) - passed_targets
+
+    total_pages = sum(
+        result.pages_checked
+        for result in results
+    )
+
+    total_links = sum(
+        result.links_checked
+        for result in results
+    )
+
+    total_broken = sum(
+        len(result.broken)
+        for result in results
     )
 
     print(
-        f"Links checked : {links}"
+        f"Targets tested : "
+        f"{len(results)}"
     )
 
     print(
-        f"Broken links  : {len(broken)}"
+        f"Targets passed : "
+        f"{passed_targets}"
+    )
+
+    print(
+        f"Targets failed : "
+        f"{failed_targets}"
+    )
+
+    print(
+        f"Pages checked  : "
+        f"{total_pages}"
+    )
+
+    print(
+        f"Links checked  : "
+        f"{total_links}"
+    )
+
+    print(
+        f"Broken links   : "
+        f"{total_broken}"
     )
 
     print()
 
-    if not broken:
+    # ---------------------------------------------------------------
+    # Target-level final status.
+    # ---------------------------------------------------------------
+
+    for result in results:
+
+        status = (
+            "PASS ✓"
+            if result.passed
+            else "FAIL ❌"
+        )
 
         print(
-            "🎉 NO BROKEN PAGE LINKS FOUND!"
+            f"{result.target.name:<20} "
+            f"{status}"
+        )
+
+    print()
+
+    if failed_targets == 0:
+
+        print(
+            "🎉 ALL BARKLY DEPLOYMENT TARGETS PASSED!"
         )
 
     else:
 
         print(
-            "BROKEN PAGE LINKS:"
+            "❌ ONE OR MORE BARKLY DEPLOYMENT TARGETS FAILED."
         )
 
         print()
 
-        for result in broken:
+        print(
+            "Failed targets:"
+        )
 
-            print(
-                f"❌ {result.target_url}"
-            )
+        for result in results:
 
-            print(
-                f"   Found on: "
-                f"{result.source_page}"
-            )
+            if not result.passed:
 
-            print(
-                f"   Reason: "
-                f"{result.detail}"
-            )
+                print(
+                    f"  ❌ {result.target.name}"
+                )
 
-            print()
+                for broken in result.broken:
+
+                    print(
+                        f"     {broken.target_url}"
+                    )
+
+                    print(
+                        f"     Found on: "
+                        f"{broken.source_page}"
+                    )
+
+                    print(
+                        f"     Reason: "
+                        f"{broken.detail}"
+                    )
+
+    # ---------------------------------------------------------------
+    # Write report.
+    # ---------------------------------------------------------------
 
     write_report(
         args.output,
-        broken,
+        results,
     )
+
+    print()
 
     print(
         f"Report: {args.output}"
@@ -822,10 +1604,15 @@ def main() -> int:
 
     print()
 
-    return 1 if broken else 0
+    return (
+        0
+        if failed_targets == 0
+        else 1
+    )
 
 
 if __name__ == "__main__":
+
     raise SystemExit(
         main()
     )
