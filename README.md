@@ -1,43 +1,71 @@
-# Astro Starter Kit: Minimal
+# 🐾 BARKLY LABS 💗
 
-```sh
-npm create astro@latest -- --template minimal
-```
+### `HUMAN-CENTERED TECHNOLOGY • OPEN RESEARCH • WEIRD IDEAS`
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+> 🧠 **Can we make computers front-load the hard stuff for humans?**
 
-## 🚀 Project Structure
+Barkly Labs is an experimental technology laboratory building
+software, AI, documentation systems, hardware, research tools,
+and infrastructure designed around **people first.**
 
-Inside of your Astro project, you'll see the following folders and files:
+We like complicated technology.
+
+We just don't think humans should have to suffer through it. 🐾
+
+---
+
+<p align="center">
+  <img src="docs/barkly-homepage.png" alt="Barkly Labs website" width="100%">
+</p>
+
+<p align="center">
+  🖤 <b>WELCOME TO BARKLY LABS</b> 💗
+</p>
+
+---
+
+## 🐾 WHAT IS BARKLY?
+
+Barkly Labs is a place to **build weird things seriously.**
+
+We're interested in the space where:
+
+🧠 Artificial Intelligence  
+💻 Software Engineering  
+🔬 Research  
+🛠️ Hardware  
+📚 Documentation  
+🤖 Robotics  
+🎨 Human-centered Design  
+🌐 Open Source  
+🧪 Experimentation  
+
+...all smash into each other.
+
+The goal isn't to make technology complicated.
+
+The goal is to take complicated things and make them **useful.**
+
+> 💗 **Technology should help.**
+
+---
+
+# 🧪 THE LAB
+
+Barkly isn't one project.
+
+It's an ecosystem.
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+                         🐾 BARKLY LABS
+                               │
+             ┌─────────────────┼─────────────────┐
+             │                 │                 │
+            🧠                📚                🧪
+          CYN-X          BARKLY DOCS          LAAS
+             │                 │                 │
+        INTELLIGENCE      UNDERSTANDING      LABORATORY
+             │                 │                 │
+             └─────────────────┼─────────────────┘
+                               │
+                         🚀 FUTURE SYSTEMS
