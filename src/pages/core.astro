@@ -592,7 +592,11 @@ const year = 2026;
     <!-- FOOTER -->
     <footer class="site-footer">
       <div class="footer-brand">
-        <strong>BARKLY LABS</strong>
+        <strong>
+          <span>BARKLY</span>
+          <span>LABS</span>
+        </strong>
+
         <span>CYN-X // CORE</span>
       </div>
 
@@ -614,21 +618,16 @@ const year = 2026;
     --surface: #0a0a0a;
     --surface-2: #0f0f0f;
     --surface-hover: #131313;
-
     --text: #f1f1f1;
     --white: #f1f1f1;
-
     --muted: #a1a1a1;
     --dim: #686868;
     --faint: #444;
-
     --line: rgba(255, 255, 255, 0.12);
     --line-strong: rgba(255, 255, 255, 0.25);
-
     --pink: #ff2f92;
     --pink-soft: rgba(255, 47, 146, 0.1);
     --pink-line: rgba(255, 47, 146, 0.42);
-
     --max: 1400px;
   }
 
@@ -688,11 +687,13 @@ const year = 2026;
   }
 
   /* BARKLY = WHITE */
+
   .brand span:first-child {
     color: var(--white);
   }
 
   /* LABS = PINK */
+
   .brand span:last-child {
     color: var(--pink);
   }
@@ -762,16 +763,15 @@ const year = 2026;
 
   /*
     LARGE DISPLAY TYPE
-    Black fill + white outline.
+
+    Pink fill + white outline for outlined display lines.
   */
 
   .hero-title {
     position: relative;
     z-index: 1;
     margin: 60px 0;
-    color: var(--bg);
-    -webkit-text-stroke: 2px var(--white);
-    text-shadow: none;
+    color: var(--pink);
     font-size: clamp(4rem, 10vw, 10rem);
     line-height: 0.82;
     letter-spacing: -0.085em;
@@ -779,7 +779,7 @@ const year = 2026;
   }
 
   .hero-title span {
-    color: var(--bg);
+    color: transparent;
     -webkit-text-stroke: 2px var(--white);
   }
 
@@ -799,7 +799,7 @@ const year = 2026;
 
   .hero-mark {
     justify-self: end;
-    color: var(--white);
+    color: var(--pink);
     font-size: clamp(6rem, 13vw, 13rem);
     font-weight: 900;
     line-height: 0.7;
@@ -807,7 +807,8 @@ const year = 2026;
   }
 
   .hero-mark .x {
-    color: var(--pink);
+    color: transparent;
+    -webkit-text-stroke: 2px var(--white);
   }
 
   /* STATEMENT */
@@ -825,15 +826,9 @@ const year = 2026;
     padding-left: 20%;
   }
 
-  /*
-    MAIN STATEMENT
-    Solid white — no outline.
-  */
-
   .statement-large {
     margin: 0;
-    color: var(--white);
-    -webkit-text-stroke: 0;
+    color: var(--pink);
     font-size: clamp(4rem, 9vw, 9rem);
     font-weight: 900;
     line-height: 0.82;
@@ -841,14 +836,14 @@ const year = 2026;
   }
 
   .statement-large span {
-    color: var(--white);
-    -webkit-text-stroke: 0;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--white);
   }
 
   .statement-small {
     margin: 35px 0 0;
     font-family: monospace;
-    color: var(--muted);
+    color: var(--white);
     letter-spacing: 0.2em;
   }
 
@@ -865,9 +860,7 @@ const year = 2026;
 
   .section-heading h2 {
     margin: 20px 0 0;
-    color: var(--bg);
-    -webkit-text-stroke: 2px var(--white);
-    text-shadow: none;
+    color: var(--pink);
     font-size: clamp(2.5rem, 5vw, 5rem);
     line-height: 0.9;
     letter-spacing: -0.06em;
@@ -1090,8 +1083,7 @@ const year = 2026;
 
   .layer-card h3 {
     margin: 100px 0 20px;
-    color: var(--bg);
-    -webkit-text-stroke: 1.5px var(--white);
+    color: var(--pink);
     font-size: clamp(2rem, 4vw, 4rem);
     letter-spacing: -0.06em;
   }
@@ -1140,15 +1132,14 @@ const year = 2026;
 
   .subsystem-heading h2 {
     margin: 0;
-    color: var(--bg);
-    -webkit-text-stroke: 2px var(--white);
+    color: var(--pink);
     font-size: clamp(4rem, 8vw, 8rem);
     line-height: 0.8;
     letter-spacing: -0.08em;
   }
 
   .subsystem-heading h2 span {
-    color: var(--bg);
+    color: transparent;
     -webkit-text-stroke: 2px var(--white);
   }
 
@@ -1317,15 +1308,14 @@ const year = 2026;
 
   .memory-layout h2 {
     margin: 0;
-    color: var(--bg);
-    -webkit-text-stroke: 2px var(--white);
+    color: var(--pink);
     font-size: clamp(4rem, 8vw, 8rem);
     line-height: 0.8;
     letter-spacing: -0.08em;
   }
 
   .memory-layout h2 span {
-    color: var(--bg);
+    color: transparent;
     -webkit-text-stroke: 2px var(--white);
   }
 
@@ -1387,15 +1377,14 @@ const year = 2026;
 
   .local h2 {
     margin: 45px 0;
-    color: var(--bg);
-    -webkit-text-stroke: 2px var(--white);
+    color: var(--pink);
     font-size: clamp(4rem, 9vw, 9rem);
     line-height: 0.8;
     letter-spacing: -0.08em;
   }
 
   .local h2 span {
-    color: var(--bg);
+    color: transparent;
     -webkit-text-stroke: 2px var(--white);
   }
 
@@ -1492,7 +1481,7 @@ const year = 2026;
 
   .relationship-label {
     font-family: monospace;
-    color: var(--muted);
+    color: var(--white);
     font-size: 9px;
     letter-spacing: 0.15em;
   }
@@ -1528,15 +1517,14 @@ const year = 2026;
 
   .future h2 {
     margin: 0;
-    color: var(--bg);
-    -webkit-text-stroke: 2px var(--white);
+    color: var(--pink);
     font-size: clamp(4rem, 9vw, 9rem);
     line-height: 0.8;
     letter-spacing: -0.08em;
   }
 
   .future h2 span {
-    color: var(--bg);
+    color: transparent;
     -webkit-text-stroke: 2px var(--white);
   }
 
@@ -1585,15 +1573,14 @@ const year = 2026;
 
   .cta h2 {
     margin: 50px 0 70px;
-    color: var(--bg);
-    -webkit-text-stroke: 2px var(--white);
+    color: var(--pink);
     font-size: clamp(4rem, 9vw, 9rem);
     line-height: 0.8;
     letter-spacing: -0.08em;
   }
 
   .cta h2 span {
-    color: var(--bg);
+    color: transparent;
     -webkit-text-stroke: 2px var(--white);
   }
 
@@ -1657,16 +1644,24 @@ const year = 2026;
   }
 
   .footer-brand strong,
-  .footer-brand span {
+  .footer-brand strong span,
+  .footer-brand > span {
     display: block;
   }
 
   .footer-brand strong {
-    color: var(--white);
     margin-bottom: 6px;
   }
 
-  .footer-brand span {
+  .footer-brand strong span:first-child {
+    color: var(--white);
+  }
+
+  .footer-brand strong span:last-child {
+    color: var(--pink);
+  }
+
+  .footer-brand > span {
     color: var(--pink);
   }
 
