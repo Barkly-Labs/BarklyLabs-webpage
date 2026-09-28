@@ -1,0 +1,108 @@
+---
+const year = 2026;
+
+const funding = [
+  { n:'01', title:'RESEARCH & DEVELOPMENT', tag:'BUILD', share:'30%', text:'Fund the experiments that turn Barkly research questions into working prototypes, open-source software, hardware experiments, testing, and documented results.', items:['CYN-X intelligent systems','Barkly Docs & developer infrastructure','PawBoard / experimental computing','Human-centered interface research','Prototyping, testing, and iteration'] },
+  { n:'02', title:'THE PHYSICAL LAB', tag:'SPACE', share:'25%', text:'Create a real Barkly Labs workspace where software, hardware, research, and community work can happen together.', items:['Rent, utilities, and facility costs','Workbenches and safe build areas','Networking and local computing','Storage and workshop organization','Accessibility and human-centered workspace design'] },
+  { n:'03', title:'HARDWARE & COMPUTING', tag:'EQUIPMENT', share:'15%', text:'Give the lab the physical tools needed to investigate computing beyond the screen.', items:['Development boards and embedded systems','AI / GPU / NPU / accelerator hardware','Test equipment and electronics tools','Reclaimed-device experimentation','Servers and local compute'] },
+  { n:'04', title:'OUTREACH & EDUCATION', tag:'COMMUNITY', share:'15%', text:'Turn the lab\'s work into things people can learn from, participate in, remix, and build on.', items:['Open documentation and tutorials','Community workshops','Builder and creator programs','Educational demonstrations','Public research notes and project releases'] },
+  { n:'05', title:'OPEN INFRASTRUCTURE', tag:'SHARE', share:'10%', text:'Keep Barkly\'s public-facing technology, repositories, documentation, websites, and services available and maintainable.', items:['Hosting and domains','Open-source infrastructure','CI / testing systems','Documentation publishing','Backups and project continuity'] },
+  { n:'06', title:'OPERATIONS', tag:'SUSTAIN', share:'5%', text:'Support the boring-but-important work that lets the research keep happening responsibly.', items:['Accounting and organizational services','Insurance and compliance','Administrative tools','Basic supplies','Planning and reporting'] },
+];
+
+const projects = [
+  ['CYN-X','Human-centered intelligent systems','Local AI, personality systems, tools, vision, interfaces, and experiments exploring how intelligent computers can work with people.'],
+  ['BARKLY DOCS','Make software understandable','Static project analysis that turns complex repositories into structured, human-oriented documentation and system knowledge.'],
+  ['PAWBOARD','Experimental computing hardware','A computing platform exploring how reclaimed mobile hardware and modern accelerators can become flexible, open computer systems.'],
+  ['COMMUNITY','Technology people can participate in','Workshops, educational material, open experiments, community projects, and resources for builders, artists, engineers, and curious humans.'],
+];
+
+const principles = [
+  ['HUMAN FIRST','Technology should serve the person using it.'],
+  ['UNDERSTANDABLE','People should be able to understand what a system is doing.'],
+  ['ACCESSIBLE','Accessibility belongs in the design process from the beginning.'],
+  ['OPEN','Whenever practical, share the knowledge, tools, and experiments.'],
+  ['EXPERIMENTAL','Prototype, test, document what happened, and improve.'],
+  ['RESPECTFUL','Protect human autonomy, privacy, creativity, and choice.'],
+];
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barkly Labs / Funding the Lab</title>
+  <meta name="description" content="How funding helps Barkly Labs research, build, document, share, and grow a human-centered technology laboratory." />
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="brand"><span class="mark">◆</span> BARKLY LABS</a>
+    <span class="top-status">FUNDING / LAB GROWTH</span>
+    <a href="/" class="back">← RETURN TO LABS</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="grid"></div><div class="orbit o1"></div><div class="orbit o2"></div>
+      <div class="hero-copy">
+        <div class="eyebrow"><span>01</span> SUPPORT THE RESEARCH</div>
+        <h1>HELP US <em>BUILD THE LAB.</em></h1>
+        <p>Barkly Labs is building an independent, human-centered technology laboratory for software, AI, hardware, creative engineering, education, and open experimentation.</p>
+        <p class="dim">Funding does not buy a finished answer. It gives the lab resources to ask better questions, build prototypes, test them, document what happens, and share what we learn.</p>
+        <div class="actions"><a class="primary" href="#funding">SEE WHERE FUNDING GOES ↓</a><a href="#projects">SEE THE PROJECTS</a></div>
+      </div>
+      <div class="side">DETROIT, MICHIGAN<br/>INDEPENDENT RESEARCH<br/>HUMAN-FIRST</div>
+      <div class="scroll">RESEARCH / BUILD / DOCUMENT / SHARE <b></b></div>
+    </section>
+
+    <section class="section manifesto">
+      <header><small>02</small><div><label>WHY FUND THE LAB</label><h2>WE WANT TO <em>DISCOVER.</em></h2></div></header>
+      <div class="two-col"><div class="big">Some of the most interesting technology starts as a question nobody has completely answered yet.</div><div class="copy"><p>Barkly Labs exists to create room for that kind of work. We explore ideas between software, AI, hardware, accessibility, creativity, and human experience.</p><p>A project may become a tool. It may become an open-source platform. It may teach us something. It may fail and point us somewhere better.</p><p class="bright">The goal is not to pretend we already know the answer.<br/><strong>The goal is to build the experiment.</strong></p></div></div>
+    </section>
+
+    <section id="funding" class="section">
+      <header><small>03</small><div><label>ILLUSTRATIVE PLANNING MODEL</label><h2>WHERE THE <em>RESOURCES GO.</em></h2></div></header>
+      <div class="note"><b>[ i ]</b><p>These percentages are a planning model, not a promise of exact spending. Actual allocations would depend on the funding source, project requirements, organizational needs, and applicable grant restrictions. Public reporting would explain how funded work was actually used.</p></div>
+      <div class="funding-grid">
+        {funding.map(area => <article class="fund-card"><div class="card-top"><span>{area.n}</span><small>{area.tag}</small></div><strong class="share">{area.share}</strong><h3>{area.title}</h3><p>{area.text}</p><ul>{area.items.map(item => <li>→ {item}</li>)}</ul></article>)}
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <header><small>04</small><div><label>RESEARCH PORTFOLIO</label><h2>WHAT FUNDING <em>UNLOCKS.</em></h2></div></header>
+      <div class="projects">{projects.map((p,i) => <article><span>0{i+1}</span><b>{p[0]}</b><div><h3>{p[1]}</h3><p>{p[2]}</p></div><i>↗</i></article>)}</div>
+    </section>
+
+    <section class="section building"><div class="panel"><small>05</small><div><label>THE PHYSICAL LAB</label><h2>FROM A <em>DESK</em> TO A <em>LABORATORY.</em></h2><p>Barkly Labs is currently being built through software, experiments, documentation, and hardware prototypes. A dedicated physical space would let those pieces exist together.</p><p>The goal is not a polished corporate office. It is a working laboratory: benches, computers, electronics, local infrastructure, research space, documentation stations, creative space, and room for people to experiment.</p></div><dl><div><dt>SPACE</dt><dd>WORKSHOP + RESEARCH</dd></div><div><dt>COMPUTE</dt><dd>LOCAL / EDGE / AI</dd></div><div><dt>HARDWARE</dt><dd>BUILD / TEST / REPAIR</dd></div><div><dt>COMMUNITY</dt><dd>LEARN / COLLABORATE</dd></div></dl></div></section>
+
+    <section class="section">
+      <header><small>06</small><div><label>OUTREACH</label><h2>THE LAB SHOULD <em>OPEN OUTWARD.</em></h2></div></header>
+      <div class="outreach">{[['OPEN DOCUMENTATION','Publish technical docs, research notes, experiments, tutorials, development history, and lessons learned.'],['WORKSHOPS','Give people practical ways to learn computing, AI, electronics, software, and creative technology by building things.'],['COMMUNITY PROJECTS','Create opportunities for builders, artists, engineers, students, creators, and curious people to participate.'],['RESEARCH IN PUBLIC','Show what worked, what failed, what changed, and what the lab learned.']].map((x,i)=><article><span>0{i+1}</span><h3>{x[0]}</h3><p>{x[1]}</p></article>)}</div>
+    </section>
+
+    <section class="section">
+      <header><small>07</small><div><label>BARKLY STANDARD</label><h2>FUND THE WORK. <em>KEEP THE HUMAN.</em></h2></div></header>
+      <div class="principles">{principles.map((p,i)=><article><span>0{i+1}</span><h3>{p[0]}</h3><p>{p[1]}</p></article>)}</div>
+    </section>
+
+    <section class="section"><div class="transparency"><div><label>ACCOUNTABILITY</label><h2>SHOW THE <em>WORK.</em></h2></div><div><p>Barkly Labs wants funding to be understandable too. When appropriate, we intend to publish project goals, milestones, documentation, research outputs, and clear explanations of what funded work accomplished.</p><p class="bright">If something is experimental, we'll say it's experimental.<br/>If something failed, we'll document the failure.<br/>If something worked, we'll share what we learned.</p></div></div></section>
+
+    <section class="final"><label>THE NEXT STAGE</label><h2>HELP US BUILD <em>THE LAB.</em></h2><p>Barkly Labs is being built one experiment at a time. Funding helps turn a growing collection of ideas, prototypes, and research into a place where more people can build, learn, and discover.</p><div class="actions"><a class="primary" href="/contact">TALK TO BARKLY LABS ↗</a><a href="/docs">READ THE DOCUMENTATION</a></div></section>
+
+    <footer><div><strong>BARKLY</strong><small>LABS</small></div><span>BUILD.<br/>LEARN.<br/>DISCOVER.</span><p>© {year} BARKLY LABS · DETROIT, MICHIGAN · TECHNOLOGY SHOULD ADAPT TO HUMANS.</p></footer>
+  </main>
+</body>
+</html>
+
+<style>
+:root{--bg:#050505;--text:#f2f2f2;--muted:rgba(255,255,255,.52);--faint:rgba(255,255,255,.28);--line:rgba(255,255,255,.12);--pink:#ff4fa3;--pf:rgba(255,79,163,.08);--ps:rgba(255,79,163,.22)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;background:radial-gradient(circle at 70% 5%,var(--pf),transparent 30rem),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,sans-serif}a{color:inherit;text-decoration:none}::selection{background:var(--pink);color:#050505}
+.topbar{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 5vw;min-height:68px;border-bottom:1px solid var(--line);background:rgba(5,5,5,.88);backdrop-filter:blur(18px);font:10px "Courier New",monospace;letter-spacing:.18em}.brand{font-weight:700}.mark{color:var(--pink);margin-right:10px}.top-status{text-align:center;color:var(--faint)}.back{justify-self:end;color:var(--muted)}
+.hero{position:relative;min-height:88vh;display:flex;align-items:center;padding:120px 8vw;overflow:hidden;border-bottom:1px solid var(--line)}.grid{position:absolute;inset:0;opacity:.3;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,#000,transparent 85%)}.orbit{position:absolute;border:1px solid var(--ps);border-radius:50%}.o1{width:55vw;height:55vw;right:-20vw;top:-20vw}.o2{width:30vw;height:30vw;right:-5vw;top:-7vw}.hero-copy{position:relative;z-index:2;max-width:900px}.eyebrow,label,.fund-card small,.projects b,footer small{font:10px "Courier New",monospace;letter-spacing:.2em}.eyebrow{display:flex;gap:16px;color:var(--muted);margin-bottom:28px}.eyebrow span,header small,.fund-card .card-top span,.projects article>span,.outreach span,.principles span{color:var(--pink)}h1,h2{margin:0;text-transform:uppercase;letter-spacing:-.065em;line-height:.88}h1{font-size:clamp(62px,10vw,150px)}h1 em,h2 em{display:block;color:var(--pink);font-style:normal}.hero-copy>p{max-width:760px;margin:36px 0 0;color:var(--muted);font-size:18px;line-height:1.7}.hero-copy .dim{color:rgba(255,255,255,.35);font-size:14px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:38px}.actions a{display:inline-flex;min-width:190px;justify-content:center;padding:15px 18px;border:1px solid var(--line);font:10px "Courier New",monospace;letter-spacing:.12em}.actions .primary{background:var(--pink);border-color:var(--pink);color:#050505;font-weight:700}.side{position:absolute;right:4vw;top:50%;transform:rotate(90deg) translateX(50%);transform-origin:right center;color:rgba(255,255,255,.25);font:8px/2 "Courier New",monospace;letter-spacing:.18em}.scroll{position:absolute;bottom:28px;left:8vw;right:8vw;color:var(--faint);font:8px "Courier New",monospace;letter-spacing:.18em}.scroll b{display:inline-block;width:100px;height:1px;background:var(--pink);vertical-align:middle;margin-left:18px}
+.section{padding:130px 8vw;border-bottom:1px solid var(--line)}section>header{display:grid;grid-template-columns:80px 1fr;gap:30px;margin-bottom:65px}header small{font:13px "Courier New",monospace;padding-top:9px}label{display:block;color:var(--muted);margin-bottom:20px}h2{font-size:clamp(48px,7vw,100px)}.two-col{display:grid;grid-template-columns:1.1fr .9fr;gap:9vw}.big{font-size:clamp(32px,4.4vw,65px);line-height:1.02;letter-spacing:-.045em}.copy{color:var(--muted);line-height:1.8}.bright{color:var(--text)!important;font-weight:600}.bright strong{color:var(--pink)}
+.note{display:flex;gap:20px;padding:22px;margin-bottom:38px;border:1px solid var(--ps);background:var(--pf)}.note>b{color:var(--pink);font-family:"Courier New",monospace}.note p{max-width:900px;margin:0;color:var(--muted);font-size:13px;line-height:1.7}.funding-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.fund-card{min-height:450px;padding:32px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.025),transparent)}.card-top{display:flex;justify-content:space-between}.card-top small{color:var(--faint)}.share{display:block;margin:50px 0 12px;color:var(--pink);font-size:42px;letter-spacing:-.06em}.fund-card h3,.projects h3,.outreach h3,.principles h3{margin:0;text-transform:uppercase;letter-spacing:-.025em}.fund-card h3{font-size:20px}.fund-card>p,.projects p,.outreach p,.principles p,.building p,.transparency p,.final>p{color:var(--muted);line-height:1.65;font-size:14px}.fund-card ul{list-style:none;padding:0;margin:28px 0 0}.fund-card li{padding:9px 0;border-top:1px solid var(--line);color:rgba(255,255,255,.58);font-size:12px}
+.projects{border-top:1px solid var(--line)}.projects article{display:grid;grid-template-columns:55px 190px 1fr 30px;gap:25px;align-items:center;padding:34px 0;border-bottom:1px solid var(--line)}.projects b{color:var(--faint)}.projects i{color:var(--pink);font-style:normal}.projects h3{font-size:21px}.projects p{max-width:720px;margin:10px 0 0}.panel,.transparency{display:grid;grid-template-columns:70px 1fr 300px;gap:55px;padding:65px;border:1px solid var(--line);background:linear-gradient(135deg,var(--pf),transparent 45%)}.panel h2,.transparency h2{font-size:clamp(45px,6vw,82px)}.panel p{max-width:720px}.panel dl{align-self:end;margin:0}.panel dl div{padding:16px 0;border-top:1px solid var(--line)}dt,dd{font:9px "Courier New",monospace;letter-spacing:.12em}dt{color:var(--faint);margin-bottom:6px}dd{margin:0}.outreach,.principles{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.outreach article,.principles article{min-height:250px;padding:30px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.outreach h3{margin-top:55px;font-size:17px}.principles article{min-height:210px}.principles h3{margin-top:38px;font-size:16px}.transparency{grid-template-columns:1fr 1fr}.transparency label{color:var(--pink)}.final{text-align:center;padding:160px 8vw;border-bottom:1px solid var(--line)}.final h2{max-width:1000px;margin:auto}.final>p{max-width:680px;margin:35px auto 0}.final .actions{justify-content:center}footer{padding:70px 8vw 30px}footer>div{display:flex;justify-content:space-between}footer strong{font-size:50px;letter-spacing:-.07em}footer small{display:block;color:var(--pink);letter-spacing:.55em;margin-top:4px}footer>span{color:var(--faint);font:10px/1.7 "Courier New",monospace;text-align:right}footer p{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--faint);font:8px "Courier New",monospace;letter-spacing:.12em}
+@media(max-width:900px){.topbar{grid-template-columns:1fr auto}.top-status,.side{display:none}.funding-grid,.outreach,.principles{grid-template-columns:repeat(2,1fr)}.two-col,.transparency{grid-template-columns:1fr}.panel{grid-template-columns:60px 1fr}.panel dl{grid-column:2}.projects article{grid-template-columns:45px 1fr 25px}.projects b{display:none}}
+@media(max-width:600px){.section{padding:90px 6vw}.hero{padding:110px 6vw 100px}.scroll{left:6vw;right:6vw}section>header{grid-template-columns:45px 1fr;gap:15px}.funding-grid,.outreach,.principles{grid-template-columns:1fr}.panel{grid-template-columns:1fr;padding:30px;gap:30px}.panel dl{grid-column:auto}.transparency{padding:30px}.final{padding:110px 6vw}footer>div{display:block}footer>span{text-align:left;display:block;margin-top:30px}}
+</style>
