@@ -1,0 +1,32 @@
+<div class="channel-grid">
+  {channels.map((channel) => (
+    <article class="channel">
+
+      <div class="channel-top">
+        <span class="number">{channel.number}</span>
+        <span>{channel.label}</span>
+      </div>
+
+      <h2>{channel.title}</h2>
+
+      <p>
+        {channel.description}
+      </p>
+
+      <div class="channel-meta">
+        {channel.meta}
+      </div>
+
+      <a
+        class="channel-button"
+        href={channel.href}
+        target={channel.label === "DISCORD" ? "_blank" : undefined}
+        rel={channel.label === "DISCORD" ? "noopener noreferrer" : undefined}
+      >
+        {channel.action}
+        <span>↗</span>
+      </a>
+
+    </article>
+  ))}
+</div>
