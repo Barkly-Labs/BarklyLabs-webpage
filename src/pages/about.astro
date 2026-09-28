@@ -437,6 +437,7 @@ const sections = [
   </body>
 </html>
 
+
 <style>
 
 :global(*) {
@@ -478,14 +479,11 @@ const sections = [
 }
 
 
-/* =========================================================
-   HEADER
-   ========================================================= */
+/* HEADER */
 
 .site-header {
   height: 72px;
   padding: 0 4vw;
-
   border-bottom: 1px solid var(--line);
 
   display: flex;
@@ -500,7 +498,6 @@ const sections = [
 .header-logo a {
   color: var(--white);
   text-decoration: none;
-
   font-size: 14px;
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -517,7 +514,6 @@ const sections = [
 .header-document {
   display: flex;
   gap: 10px;
-
   color: var(--dim);
 }
 
@@ -530,9 +526,7 @@ const sections = [
 }
 
 
-/* =========================================================
-   SIDE NAVIGATION
-   ========================================================= */
+/* SIDE NAV */
 
 .side-nav {
   position: fixed;
@@ -573,9 +567,7 @@ const sections = [
 }
 
 
-/* =========================================================
-   HERO
-   ========================================================= */
+/* HERO */
 
 .hero {
   max-width: var(--max);
@@ -654,9 +646,7 @@ const sections = [
 }
 
 
-/* =========================================================
-   GENERAL CONTENT SECTIONS
-   ========================================================= */
+/* GENERAL SECTIONS */
 
 .content-section {
   max-width: var(--max);
@@ -668,16 +658,14 @@ const sections = [
 
   display: grid;
   grid-template-columns:
-    minmax(300px, 0.8fr)
+    minmax(280px, 0.8fr)
     minmax(0, 1.2fr);
 
-  gap: 90px;
+  gap: 80px;
 }
 
 
-/* =========================================================
-   SECTION HEADINGS
-   ========================================================= */
+/* HEADINGS */
 
 .section-heading {
   min-width: 0;
@@ -718,7 +706,6 @@ const sections = [
   font-size: clamp(45px, 5vw, 78px);
   line-height: 0.92;
   letter-spacing: -0.06em;
-  font-weight: 800;
 }
 
 .section-heading h2 span {
@@ -726,39 +713,24 @@ const sections = [
 }
 
 
-/* =========================================================
-   PURPOSE
-   ========================================================= */
+/* BODY */
 
-#purpose {
-  grid-template-columns:
-    minmax(340px, 0.9fr)
-    minmax(0, 1.1fr);
-}
-
-#purpose .section-heading h2 {
-  max-width: 390px;
-}
-
-#purpose .section-body {
+.section-body,
+.lab-content,
+.ecosystem-content,
+.people-content,
+.future-content {
   min-width: 0;
-  max-width: 760px;
-
-  padding-top: 38px;
+  max-width: 800px;
 }
 
-.section-body p {
-  max-width: 100%;
-  margin: 0;
-
+.section-body p,
+.people-content p,
+.future-content p,
+.lab-intro p {
   color: var(--muted);
-
   font-size: 18px;
   line-height: 1.7;
-}
-
-.section-body p + p {
-  margin-top: 28px;
 }
 
 .large-copy {
@@ -770,30 +742,10 @@ const sections = [
 }
 
 
-/* =========================================================
-   LAB
-   ========================================================= */
-
-.lab-content {
-  min-width: 0;
-  max-width: 800px;
-}
+/* LAB */
 
 .lab-intro {
   margin-bottom: 75px;
-}
-
-.lab-intro p {
-  margin: 0;
-
-  color: var(--muted);
-
-  font-size: 18px;
-  line-height: 1.7;
-}
-
-.lab-intro p + p {
-  margin-top: 28px;
 }
 
 .lab-process {
@@ -801,23 +753,19 @@ const sections = [
 }
 
 .lab-process > div {
-  min-height: 105px;
-
-  padding: 30px 0;
+  padding: 28px 0;
 
   border-bottom: 1px solid var(--line);
 
   display: grid;
-  grid-template-columns:
-    55px
-    180px
-    minmax(0, 1fr);
+  grid-template-columns: 50px 180px minmax(0, 1fr);
 
   gap: 25px;
-  align-items: center;
+  align-items: start;
 }
 
-.lab-process span {
+.lab-process span,
+.system-number {
   color: var(--pink);
 
   font-family: "Courier New", monospace;
@@ -832,7 +780,6 @@ const sections = [
 }
 
 .lab-process p {
-  max-width: 550px;
   margin: 0;
 
   color: var(--muted);
@@ -842,17 +789,11 @@ const sections = [
 }
 
 
-/* =========================================================
-   SYSTEMS
-   ========================================================= */
-
-.ecosystem-content {
-  min-width: 0;
-  max-width: 800px;
-}
+/* SYSTEMS */
 
 .ecosystem-content > .large-copy {
-  margin: 0 0 55px;
+  margin-top: 0;
+  margin-bottom: 55px;
 }
 
 .system-list {
@@ -885,18 +826,10 @@ const sections = [
   align-items: center;
 }
 
-.system-number {
-  color: var(--pink);
-
-  font-family: "Courier New", monospace;
-  font-size: 10px;
-}
-
 .system-card strong {
   color: var(--white);
 
   font-size: 18px;
-  font-weight: 700;
   letter-spacing: 0.02em;
 }
 
@@ -919,26 +852,10 @@ const sections = [
 }
 
 
-/* =========================================================
-   PEOPLE
-   ========================================================= */
-
-.people-content {
-  min-width: 0;
-  max-width: 800px;
-}
+/* PEOPLE */
 
 .people-content > p {
-  margin: 0;
-
-  color: var(--muted);
-
-  font-size: 18px;
-  line-height: 1.7;
-}
-
-.people-content > p + p {
-  margin-top: 28px;
+  margin-top: 0;
 }
 
 .people-callout {
@@ -967,26 +884,10 @@ const sections = [
 }
 
 
-/* =========================================================
-   FUTURE
-   ========================================================= */
+/* FUTURE */
 
-.future-content {
-  min-width: 0;
-  max-width: 800px;
-}
-
-.future-content > p {
-  margin: 0;
-
-  color: var(--muted);
-
-  font-size: 18px;
-  line-height: 1.7;
-}
-
-.future-content > p + p {
-  margin-top: 28px;
+.future-content > p:first-child {
+  margin-top: 0;
 }
 
 .future-mark {
@@ -1005,9 +906,7 @@ const sections = [
 }
 
 
-/* =========================================================
-   FINAL STATEMENT
-   ========================================================= */
+/* FINAL */
 
 .final-section {
   max-width: var(--max);
@@ -1035,7 +934,6 @@ const sections = [
   font-size: clamp(65px, 9vw, 145px);
   line-height: 0.87;
   letter-spacing: -0.075em;
-  font-weight: 800;
 }
 
 .final-section h2 span {
@@ -1053,9 +951,7 @@ const sections = [
 }
 
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
+/* FOOTER */
 
 .site-footer {
   max-width: var(--max);
@@ -1076,20 +972,12 @@ const sections = [
 }
 
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* RESPONSIVE */
 
 @media (max-width: 1100px) {
 
   .content-section {
-    gap: 60px;
-  }
-
-  #purpose {
-    grid-template-columns:
-      minmax(300px, 0.85fr)
-      minmax(0, 1.15fr);
+    gap: 55px;
   }
 
   .lab-process > div {
@@ -1122,24 +1010,17 @@ const sections = [
     justify-self: start;
   }
 
-  .content-section,
-  #purpose {
+  .content-section {
     padding: 90px 7vw;
 
     grid-template-columns: 1fr;
     gap: 60px;
   }
 
-  #purpose .section-body {
-    padding-top: 0;
-  }
-
   .lab-process > div {
     grid-template-columns:
       45px
       minmax(0, 1fr);
-
-    gap: 18px;
   }
 
   .lab-process strong,
@@ -1195,20 +1076,7 @@ const sections = [
     font-size: 10px;
   }
 
-  #purpose .section-heading h2 {
-    font-size: 48px;
-  }
-
-  .large-copy {
-    font-size: 26px !important;
-  }
-
-  .lab-intro {
-    margin-bottom: 55px;
-  }
-
   .lab-process > div {
-    min-height: 90px;
     padding: 25px 0;
   }
 
@@ -1217,7 +1085,6 @@ const sections = [
   }
 
   .people-callout {
-    margin-top: 55px;
     padding: 25px;
   }
 
