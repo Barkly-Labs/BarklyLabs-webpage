@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 BARKLY DEPLOY
+
 Human-friendly automatic deployment system for Barkly Labs.
 
 Pipeline:
@@ -15,15 +16,26 @@ Pipeline:
       ↓
     Temporary QA server
       ↓
-    Barkly QA
+    Local Barkly QA
       ↓
     Immutable release
       ↓
     Atomic current symlink
       ↓
     Nginx reload
+      ↓
+    Public deployment QA
+      ↓
+    Deployment complete
 
-The live release is never replaced unless the new build passes QA.
+Safety:
+
+    - The live release is never replaced unless the new build
+      passes local QA.
+    - Public QA failure automatically rolls the live release back.
+    - A missing / empty releases directory automatically triggers
+      the first deployment.
+    - A missing current symlink automatically triggers deployment.
 """
 
 from __future__ import annotations
@@ -56,9 +68,15 @@ BUILD_COMMAND = [
 ]
 
 QA_SCRIPT = "Barkly-qa.py"
+
 QA_HOST = "127.0.0.1"
 QA_PORT = 4321
 QA_URL = f"http://{QA_HOST}:{QA_PORT}/"
+
+PUBLIC_IP = "97.107.133.215"
+
+DOMAIN = "barklylabs.space"
+WWW_DOMAIN = "www.barklylabs.space"
 
 SERVER_SCRIPT = "barkly-server.py"
 
@@ -73,8 +91,14 @@ QA_START_POLL_INTERVAL = 0.25
 # ---------------------------------------------------------------------------
 
 def log(message: str = "") -> None:
-    timestamp = datetime.now(timezone.utc).isoformat()
-    print(f"[{timestamp}] {message}", flush=True)
+    timestamp = datetime.now(
+        timezone.utc
+    ).isoformat()
+
+    print(
+        f"[{timestamp}] {message}",
+        flush=True,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -87,30 +111,69 @@ def run(
     cwd: Path | None = None,
     check: bool = True,
 ) -> subprocess.CompletedProcess[str]:
-    log("$ " + " ".join(command))
+    """
+    Run a command.
 
-    return subprocess.run(
+    stdout and stderr are captured so callers can inspect output,
+    while the output is also printed immediately to the deploy log.
+    """
+
+    log(
+        "$ " + " ".join(command)
+    )
+
+    result = subprocess.run(
         command,
         cwd=cwd,
         text=True,
-        check=check,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
     )
+
+    if result.stdout:
+        print(
+            result.stdout,
+            end="",
+            flush=True,
+        )
+
+    if check and result.returncode != 0:
+
+        raise subprocess.CalledProcessError(
+            result.returncode,
+            command,
+            output=result.stdout,
+        )
+
+    return result
 
 
 # ---------------------------------------------------------------------------
 # Git
 # ---------------------------------------------------------------------------
 
-def current_commit(project: Path) -> str:
+def current_commit(
+    project: Path,
+) -> str:
+
     result = run(
-        ["git", "rev-parse", "HEAD"],
+        [
+            "git",
+            "rev-parse",
+            "HEAD",
+        ],
         cwd=project,
     )
 
     return result.stdout.strip()
 
 
-def remote_commit(project: Path, branch: str) -> str:
+def remote_commit(
+    project: Path,
+    branch: str,
+) -> str:
+
     result = run(
         [
             "git",
@@ -124,8 +187,10 @@ def remote_commit(project: Path, branch: str) -> str:
     output = result.stdout.strip()
 
     if not output:
+
         raise RuntimeError(
-            f"Could not determine remote commit for origin/{branch}."
+            f"Could not determine remote commit "
+            f"for origin/{branch}."
         )
 
     return output.split()[0]
@@ -135,28 +200,138 @@ def update_repository(
     project: Path,
     branch: str,
 ) -> str:
-    log("Fetching latest repository state...")
+
+    log(
+        "Fetching latest repository state..."
+    )
 
     run(
-        ["git", "fetch", "origin", branch],
+        [
+            "git",
+            "fetch",
+            "origin",
+            branch,
+        ],
         cwd=project,
     )
 
     run(
-        ["git", "checkout", branch],
+        [
+            "git",
+            "checkout",
+            branch,
+        ],
         cwd=project,
     )
 
     run(
-        ["git", "reset", "--hard", f"origin/{branch}"],
+        [
+            "git",
+            "reset",
+            "--hard",
+            f"origin/{branch}",
+        ],
         cwd=project,
     )
 
-    commit = current_commit(project)
+    commit = current_commit(
+        project
+    )
 
-    log(f"Preparing commit: {commit}")
+    log(
+        f"Preparing commit: {commit}"
+    )
 
     return commit
+
+
+# ---------------------------------------------------------------------------
+# Release directory preparation
+# ---------------------------------------------------------------------------
+
+def prepare_release_directories(
+    releases: Path,
+    current: Path,
+) -> bool:
+    """
+    Ensure the deployment filesystem exists.
+
+    Returns True when this is a first deployment.
+
+    A first deployment is detected when:
+
+        - releases does not exist
+        - releases exists but contains no releases
+        - current does not exist
+        - current exists but is not a symlink
+        - current is a broken symlink
+    """
+
+    first_deployment = False
+
+    log(
+        f"Preparing release directory: {releases}"
+    )
+
+    releases.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    if not current.exists() and not current.is_symlink():
+
+        log(
+            "No current release is configured."
+        )
+
+        first_deployment = True
+
+    elif not current.is_symlink():
+
+        log(
+            "WARNING: current exists but is not a symlink."
+        )
+
+        first_deployment = True
+
+    else:
+
+        try:
+
+            current.resolve(
+                strict=True
+            )
+
+        except FileNotFoundError:
+
+            log(
+                "Current symlink is broken."
+            )
+
+            first_deployment = True
+
+    release_directories = [
+        path
+        for path in releases.iterdir()
+        if path.is_dir()
+    ]
+
+    if not release_directories:
+
+        log(
+            "No releases are currently installed."
+        )
+
+        first_deployment = True
+
+    if first_deployment:
+
+        log(
+            "Barkly deployment filesystem requires "
+            "an initial release."
+        )
+
+    return first_deployment
 
 
 # ---------------------------------------------------------------------------
@@ -166,46 +341,76 @@ def update_repository(
 def deployed_commit(
     current_link: Path,
 ) -> str | None:
-    if not current_link.exists() and not current_link.is_symlink():
+
+    if (
+        not current_link.exists()
+        and not current_link.is_symlink()
+    ):
+
         return None
 
     if not current_link.is_symlink():
+
         log(
-            "WARNING: current path exists but is not a symlink: "
-            f"{current_link}"
+            "WARNING: current path exists but is "
+            f"not a symlink: {current_link}"
         )
+
         return None
 
-    release = current_link.resolve()
+    try:
 
-    metadata_file = release / RELEASE_METADATA
+        release = current_link.resolve(
+            strict=True
+        )
+
+    except FileNotFoundError:
+
+        log(
+            "Current symlink points to a missing release."
+        )
+
+        return None
+
+    metadata_file = (
+        release / RELEASE_METADATA
+    )
 
     if not metadata_file.exists():
+
         log(
             "Current release has no "
             f"{RELEASE_METADATA} metadata."
         )
+
         return None
 
     try:
+
         metadata = json.loads(
             metadata_file.read_text(
                 encoding="utf-8",
             )
         )
 
-        commit = metadata.get("commit")
+        commit = metadata.get(
+            "commit"
+        )
 
         if not commit:
             return None
 
-        return str(commit)
+        return str(
+            commit
+        )
 
     except Exception as error:
+
         log(
             "Unable to read current release metadata: "
             f"{error}"
         )
+
         return None
 
 
@@ -213,23 +418,28 @@ def deployed_commit(
 # Server provisioning
 # ---------------------------------------------------------------------------
 
-def provision_server(project: Path) -> None:
-    """
-    Run Barkly's server provisioning layer.
+def provision_server(
+    project: Path,
+) -> None:
 
-    This installs/configures Nginx and ensures the host
-    is ready to serve /srv/barkly/current.
-    """
-
-    script = project / SERVER_SCRIPT
+    script = (
+        project / SERVER_SCRIPT
+    )
 
     if not script.exists():
+
         raise RuntimeError(
-            f"Server provisioning script not found: {script}"
+            f"Server provisioning script not found: "
+            f"{script}"
         )
 
-    log("Provisioning Barkly server...")
-    log(f"Running {SERVER_SCRIPT}")
+    log(
+        "Provisioning Barkly server..."
+    )
+
+    log(
+        f"Running {SERVER_SCRIPT}"
+    )
 
     run(
         [
@@ -239,18 +449,28 @@ def provision_server(project: Path) -> None:
         cwd=project,
     )
 
-    log("Barkly server provisioning completed.")
+    log(
+        "Barkly server provisioning completed."
+    )
 
 
 # ---------------------------------------------------------------------------
 # Dependencies
 # ---------------------------------------------------------------------------
 
-def install_dependencies(project: Path) -> None:
-    log("Installing dependencies...")
+def install_dependencies(
+    project: Path,
+) -> None:
+
+    log(
+        "Installing dependencies..."
+    )
 
     run(
-        ["npm", "ci"],
+        [
+            "npm",
+            "ci",
+        ],
         cwd=project,
     )
 
@@ -259,22 +479,33 @@ def install_dependencies(project: Path) -> None:
 # Build
 # ---------------------------------------------------------------------------
 
-def build(project: Path) -> Path:
-    log("Building website...")
+def build(
+    project: Path,
+) -> Path:
+
+    log(
+        "Building website..."
+    )
 
     run(
         BUILD_COMMAND,
         cwd=project,
     )
 
-    dist = project / "dist"
+    dist = (
+        project / "dist"
+    )
 
     if not dist.is_dir():
+
         raise RuntimeError(
-            f"Build completed but dist directory does not exist: {dist}"
+            "Build completed but dist directory "
+            f"does not exist: {dist}"
         )
 
-    log("Build completed successfully.")
+    log(
+        "Build completed successfully."
+    )
 
     return dist
 
@@ -287,14 +518,21 @@ def port_available(
     host: str,
     port: int,
 ) -> bool:
+
     with socket.socket(
         socket.AF_INET,
         socket.SOCK_STREAM,
     ) as sock:
-        sock.settimeout(0.5)
+
+        sock.settimeout(
+            0.5
+        )
 
         result = sock.connect_ex(
-            (host, port)
+            (
+                host,
+                port,
+            )
         )
 
         return result != 0
@@ -306,18 +544,20 @@ def start_qa_server(
     """
     Start a temporary static HTTP server against the freshly
     generated Astro dist directory.
-
-    This guarantees Barkly QA tests exactly what was just built.
     """
 
-    if not port_available(QA_HOST, QA_PORT):
+    if not port_available(
+        QA_HOST,
+        QA_PORT,
+    ):
+
         raise RuntimeError(
             f"QA port {QA_PORT} is already in use."
         )
 
     log(
-        f"Starting temporary QA server: "
-        f"http://{QA_HOST}:{QA_PORT}/"
+        "Starting temporary QA server: "
+        f"{QA_URL}"
     )
 
     log(
@@ -342,14 +582,22 @@ def start_qa_server(
         start_new_session=True,
     )
 
-    deadline = time.monotonic() + QA_START_TIMEOUT
+    deadline = (
+        time.monotonic()
+        + QA_START_TIMEOUT
+    )
 
     while time.monotonic() < deadline:
+
         if process.poll() is not None:
+
             output = ""
 
             if process.stdout:
-                output = process.stdout.read()
+
+                output = (
+                    process.stdout.read()
+                )
 
             raise RuntimeError(
                 "Temporary QA server exited before "
@@ -357,53 +605,78 @@ def start_qa_server(
                 f"{output}"
             )
 
-        if not port_available(QA_HOST, QA_PORT):
-            log("Temporary QA server is ready.")
+        if not port_available(
+            QA_HOST,
+            QA_PORT,
+        ):
+
+            log(
+                "Temporary QA server is ready."
+            )
+
             return process
 
-        time.sleep(QA_START_POLL_INTERVAL)
+        time.sleep(
+            QA_START_POLL_INTERVAL
+        )
 
-    stop_qa_server(process)
+    stop_qa_server(
+        process
+    )
 
     raise RuntimeError(
-        "Timed out waiting for temporary QA server "
-        f"on {QA_HOST}:{QA_PORT}."
+        "Timed out waiting for temporary QA "
+        f"server on {QA_HOST}:{QA_PORT}."
     )
 
 
 def stop_qa_server(
     process: subprocess.Popen[str] | None,
 ) -> None:
+
     if process is None:
         return
 
     if process.poll() is not None:
         return
 
-    log("Stopping temporary QA server...")
+    log(
+        "Stopping temporary QA server..."
+    )
 
     try:
+
         os.killpg(
             process.pid,
             signal.SIGTERM,
         )
+
     except ProcessLookupError:
+
         return
 
     try:
-        process.wait(timeout=5)
+
+        process.wait(
+            timeout=5
+        )
+
     except subprocess.TimeoutExpired:
+
         log(
             "QA server did not stop cleanly. "
-            "Terminating it."
+            "Killing it."
         )
 
         try:
+
             os.killpg(
                 process.pid,
                 signal.SIGKILL,
             )
+
         except ProcessLookupError:
+
             pass
 
         process.wait()
@@ -413,40 +686,227 @@ def stop_qa_server(
 # QA
 # ---------------------------------------------------------------------------
 
-def qa(project: Path) -> None:
-    script = project / QA_SCRIPT
+def qa_local(
+    project: Path,
+) -> None:
+
+    script = (
+        project / QA_SCRIPT
+    )
 
     if not script.exists():
+
         raise RuntimeError(
             f"Barkly QA script not found: {script}"
         )
 
-    log("Running Barkly QA...")
+    log(
+        "Running local Barkly QA..."
+    )
 
     run(
         [
             "python3",
             QA_SCRIPT,
-            QA_URL,
+            "--target",
+            f"local={QA_URL}",
         ],
         cwd=project,
     )
 
-    log("Barkly QA passed.")
+    log(
+        "Local Barkly QA passed."
+    )
+
+
+def qa_public(
+    project: Path,
+) -> None:
+    """
+    Test the published deployment from the public
+    server IP while forcing the Barkly Host header.
+    """
+
+    script = (
+        project / QA_SCRIPT
+    )
+
+    if not script.exists():
+
+        raise RuntimeError(
+            f"Barkly QA script not found: {script}"
+        )
+
+    log(
+        "Running public IP Barkly QA..."
+    )
+
+    run(
+        [
+            "python3",
+            QA_SCRIPT,
+            "--target",
+            f"public=http://{PUBLIC_IP}/",
+            "--host",
+            DOMAIN,
+        ],
+        cwd=project,
+    )
+
+    log(
+        "Public IP Barkly QA passed."
+    )
+
+
+def qa_domain(
+    project: Path,
+) -> None:
+
+    script = (
+        project / QA_SCRIPT
+    )
+
+    if not script.exists():
+
+        raise RuntimeError(
+            f"Barkly QA script not found: {script}"
+        )
+
+    log(
+        "Running domain Barkly QA..."
+    )
+
+    run(
+        [
+            "python3",
+            QA_SCRIPT,
+            "--target",
+            f"domain=http://{DOMAIN}/",
+            "--host",
+            DOMAIN,
+        ],
+        cwd=project,
+    )
+
+    log(
+        "Domain Barkly QA passed."
+    )
+
+
+def qa_www(
+    project: Path,
+) -> None:
+
+    script = (
+        project / QA_SCRIPT
+    )
+
+    if not script.exists():
+
+        raise RuntimeError(
+            f"Barkly QA script not found: {script}"
+        )
+
+    log(
+        "Running WWW Barkly QA..."
+    )
+
+    run(
+        [
+            "python3",
+            QA_SCRIPT,
+            "--target",
+            f"www=http://{WWW_DOMAIN}/",
+            "--host",
+            WWW_DOMAIN,
+        ],
+        cwd=project,
+    )
+
+    log(
+        "WWW Barkly QA passed."
+    )
+
+
+def qa_public_deployment(
+    project: Path,
+) -> None:
+    """
+    Run all post-publication deployment checks.
+
+    These are intentionally separate from local QA.
+
+    Local QA proves that the newly generated build works.
+
+    Public QA proves that:
+
+        Nginx
+        current symlink
+        public IP
+        domain
+        WWW domain
+
+    all work after publication.
+    """
+
+    log(
+        "=" * 40
+    )
+
+    log(
+        "BARKLY PUBLIC DEPLOYMENT QA"
+    )
+
+    log(
+        "=" * 40
+    )
+
+    qa_public(
+        project
+    )
+
+    qa_domain(
+        project
+    )
+
+    qa_www(
+        project
+    )
+
+    log(
+        "=" * 40
+    )
+
+    log(
+        "PUBLIC DEPLOYMENT QA PASSED"
+    )
+
+    log(
+        "=" * 40
+    )
 
 
 # ---------------------------------------------------------------------------
 # Release creation
 # ---------------------------------------------------------------------------
 
-def release_id(commit: str) -> str:
+def release_id(
+    commit: str,
+) -> str:
+
     timestamp = datetime.now(
         timezone.utc
-    ).strftime("%Y%m%d-%H%M%S")
+    ).strftime(
+        "%Y%m%d-%H%M%S"
+    )
 
-    short_commit = commit[:8]
+    short_commit = (
+        commit[:8]
+    )
 
-    return f"{timestamp}-{short_commit}"
+    return (
+        f"{timestamp}-{short_commit}"
+    )
 
 
 def create_release(
@@ -454,17 +914,26 @@ def create_release(
     releases: Path,
     commit: str,
 ) -> Path:
+
     releases.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    name = release_id(commit)
-    release = releases / name
+    name = release_id(
+        commit
+    )
 
-    log(f"Creating release: {release}")
+    release = (
+        releases / name
+    )
+
+    log(
+        f"Creating release: {release}"
+    )
 
     if release.exists():
+
         raise RuntimeError(
             f"Release already exists: {release}"
         )
@@ -483,7 +952,9 @@ def create_release(
         "source": str(dist),
     }
 
-    metadata_file = release / RELEASE_METADATA
+    metadata_file = (
+        release / RELEASE_METADATA
+    )
 
     metadata_file.write_text(
         json.dumps(
@@ -493,7 +964,9 @@ def create_release(
         encoding="utf-8",
     )
 
-    log("Release created successfully.")
+    log(
+        "Release created successfully."
+    )
 
     return release
 
@@ -505,12 +978,11 @@ def create_release(
 def publish(
     release: Path,
     current_link: Path,
-) -> None:
+) -> Path | None:
     """
     Atomically switch the live symlink to the new release.
 
-    The old release remains untouched until the new symlink
-    is successfully installed.
+    Returns the previous release path when one exists.
     """
 
     current_link.parent.mkdir(
@@ -518,15 +990,39 @@ def publish(
         exist_ok=True,
     )
 
-    temporary_link = current_link.parent / (
-        f".current-{os.getpid()}-{time.time_ns()}"
+    previous_release: Path | None = None
+
+    if current_link.is_symlink():
+
+        try:
+
+            previous_release = (
+                current_link.resolve(
+                    strict=True
+                )
+            )
+
+        except FileNotFoundError:
+
+            previous_release = None
+
+    temporary_link = (
+        current_link.parent
+        / (
+            f".current-{os.getpid()}-"
+            f"{time.time_ns()}"
+        )
     )
 
     log(
         f"Publishing release: {release}"
     )
 
-    if temporary_link.exists() or temporary_link.is_symlink():
+    if (
+        temporary_link.exists()
+        or temporary_link.is_symlink()
+    ):
+
         temporary_link.unlink()
 
     temporary_link.symlink_to(
@@ -544,6 +1040,84 @@ def publish(
         f"{current_link.resolve()}"
     )
 
+    return previous_release
+
+
+# ---------------------------------------------------------------------------
+# Rollback
+# ---------------------------------------------------------------------------
+
+def rollback(
+    previous_release: Path | None,
+    current_link: Path,
+) -> None:
+    """
+    Restore the previous live release.
+
+    Used when post-publication QA fails.
+    """
+
+    if previous_release is None:
+
+        log(
+            "No previous release exists."
+        )
+
+        if (
+            current_link.exists()
+            or current_link.is_symlink()
+        ):
+
+            log(
+                "Removing failed first deployment "
+                "from current."
+            )
+
+            current_link.unlink()
+
+        return
+
+    if not previous_release.exists():
+
+        raise RuntimeError(
+            "Cannot rollback: previous release "
+            f"does not exist: {previous_release}"
+        )
+
+    temporary_link = (
+        current_link.parent
+        / (
+            f".rollback-{os.getpid()}-"
+            f"{time.time_ns()}"
+        )
+    )
+
+    log(
+        f"Rolling back to: {previous_release}"
+    )
+
+    if (
+        temporary_link.exists()
+        or temporary_link.is_symlink()
+    ):
+
+        temporary_link.unlink()
+
+    temporary_link.symlink_to(
+        previous_release,
+        target_is_directory=True,
+    )
+
+    os.replace(
+        temporary_link,
+        current_link,
+    )
+
+    log(
+        f"Rollback complete: "
+        f"{current_link.resolve()}"
+    )
+
 
 # ---------------------------------------------------------------------------
 # Release cleanup
@@ -553,6 +1127,7 @@ def cleanup_releases(
     releases: Path,
     keep: int,
 ) -> None:
+
     if not releases.exists():
         return
 
@@ -569,22 +1144,43 @@ def cleanup_releases(
 
     current_target: Path | None = None
 
-    current_link = releases.parent / "current"
+    current_link = (
+        releases.parent / "current"
+    )
 
     if current_link.is_symlink():
+
         try:
-            current_target = current_link.resolve()
-        except OSError:
+
+            current_target = (
+                current_link.resolve(
+                    strict=True
+                )
+            )
+
+        except FileNotFoundError:
+
             current_target = None
 
     retained = 0
 
     for release in candidates:
-        if current_target and release.resolve() == current_target:
+
+        if (
+            current_target
+            and release.resolve()
+            == current_target
+        ):
+
             continue
 
-        if retained < keep - 1:
+        if retained < max(
+            0,
+            keep - 1,
+        ):
+
             retained += 1
+
             continue
 
         log(
@@ -600,31 +1196,41 @@ def cleanup_releases(
 # Nginx reload
 # ---------------------------------------------------------------------------
 
-def reload_nginx(project: Path) -> None:
+def reload_nginx(
+    project: Path,
+) -> None:
     """
-    Ask barkly-server.py to validate and reload Nginx.
-
-    The server script owns Nginx configuration.
+    Validate and reload Nginx through Barkly's
+    server management layer.
     """
 
-    script = project / SERVER_SCRIPT
+    script = (
+        project / SERVER_SCRIPT
+    )
 
-    log("Reloading Nginx through Barkly server manager...")
+    if not script.exists():
 
-    # Importing the module would make this deployment system
-    # depend on its implementation. Keep the boundary simple:
-    # execute the server manager and let it perform provisioning.
+        raise RuntimeError(
+            f"Server management script not found: "
+            f"{script}"
+        )
+
+    log(
+        "Reloading Nginx through "
+        "Barkly server manager..."
+    )
+
     run(
         [
             "python3",
-            "-c",
-            (
-                "import barkly_server; "
-                "barkly_server.validate_nginx(); "
-                "barkly_server.reload_nginx()"
-            ),
+            SERVER_SCRIPT,
+            "--reload",
         ],
         cwd=project,
+    )
+
+    log(
+        "Nginx reload completed successfully."
     )
 
 
@@ -640,21 +1246,45 @@ def deploy(
     keep_releases: int,
 ) -> bool:
 
-    log("=" * 40)
-    log("BARKLY DEPLOY")
-    log("=" * 40)
+    log(
+        "=" * 40
+    )
+
+    log(
+        "BARKLY DEPLOY"
+    )
+
+    log(
+        "=" * 40
+    )
 
     # ---------------------------------------------------------------
     # Server
     # ---------------------------------------------------------------
 
-    provision_server(project)
+    provision_server(
+        project
+    )
+
+    # ---------------------------------------------------------------
+    # Deployment filesystem
+    # ---------------------------------------------------------------
+
+    first_deployment = (
+        prepare_release_directories(
+            releases,
+            current,
+        )
+    )
 
     # ---------------------------------------------------------------
     # Git state
     # ---------------------------------------------------------------
 
-    local_commit = current_commit(project)
+    local_commit = current_commit(
+        project
+    )
+
     remote = remote_commit(
         project,
         branch,
@@ -673,32 +1303,66 @@ def deploy(
     )
 
     if live_commit:
+
         log(
             f"Live release commit: {live_commit}"
         )
+
     else:
-        log("No valid live release detected.")
+
+        log(
+            "No valid live release detected."
+        )
+
+    # ---------------------------------------------------------------
+    # Already current
+    # ---------------------------------------------------------------
 
     if (
-        local_commit == remote
+        not first_deployment
+        and local_commit == remote
         and live_commit == remote
     ):
+
         log(
-            "Repository and live release are already current."
+            "Repository and live release "
+            "are already current."
         )
-        log("No deployment required.")
+
+        log(
+            "No deployment required."
+        )
+
         return False
 
+    # ---------------------------------------------------------------
+    # Repository update
+    # ---------------------------------------------------------------
+
     if local_commit != remote:
-        log("New commit detected.")
+
+        log(
+            "New commit detected."
+        )
+
         commit = update_repository(
             project,
             branch,
         )
-    else:
+
+    elif first_deployment:
+
         log(
-            "Repository is current, but the live release "
-            "is not."
+            "Initial Barkly deployment detected."
+        )
+
+        commit = local_commit
+
+    else:
+
+        log(
+            "Repository is current, but the "
+            "live release is not."
         )
 
         commit = local_commit
@@ -708,7 +1372,7 @@ def deploy(
     # ---------------------------------------------------------------
 
     install_dependencies(
-        project,
+        project
     )
 
     # ---------------------------------------------------------------
@@ -716,31 +1380,34 @@ def deploy(
     # ---------------------------------------------------------------
 
     dist = build(
-        project,
+        project
     )
 
     # ---------------------------------------------------------------
-    # QA
+    # LOCAL QA
     # ---------------------------------------------------------------
 
     qa_server: subprocess.Popen[str] | None = None
 
     try:
+
         qa_server = start_qa_server(
-            dist,
+            dist
         )
 
-        qa(
-            project,
+        qa_local(
+            project
         )
 
     finally:
+
         stop_qa_server(
-            qa_server,
+            qa_server
         )
 
     # ---------------------------------------------------------------
-    # Release
+    # Local QA passed.
+    # The release may now be created.
     # ---------------------------------------------------------------
 
     release = create_release(
@@ -753,10 +1420,88 @@ def deploy(
     # Publish
     # ---------------------------------------------------------------
 
-    publish(
+    previous_release = publish(
         release,
         current,
     )
+
+    # ---------------------------------------------------------------
+    # Nginx
+    # ---------------------------------------------------------------
+
+    try:
+
+        reload_nginx(
+            project
+        )
+
+    except Exception:
+
+        log(
+            "Nginx reload failed."
+        )
+
+        log(
+            "Rolling back published release..."
+        )
+
+        rollback(
+            previous_release,
+            current,
+        )
+
+        raise
+
+    # ---------------------------------------------------------------
+    # PUBLIC QA
+    # ---------------------------------------------------------------
+
+    try:
+
+        qa_public_deployment(
+            project
+        )
+
+    except Exception as error:
+
+        log(
+            "=" * 40
+        )
+
+        log(
+            "PUBLIC QA FAILED"
+        )
+
+        log(
+            str(error)
+        )
+
+        log(
+            "Rolling back live release..."
+        )
+
+        rollback(
+            previous_release,
+            current,
+        )
+
+        try:
+
+            reload_nginx(
+                project
+            )
+
+        except Exception as reload_error:
+
+            log(
+                "WARNING: Nginx reload after "
+                f"rollback failed: {reload_error}"
+            )
+
+        raise RuntimeError(
+            "Public deployment QA failed. "
+            "Live release was rolled back."
+        ) from error
 
     # ---------------------------------------------------------------
     # Cleanup
@@ -768,30 +1513,51 @@ def deploy(
     )
 
     # ---------------------------------------------------------------
-    # Nginx
+    # Complete
     # ---------------------------------------------------------------
 
-    reload_nginx(
-        project,
-    )
-
-    log("=" * 40)
-    log("DEPLOYMENT SUCCESSFUL")
-    log("=" * 40)
-
     log(
-        f"Commit:  {commit}"
+        "=" * 40
     )
 
     log(
-        f"Release: {release}"
+        "DEPLOYMENT SUCCESSFUL"
+    )
+
+    log(
+        "=" * 40
+    )
+
+    log(
+        f"Commit:   {commit}"
+    )
+
+    log(
+        f"Release:  {release}"
     )
 
     log(
         f"Current:  {current.resolve()}"
     )
 
-    log("=" * 40)
+    log(
+        "Public IP: "
+        f"http://{PUBLIC_IP}/"
+    )
+
+    log(
+        "Domain:    "
+        f"http://{DOMAIN}/"
+    )
+
+    log(
+        "WWW:       "
+        f"http://{WWW_DOMAIN}/"
+    )
+
+    log(
+        "=" * 40
+    )
 
     return True
 
@@ -809,17 +1575,38 @@ def watch(
     keep_releases: int,
 ) -> None:
 
-    log("Status: watching")
-    log(f"Project: {project}")
-    log(f"Branch: {branch}")
-    log(f"Interval: {interval}s")
-    log(f"Releases kept: {keep_releases}")
-    log(f"Current: {current}")
+    log(
+        "Status: watching"
+    )
 
-    log("=" * 40)
+    log(
+        f"Project: {project}"
+    )
+
+    log(
+        f"Branch: {branch}"
+    )
+
+    log(
+        f"Interval: {interval}s"
+    )
+
+    log(
+        f"Releases kept: {keep_releases}"
+    )
+
+    log(
+        f"Current: {current}"
+    )
+
+    log(
+        "=" * 40
+    )
 
     while True:
+
         try:
+
             deploy(
                 project=project,
                 releases=releases,
@@ -829,19 +1616,46 @@ def watch(
             )
 
         except KeyboardInterrupt:
-            log("Stopping Barkly Deploy.")
+
+            log(
+                "Stopping Barkly Deploy."
+            )
+
             return
 
         except Exception as error:
-            log("")
-            log("=" * 40)
-            log("DEPLOYMENT FAILED")
-            log(str(error))
-            log("CURRENT RELEASE WAS NOT REPLACED")
-            log("=" * 40)
-            log("")
 
-        time.sleep(interval)
+            log(
+                ""
+            )
+
+            log(
+                "=" * 40
+            )
+
+            log(
+                "DEPLOYMENT FAILED"
+            )
+
+            log(
+                str(error)
+            )
+
+            log(
+                "CURRENT RELEASE WAS NOT REPLACED"
+            )
+
+            log(
+                "=" * 40
+            )
+
+            log(
+                ""
+            )
+
+        time.sleep(
+            interval
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -849,55 +1663,72 @@ def watch(
 # ---------------------------------------------------------------------------
 
 def parse_args() -> argparse.Namespace:
+
     parser = argparse.ArgumentParser(
-        description="Barkly Labs deployment system."
+        description=(
+            "Barkly Labs deployment system."
+        )
     )
 
     parser.add_argument(
         "--project",
         type=Path,
         required=True,
-        help="Path to the Git project.",
+        help=(
+            "Path to the Git project."
+        ),
     )
 
     parser.add_argument(
         "--releases",
         type=Path,
         required=True,
-        help="Directory containing immutable releases.",
+        help=(
+            "Directory containing immutable releases."
+        ),
     )
 
     parser.add_argument(
         "--current",
         type=Path,
         required=True,
-        help="Symlink pointing to the active release.",
+        help=(
+            "Symlink pointing to the active release."
+        ),
     )
 
     parser.add_argument(
         "--branch",
         default=DEFAULT_BRANCH,
-        help="Git branch to deploy.",
+        help=(
+            "Git branch to deploy."
+        ),
     )
 
     parser.add_argument(
         "--interval",
         type=int,
         default=DEFAULT_INTERVAL,
-        help="Watch interval in seconds.",
+        help=(
+            "Watch interval in seconds."
+        ),
     )
 
     parser.add_argument(
         "--keep-releases",
         type=int,
         default=DEFAULT_KEEP_RELEASES,
-        help="Number of releases to retain.",
+        help=(
+            "Number of releases to retain."
+        ),
     )
 
     parser.add_argument(
         "--once",
         action="store_true",
-        help="Deploy once and exit.",
+        help=(
+            "Deploy once and exit."
+        ),
     )
 
     return parser.parse_args()
@@ -908,27 +1739,42 @@ def parse_args() -> argparse.Namespace:
 # ---------------------------------------------------------------------------
 
 def main() -> int:
+
     args = parse_args()
 
-    project = args.project.resolve()
-    releases = args.releases.resolve()
+    project = (
+        args.project.resolve()
+    )
+
+    releases = (
+        args.releases.resolve()
+    )
 
     # IMPORTANT:
+    #
     # Do NOT call resolve() on current.
     #
-    # current may itself be a symlink and must remain the symlink
-    # that we atomically replace.
-    current = args.current.absolute()
+    # current may itself be a symlink and must remain
+    # the symlink that we atomically replace.
+
+    current = (
+        args.current.absolute()
+    )
 
     if not project.exists():
+
         print(
-            f"ERROR: project does not exist: {project}",
+            f"ERROR: project does not exist: "
+            f"{project}",
             file=sys.stderr,
         )
+
         return 1
 
     if args.once:
+
         try:
+
             deploy(
                 project=project,
                 releases=releases,
@@ -940,25 +1786,68 @@ def main() -> int:
             return 0
 
         except KeyboardInterrupt:
-            log("Interrupted.")
+
+            log(
+                "Interrupted."
+            )
+
             return 130
 
         except Exception as error:
-            log("")
-            log("=" * 40)
-            log("DEPLOYMENT FAILED")
-            log(str(error))
-            log("CURRENT RELEASE WAS NOT REPLACED")
-            log("=" * 40)
+
+            log(
+                ""
+            )
+
+            log(
+                "=" * 40
+            )
+
+            log(
+                "DEPLOYMENT FAILED"
+            )
+
+            log(
+                str(error)
+            )
+
+            log(
+                "CURRENT RELEASE WAS NOT REPLACED"
+            )
+
+            log(
+                "=" * 40
+            )
+
             return 1
 
-    log("Status: watching")
-    log(f"Project: {project}")
-    log(f"Branch: {args.branch}")
-    log(f"Interval: {args.interval}s")
-    log(f"Releases kept: {args.keep_releases}")
-    log(f"Current: {current}")
-    log("=" * 40)
+    log(
+        "Status: watching"
+    )
+
+    log(
+        f"Project: {project}"
+    )
+
+    log(
+        f"Branch: {args.branch}"
+    )
+
+    log(
+        f"Interval: {args.interval}s"
+    )
+
+    log(
+        f"Releases kept: {args.keep_releases}"
+    )
+
+    log(
+        f"Current: {current}"
+    )
+
+    log(
+        "=" * 40
+    )
 
     watch(
         project=project,
@@ -973,4 +1862,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+
+    sys.exit(
+        main()
+    )
