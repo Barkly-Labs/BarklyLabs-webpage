@@ -171,10 +171,9 @@ function formatDate(date: string): string {
 
 const repositories = await getRepositories();
 
-const activeProjects = repositories.filter(
+const activeRepositories = repositories.filter(
   (repo) => !repo.archived && !repo.fork,
 );
-
 const archivedProjects = repositories.filter(
   (repo) => repo.archived,
 );
