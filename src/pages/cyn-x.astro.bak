@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const systems = [
   {
     number: "01",
@@ -137,9 +136,11 @@ const year = 2026;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SEO />
-
-
+    <meta
+      name="description"
+      content="CYN-X — a human-centered intelligent system developed by BARKLY LABS."
+    />
+    <title>CYN-X — BARKLY LABS</title>
   </head>
   <body>
 

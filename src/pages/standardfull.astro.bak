@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const sections = [
   ["01", "Scope and Objectives"],
   ["02", "Principles"],
@@ -40,10 +39,13 @@ const sections = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <SEO />
 
+    <title>PAW-HC 0.1 — Barkly Labs</title>
 
-    
+    <meta
+      name="description"
+      content="PAW-HC 0.1 — People Are Worth Designing For. Human-Centered AI Engineering Standard."
+    />
 
     <style>
       :global(*) {

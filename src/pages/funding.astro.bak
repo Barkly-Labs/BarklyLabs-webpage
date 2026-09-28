@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const year = 2026;
 
 const funding = [
@@ -178,10 +177,13 @@ const practices = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SEO />
 
+  <title>Barkly Labs / Barkly Standard</title>
 
-  
+  <meta
+    name="description"
+    content="Barkly Labs — building human-centered technology through research, experimentation, documentation, accessibility, openness, and responsible engineering."
+  />
 </head>
 
 <body>

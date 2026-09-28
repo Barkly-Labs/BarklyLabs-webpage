@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const principles = [
   {
     number: "01",
@@ -104,9 +103,11 @@ const direction = [
 ---
 
 <head>
-    <SEO />
-
-
+  <title>Barkly Labs — Charter</title>
+  <meta
+    name="description"
+    content="The Barkly Labs Charter — mission, principles, practices, continuity, and direction."
+  />
 </head>
 
 <div class="page">

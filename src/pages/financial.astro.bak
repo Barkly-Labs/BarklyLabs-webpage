@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const financialSystems = [
   {
     number: "01",
@@ -76,10 +75,13 @@ const principles = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SEO />
 
+    <title>BARKLY LABS — Financial Systems</title>
 
-    
+    <meta
+      name="description"
+      content="Barkly Labs financial systems for document intake, structured extraction, reconciliation, reporting, and human review."
+    />
   </head>
 
   <body>

@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const year = 2026;
 
 const services = [
@@ -145,11 +144,15 @@ const architecture = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SEO />
 
+    <title>LAAS — BARKLY LABS</title>
 
-    
+    <meta
+      name="description"
+      content="Laboratory as a Service — reusable research infrastructure from Barkly Labs."
+    />
 
+    <meta name="theme-color" content="#050505" />
   </head>
 
   <body>

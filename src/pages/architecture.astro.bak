@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const layers = [
   {
     id: "01",
@@ -47,8 +46,7 @@ const flows = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SEO />
-
+  <title>CYN-X ARCHITECTURE // BARKLY LABS</title>
 
   <style>
     :global(*) {

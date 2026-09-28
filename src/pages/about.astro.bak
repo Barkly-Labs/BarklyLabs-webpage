@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const sections = [
   {
     number: "01",
@@ -32,9 +31,11 @@ const sections = [
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
-    <SEO />
-
-
+    <title>About — Barkly Labs</title>
+    <meta
+      name="description"
+      content="Barkly Labs is an independent technology laboratory building human-centered systems, research infrastructure, and open technology."
+    />
   </head>
 
   <body>

@@ -1,5 +1,4 @@
 ---
-import SEO from "../components/SEO.astro";
 const channels = [
   {
     number: "01",
@@ -78,10 +77,13 @@ const principles = [
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
-    <SEO />
 
+    <title>Contact · Barkly Labs</title>
 
-    
+    <meta
+      name="description"
+      content="Talk to Barkly Labs through email, Discord, or direct communication."
+    />
   </head>
 
   <body>
