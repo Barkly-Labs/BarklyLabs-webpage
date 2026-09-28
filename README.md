@@ -392,7 +392,8 @@ The engineering still has to work.
 Barkly Labs builds through documentation, experimentation, reuse, and collaboration.
 
 The systems we create should leave something useful behind for the people who work with them next.
-See [`contrib.md`](contrib.md).
+
+See [`contrib.md`](contrib.md) To Help Contribute to our cause!
 
 
 ## DOCUMENT
