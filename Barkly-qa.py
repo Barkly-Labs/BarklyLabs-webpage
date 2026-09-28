@@ -1,46 +1,43 @@
 #!/usr/bin/env python3
 """
-BARKLY LINK CHECKER
+BARKLY PAGE QA
 
-Crawls a website and reports broken links.
+Crawls an Astro website and checks actual webpage navigation links.
 
-Features:
-- Recursively crawls internal pages
-- Checks internal and external links
-- Reports HTTP errors
-- Reports exactly which page contains each broken link
-- Handles relative URLs
-- Handles fragments (#section)
-- Ignores mailto:, tel:, javascript:, etc.
-- Avoids duplicate crawling
-- Uses Python standard library only
+Checks:
+    <a href="...">
 
-Usage:
+Ignores:
+    <script src="...">
+    <link href="...">
+    <img src="...">
+    <source src="...">
+    /@vite/...
+    /@id/...
+    /src/...
+    /_astro/...
+    ?astro=...
+    mailto:
+    tel:
+    javascript:
+    data:
 
-    python barkly_link_checker.py https://barkly-labs.github.io/BarklyLabs-webpage/
+Reports:
+    - Which page contains the broken link
+    - The broken URL
+    - HTTP status / connection error
 
-Optional:
-
-    python barkly_link_checker.py URL --internal-only
-
-    python barkly_link_checker.py URL --max-pages 500
-
-    python barkly_link_checker.py URL --timeout 10
-
-    python barkly_link_checker.py URL --output broken_links.txt
+Standard library only.
 """
 
 from __future__ import annotations
 
 import argparse
-import re
-import sys
 import time
 
 from collections import deque
 from dataclasses import dataclass
 from html.parser import HTMLParser
-from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import (
     urljoin,
@@ -54,8 +51,8 @@ from urllib.request import (
 
 
 USER_AGENT = (
-    "BarklyLabs-LinkChecker/1.0 "
-    "(website quality assurance crawler)"
+    "BarklyLabs-PageQA/1.0 "
+    "(website navigation quality checker)"
 )
 
 
@@ -68,6 +65,15 @@ IGNORED_SCHEMES = {
 }
 
 
+IGNORED_PATH_PREFIXES = (
+    "/@vite/",
+    "/@id/",
+    "/src/",
+    "/node_modules/",
+    "/_astro/",
+)
+
+
 @dataclass
 class LinkResult:
     source_page: str
@@ -76,9 +82,9 @@ class LinkResult:
     detail: str
 
 
-class LinkParser(HTMLParser):
+class PageLinkParser(HTMLParser):
     """
-    Extract links from HTML.
+    Extract ONLY actual <a href=""> navigation links.
     """
 
     def __init__(self) -> None:
@@ -92,64 +98,36 @@ class LinkParser(HTMLParser):
         attrs: list[tuple[str, str | None]],
     ) -> None:
 
-        tag = tag.lower()
-
-        if tag not in {
-            "a",
-            "link",
-            "script",
-            "img",
-            "iframe",
-            "source",
-        }:
+        if tag.lower() != "a":
             return
 
         attributes = dict(attrs)
 
-        if tag in {"a", "link"}:
-            value = attributes.get("href")
+        href = attributes.get("href")
 
-        else:
-            value = attributes.get("src")
-
-            if tag == "source":
-                value = (
-                    attributes.get("src")
-                    or attributes.get("srcset")
-                )
-
-        if not value:
-            return
-
-        # Basic srcset support.
-        if "," in value:
-            value = value.split(",", 1)[0]
-
-        value = value.strip().split(" ")[0]
-
-        if value:
-            self.links.append(value)
+        if href:
+            self.links.append(href.strip())
 
 
 def normalize_url(url: str) -> str:
     """
-    Normalize a URL so equivalent URLs are treated as one.
+    Normalize URLs so duplicates are not checked repeatedly.
     """
 
     parsed = urlparse(url)
 
-    # Remove fragment.
-    parsed = parsed._replace(fragment="")
+    parsed = parsed._replace(
+        fragment=""
+    )
 
-    # Remove default ports.
     hostname = parsed.hostname
 
     if hostname:
         hostname = hostname.lower()
 
-    port = parsed.port
-
     netloc = hostname or ""
+
+    port = parsed.port
 
     if port:
         if not (
@@ -161,16 +139,6 @@ def normalize_url(url: str) -> str:
         ):
             netloc += f":{port}"
 
-    # Preserve username/password if present.
-    if parsed.username:
-        credentials = parsed.username
-
-        if parsed.password:
-            credentials += ":" + parsed.password
-
-        netloc = credentials + "@" + netloc
-
-    # Normalize empty path.
     path = parsed.path or "/"
 
     return urlunparse(
@@ -185,27 +153,33 @@ def normalize_url(url: str) -> str:
     )
 
 
-def is_http_url(url: str) -> bool:
-    scheme = urlparse(url).scheme.lower()
+def default_port(
+    scheme: str,
+) -> int:
 
-    return scheme in {
-        "http",
-        "https",
-    }
+    if scheme.lower() == "https":
+        return 443
+
+    return 80
 
 
 def same_origin(
-    url_a: str,
-    url_b: str,
+    first: str,
+    second: str,
 ) -> bool:
 
-    a = urlparse(url_a)
-    b = urlparse(url_b)
+    a = urlparse(first)
+    b = urlparse(second)
 
     return (
-        a.scheme.lower() == b.scheme.lower()
-        and a.hostname.lower()
-        == b.hostname.lower()
+        a.scheme.lower()
+        == b.scheme.lower()
+        and (
+            a.hostname or ""
+        ).lower()
+        == (
+            b.hostname or ""
+        ).lower()
         and (
             a.port
             or default_port(a.scheme)
@@ -217,8 +191,66 @@ def same_origin(
     )
 
 
-def default_port(scheme: str) -> int:
-    return 443 if scheme.lower() == "https" else 80
+def is_ignored_url(
+    url: str,
+) -> bool:
+
+    parsed = urlparse(url)
+
+    scheme = parsed.scheme.lower()
+
+    if scheme in IGNORED_SCHEMES:
+        return True
+
+    path = parsed.path.lower()
+
+    for prefix in IGNORED_PATH_PREFIXES:
+
+        if path.startswith(prefix):
+            return True
+
+    # Astro development resources.
+    if "astro=" in parsed.query.lower():
+        return True
+
+    return False
+
+
+def clean_link(
+    source_page: str,
+    raw_link: str,
+) -> str | None:
+
+    raw_link = raw_link.strip()
+
+    if not raw_link:
+        return None
+
+    # Same-page fragment.
+    if raw_link.startswith("#"):
+        return None
+
+    target = urljoin(
+        source_page,
+        raw_link,
+    )
+
+    parsed = urlparse(target)
+
+    if parsed.scheme.lower() not in {
+        "http",
+        "https",
+    }:
+        return None
+
+    target = normalize_url(
+        target
+    )
+
+    if is_ignored_url(target):
+        return None
+
+    return target
 
 
 def fetch(
@@ -230,13 +262,7 @@ def fetch(
         url,
         headers={
             "User-Agent": USER_AGENT,
-            "Accept": (
-                "text/html,"
-                "application/xhtml+xml,"
-                "image/avif,"
-                "image/webp,"
-                "*/*;q=0.8"
-            ),
+            "Accept": "text/html,*/*;q=0.8",
         },
         method="GET",
     )
@@ -248,20 +274,13 @@ def fetch(
             timeout=timeout,
         ) as response:
 
-            status = response.status
-            content_type = (
+            return (
+                response.status,
                 response.headers.get(
                     "Content-Type",
                     "",
-                )
-            )
-
-            data = response.read()
-
-            return (
-                status,
-                content_type,
-                data,
+                ),
+                response.read(),
             )
 
     except HTTPError as exc:
@@ -288,96 +307,26 @@ def fetch(
         )
 
 
-def looks_like_html(
-    content_type: str,
-    url: str,
-) -> bool:
-
-    content_type = content_type.lower()
-
-    if (
-        "text/html" in content_type
-        or "application/xhtml+xml"
-        in content_type
-    ):
-        return True
-
-    path = urlparse(url).path.lower()
-
-    return (
-        path.endswith(".html")
-        or path.endswith("/")
-    )
-
-
-def extract_links(
-    html: bytes,
+def parse_page_links(
+    data: bytes,
 ) -> list[str]:
 
-    try:
+    text = data.decode(
+        "utf-8",
+        errors="replace",
+    )
 
-        text = html.decode(
-            "utf-8",
-            errors="replace",
-        )
-
-    except Exception:
-
-        return []
-
-    parser = LinkParser()
+    parser = PageLinkParser()
 
     try:
-
         parser.feed(text)
-
     except Exception:
-
         pass
 
     return parser.links
 
 
-def clean_target(
-    source_url: str,
-    raw_link: str,
-) -> str | None:
-
-    raw_link = raw_link.strip()
-
-    if not raw_link:
-        return None
-
-    # Ignore fragments.
-    if raw_link.startswith("#"):
-        return None
-
-    parsed = urlparse(raw_link)
-
-    if parsed.scheme.lower() in IGNORED_SCHEMES:
-        return None
-
-    # Protocol-relative URL.
-    if raw_link.startswith("//"):
-        target = (
-            urlparse(source_url).scheme
-            + ":"
-            + raw_link
-        )
-
-    else:
-        target = urljoin(
-            source_url,
-            raw_link,
-        )
-
-    if not is_http_url(target):
-        return None
-
-    return normalize_url(target)
-
-
-def check_link(
+def check_url(
     source_page: str,
     target_url: str,
     timeout: float,
@@ -385,7 +334,7 @@ def check_link(
 
     try:
 
-        status, content_type, _ = fetch(
+        status, _, _ = fetch(
             target_url,
             timeout,
         )
@@ -411,7 +360,7 @@ def check_link(
         return LinkResult(
             source_page,
             target_url,
-            "ERROR",
+            "BROKEN",
             str(exc),
         )
 
@@ -433,7 +382,9 @@ def crawl(
         start_url
     )
 
-    queue = deque([start_url])
+    queue = deque([
+        start_url
+    ])
 
     visited_pages: set[str] = set()
 
@@ -447,11 +398,13 @@ def crawl(
     while queue:
 
         if pages_checked >= max_pages:
+
             print()
             print(
-                f"Reached max page limit: "
+                f"Reached maximum page limit: "
                 f"{max_pages}"
             )
+
             break
 
         page_url = queue.popleft()
@@ -459,7 +412,9 @@ def crawl(
         if page_url in visited_pages:
             continue
 
-        visited_pages.add(page_url)
+        visited_pages.add(
+            page_url
+        )
 
         print(
             f"[PAGE {pages_checked + 1}] "
@@ -475,14 +430,14 @@ def crawl(
 
         except Exception as exc:
 
-            result = LinkResult(
-                page_url,
-                page_url,
-                "BROKEN",
-                str(exc),
+            broken.append(
+                LinkResult(
+                    page_url,
+                    page_url,
+                    "BROKEN",
+                    str(exc),
+                )
             )
-
-            broken.append(result)
 
             pages_checked += 1
 
@@ -505,20 +460,25 @@ def crawl(
 
             continue
 
-        if not looks_like_html(
-            content_type,
-            page_url,
+        # We only crawl HTML pages.
+        if (
+            "text/html"
+            not in content_type.lower()
+            and "application/xhtml+xml"
+            not in content_type.lower()
         ):
 
             continue
 
-        raw_links = extract_links(data)
+        raw_links = parse_page_links(
+            data
+        )
 
-        page_links: set[str] = set()
+        page_targets: set[str] = set()
 
         for raw_link in raw_links:
 
-            target = clean_target(
+            target = clean_link(
                 page_url,
                 raw_link,
             )
@@ -526,60 +486,104 @@ def crawl(
             if not target:
                 continue
 
-            if target in page_links:
-                continue
-
-            page_links.add(target)
-
-        for target in sorted(page_links):
-
-            # Don't repeatedly check identical URLs
-            # from every page.
-            link_key = target
-
-            should_check = (
-                link_key not in checked_links
+            page_targets.add(
+                target
             )
 
-            if should_check:
+        for target in sorted(
+            page_targets
+        ):
+
+            # Check each URL only once.
+            if target not in checked_links:
 
                 checked_links.add(
-                    link_key
+                    target
                 )
 
                 links_checked += 1
 
-                result = check_link(
+                result = check_url(
                     page_url,
                     target,
                     timeout,
                 )
 
-                if result.status != "OK":
+                if result.status == "BROKEN":
 
-                    broken.append(result)
-
-                    print(
-                        "  !!! "
-                        f"{result.status}: "
-                        f"{target} "
-                        f"({result.detail})"
+                    broken.append(
+                        result
                     )
 
-            # Crawl internal pages.
+                    print(
+                        "  ❌ BROKEN LINK"
+                    )
+
+                    print(
+                        f"     {target}"
+                    )
+
+                    print(
+                        f"     HTTP/error: "
+                        f"{result.detail}"
+                    )
+
+                else:
+
+                    print(
+                        "  ✓ "
+                        f"{target}"
+                    )
+
+            # Crawl only internal webpage links.
             if same_origin(
                 start_url,
                 target,
             ):
 
+                parsed = urlparse(
+                    target
+                )
+
+                # Never crawl ignored infrastructure.
+                if is_ignored_url(
+                    target
+                ):
+                    continue
+
+                # Only queue likely webpage URLs.
+                path = parsed.path.lower()
+
+                if (
+                    path.endswith(
+                        (
+                            ".js",
+                            ".css",
+                            ".png",
+                            ".jpg",
+                            ".jpeg",
+                            ".gif",
+                            ".svg",
+                            ".webp",
+                            ".ico",
+                            ".pdf",
+                            ".json",
+                            ".xml",
+                        )
+                    )
+                ):
+                    continue
+
                 if target not in visited_pages:
 
-                    queue.append(target)
+                    queue.append(
+                        target
+                    )
 
             elif not internal_only:
 
-                # External pages are checked,
-                # but aren't crawled.
+                # External links are checked,
+                # but never crawled.
                 pass
 
         if delay > 0:
@@ -593,14 +597,14 @@ def crawl(
 
 
 def write_report(
-    output: Path,
+    output: str,
     broken: list[LinkResult],
 ) -> None:
 
     lines: list[str] = []
 
     lines.append(
-        "BARKLY LABS — BROKEN LINK REPORT"
+        "BARKLY LABS — PAGE QA REPORT"
     )
 
     lines.append(
@@ -612,24 +616,25 @@ def write_report(
     if not broken:
 
         lines.append(
-            "NO BROKEN LINKS FOUND."
+            "NO BROKEN PAGE LINKS FOUND."
         )
 
     else:
 
         lines.append(
-            f"Broken links: {len(broken)}"
+            f"Broken page links: "
+            f"{len(broken)}"
         )
 
         lines.append("")
 
-        for index, result in enumerate(
+        for number, result in enumerate(
             broken,
             start=1,
         ):
 
             lines.append(
-                f"{index}. {result.target_url}"
+                f"{number}. {result.target_url}"
             )
 
             lines.append(
@@ -638,48 +643,53 @@ def write_report(
             )
 
             lines.append(
-                f"   Status: "
+                f"   Problem: "
                 f"{result.detail}"
             )
 
             lines.append("")
 
-    output.write_text(
-        "\n".join(lines),
+    with open(
+        output,
+        "w",
         encoding="utf-8",
-    )
+    ) as file:
+
+        file.write(
+            "\n".join(lines)
+        )
 
 
 def main() -> int:
 
     parser = argparse.ArgumentParser(
         description=(
-            "Crawl a website and report "
-            "broken links."
+            "Check an Astro website for "
+            "broken webpage navigation links."
         )
     )
 
     parser.add_argument(
         "url",
-        help="Starting website URL.",
+        help="Website URL to crawl.",
     )
 
     parser.add_argument(
         "--internal-only",
         action="store_true",
         help=(
-            "Only report broken links "
-            "on the same website."
+            "Only check links belonging "
+            "to this website."
         ),
     )
 
     parser.add_argument(
         "--max-pages",
         type=int,
-        default=1000,
+        default=500,
         help=(
             "Maximum pages to crawl "
-            "(default: 1000)."
+            "(default: 500)."
         ),
     )
 
@@ -698,19 +708,17 @@ def main() -> int:
         type=float,
         default=0.1,
         help=(
-            "Delay between page requests "
-            "(default: 0.1 seconds)."
+            "Delay between pages "
+            "(default: 0.1)."
         ),
     )
 
     parser.add_argument(
         "--output",
-        type=Path,
-        default=Path(
-            "barkly_broken_links.txt"
-        ),
+        default="barklyqa.txt",
         help=(
-            "Report output file."
+            "Report filename "
+            "(default: barklyqa.txt)."
         ),
     )
 
@@ -718,20 +726,22 @@ def main() -> int:
 
     print()
     print(
-        "🐾 BARKLY LABS LINK CHECKER"
+        "🐾 BARKLY LABS PAGE QA"
     )
-    print("=" * 70)
-
     print(
-        f"Starting URL : {args.url}"
+        "=" * 70
     )
 
     print(
-        f"Max pages    : {args.max_pages}"
+        f"Website      : {args.url}"
     )
 
     print(
-        f"Timeout      : {args.timeout}s"
+        "Checking     : webpage navigation only"
+    )
+
+    print(
+        "Ignoring     : Astro/Vite internals"
     )
 
     print()
@@ -745,9 +755,15 @@ def main() -> int:
     )
 
     print()
-    print("=" * 70)
-    print("BARKLY LINK CHECK COMPLETE")
-    print("=" * 70)
+    print(
+        "=" * 70
+    )
+    print(
+        "BARKLY PAGE QA COMPLETE"
+    )
+    print(
+        "=" * 70
+    )
 
     print(
         f"Pages checked : {pages}"
@@ -763,10 +779,16 @@ def main() -> int:
 
     print()
 
-    if broken:
+    if not broken:
 
         print(
-            "BROKEN LINKS:"
+            "🎉 NO BROKEN PAGE LINKS FOUND!"
+        )
+
+    else:
+
+        print(
+            "BROKEN PAGE LINKS:"
         )
 
         print()
@@ -774,26 +796,20 @@ def main() -> int:
         for result in broken:
 
             print(
-                f"  ❌ {result.target_url}"
+                f"❌ {result.target_url}"
             )
 
             print(
-                f"     Found on: "
+                f"   Found on: "
                 f"{result.source_page}"
             )
 
             print(
-                f"     Reason: "
+                f"   Reason: "
                 f"{result.detail}"
             )
 
             print()
-
-    else:
-
-        print(
-            "✅ NO BROKEN LINKS FOUND."
-        )
 
     write_report(
         args.output,
@@ -801,8 +817,7 @@ def main() -> int:
     )
 
     print(
-        f"Report written to: "
-        f"{args.output}"
+        f"Report: {args.output}"
     )
 
     print()
