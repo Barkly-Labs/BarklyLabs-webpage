@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>BARKLY DOCS — Barkly Docs</title>
+<title>BARKLY DOCS v2 — Barkly Docs</title>
 
 <style>
 
@@ -329,7 +329,7 @@ footer {
         </div>
 
         <h1>
-            BARKLY DOCS
+            BARKLY DOCS v2
         </h1>
 
         <p>
@@ -349,523 +349,517 @@ footer {
 
     <article class="document-card">
 
-        <h1>BARKLY DOCS</h1>
+        <h1>BARKLY DOCS v2</h1>
 <h2>Functional Requirements Document</h2>
-<p class="paragraph normal">Project: Barkly Docs
- System: Automated Documentation &amp; Code Analysis Platform
- Current Status: Prototype / Active Development
- Primary Output: Human-readable technical documentation
- Initial Format: HTML
- Long-Term Goal: Modular documentation analysis platform</p>
-<h1>01 — PURPOSE</h1>
-<p class="paragraph normal">Barkly Docs is a documentation and static-analysis system designed to transform software projects into structured, understandable technical documentation.</p>
-<p class="paragraph normal">The system shall analyze projects without requiring the analyzed software to be executed and shall generate documentation describing the project&#x27;s structure, components, implementation, interfaces, dependencies, relationships, development history, and declared project information.</p>
-<p class="paragraph normal">The initial implementation may be a single-file documentation generator.</p>
-<p class="paragraph normal">The long-term implementation shall evolve into a modular documentation platform capable of supporting multiple programming languages, frameworks, protocols, libraries, and project types.</p>
-<h1>02 — DESIGN PRINCIPLES</h1>
-<p class="paragraph normal">Barkly Docs shall be designed around the following principles:</p>
-<h3>Human First</h3>
-<p class="paragraph normal">Documentation shall help humans understand software rather than merely expose raw implementation details.</p>
-<h3>Show the Shape First</h3>
-<p class="paragraph normal">The system should present the overall structure of a project before exposing deeper implementation details.</p>
-<p class="paragraph normal">PROJECT</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">COMPONENTS</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">MODULES</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">CLASSES / FUNCTIONS</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">IMPLEMENTATION</p>
-<h3>Static by Default</h3>
-<p class="paragraph normal">The analyzer should inspect source and project information without executing the analyzed application.</p>
-<h3>Transparent Analysis</h3>
-<p class="paragraph normal">The system should distinguish between information that is:</p>
-<p class="paragraph normal">DECLARED</p>
-<p class="paragraph normal">DETECTED</p>
-<p class="paragraph normal">INFERRED</p>
-<p class="paragraph normal">UNKNOWN</p>
-<p class="paragraph normal">The system should not present an inference as confirmed fact.</p>
-<h3>Extensible</h3>
-<p class="paragraph normal">New languages, frameworks, protocols, and analysis capabilities should be addable without redesigning the entire system.</p>
-<h3>Reproducible</h3>
-<p class="paragraph normal">Documentation should be regeneratable from the same project state.</p>
-<h3>Documentation Is Infrastructure</h3>
-<p class="paragraph normal">Generated documentation should be considered part of the project&#x27;s technical infrastructure rather than merely an optional description.</p>
-<h1>03 — CURRENT BASELINE</h1>
-<p class="paragraph normal">The initial Barkly Docs implementation shall provide a working documentation generator before the complete modular architecture is implemented.</p>
-<p class="paragraph normal">The baseline implementation may exist as a single Python file.</p>
-<p class="paragraph normal">The baseline exists to:</p>
-<p class="paragraph normal">Prove the documentation workflow.</p>
-<p class="paragraph normal">Generate initial documentation for Barkly projects.</p>
-<p class="paragraph normal">Establish the documentation structure.</p>
-<p class="paragraph normal">Identify additional analysis requirements.</p>
-<p class="paragraph normal">Provide real examples for future development.</p>
-<p class="paragraph normal">Serve as a prototype for the future Barkly Docs platform.</p>
-<p class="paragraph normal">The single-file implementation shall not be considered the final architecture.</p>
-<h1>04 — PROJECT INPUT</h1>
-<h3>FR-001 — Project Path</h3>
-<p class="paragraph normal">The system shall accept a project directory as input.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">barkly-docs ./SecuServe</p>
-<h3>FR-002 — Project Discovery</h3>
-<p class="paragraph normal">The system shall recursively discover relevant files and directories within the project.</p>
-<h3>FR-003 — Project Metadata</h3>
-<p class="paragraph normal">The system shall support an optional standardized project metadata definition.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">PROJECT = {</p>
-<p class="paragraph normal">&quot;name&quot;: &quot;SecuServe OpenCV&quot;,</p>
-<p class="paragraph normal">&quot;type&quot;: &quot;Security / Computer Vision / Software / Systems&quot;,</p>
-<p class="paragraph normal">&quot;status&quot;: &quot;Active&quot;,</p>
-<p class="paragraph normal">&quot;description&quot;: &quot;...&quot;,</p>
-<p class="paragraph normal">&quot;principles&quot;: [],</p>
-<p class="paragraph normal">&quot;components&quot;: [],</p>
-<p class="paragraph normal">&quot;lifecycle&quot;: [],</p>
-<p class="paragraph normal">}</p>
-<h3>FR-004 — Metadata + Analysis</h3>
-<p class="paragraph normal">The system shall combine human-provided project metadata with automatically discovered technical information.</p>
-<h1>05 — PROJECT OVERVIEW</h1>
-<h3>FR-005 — Project Identity</h3>
-<p class="paragraph normal">The generated documentation shall display, when available:</p>
-<p class="paragraph normal">Project name</p>
-<p class="paragraph normal">Project type</p>
-<p class="paragraph normal">Project status</p>
-<p class="paragraph normal">Description</p>
-<p class="paragraph normal">Version</p>
-<p class="paragraph normal">Repository information</p>
-<h3>FR-006 — Project Principles</h3>
-<p class="paragraph normal">The system shall support documentation of project-defined principles.</p>
-<h3>FR-007 — Project Components</h3>
-<p class="paragraph normal">The system shall support documentation of project-defined and automatically discovered components.</p>
-<h3>FR-008 — Project Lifecycle</h3>
-<p class="paragraph normal">The system shall support project lifecycle information.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">IDEA</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">RESEARCH</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">EXPERIMENT</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">PROTOTYPE</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">ENGINEERING</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">RELEASE</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">FEEDBACK</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">CONTINUED DEVELOPMENT</p>
-<h1>06 — SOURCE CODE ANALYSIS</h1>
-<h3>FR-009 — Static Analysis</h3>
-<p class="paragraph normal">The system shall analyze supported source code using static analysis.</p>
-<h3>FR-010 — No Application Execution</h3>
-<p class="paragraph normal">The analyzer shall not require the target project to be imported or executed.</p>
-<h3>FR-011 — Module Detection</h3>
-<p class="paragraph normal">The system shall identify supported modules and source files.</p>
-<h3>FR-012 — Function Detection</h3>
-<p class="paragraph normal">The system shall identify functions.</p>
-<p class="paragraph normal">The generated documentation should include, when available:</p>
-<p class="paragraph normal">Name</p>
-<p class="paragraph normal">Parameters</p>
-<p class="paragraph normal">Return information</p>
-<p class="paragraph normal">Source location</p>
-<p class="paragraph normal">Docstring</p>
-<p class="paragraph normal">Async status</p>
-<p class="paragraph normal">Parent module</p>
-<h3>FR-013 — Method Detection</h3>
-<p class="paragraph normal">The system shall identify class methods.</p>
-<h3>FR-014 — Class Detection</h3>
-<p class="paragraph normal">The system shall identify classes and document:</p>
-<p class="paragraph normal">Class name</p>
-<p class="paragraph normal">Base classes</p>
-<p class="paragraph normal">Methods</p>
-<p class="paragraph normal">Attributes where detectable</p>
-<p class="paragraph normal">Source location</p>
-<p class="paragraph normal">Documentation strings</p>
-<h3>FR-015 — Import Detection</h3>
-<p class="paragraph normal">The system shall identify imports and dependencies.</p>
-<h1>07 — API ANALYSIS</h1>
-<h3>FR-016 — API Detection</h3>
-<p class="paragraph normal">The system shall detect supported API definitions automatically where they can be established through static analysis.</p>
-<h3>FR-017 — HTTP Endpoint Detection</h3>
-<p class="paragraph normal">For supported frameworks, the system shall identify HTTP endpoints.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">GET    /health</p>
-<p class="paragraph normal">POST   /vision/process</p>
-<p class="paragraph normal">GET    /status</p>
-<h3>FR-018 — Endpoint Metadata</h3>
-<p class="paragraph normal">Where available, documentation shall include:</p>
-<p class="paragraph normal">HTTP method</p>
-<p class="paragraph normal">Route</p>
-<p class="paragraph normal">Handler</p>
-<p class="paragraph normal">Module</p>
-<p class="paragraph normal">Parameters</p>
-<p class="paragraph normal">Request models</p>
-<p class="paragraph normal">Response models</p>
-<p class="paragraph normal">Dependencies</p>
-<p class="paragraph normal">Authentication information</p>
-<h3>FR-019 — Framework Adapters</h3>
-<p class="paragraph normal">API analysis shall be implemented through framework-specific analyzers rather than hard-coded into the core documentation engine.</p>
-<p class="paragraph normal">Potential analyzers include:</p>
-<p class="paragraph normal">FastAPI</p>
-<p class="paragraph normal">Flask</p>
-<p class="paragraph normal">Django</p>
-<p class="paragraph normal">Express</p>
-<h1>08 — PROTOCOL ANALYSIS</h1>
-<p class="paragraph normal">Barkly Docs shall eventually support analysis of communication protocols and messaging systems.</p>
-<h3>FR-020 — Protocol Detection</h3>
-<p class="paragraph normal">The system shall be capable of detecting supported protocol/library usage.</p>
-<p class="paragraph normal">Examples:</p>
-<p class="paragraph normal">ZeroMQ</p>
-<p class="paragraph normal">HTTP</p>
-<p class="paragraph normal">MQTT</p>
-<p class="paragraph normal">WebSocket</p>
-<p class="paragraph normal">IPC</p>
-<h3>FR-021 — ZeroMQ Analysis</h3>
-<p class="paragraph normal">A ZeroMQ analyzer should identify, where statically detectable:</p>
-<p class="paragraph normal">ZMQ imports</p>
-<p class="paragraph normal">Socket creation</p>
-<p class="paragraph normal">Socket types</p>
-<p class="paragraph normal">Bind operations</p>
-<p class="paragraph normal">Connect operations</p>
-<p class="paragraph normal">Endpoints</p>
-<p class="paragraph normal">Send operations</p>
-<p class="paragraph normal">Receive operations</p>
-<p class="paragraph normal">Relevant modules</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">SECUSERVE</p>
-<p class="paragraph normal">└── MESSAGING</p>
-<p class="paragraph normal">└── ZEROMQ</p>
-<p class="paragraph normal">SOCKETS</p>
-<p class="paragraph normal">├── PUB</p>
-<p class="paragraph normal">└── SUB</p>
-<p class="paragraph normal">ENDPOINTS</p>
-<p class="paragraph normal">├── tcp://...</p>
-<p class="paragraph normal">└── ipc://...</p>
-<h3>FR-022 — Analysis Confidence</h3>
-<p class="paragraph normal">Protocol information that cannot be established statically shall be marked appropriately rather than presented as confirmed.</p>
-<h1>09 — LIBRARY &amp; FRAMEWORK ANALYSIS</h1>
-<h3>FR-023 — Dependency Recognition</h3>
-<p class="paragraph normal">The system shall identify recognized libraries and frameworks.</p>
-<h3>FR-024 — Specialized Analyzers</h3>
-<p class="paragraph normal">The architecture shall support specialized analyzers for libraries and frameworks.</p>
-<p class="paragraph normal">Potential analyzers include:</p>
-<p class="paragraph normal">OpenCV</p>
-<p class="paragraph normal">NumPy</p>
-<p class="paragraph normal">FastAPI</p>
-<p class="paragraph normal">ZeroMQ</p>
-<p class="paragraph normal">Git</p>
-<h3>FR-025 — OpenCV Analysis</h3>
-<p class="paragraph normal">An OpenCV analyzer should eventually identify, where possible:</p>
-<p class="paragraph normal">OpenCV imports</p>
-<p class="paragraph normal">Image processing operations</p>
-<p class="paragraph normal">Video processing operations</p>
-<p class="paragraph normal">Camera interfaces</p>
-<p class="paragraph normal">Image transformations</p>
-<p class="paragraph normal">Computer vision functions</p>
-<p class="paragraph normal">Relevant processing pipelines</p>
-<h1>10 — ANALYZER ARCHITECTURE</h1>
-<p class="paragraph normal">The long-term Barkly Docs system shall use modular analyzers.</p>
-<p class="paragraph normal">Example:</p>
+<h3>1. Purpose</h3>
+<p class="paragraph normal">Barkly Docs SHALL analyze software projects and transform their source structure into understandable, human-readable project documentation.</p>
+<p class="paragraph normal">The system SHALL progress beyond documenting individual files and functions.</p>
+<p class="paragraph normal">It SHALL be capable of answering:</p>
+<p class="paragraph normal">“What is this project, how is it structured, how do its parts relate, and what does each part appear to do?”</p>
+<p class="paragraph normal">The source code remains authoritative.</p>
+<p class="paragraph normal">AI-assisted interpretation MAY be used to explain project structure and intent, but SHALL NOT replace deterministic source analysis.</p>
+<h1>2. Core Architecture</h1>
+<p class="paragraph normal">BARKLY DOCS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌───────────┴───────────┐</p>
+<p class="paragraph normal">│                       │</p>
+<p class="paragraph normal">LANGUAGE READERS         PROJECT READER</p>
+<p class="paragraph normal">│                       │</p>
+<p class="paragraph normal">┌─────────┼─────────┐             │</p>
+<p class="paragraph normal">│         │         │             │</p>
+<p class="paragraph normal">Python     JS/TS    Astro          Git</p>
+<p class="paragraph normal">HTML       CSS      Markdown       Config</p>
+<p class="paragraph normal">│         │         │             │</p>
+<p class="paragraph normal">└─────────┴─────────┴─────────────┘</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">BARKLY PROJECT MODEL</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">RELATIONSHIP ENGINE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">PROJECT INTERPRETATION</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌──────────┴──────────┐</p>
+<p class="paragraph normal">│                     │</p>
+<p class="paragraph normal">Deterministic Docs      AI Explanation</p>
+<p class="paragraph normal">│                     │</p>
+<p class="paragraph normal">└──────────┬──────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">BARKLY DOCUMENTS</p>
+<h1>3. Functional Requirements</h1>
+<h2>FR-001 — Project Discovery</h2>
+<p class="paragraph normal">Barkly Docs SHALL accept a project directory as its primary input.</p>
+<p class="paragraph normal">It SHALL recursively discover relevant project files.</p>
+<p class="paragraph normal">The discovery system SHALL identify:</p>
+<p class="paragraph normal">source files</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">configuration</p>
+<p class="paragraph normal">package manifests</p>
+<p class="paragraph normal">build configuration</p>
+<p class="paragraph normal">test files</p>
+<p class="paragraph normal">static assets</p>
+<p class="paragraph normal">generated files</p>
+<p class="paragraph normal">Git metadata where available</p>
+<h2>FR-002 — Multi-Language Analysis</h2>
+<p class="paragraph normal">Barkly Docs SHALL support analysis of multiple programming and markup languages.</p>
+<p class="paragraph normal">Initial target languages:</p>
+<p class="paragraph normal">Python</p>
+<p class="paragraph normal">JavaScript</p>
+<p class="paragraph normal">TypeScript</p>
+<p class="paragraph normal">Astro</p>
+<p class="paragraph normal">HTML</p>
+<p class="paragraph normal">CSS</p>
+<p class="paragraph normal">Markdown</p>
+<p class="paragraph normal">Additional languages MAY be added through the same adapter architecture.</p>
+<h1>4. Language Adapter Architecture</h1>
+<h2>FR-003 — Language Adapters</h2>
+<p class="paragraph normal">Each supported language SHALL have a dedicated reader/adapter.</p>
 <p class="paragraph normal">barkly_docs/</p>
 <p class="paragraph normal">│</p>
-<p class="paragraph normal">├── core/</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">├── analyzers/</p>
-<p class="paragraph normal">│   ├── python/</p>
-<p class="paragraph normal">│   ├── javascript/</p>
-<p class="paragraph normal">│   ├── cpp/</p>
-<p class="paragraph normal">│   ├── fastapi/</p>
-<p class="paragraph normal">│   ├── opencv/</p>
-<p class="paragraph normal">│   ├── zmq/</p>
-<p class="paragraph normal">│   └── git/</p>
+<p class="paragraph normal">├── readers/</p>
+<p class="paragraph normal">│   ├── python.py</p>
+<p class="paragraph normal">│   ├── javascript.py</p>
+<p class="paragraph normal">│   ├── typescript.py</p>
+<p class="paragraph normal">│   ├── astro.py</p>
+<p class="paragraph normal">│   ├── html.py</p>
+<p class="paragraph normal">│   ├── css.py</p>
+<p class="paragraph normal">│   └── markdown.py</p>
 <p class="paragraph normal">│</p>
 <p class="paragraph normal">├── model/</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">├── renderers/</p>
-<p class="paragraph normal">│   ├── html/</p>
-<p class="paragraph normal">│   ├── markdown/</p>
-<p class="paragraph normal">│   └── json/</p>
-<p class="paragraph normal">│</p>
+<p class="paragraph normal">├── relationships/</p>
+<p class="paragraph normal">├── interpretation/</p>
+<p class="paragraph normal">├── rendering/</p>
 <p class="paragraph normal">└── cli/</p>
-<h3>FR-026 — Analyzer Interface</h3>
-<p class="paragraph normal">Analyzers shall use a standardized interface so that new analyzers can be added without modifying the core system unnecessarily.</p>
-<h3>FR-027 — Independent Analysis</h3>
-<p class="paragraph normal">An analyzer should be able to inspect only the technologies it understands while allowing other analyzers to operate independently.</p>
-<h3>FR-028 — Analyzer Combination</h3>
-<p class="paragraph normal">Multiple analyzers shall be capable of contributing information to the same project documentation.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">Python Analyzer</p>
-<p class="paragraph normal">+</p>
-<p class="paragraph normal">FastAPI Analyzer</p>
-<p class="paragraph normal">+</p>
-<p class="paragraph normal">OpenCV Analyzer</p>
-<p class="paragraph normal">+</p>
-<p class="paragraph normal">ZMQ Analyzer</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">PROJECT MODEL</p>
-<h1>11 — NORMALIZED PROJECT MODEL</h1>
-<p class="paragraph normal">This is one of the most important future requirements.</p>
-<p class="paragraph normal">Analyzers shall not directly generate the final HTML.</p>
-<p class="paragraph normal">Instead, analysis results shall be converted into a common internal representation.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">PROJECT</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">├── COMPONENTS</p>
-<p class="paragraph normal">├── MODULES</p>
-<p class="paragraph normal">├── CLASSES</p>
-<p class="paragraph normal">├── FUNCTIONS</p>
-<p class="paragraph normal">├── APIS</p>
-<p class="paragraph normal">├── DEPENDENCIES</p>
-<p class="paragraph normal">├── PROTOCOLS</p>
-<p class="paragraph normal">├── ENDPOINTS</p>
-<p class="paragraph normal">├── RELATIONSHIPS</p>
-<p class="paragraph normal">├── METADATA</p>
-<p class="paragraph normal">└── GIT</p>
-<h3>FR-029 — Unified Knowledge Model</h3>
-<p class="paragraph normal">The system shall provide a normalized representation of discovered project information.</p>
-<h3>FR-030 — Cross-Analyzer Relationships</h3>
-<p class="paragraph normal">The model shall allow information from different analyzers to be related.</p>
-<p class="paragraph normal">For example:</p>
-<p class="paragraph normal">FastAPI endpoint</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Python function</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">OpenCV processor</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">ZMQ publisher</p>
-<p class="paragraph normal">when those relationships can be established.</p>
-<h1>12 — DOCUMENTATION GENERATION</h1>
-<h3>FR-031 — HTML Generation</h3>
-<p class="paragraph normal">The system shall generate HTML documentation.</p>
-<h3>FR-032 — Index Generation</h3>
-<p class="paragraph normal">Every generated documentation project shall provide an entry point:</p>
-<p class="paragraph normal">index.html</p>
-<h3>FR-033 — Structured Documentation</h3>
-<p class="paragraph normal">Documentation shall be organized into logical sections such as:</p>
-<p class="paragraph normal">Overview</p>
-<p class="paragraph normal">Architecture</p>
-<p class="paragraph normal">Components</p>
-<p class="paragraph normal">Modules</p>
-<p class="paragraph normal">Classes</p>
-<p class="paragraph normal">Functions</p>
-<p class="paragraph normal">APIs</p>
-<p class="paragraph normal">Dependencies</p>
-<p class="paragraph normal">Protocols</p>
-<p class="paragraph normal">Git</p>
-<p class="paragraph normal">Changelog</p>
-<h3>FR-034 — Cross References</h3>
-<p class="paragraph normal">Generated documentation shall link related entities where possible.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">API Endpoint</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Handler</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Function</p>
-<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Each reader SHALL translate language-specific structures into the common Barkly Project Model.</p>
+<h2>FR-004 — Common Project Model</h2>
+<p class="paragraph normal">Language-specific readers SHALL NOT directly generate final documentation.</p>
+<p class="paragraph normal">They SHALL produce normalized project objects.</p>
+<p class="paragraph normal">The common model SHALL support objects such as:</p>
+<p class="paragraph normal">Project</p>
+<p class="paragraph normal">File</p>
 <p class="paragraph normal">Module</p>
-<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Component</p>
+<p class="paragraph normal">Function</p>
+<p class="paragraph normal">Method</p>
 <p class="paragraph normal">Class</p>
-<h1>13 — OUTPUT FORMATS</h1>
-<h3>FR-035 — HTML</h3>
-<p class="paragraph normal">HTML shall be the initial primary output format.</p>
-<h3>FR-036 — Markdown</h3>
-<p class="paragraph normal">The architecture should support Markdown output in the future.</p>
-<h3>FR-037 — JSON</h3>
-<p class="paragraph normal">The system should support machine-readable JSON output.</p>
-<p class="paragraph normal">This would allow CYN-X or other Barkly systems to consume documentation programmatically.</p>
-<h3>FR-038 — Additional Renderers</h3>
-<p class="paragraph normal">The renderer architecture shall allow additional output formats without changing the underlying analysis engine.</p>
-<h1>14 — GIT &amp; DEVELOPMENT HISTORY</h1>
-<h3>FR-039 — Git Detection</h3>
-<p class="paragraph normal">The system shall detect Git repositories when present.</p>
-<h3>FR-040 — Repository Information</h3>
-<p class="paragraph normal">The system shall document available repository information.</p>
-<h3>FR-041 — Commit Information</h3>
-<p class="paragraph normal">The system should document relevant commit information.</p>
-<h3>FR-042 — Changelog</h3>
-<p class="paragraph normal">The system shall support changelog information when available.</p>
-<h1>15 — ERROR HANDLING</h1>
-<h3>FR-043 — Partial Failure</h3>
-<p class="paragraph normal">A failure analyzing one file or module shall not unnecessarily prevent documentation for the rest of the project.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">module_a.py       ✓</p>
-<p class="paragraph normal">module_b.py       ✓</p>
-<p class="paragraph normal">module_c.py       ⚠</p>
-<p class="paragraph normal">module_d.py       ✓</p>
-<h3>FR-044 — Analysis Reporting</h3>
-<p class="paragraph normal">The system should report analysis failures clearly.</p>
-<h3>FR-045 — Unknown Information</h3>
-<p class="paragraph normal">The system shall avoid inventing information when analysis cannot establish an answer.</p>
-<h1>16 — REPRODUCIBILITY</h1>
-<h3>FR-046 — Repeatable Generation</h3>
-<p class="paragraph normal">The system should produce substantially equivalent documentation when run against the same project state and configuration.</p>
-<h3>FR-047 — Generation Metadata</h3>
-<p class="paragraph normal">Generated documentation should identify, where practical:</p>
-<p class="paragraph normal">Barkly Docs version</p>
-<p class="paragraph normal">Generation timestamp</p>
-<p class="paragraph normal">Project version</p>
-<p class="paragraph normal">Git commit</p>
-<h3>FR-048 — Build Artifacts</h3>
-<p class="paragraph normal">Generated documentation shall be suitable for being stored, versioned, deployed, and served independently from the source project.</p>
-<h1>17 — BARKLY ECOSYSTEM INTEGRATION</h1>
-<h3>FR-049 — Independent Project Documentation</h3>
-<p class="paragraph normal">Each Barkly project shall be capable of generating its own documentation.</p>
-<p class="paragraph normal">Examples:</p>
-<p class="paragraph normal">CYN-X</p>
-<p class="paragraph normal">SecuServe</p>
-<p class="paragraph normal">SecuServe OpenCV</p>
-<p class="paragraph normal">PawBoard</p>
-<p class="paragraph normal">LAAS</p>
-<p class="paragraph normal">PlantWater</p>
-<h3>FR-050 — Shared Documentation Standard</h3>
-<p class="paragraph normal">All Barkly projects should be capable of using the same PROJECT metadata format.</p>
-<h3>FR-051 — Central Documentation Index</h3>
-<p class="paragraph normal">The Barkly website shall be capable of discovering generated documentation automatically.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">BARKLY DOCS</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">├── CYN-X</p>
-<p class="paragraph normal">├── SECUSERVE</p>
-<p class="paragraph normal">│   ├── CORE</p>
-<p class="paragraph normal">│   └── OPENCV</p>
-<p class="paragraph normal">├── PAWBOARD</p>
-<p class="paragraph normal">├── LAAS</p>
-<p class="paragraph normal">└── PLANTWATER</p>
-<h3>FR-052 — Generated Documentation as Build Artifact</h3>
-<p class="paragraph normal">Generated index.html files should be treated as build artifacts rather than manually maintained website pages.</p>
-<h1>18 — CLI</h1>
-<p class="paragraph normal">The long-term system shall provide a command-line interface.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">barkly-docs ./project</p>
-<p class="paragraph normal">Potential commands:</p>
-<p class="paragraph normal">barkly-docs analyze ./project</p>
-<p class="paragraph normal">barkly-docs generate ./project</p>
-<p class="paragraph normal">barkly-docs build ./project</p>
-<p class="paragraph normal">barkly-docs check ./project</p>
-<p class="paragraph normal">barkly-docs version</p>
-<h1>19 — FUTURE INTELLIGENCE</h1>
-<p class="paragraph normal">Barkly Docs may eventually expose its normalized documentation model to other Barkly systems.</p>
-<p class="paragraph normal">Potential consumers include:</p>
-<p class="paragraph normal">Barkly Website</p>
-<p class="paragraph normal">CYN-X</p>
-<p class="paragraph normal">PawBoard</p>
-<p class="paragraph normal">LAAS</p>
-<p class="paragraph normal">Developer Tools</p>
-<p class="paragraph normal">CI/CD Systems</p>
-<p class="paragraph normal">For example:</p>
-<p class="paragraph normal">SOURCE CODE</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">BARKLY DOCS</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">KNOWLEDGE MODEL</p>
-<p class="paragraph normal">├──────────────┐</p>
-<p class="paragraph normal">↓              ↓</p>
-<p class="paragraph normal">HTML             JSON/API</p>
-<p class="paragraph normal">↓              ↓</p>
-<p class="paragraph normal">BARKLY WEB       CYN-X</p>
-<p class="paragraph normal">This would allow documentation to become machine-readable knowledge as well as human-readable documentation.</p>
-<h1>20 — FUTURE CI/CD INTEGRATION</h1>
-<p class="paragraph normal">Barkly Docs should eventually integrate into development pipelines.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">CODE CHANGE</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">TESTS</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">BARKLY DOCS ANALYSIS</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">DOCUMENTATION GENERATED</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">DOCUMENTATION VALIDATED</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">BUILD / RELEASE</p>
-<p class="paragraph normal">A project could automatically regenerate its documentation whenever the source changes.</p>
-<h1>21 — NON-FUNCTIONAL REQUIREMENTS</h1>
-<h3>NFR-001 — Safety</h3>
-<p class="paragraph normal">The analyzer should not execute arbitrary project code during normal static analysis.</p>
-<h3>NFR-002 — Performance</h3>
-<p class="paragraph normal">The system should be capable of analyzing projects substantially larger than the original single-file prototype.</p>
-<h3>NFR-003 — Maintainability</h3>
-<p class="paragraph normal">Analyzer implementations should remain independently maintainable.</p>
-<h3>NFR-004 — Extensibility</h3>
-<p class="paragraph normal">Adding a new analyzer should not require rewriting unrelated analyzers.</p>
-<h3>NFR-005 — Portability</h3>
-<p class="paragraph normal">The core system should operate across supported development environments.</p>
-<h3>NFR-006 — Understandability</h3>
-<p class="paragraph normal">Generated documentation should prioritize human comprehension over maximum information density.</p>
-<h3>NFR-007 — Determinism</h3>
-<p class="paragraph normal">Equivalent inputs should produce equivalent documentation structures wherever practical.</p>
-<h1>22 — DEVELOPMENT PHASES</h1>
-<p class="paragraph normal">And this is where I&#x27;d keep you from accidentally trying to build the whole monster at once, puppy. 😭</p>
-<h3>PHASE 1 — Prototype</h3>
-<p class="paragraph normal">Current one-file generator:</p>
-<p class="paragraph normal">✓ Project</p>
-<p class="paragraph normal">✓ Principles</p>
-<p class="paragraph normal">✓ Components</p>
-<p class="paragraph normal">✓ APIs</p>
-<p class="paragraph normal">✓ Functions</p>
-<p class="paragraph normal">✓ Classes</p>
-<p class="paragraph normal">✓ Modules</p>
-<p class="paragraph normal">✓ Imports</p>
-<p class="paragraph normal">✓ Lifecycle</p>
-<p class="paragraph normal">✓ Git</p>
-<p class="paragraph normal">✓ Changelog</p>
-<p class="paragraph normal">✓ HTML</p>
-<h3>PHASE 2 — Real Barkly Projects</h3>
-<p class="paragraph normal">Use it to generate baseline documentation for:</p>
-<p class="paragraph normal">CYN-X</p>
-<p class="paragraph normal">SecuServe</p>
-<p class="paragraph normal">SecuServe OpenCV</p>
-<p class="paragraph normal">PawBoard</p>
-<p class="paragraph normal">LAAS</p>
-<p class="paragraph normal">PlantWater</p>
-<p class="paragraph normal">Barkly Labs</p>
-<p class="paragraph normal">This gives you real projects to test against.</p>
-<h3>PHASE 3 — Modular Core</h3>
-<p class="paragraph normal">Break the prototype into:</p>
-<p class="paragraph normal">Core</p>
-<p class="paragraph normal">Analyzers</p>
-<p class="paragraph normal">Knowledge Model</p>
-<p class="paragraph normal">Renderers</p>
-<p class="paragraph normal">CLI</p>
-<h3>PHASE 4 — Specialized Analyzers</h3>
-<p class="paragraph normal">Add:</p>
-<p class="paragraph normal">Python</p>
-<p class="paragraph normal">FastAPI</p>
-<p class="paragraph normal">OpenCV</p>
-<p class="paragraph normal">ZeroMQ</p>
-<p class="paragraph normal">Git</p>
-<h3>PHASE 5 — Unified Knowledge Model</h3>
-<p class="paragraph normal">Connect:</p>
+<p class="paragraph normal">Interface</p>
+<p class="paragraph normal">Variable</p>
+<p class="paragraph normal">Route</p>
+<p class="paragraph normal">Endpoint</p>
+<p class="paragraph normal">Import</p>
+<p class="paragraph normal">Export</p>
+<p class="paragraph normal">Dependency</p>
+<p class="paragraph normal">Configuration</p>
+<p class="paragraph normal">Test</p>
+<p class="paragraph normal">Documentation</p>
+<p class="paragraph normal">Relationship</p>
+<h1>5. Python Reader</h1>
+<h2>FR-005 — Python Static Analysis</h2>
+<p class="paragraph normal">The Python reader SHALL use static analysis where practical.</p>
+<p class="paragraph normal">It SHALL identify:</p>
 <p class="paragraph normal">modules</p>
-<p class="paragraph normal">functions</p>
+<p class="paragraph normal">imports</p>
 <p class="paragraph normal">classes</p>
-<p class="paragraph normal">APIs</p>
-<p class="paragraph normal">protocols</p>
-<p class="paragraph normal">dependencies</p>
+<p class="paragraph normal">methods</p>
+<p class="paragraph normal">functions</p>
+<p class="paragraph normal">parameters</p>
+<p class="paragraph normal">return annotations</p>
+<p class="paragraph normal">decorators</p>
+<p class="paragraph normal">constants</p>
+<p class="paragraph normal">assignments</p>
+<p class="paragraph normal">docstrings</p>
+<p class="paragraph normal">type annotations</p>
+<p class="paragraph normal">module relationships</p>
+<p class="paragraph normal">Source code SHALL NOT need to be imported or executed merely to document it.</p>
+<h1>6. JavaScript Reader</h1>
+<h2>FR-006 — JavaScript Analysis</h2>
+<p class="paragraph normal">The JavaScript reader SHALL identify, where supported:</p>
+<p class="paragraph normal">modules</p>
+<p class="paragraph normal">imports</p>
+<p class="paragraph normal">exports</p>
+<p class="paragraph normal">functions</p>
+<p class="paragraph normal">arrow functions</p>
+<p class="paragraph normal">classes</p>
+<p class="paragraph normal">methods</p>
+<p class="paragraph normal">variables</p>
+<p class="paragraph normal">constants</p>
+<p class="paragraph normal">objects</p>
+<p class="paragraph normal">calls</p>
+<p class="paragraph normal">comments</p>
+<p class="paragraph normal">documentation</p>
 <p class="paragraph normal">relationships</p>
-<h3>PHASE 6 — Ecosystem Integration</h3>
-<p class="paragraph normal">Connect it to:</p>
-<p class="paragraph normal">Barkly Docs website</p>
-<p class="paragraph normal">CI/CD</p>
-<p class="paragraph normal">CYN-X</p>
-<p class="paragraph normal">Barkly projects</p>
-<h3>PHASE 7 — Advanced Documentation Infrastructure</h3>
-<p class="paragraph normal">Eventually:</p>
-<p class="paragraph normal">BARKLY DOCS</p>
+<h1>7. TypeScript Reader</h1>
+<h2>FR-007 — TypeScript Analysis</h2>
+<p class="paragraph normal">The TypeScript reader SHALL additionally recognize:</p>
+<p class="paragraph normal">interfaces</p>
+<p class="paragraph normal">types</p>
+<p class="paragraph normal">enums</p>
+<p class="paragraph normal">generics</p>
+<p class="paragraph normal">type annotations</p>
+<p class="paragraph normal">access modifiers</p>
+<p class="paragraph normal">decorators where applicable</p>
+<p class="paragraph normal">TypeScript-specific exports/imports</p>
+<h1>8. Astro Reader</h1>
+<h2>FR-008 — Astro Analysis</h2>
+<p class="paragraph normal">The Astro reader SHALL understand the mixed structure of Astro files.</p>
+<p class="paragraph normal">It SHALL distinguish, where possible:</p>
+<p class="paragraph normal">Astro file</p>
+<p class="paragraph normal">├── frontmatter</p>
+<p class="paragraph normal">│   └── JavaScript / TypeScript</p>
 <p class="paragraph normal">│</p>
-<p class="paragraph normal">├── STATIC ANALYSIS</p>
-<p class="paragraph normal">├── KNOWLEDGE MODEL</p>
-<p class="paragraph normal">├── API DISCOVERY</p>
-<p class="paragraph normal">├── PROTOCOL DISCOVERY</p>
-<p class="paragraph normal">├── ARCHITECTURE MAPPING</p>
-<p class="paragraph normal">├── DEPENDENCY GRAPH</p>
-<p class="paragraph normal">├── GIT HISTORY</p>
-<p class="paragraph normal">├── MULTIPLE RENDERERS</p>
-<p class="paragraph normal">└── CI/CD</p>
-<p class="paragraph normal">FR — Requirement Traceability</p>
-<p class="paragraph normal">The documentation system MAY associate Functional Requirements with implementation components and testing artifacts.</p>
-<p class="paragraph normal">This capability is intended for a future release and is not required for the initial documentation generator.</p>
+<p class="paragraph normal">├── template</p>
+<p class="paragraph normal">│   ├── HTML</p>
+<p class="paragraph normal">│   ├── Astro components</p>
+<p class="paragraph normal">│   └── expressions</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">└── client script</p>
+<p class="paragraph normal">└── JavaScript</p>
+<p class="paragraph normal">It SHALL identify:</p>
+<p class="paragraph normal">pages</p>
+<p class="paragraph normal">routes</p>
+<p class="paragraph normal">layouts</p>
+<p class="paragraph normal">components</p>
+<p class="paragraph normal">imports</p>
+<p class="paragraph normal">props</p>
+<p class="paragraph normal">frontmatter</p>
+<p class="paragraph normal">scripts</p>
+<p class="paragraph normal">links</p>
+<p class="paragraph normal">metadata</p>
+<p class="paragraph normal">component relationships</p>
+<p class="paragraph normal">This is particularly important for the Barkly website itself.</p>
+<h1>9. HTML Reader</h1>
+<h2>FR-009 — HTML Analysis</h2>
+<p class="paragraph normal">The HTML reader SHALL identify:</p>
+<p class="paragraph normal">document structure</p>
+<p class="paragraph normal">headings</p>
+<p class="paragraph normal">navigation</p>
+<p class="paragraph normal">links</p>
+<p class="paragraph normal">forms</p>
+<p class="paragraph normal">semantic elements</p>
+<p class="paragraph normal">IDs</p>
+<p class="paragraph normal">classes</p>
+<p class="paragraph normal">metadata</p>
+<p class="paragraph normal">embedded resources</p>
+<h1>10. CSS Reader</h1>
+<h2>FR-010 — CSS Analysis</h2>
+<p class="paragraph normal">The CSS reader SHALL identify:</p>
+<p class="paragraph normal">stylesheets</p>
+<p class="paragraph normal">selectors</p>
+<p class="paragraph normal">classes</p>
+<p class="paragraph normal">IDs</p>
+<p class="paragraph normal">media queries</p>
+<p class="paragraph normal">CSS variables</p>
+<p class="paragraph normal">animations</p>
+<p class="paragraph normal">keyframes</p>
+<p class="paragraph normal">imports</p>
+<p class="paragraph normal">dependencies between stylesheets where determinable</p>
+<h1>11. Markdown Reader</h1>
+<h2>FR-011 — Markdown Analysis</h2>
+<p class="paragraph normal">The Markdown reader SHALL identify:</p>
+<p class="paragraph normal">headings</p>
+<p class="paragraph normal">sections</p>
+<p class="paragraph normal">links</p>
+<p class="paragraph normal">lists</p>
+<p class="paragraph normal">code blocks</p>
+<p class="paragraph normal">tables</p>
+<p class="paragraph normal">images</p>
+<p class="paragraph normal">references</p>
+<p class="paragraph normal">documentation relationships</p>
+<p class="paragraph normal">Markdown SHALL be treated as project knowledge rather than merely another text file.</p>
+<h1>12. Project Relationship Engine</h1>
+<p class="paragraph normal">This is the big upgrade.</p>
+<h2>FR-012 — Relationship Detection</h2>
+<p class="paragraph normal">Barkly Docs SHALL construct relationships between discovered project entities.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">Page</p>
+<p class="paragraph normal">↓ imports</p>
+<p class="paragraph normal">Component</p>
+<p class="paragraph normal">↓ imports</p>
+<p class="paragraph normal">Utility</p>
+<p class="paragraph normal">↓ calls</p>
+<p class="paragraph normal">Function</p>
+<p class="paragraph normal">↓ reads</p>
+<p class="paragraph normal">Configuration</p>
+<p class="paragraph normal">Relationships SHALL include, where determinable:</p>
+<p class="paragraph normal">imports</p>
+<p class="paragraph normal">exports</p>
+<p class="paragraph normal">calls</p>
+<p class="paragraph normal">references</p>
+<p class="paragraph normal">inheritance</p>
+<p class="paragraph normal">implementation</p>
+<p class="paragraph normal">composition</p>
+<p class="paragraph normal">route ownership</p>
+<p class="paragraph normal">component usage</p>
+<p class="paragraph normal">documentation references</p>
+<p class="paragraph normal">configuration relationships</p>
+<h1>13. Project Graph</h1>
+<h2>FR-013 — Project Graph</h2>
+<p class="paragraph normal">Barkly Docs SHALL maintain an internal representation of project relationships.</p>
+<p class="paragraph normal">Conceptually:</p>
+<p class="paragraph normal">Project</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌─────────┼─────────┐</p>
+<p class="paragraph normal">↓         ↓         ↓</p>
+<p class="paragraph normal">Pages    Components   API</p>
+<p class="paragraph normal">│         │         │</p>
+<p class="paragraph normal">↓         ↓         ↓</p>
+<p class="paragraph normal">Layouts    Functions  Services</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Modules</p>
+<p class="paragraph normal">This graph becomes the foundation for project-level interpretation.</p>
+<h1>14. Project Interpretation</h1>
+<h2>FR-014 — Project Summary</h2>
+<p class="paragraph normal">Barkly Docs SHALL generate a deterministic project summary from the Project Model.</p>
+<p class="paragraph normal">It SHOULD be able to describe:</p>
+<p class="paragraph normal">project type</p>
+<p class="paragraph normal">major technologies</p>
+<p class="paragraph normal">major components</p>
+<p class="paragraph normal">entry points</p>
+<p class="paragraph normal">routes</p>
+<p class="paragraph normal">APIs</p>
+<p class="paragraph normal">dependencies</p>
+<p class="paragraph normal">build system</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">tests</p>
+<p class="paragraph normal">deployment structure</p>
+<h2>FR-015 — Architectural Interpretation</h2>
+<p class="paragraph normal">Barkly Docs SHOULD identify recognizable architectural patterns when sufficient evidence exists.</p>
+<p class="paragraph normal">Examples:</p>
+<p class="paragraph normal">Astro website</p>
+<p class="paragraph normal">Static site</p>
+<p class="paragraph normal">API service</p>
+<p class="paragraph normal">CLI application</p>
+<p class="paragraph normal">Python library</p>
+<p class="paragraph normal">Monorepo</p>
+<p class="paragraph normal">Frontend application</p>
+<p class="paragraph normal">Backend service</p>
+<p class="paragraph normal">Embedded project</p>
+<p class="paragraph normal">Documentation project</p>
+<p class="paragraph normal">Interpretations SHALL distinguish observed facts from inferred descriptions.</p>
+<h1>15. AI-Assisted Interpretation</h1>
+<h2>FR-016 — Optional AI Layer</h2>
+<p class="paragraph normal">AI interpretation SHALL be optional.</p>
+<p class="paragraph normal">The core documentation pipeline SHALL remain functional without an AI model.</p>
+<p class="paragraph normal">WITHOUT AI</p>
+<p class="paragraph normal">Source</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Readers</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Project Model</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Relationships</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Documentation</p>
+<p class="paragraph normal">With AI:</p>
+<p class="paragraph normal">Project Model</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">CYN-X</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Human-oriented explanation</p>
+<p class="paragraph normal">This is particularly important because CYN-X&#x27;s available hardware may vary.</p>
+<p class="paragraph normal">Barkly Docs SHALL NOT require local high-end GPU hardware to perform its fundamental documentation functions.</p>
+<h1>16. Evidence-Based Interpretation</h1>
+<h2>FR-017 — Source Authority</h2>
+<p class="paragraph normal">Generated explanations SHALL be traceable to discovered project evidence whenever practical.</p>
+<p class="paragraph normal">Barkly Docs SHOULD be able to indicate:</p>
+<p class="paragraph normal">Observed:</p>
+<p class="paragraph normal">src/components/SEO.astro imports...</p>
+<p class="paragraph normal">Observed:</p>
+<p class="paragraph normal">src/pages/index.astro references...</p>
+<p class="paragraph normal">Inferred:</p>
+<p class="paragraph normal">These components appear to form the site&#x27;s metadata system.</p>
+<p class="paragraph normal">The system SHALL avoid presenting uncertain interpretation as confirmed source fact.</p>
+<h1>17. Documentation Generation</h1>
+<h2>FR-018 — Structured Documentation</h2>
+<p class="paragraph normal">Barkly Docs SHALL generate structured documentation covering:</p>
+<p class="paragraph normal">01 Project</p>
+<p class="paragraph normal">02 Principles</p>
+<p class="paragraph normal">03 Components</p>
+<p class="paragraph normal">04 API Endpoints</p>
+<p class="paragraph normal">05 Functions &amp; Methods</p>
+<p class="paragraph normal">06 Classes</p>
+<p class="paragraph normal">07 Modules</p>
+<p class="paragraph normal">08 Imports</p>
+<p class="paragraph normal">09 Lifecycle</p>
+<p class="paragraph normal">10 Git</p>
+<p class="paragraph normal">11 Changelog</p>
+<p class="paragraph normal">The existing “show the shape first” philosophy SHALL remain the organizing principle.</p>
+<h1>18. Project Knowledge</h1>
+<h2>FR-019 — Project-Level Explanation</h2>
+<p class="paragraph normal">Barkly Docs SHOULD produce a higher-level explanation such as:</p>
+<p class="paragraph normal">WHAT IS THIS?</p>
+<p class="paragraph normal">HOW IS IT STRUCTURED?</p>
+<p class="paragraph normal">WHAT ARE THE IMPORTANT PARTS?</p>
+<p class="paragraph normal">HOW DO THEY CONNECT?</p>
+<p class="paragraph normal">HOW DOES DATA MOVE THROUGH IT?</p>
+<p class="paragraph normal">HOW IS IT BUILT?</p>
+<p class="paragraph normal">HOW IS IT TESTED?</p>
+<p class="paragraph normal">HOW IS IT DEPLOYED?</p>
+<p class="paragraph normal">WHAT APPEARS TO BE INCOMPLETE?</p>
+<p class="paragraph normal">This is the difference between:</p>
+<p class="paragraph normal">“Here are 83 functions.”</p>
+<p class="paragraph normal">and:</p>
+<p class="paragraph normal">“Here is how this system works.”</p>
+<h1>19. Git Integration</h1>
+<h2>FR-020 — Git Awareness</h2>
+<p class="paragraph normal">Where a Git repository exists, Barkly Docs SHOULD analyze:</p>
+<p class="paragraph normal">current branch</p>
+<p class="paragraph normal">current commit</p>
+<p class="paragraph normal">recent commits</p>
+<p class="paragraph normal">contributors where available</p>
+<p class="paragraph normal">changed files</p>
+<p class="paragraph normal">project history</p>
+<p class="paragraph normal">changelog information</p>
+<p class="paragraph normal">Git information SHALL remain separate from source-code facts.</p>
+<h1>20. Documentation Website Integration</h1>
+<h2>FR-021 — Machine-Readable Output</h2>
+<p class="paragraph normal">Barkly Docs SHALL support structured output that can be consumed by the Barkly website.</p>
+<p class="paragraph normal">Preferred intermediate representation:</p>
+<p class="paragraph normal">Project Model</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">JSON</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Markdown / HTML</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Barkly Website</p>
+<p class="paragraph normal">This means the website doesn&#x27;t need to understand every programming language.</p>
+<p class="paragraph normal">Barkly Docs does that work.</p>
+<h1>21. Deterministic + AI Pipeline</h1>
+<p class="paragraph normal">The complete future pipeline becomes:</p>
+<p class="paragraph normal">SOURCE PROJECT</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">FILE DISCOVERY</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">LANGUAGE DETECTION</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌────────────────┼────────────────┐</p>
+<p class="paragraph normal">▼                ▼                ▼</p>
+<p class="paragraph normal">Python           JS / TS           Astro</p>
+<p class="paragraph normal">│                │                │</p>
+<p class="paragraph normal">└────────────────┼────────────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">BARKLY PROJECT MODEL</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">RELATIONSHIP ENGINE</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">PROJECT GRAPH</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">┌─────────┴─────────┐</p>
+<p class="paragraph normal">▼                   ▼</p>
+<p class="paragraph normal">FACTUAL ANALYSIS     CYN-X / AI</p>
+<p class="paragraph normal">│                   │</p>
+<p class="paragraph normal">└─────────┬─────────┘</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">PROJECT EXPLANATION</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">BARKLY DOCUMENTS</p>
+<p class="paragraph normal">│</p>
+<p class="paragraph normal">▼</p>
+<p class="paragraph normal">BARKLY WEBSITE</p>
+<h1>22. Resource Requirements</h1>
+<h2>FR-022 — Resource Independence</h2>
+<p class="paragraph normal">Barkly Docs SHALL prioritize lightweight deterministic processing.</p>
+<p class="paragraph normal">The system SHOULD operate on ordinary consumer hardware for source analysis.</p>
+<p class="paragraph normal">Large language models SHALL NOT be required for:</p>
+<p class="paragraph normal">file discovery</p>
+<p class="paragraph normal">syntax analysis</p>
+<p class="paragraph normal">project structure</p>
+<p class="paragraph normal">dependency extraction</p>
+<p class="paragraph normal">route discovery</p>
+<p class="paragraph normal">import analysis</p>
+<p class="paragraph normal">documentation generation</p>
+<p class="paragraph normal">basic project summaries</p>
+<p class="paragraph normal">This keeps Barkly Docs useful even when CYN-X cannot run a sufficiently large model locally.</p>
+<h1>23. Extensibility</h1>
+<h2>FR-023 — New Language Support</h2>
+<p class="paragraph normal">Adding another language SHOULD require implementing a new reader rather than modifying the entire documentation system.</p>
+<p class="paragraph normal">Conceptually:</p>
+<p class="paragraph normal">class LanguageReader:</p>
+<p class="paragraph normal">def can_read(self, path):</p>
+<p class="paragraph normal">...</p>
+<p class="paragraph normal">def analyze(self, path):</p>
+<p class="paragraph normal">...</p>
+<p class="paragraph normal">Then:</p>
+<p class="paragraph normal">PythonReader</p>
+<p class="paragraph normal">JavaScriptReader</p>
+<p class="paragraph normal">TypeScriptReader</p>
+<p class="paragraph normal">AstroReader</p>
+<p class="paragraph normal">HTMLReader</p>
+<p class="paragraph normal">CSSReader</p>
+<p class="paragraph normal">MarkdownReader</p>
+<p class="paragraph normal">all feed the same model.</p>
+<h1>24. Testing</h1>
+<h2>FR-024 — Parser Regression Tests</h2>
+<p class="paragraph normal">Every language reader SHALL have representative fixtures.</p>
+<p class="paragraph normal">Example:</p>
+<p class="paragraph normal">tests/</p>
+<p class="paragraph normal">├── python/</p>
+<p class="paragraph normal">├── javascript/</p>
+<p class="paragraph normal">├── typescript/</p>
+<p class="paragraph normal">├── astro/</p>
+<p class="paragraph normal">├── html/</p>
+<p class="paragraph normal">├── css/</p>
+<p class="paragraph normal">└── markdown/</p>
+<p class="paragraph normal">Tests SHALL verify that known source structures produce the expected Project Model objects.</p>
+<p class="paragraph normal">This is especially important for CYN-X regression: Barkly Docs should have its own regression suite and shouldn&#x27;t depend on CYN-X behaving correctly.</p>
+<h1>25. Failure Isolation</h1>
+<h2>FR-025 — Reader Failure Isolation</h2>
+<p class="paragraph normal">A malformed or unsupported file SHALL NOT cause the entire project analysis to fail when practical.</p>
+<p class="paragraph normal">Instead:</p>
+<p class="paragraph normal">Project</p>
+<p class="paragraph normal">├── Python ✓</p>
+<p class="paragraph normal">├── JavaScript ✓</p>
+<p class="paragraph normal">├── TypeScript ✓</p>
+<p class="paragraph normal">├── Astro ✓</p>
+<p class="paragraph normal">├── CSS ✓</p>
+<p class="paragraph normal">├── Markdown ✓</p>
+<p class="paragraph normal">└── Unknown file ⚠</p>
+<p class="paragraph normal">Barkly Docs SHOULD report the problem and continue analyzing the remaining project.</p>
+<h1>26. Human-Centered Output</h1>
+<h2>FR-026 — Understandability</h2>
+<p class="paragraph normal">Generated documentation SHALL prioritize human understanding over maximum information density.</p>
+<p class="paragraph normal">The system SHALL prefer:</p>
+<p class="paragraph normal">Show the shape first.</p>
+<p class="paragraph normal">Reveal the details when the human asks.</p>
+<p class="paragraph normal">This aligns directly with Barkly&#x27;s existing human-centered philosophy: the website itself describes complex systems as something people should be able to understand, question, modify, and build upon.</p>
+<h1>27. The Actual Goal</h1>
+<p class="paragraph normal">And this is the part I really want us to put near the top of the repo:</p>
+<p class="paragraph normal">Barkly Docs is not merely a code documentation generator.</p>
+<p class="paragraph normal">It is a project understanding system.</p>
+<p class="paragraph normal">The documentation generator is the first layer.</p>
+<p class="paragraph normal">The seven language readers are the input layer.</p>
+<p class="paragraph normal">The Barkly Project Model is the foundation.</p>
+<p class="paragraph normal">The relationship graph is how Barkly understands structure.</p>
+<p class="paragraph normal">The optional CYN-X layer helps turn that structure into richer human explanations.</p>
+<p class="paragraph normal">And the website becomes the place where humans actually explore what the machine discovered.</p>
+<p class="paragraph normal">That gives us a very clean next implementation order:</p>
+<p class="paragraph normal">1. Update Barkly Docs FRD</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">2. Define Project Model</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">3. Refactor existing Python analyzer</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">4. Create LanguageReader interface</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">5. Add 7 readers</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">6. Build relationship engine</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">7. Build project graph</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">8. Generate deterministic explanations</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">9. Add optional CYN-X interpretation</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">10. Feed everything into the website</p>
 
     </article>
 

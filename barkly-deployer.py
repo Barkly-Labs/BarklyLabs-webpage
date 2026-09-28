@@ -1,32 +1,30 @@
 #!/usr/bin/env python3
 """
 BARKLY DEPLOY
-Tiny automatic deployment daemon for Barkly Labs.
-
-Watches a Git repository for changes and deploys the newest commit.
+Automatic Git-based deployment daemon for Barkly Labs.
 
 Pipeline:
 
-    Check Git
-        ↓
-    New commit?
-        ↓
-    Fetch
-        ↓
-    Checkout
-        ↓
-    Install dependencies
-        ↓
-    Build
-        ↓
+    Git push
+       ↓
+    detect commit
+       ↓
+    fetch repository
+       ↓
+    build
+       ↓
     QA
-        ↓
-    Publish
-        ↓
-    Report
+       ↓
+    create release
+       ↓
+    atomic switch
+       ↓
+    current → release
+
+A failed deployment never replaces the current live release.
 
 Design principle:
-Small tools. Clear stages. Never destroy a working deployment.
+Small tools. Clear stages. Safe publication.
 """
 
 from __future__ import annotations
@@ -41,40 +39,46 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
 
 DEFAULT_INTERVAL = 30
 
-PROJECT_NAME = "Barkly Labs Website"
-
 BUILD_COMMAND = ["npm", "run", "build"]
 
-# Change this to the location of barkly_qa.py on the VPS.
-QA_COMMAND = ["python3", "barkly_qa.py", "http://localhost:4321/"]
+# Barkly QA should be available from the project directory.
+QA_COMMAND = [
+    "python3",
+    "barkly_qa.py",
+    "http://localhost:4321/",
+]
 
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
+# ============================================================================
+# LOGGING
+# ============================================================================
 
 def timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
 def log(message: str) -> None:
-    print(f"[{timestamp()}] {message}", flush=True)
+    print(
+        f"[{timestamp()}] {message}",
+        flush=True,
+    )
 
 
-# ---------------------------------------------------------------------------
-# Command execution
-# ---------------------------------------------------------------------------
+# ============================================================================
+# COMMAND EXECUTION
+# ============================================================================
 
 def run(
     command: list[str],
     cwd: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
+
     log(f"$ {' '.join(command)}")
 
     return subprocess.run(
@@ -89,42 +93,68 @@ def run_checked(
     command: list[str],
     cwd: Path | None = None,
 ) -> None:
+
     result = run(command, cwd)
 
     if result.stdout:
-        print(result.stdout, end="")
+        print(
+            result.stdout,
+            end="",
+        )
 
     if result.stderr:
-        print(result.stderr, end="", file=sys.stderr)
+        print(
+            result.stderr,
+            end="",
+            file=sys.stderr,
+        )
 
     if result.returncode != 0:
         raise RuntimeError(
-            f"Command failed with exit code {result.returncode}: "
+            f"Command failed with exit code "
+            f"{result.returncode}: "
             f"{' '.join(command)}"
         )
 
 
-# ---------------------------------------------------------------------------
-# Git
-# ---------------------------------------------------------------------------
+# ============================================================================
+# GIT
+# ============================================================================
 
 def current_commit(project: Path) -> str:
-    result = run(["git", "rev-parse", "HEAD"], project)
 
-    if result.returncode != 0:
-        raise RuntimeError("Unable to determine current Git commit.")
-
-    return result.stdout.strip()
-
-
-def remote_commit(project: Path, branch: str) -> str:
     result = run(
-        ["git", "ls-remote", "origin", f"refs/heads/{branch}"],
+        ["git", "rev-parse", "HEAD"],
         project,
     )
 
     if result.returncode != 0:
-        raise RuntimeError("Unable to check remote Git repository.")
+        raise RuntimeError(
+            "Unable to determine current Git commit."
+        )
+
+    return result.stdout.strip()
+
+
+def remote_commit(
+    project: Path,
+    branch: str,
+) -> str:
+
+    result = run(
+        [
+            "git",
+            "ls-remote",
+            "origin",
+            f"refs/heads/{branch}",
+        ],
+        project,
+    )
+
+    if result.returncode != 0:
+        raise RuntimeError(
+            "Unable to check remote Git repository."
+        )
 
     line = result.stdout.strip()
 
@@ -140,51 +170,77 @@ def update_repository(
     project: Path,
     branch: str,
 ) -> str:
+
     log("Fetching latest repository state...")
 
     run_checked(
-        ["git", "fetch", "origin", branch],
+        [
+            "git",
+            "fetch",
+            "origin",
+            branch,
+        ],
         project,
     )
 
     run_checked(
-        ["git", "checkout", branch],
+        [
+            "git",
+            "checkout",
+            branch,
+        ],
         project,
     )
 
     run_checked(
-        ["git", "reset", "--hard", f"origin/{branch}"],
+        [
+            "git",
+            "reset",
+            "--hard",
+            f"origin/{branch}",
+        ],
         project,
     )
 
     return current_commit(project)
 
 
-# ---------------------------------------------------------------------------
-# Build
-# ---------------------------------------------------------------------------
+# ============================================================================
+# BUILD
+# ============================================================================
 
 def build(project: Path) -> None:
-    log("Building website...")
+
+    log("Installing dependencies...")
 
     run_checked(
         ["npm", "ci"],
         project,
     )
 
+    log("Building website...")
+
     run_checked(
         BUILD_COMMAND,
         project,
     )
 
+    dist = project / "dist"
+
+    if not dist.exists():
+        raise RuntimeError(
+            "Build completed but dist/ was not created."
+        )
+
     log("Build completed successfully.")
 
 
-# ---------------------------------------------------------------------------
+# ============================================================================
 # QA
-# ---------------------------------------------------------------------------
+# ============================================================================
 
 def qa(project: Path) -> None:
+
     log("Running Barkly QA...")
 
     result = run(
@@ -193,232 +249,407 @@ def qa(project: Path) -> None:
     )
 
     if result.stdout:
-        print(result.stdout, end="")
+        print(
+            result.stdout,
+            end="",
+        )
 
     if result.stderr:
-        print(result.stderr, end="", file=sys.stderr)
+        print(
+            result.stderr,
+            end="",
+            file=sys.stderr,
+        )
 
     if result.returncode != 0:
-        raise RuntimeError("Barkly QA failed.")
+        raise RuntimeError(
+            "Barkly QA failed."
+        )
 
     log("QA passed.")
 
 
-# ---------------------------------------------------------------------------
-# Publication
-# ---------------------------------------------------------------------------
+# ============================================================================
+# RELEASE MANAGEMENT
+# ============================================================================
 
-def publish(
+def release_name(commit: str) -> str:
+
+    now = datetime.now(
+        timezone.utc
+    ).strftime("%Y%m%d-%H%M%S")
+
+    short_commit = commit[:12]
+
+    return f"{now}-{short_commit}"
+
+
+def create_release(
     project: Path,
-    publish_directory: Path,
-) -> None:
+    releases_directory: Path,
+    commit: str,
+) -> Path:
+
     dist = project / "dist"
 
     if not dist.exists():
         raise RuntimeError(
-            f"Build output does not exist: {dist}"
+            "Cannot create release: dist/ does not exist."
         )
 
-    publish_directory.parent.mkdir(
+    releases_directory.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    temporary = publish_directory.with_name(
-        publish_directory.name + ".next"
+    release = (
+        releases_directory
+        / release_name(commit)
     )
 
-    if temporary.exists():
-        shutil.rmtree(temporary)
+    if release.exists():
+        raise RuntimeError(
+            f"Release already exists: {release}"
+        )
 
-    log(f"Preparing publication directory: {temporary}")
+    log(
+        f"Creating release: {release.name}"
+    )
 
     shutil.copytree(
         dist,
-        temporary,
+        release,
     )
 
-    log("Replacing live website...")
+    metadata = {
+        "commit": commit,
+        "created": timestamp(),
+        "project": "Barkly Labs Website",
+    }
 
-    backup = publish_directory.with_name(
-        publish_directory.name + ".previous"
+    (release / ".barkly-release.json").write_text(
+        json.dumps(
+            metadata,
+            indent=2,
+        ),
+        encoding="utf-8",
     )
 
-    if backup.exists():
-        shutil.rmtree(backup)
-
-    if publish_directory.exists():
-        publish_directory.rename(backup)
-
-    temporary.rename(publish_directory)
-
-    if backup.exists():
-        shutil.rmtree(backup)
-
-    log("Website published successfully.")
+    return release
 
 
-# ---------------------------------------------------------------------------
-# Deployment
-# ---------------------------------------------------------------------------
+# ============================================================================
+# ATOMIC PUBLICATION
+# ============================================================================
 
-def deploy(
-    project: Path,
-    branch: str,
-    publish_directory: Path,
-    dry_run: bool = False,
-) -> bool:
+def publish(
+    release: Path,
+    current_link: Path,
+) -> None:
 
-    old_commit = current_commit(project)
-
-    log(f"Current deployment commit: {old_commit}")
-
-    new_commit = remote_commit(
-        project,
-        branch,
+    current_link.parent.mkdir(
+        parents=True,
+        exist_ok=True,
     )
 
-    log(f"Remote commit: {new_commit}")
+    temporary_link = current_link.with_name(
+        current_link.name + ".next"
+    )
 
-    if old_commit == new_commit:
-        log("No new commit. Nothing to deploy.")
-        return False
+    if temporary_link.exists() or temporary_link.is_symlink():
+        temporary_link.unlink()
 
-    log("New commit detected.")
+    log(
+        f"Preparing atomic switch → {release}"
+    )
 
-    if dry_run:
-        log("DRY RUN: deployment would begin here.")
-        return True
+    temporary_link.symlink_to(
+        release,
+        target_is_directory=True,
+    )
 
-    try:
-        deployed_commit = update_repository(
-            project,
-            branch,
+    # os.replace() is atomic when both paths
+    # are on the same filesystem.
+    import os
+
+    os.replace(
+        temporary_link,
+        current_link,
+    )
+
+    log(
+        f"Live site now points to: {release.name}"
+    )
+
+
+# ============================================================================
+# RELEASE CLEANUP
+# ============================================================================
+
+def cleanup_releases(
+    releases_directory: Path,
+    keep: int,
+) -> None:
+
+    releases = sorted(
+        [
+            path
+            for path in releases_directory.iterdir()
+            if path.is_dir()
+        ],
+        key=lambda path: path.name,
+        reverse=True,
+    )
+
+    for old_release in releases[keep:]:
+        log(
+            f"Removing old release: "
+            f"{old_release.name}"
         )
 
-        log(f"Preparing commit: {deployed_commit}")
-
-        build(project)
-
-        qa(project)
-
-        publish(
-            project,
-            publish_directory,
+        shutil.rmtree(
+            old_release,
         )
 
-        write_report(
-            project,
-            deployed_commit,
-            "success",
-        )
 
-        log("========================================")
-        log("DEPLOYMENT SUCCESSFUL")
-        log(f"Commit: {deployed_commit}")
-        log("========================================")
-
-        return True
-
-    except Exception as error:
-        log("========================================")
-        log("DEPLOYMENT FAILED")
-        log(str(error))
-        log("Current published website was preserved.")
-        log("========================================")
-
-        write_report(
-            project,
-            new_commit,
-            "failed",
-            str(error),
-        )
-
-        return False
-
-
-# ---------------------------------------------------------------------------
-# Deployment report
-# ---------------------------------------------------------------------------
+# ============================================================================
+# REPORTING
+# ============================================================================
 
 def write_report(
     project: Path,
     commit: str,
     status: str,
+    release: Path | None = None,
     error: str | None = None,
 ) -> None:
 
-    report_directory = project / ".barkly" / "deployments"
-    report_directory.mkdir(
+    reports = (
+        project
+        / ".barkly"
+        / "deployments"
+    )
+
+    reports.mkdir(
         parents=True,
         exist_ok=True,
     )
 
     report = {
         "timestamp": timestamp(),
-        "project": PROJECT_NAME,
+        "project": "Barkly Labs Website",
         "commit": commit,
         "status": status,
     }
+
+    if release:
+        report["release"] = release.name
 
     if error:
         report["error"] = error
 
     filename = (
-        report_directory
-        / f"{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')}.json"
+        reports
+        / (
+            datetime.now(timezone.utc)
+            .strftime("%Y%m%d-%H%M%S")
+            + ".json"
+        )
     )
 
     filename.write_text(
-        json.dumps(report, indent=2),
+        json.dumps(
+            report,
+            indent=2,
+        ),
         encoding="utf-8",
     )
 
 
-# ---------------------------------------------------------------------------
-# Watch loop
-# ---------------------------------------------------------------------------
+# ============================================================================
+# DEPLOYMENT
+# ============================================================================
+
+def deploy(
+    project: Path,
+    branch: str,
+    releases_directory: Path,
+    current_link: Path,
+    keep_releases: int,
+    dry_run: bool = False,
+) -> bool:
+
+    local_commit = current_commit(
+        project
+    )
+
+    remote = remote_commit(
+        project,
+        branch,
+    )
+
+    log(
+        f"Local repository:  {local_commit}"
+    )
+
+    log(
+        f"Remote repository: {remote}"
+    )
+
+    if local_commit == remote:
+        log(
+            "No new commit. Nothing to deploy."
+        )
+        return False
+
+    log(
+        "New commit detected."
+    )
+
+    if dry_run:
+        log(
+            "DRY RUN: deployment would begin."
+        )
+        return True
+
+    try:
+
+        commit = update_repository(
+            project,
+            branch,
+        )
+
+        log(
+            f"Preparing commit: {commit}"
+        )
+
+        build(
+            project,
+        )
+
+        qa(
+            project,
+        )
+
+        release = create_release(
+            project,
+            releases_directory,
+            commit,
+        )
+
+        publish(
+            release,
+            current_link,
+        )
+
+        cleanup_releases(
+            releases_directory,
+            keep_releases,
+        )
+
+        write_report(
+            project,
+            commit,
+            "success",
+            release,
+        )
+
+        log("")
+        log("========================================")
+        log("DEPLOYMENT SUCCESSFUL")
+        log(f"Commit:  {commit}")
+        log(f"Release: {release.name}")
+        log("========================================")
+        log("")
+
+        return True
+
+    except Exception as error:
+
+        log("")
+        log("========================================")
+        log("DEPLOYMENT FAILED")
+        log(str(error))
+        log("CURRENT RELEASE WAS NOT REPLACED")
+        log("========================================")
+        log("")
+
+        write_report(
+            project,
+            remote,
+            "failed",
+            error=str(error),
+        )
+
+        return False
+
+
+# ============================================================================
+# WATCHER
+# ============================================================================
 
 def watch(
     project: Path,
     branch: str,
-    publish_directory: Path,
+    releases_directory: Path,
+    current_link: Path,
     interval: int,
+    keep_releases: int,
     dry_run: bool,
 ) -> None:
 
     log("========================================")
     log("BARKLY DEPLOY")
     log("========================================")
-    log(f"Project: {PROJECT_NAME}")
-    log(f"Repository: {project}")
-    log(f"Branch: {branch}")
-    log(f"Check interval: {interval}s")
     log("Status: watching")
+    log(f"Project: {project}")
+    log(f"Branch: {branch}")
+    log(f"Interval: {interval}s")
+    log(f"Releases kept: {keep_releases}")
     log("========================================")
 
     while True:
+
         try:
+
             deploy(
                 project=project,
                 branch=branch,
-                publish_directory=publish_directory,
+                releases_directory=releases_directory,
+                current_link=current_link,
+                keep_releases=keep_releases,
                 dry_run=dry_run,
             )
 
+        except KeyboardInterrupt:
+
+            log(
+                "Barkly Deploy stopped."
+            )
+            break
+
         except Exception as error:
-            log(f"Watcher error: {error}")
 
-        time.sleep(interval)
+            log(
+                f"Watcher error: {error}"
+            )
+
+        time.sleep(
+            interval
+        )
 
 
-# ---------------------------------------------------------------------------
+# ============================================================================
 # CLI
-# ---------------------------------------------------------------------------
+# ============================================================================
 
 def main() -> None:
+
     parser = argparse.ArgumentParser(
-        description="Barkly Labs automatic deployment daemon."
+        description=(
+            "Barkly Labs automatic "
+            "website deployment daemon."
+        )
     )
 
     parser.add_argument(
@@ -435,39 +666,54 @@ def main() -> None:
     )
 
     parser.add_argument(
-        "--publish",
+        "--releases",
         type=Path,
         required=True,
-        help="Directory served by the web server.",
+        help="Directory containing releases.",
+    )
+
+    parser.add_argument(
+        "--current",
+        type=Path,
+        required=True,
+        help="Symlink representing the live website.",
     )
 
     parser.add_argument(
         "--interval",
         type=int,
-        default=DEFAULT_INTERVAL,
-        help="Seconds between repository checks.",
+        default=30,
+        help="Seconds between checks.",
+    )
+
+    parser.add_argument(
+        "--keep",
+        type=int,
+        default=5,
+        help="Number of releases to retain.",
     )
 
     parser.add_argument(
         "--once",
         action="store_true",
-        help="Check and deploy once, then exit.",
+        help="Deploy once and exit.",
     )
 
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Detect a new commit without deploying.",
+        help="Detect changes without deploying.",
     )
 
     args = parser.parse_args()
 
     project = args.project.resolve()
-    publish_directory = args.publish.resolve()
+    releases = args.releases.resolve()
+    current = args.current.resolve()
 
     if not project.exists():
         raise SystemExit(
-            f"Project directory does not exist: {project}"
+            f"Project does not exist: {project}"
         )
 
     if not (project / ".git").exists():
@@ -475,20 +721,31 @@ def main() -> None:
             f"Not a Git repository: {project}"
         )
 
+    if args.keep < 1:
+        raise SystemExit(
+            "--keep must be at least 1."
+        )
+
     if args.once:
+
         deploy(
             project=project,
             branch=args.branch,
-            publish_directory=publish_directory,
+            releases_directory=releases,
+            current_link=current,
+            keep_releases=args.keep,
             dry_run=args.dry_run,
         )
+
         return
 
     watch(
         project=project,
         branch=args.branch,
-        publish_directory=publish_directory,
+        releases_directory=releases,
+        current_link=current,
         interval=args.interval,
+        keep_releases=args.keep,
         dry_run=args.dry_run,
     )
 
