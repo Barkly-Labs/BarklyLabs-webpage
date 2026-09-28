@@ -40,12 +40,40 @@ const practices = [
   ["CONNECT", "Projects should be able to work together as part of a larger ecosystem."],
   ["RESPECT", "Technology should preserve human dignity and agency."],
 ];
+
+const continuity = [
+  [
+    "PRESERVE",
+    "Barkly should preserve its mission, principles, knowledge, and institutional memory across generations.",
+  ],
+  [
+    "SUCCESSION",
+    "Leadership should have a documented path forward so Barkly does not depend on one individual to continue.",
+  ],
+  [
+    "STEWARD",
+    "Future stewards should protect the purpose of Barkly while allowing the systems and projects to evolve.",
+  ],
+  [
+    "DOCUMENT",
+    "Important decisions, systems, responsibilities, and knowledge should be documented so they can be understood by those who come next.",
+  ],
+  [
+    "CONTINUE",
+    "Barkly should be built to remain useful beyond the people who originally created it.",
+  ],
+  [
+    "GROW",
+    "Each generation should be able to extend the ecosystem without having to recreate the foundation beneath it.",
+  ],
+];
 ---
+
 <head>
   <title>Barkly Labs — Charter</title>
   <meta
     name="description"
-    content="The Barkly Labs Charter — mission, principles, practices, and direction."
+    content="The Barkly Labs Charter — mission, principles, practices, continuity, and direction."
   />
 </head>
 
@@ -54,7 +82,6 @@ const practices = [
   <!-- HEADER -->
 
   <header class="site-header">
-
     <div class="header-brand">
       <a href="/">BARKLY LABS</a>
     </div>
@@ -66,14 +93,12 @@ const practices = [
       <span>/</span>
       <span>DOCUMENT 001</span>
     </div>
-
   </header>
 
 
   <!-- SIDE NAV -->
 
   <aside class="side-nav">
-
     <a href="#purpose">
       <span>01</span>
       PURPOSE
@@ -94,11 +119,20 @@ const practices = [
       HOW WE BUILD
     </a>
 
-    <a href="#direction">
+    <a href="#ecosystem">
       <span>05</span>
-      DIRECTION
+      ECOSYSTEM
     </a>
 
+    <a href="#continuity">
+      <span>06</span>
+      CONTINUITY
+    </a>
+
+    <a href="#direction">
+      <span>07</span>
+      DIRECTION
+    </a>
   </aside>
 
 
@@ -182,69 +216,72 @@ const practices = [
 
 
     <!-- MISSION -->
-<section class="content-section mission-section" id="mission">
 
-  <div class="section-heading">
+    <section class="content-section mission-section" id="mission">
 
-    <div class="section-number">02</div>
+      <div class="section-heading">
 
-    <div>
-      <span class="eyebrow">MISSION</span>
+        <div class="section-number">02</div>
 
-      <h2>
-        MAKE THE<br />
-        <span>COMPLEX</span><br />
-        USEFUL.
-      </h2>
-    </div>
+        <div>
+          <span class="eyebrow">MISSION</span>
 
-  </div>
+          <h2>
+            MAKE THE<br />
+            <span>COMPLEX</span><br />
+            USEFUL.
+          </h2>
+        </div>
 
-  <div class="mission-content">
-
-    <div class="mission-statement">
-      <p class="large-copy">
-        Barkly Labs builds human-centered systems that make
-        technology more accessible, creative, understandable,
-        and useful.
-      </p>
-    </div>
-
-    <div class="mission-details">
-
-      <div>
-        <span>01</span>
-        <p>
-          Build practical tools for real people and real problems.
-        </p>
       </div>
 
-      <div>
-        <span>02</span>
-        <p>
-          Create infrastructure that other people can build upon.
-        </p>
+      <div class="mission-content">
+
+        <div class="mission-statement">
+
+          <p class="large-copy">
+            Barkly Labs builds human-centered systems that make
+            technology more accessible, creative, understandable,
+            and useful.
+          </p>
+
+        </div>
+
+        <div class="mission-details">
+
+          <div>
+            <span>01</span>
+            <p>
+              Build practical tools for real people and real problems.
+            </p>
+          </div>
+
+          <div>
+            <span>02</span>
+            <p>
+              Create infrastructure that other people can build upon.
+            </p>
+          </div>
+
+          <div>
+            <span>03</span>
+            <p>
+              Document the work so knowledge does not disappear.
+            </p>
+          </div>
+
+          <div>
+            <span>04</span>
+            <p>
+              Keep humans at the center of the systems we create.
+            </p>
+          </div>
+
+        </div>
+
       </div>
 
-      <div>
-        <span>03</span>
-        <p>
-          Document the work so knowledge does not disappear.
-        </p>
-      </div>
-
-      <div>
-        <span>04</span>
-        <p>
-          Keep humans at the center of the systems we create.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
+    </section>
 
 
     <!-- PRINCIPLES -->
@@ -269,6 +306,7 @@ const practices = [
       <div class="principles-list">
 
         {principles.map((principle) => (
+
           <article class="principle">
 
             <div class="principle-number">
@@ -284,6 +322,7 @@ const practices = [
             </p>
 
           </article>
+
         ))}
 
       </div>
@@ -313,6 +352,7 @@ const practices = [
       <div class="flow-grid">
 
         {practices.map(([title, description]) => (
+
           <div class="flow-item">
 
             <span>{title}</span>
@@ -320,6 +360,7 @@ const practices = [
             <p>{description}</p>
 
           </div>
+
         ))}
 
       </div>
@@ -329,7 +370,7 @@ const practices = [
 
     <!-- ECOSYSTEM -->
 
-    <section class="content-section ecosystem-section">
+    <section class="content-section ecosystem-section" id="ecosystem">
 
       <div class="section-heading">
 
@@ -394,13 +435,74 @@ const practices = [
     </section>
 
 
+    <!-- CONTINUITY -->
+
+    <section class="content-section continuity-section" id="continuity">
+
+      <div class="section-heading">
+
+        <div class="section-number">06</div>
+
+        <div>
+          <span class="eyebrow">CONTINUITY</span>
+
+          <h2>
+            BUILD<br />
+            <span>BEYOND.</span>
+          </h2>
+        </div>
+
+      </div>
+
+      <div class="continuity-copy">
+
+        <p class="large-copy">
+          Barkly Labs is intended to outlive the people who begin it.
+        </p>
+
+        <p>
+          The mission, principles, knowledge, systems, and
+          institutional memory of Barkly should be preserved so
+          that future generations can understand where the lab
+          came from and continue building where others left off.
+        </p>
+
+        <p>
+          Barkly should not depend on one person being present
+          forever. Its foundation should be documented, its
+          stewardship should have a path forward, and its
+          community should be able to carry the work into the
+          future.
+        </p>
+
+      </div>
+
+      <div class="continuity-grid">
+
+        {continuity.map(([title, description]) => (
+
+          <div class="continuity-item">
+
+            <span>{title}</span>
+
+            <p>{description}</p>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </section>
+
+
     <!-- DIRECTION -->
 
     <section class="content-section direction-section" id="direction">
 
       <div class="section-heading">
 
-        <div class="section-number">06</div>
+        <div class="section-number">07</div>
 
         <div>
           <span class="eyebrow">DIRECTION</span>
@@ -416,30 +518,36 @@ const practices = [
       <div class="direction-grid">
 
         <div>
+
           <span class="direction-label">NOW</span>
 
           <p>
             Build useful systems. Document them. Test them.
             Make them better.
           </p>
+
         </div>
 
         <div>
+
           <span class="direction-label">NEXT</span>
 
           <p>
             Connect projects into infrastructure that other
             builders can use.
           </p>
+
         </div>
 
         <div>
+
           <span class="direction-label">LATER</span>
 
           <p>
             Grow Barkly into a sustainable laboratory and
             open technology ecosystem.
           </p>
+
         </div>
 
       </div>
@@ -537,7 +645,6 @@ const practices = [
 
 .site-header {
   height: 72px;
-
   padding: 0 4vw;
 
   border-bottom: 1px solid var(--line);
@@ -559,7 +666,6 @@ const practices = [
 .header-document {
   display: flex;
   gap: 10px;
-
   color: var(--dim);
 }
 
@@ -574,10 +680,8 @@ const practices = [
 
 .side-nav {
   position: fixed;
-
   left: 24px;
   top: 50%;
-
   z-index: 10;
 
   transform: translateY(-50%);
@@ -705,7 +809,10 @@ const practices = [
   border-top: 1px solid var(--line);
 
   display: grid;
-  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+  grid-template-columns:
+    minmax(280px, 0.8fr)
+    minmax(0, 1.2fr);
+
   gap: 80px;
 }
 
@@ -749,7 +856,6 @@ const practices = [
 
 .section-heading h2 {
   max-width: 100%;
-
   margin: 0;
 
   font-size: clamp(45px, 5vw, 78px);
@@ -802,6 +908,7 @@ const practices = [
 
   font-size: 30px !important;
   line-height: 1.35 !important;
+
   letter-spacing: -0.02em;
 }
 
@@ -820,13 +927,11 @@ const practices = [
 
 .mission-content {
   min-width: 0;
-
   padding-top: 8px;
 }
 
 .mission-statement {
   max-width: 850px;
-
   margin-bottom: 85px;
 }
 
@@ -849,7 +954,6 @@ const practices = [
 
 .mission-details > div {
   min-height: 105px;
-
   padding: 30px 0;
 
   border-bottom: 1px solid var(--line);
@@ -944,7 +1048,6 @@ const practices = [
 
 .flow-item {
   min-height: 190px;
-
   padding: 30px;
 
   border-right: 1px solid var(--line);
@@ -1002,11 +1105,9 @@ const practices = [
 
 .system-node {
   min-width: 170px;
-
   padding: 25px;
 
   border: 1px solid var(--line);
-
   background: var(--panel);
 
   display: flex;
@@ -1038,7 +1139,80 @@ const practices = [
   background: var(--line-strong);
 }
 
+/* =========================================================
+   CONTINUITY
+   ========================================================= */
 
+.continuity-copy {
+  grid-column: 2;
+
+  min-width: 0;
+  max-width: 750px;
+}
+
+.continuity-copy p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.continuity-copy p + p {
+  margin-top: 28px;
+}
+
+.continuity-copy .large-copy {
+  color: var(--white);
+}
+
+
+/* FULL-WIDTH CONTINUITY GRID */
+
+.continuity-grid {
+  grid-column: 1 / -1;
+
+  margin-top: 80px;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.continuity-item {
+  min-height: 190px;
+  padding: 30px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.continuity-item span {
+  color: var(--pink);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.continuity-item p {
+  max-width: 420px;
+
+  margin: auto 0 0;
+
+  color: var(--muted);
+
+  line-height: 1.55;
+}
 /* =========================================================
    DIRECTION
    ========================================================= */
@@ -1157,7 +1331,10 @@ const practices = [
   }
 
   .principle {
-    grid-template-columns: 45px 190px minmax(0, 1fr);
+    grid-template-columns:
+      45px
+      190px
+      minmax(0, 1fr);
   }
 
 }
@@ -1174,7 +1351,6 @@ const practices = [
 
   .hero {
     min-height: auto;
-
     padding: 50px 7vw 90px;
   }
 
@@ -1194,7 +1370,6 @@ const practices = [
     padding: 90px 7vw;
 
     grid-template-columns: 1fr;
-
     gap: 60px;
   }
 
@@ -1214,7 +1389,6 @@ const practices = [
 
   .mission-section {
     grid-template-columns: 1fr;
-
     gap: 60px;
   }
 
@@ -1230,7 +1404,10 @@ const practices = [
   /* PRINCIPLES */
 
   .principle {
-    grid-template-columns: 45px minmax(0, 1fr);
+    grid-template-columns:
+      45px
+      minmax(0, 1fr);
+
     gap: 20px;
   }
 
@@ -1266,6 +1443,17 @@ const practices = [
     height: 35px;
 
     margin-left: 30px;
+  }
+
+
+  /* CONTINUITY */
+
+  .continuity-grid {
+    grid-column: auto;
+
+    grid-template-columns: 1fr;
+
+    margin-top: 60px;
   }
 
 
@@ -1352,10 +1540,12 @@ const practices = [
 
   .mission-details > div {
     min-height: 90px;
-
     padding: 25px 0;
 
-    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-columns:
+      40px
+      minmax(0, 1fr);
+
     gap: 15px;
   }
 
@@ -1375,7 +1565,6 @@ const practices = [
 
   .flow-item {
     min-height: 160px;
-
     padding: 25px;
   }
 
@@ -1385,6 +1574,14 @@ const practices = [
   .system-node {
     min-width: 0;
     width: 100%;
+  }
+
+
+  /* CONTINUITY */
+
+  .continuity-item {
+    min-height: 160px;
+    padding: 25px;
   }
 
 
