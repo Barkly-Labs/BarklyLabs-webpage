@@ -12,6 +12,10 @@ Responsibilities:
 - Enable Nginx at boot
 - Start Nginx when necessary
 - Safely reload Nginx
+- Configure HTTPS
+- Ensure SSL certificates exist
+- Redirect HTTP to HTTPS
+- Preserve ACME certificate challenges
 - Never reload an invalid configuration
 
 Usage:
@@ -30,6 +34,7 @@ from __future__ import annotations
 import argparse
 import os
 import shutil
+import socket
 import subprocess
 import sys
 from pathlib import Path
@@ -57,6 +62,37 @@ NGINX_DEFAULT = Path(
     "/etc/nginx/sites-enabled/default"
 )
 
+SSL_DIRECTORY = Path(
+    f"/etc/letsencrypt/live/{DOMAIN}"
+)
+
+SSL_CERT = SSL_DIRECTORY / "fullchain.pem"
+SSL_KEY = SSL_DIRECTORY / "privkey.pem"
+
+CERTBOT_EMAIL_ENV = "BARKLY_CERTBOT_EMAIL"
+
+
+NGINX_HTTP_CONFIG = f"""\
+server {{
+    listen 80;
+    listen [::]:80;
+
+    server_name {DOMAIN} {WWW_DOMAIN};
+
+    root {CURRENT};
+    index index.html;
+
+    location /.well-known/acme-challenge/ {{
+        root {CURRENT};
+        try_files $uri =404;
+    }}
+
+    location / {{
+        return 301 https://$host$request_uri;
+    }}
+}}
+"""
+
 
 NGINX_CONFIG = f"""\
 server {{
@@ -67,6 +103,35 @@ server {{
 
     root {CURRENT};
     index index.html;
+
+    location /.well-known/acme-challenge/ {{
+        root {CURRENT};
+        try_files $uri =404;
+    }}
+
+    location / {{
+        return 301 https://$host$request_uri;
+    }}
+}}
+
+server {{
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name {DOMAIN} {WWW_DOMAIN};
+
+    root {CURRENT};
+    index index.html;
+
+    ssl_certificate {SSL_CERT};
+    ssl_certificate_key {SSL_KEY};
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location /.well-known/acme-challenge/ {{
+        root {CURRENT};
+        try_files $uri =404;
+    }}
 
     location / {{
         try_files $uri $uri/ $uri.html =404;
@@ -207,6 +272,11 @@ def prepare_barkly_directories() -> None:
         exist_ok=True,
     )
 
+    CURRENT.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
     log(
         f"Nginx will serve: {CURRENT}"
     )
@@ -216,7 +286,9 @@ def prepare_barkly_directories() -> None:
 # Nginx configuration
 # ---------------------------------------------------------------------------
 
-def write_nginx_config() -> None:
+def write_nginx_config(
+    config: str = NGINX_CONFIG,
+) -> None:
     log(
         f"Writing Nginx configuration: "
         f"{NGINX_AVAILABLE}"
@@ -228,7 +300,7 @@ def write_nginx_config() -> None:
     )
 
     NGINX_AVAILABLE.write_text(
-        NGINX_CONFIG,
+        config,
         encoding="utf-8",
     )
 
@@ -315,6 +387,198 @@ def validate_nginx() -> None:
     log(
         "Nginx configuration is valid."
     )
+
+
+# ---------------------------------------------------------------------------
+# SSL certificate
+# ---------------------------------------------------------------------------
+
+def ssl_certificate_exists() -> bool:
+    return (
+        SSL_CERT.is_file()
+        and SSL_KEY.is_file()
+    )
+
+
+def configure_http_for_certificate() -> None:
+    log(
+        "Configuring temporary HTTP server "
+        "for ACME certificate validation."
+    )
+
+    write_nginx_config(
+        NGINX_HTTP_CONFIG,
+    )
+
+    validate_nginx()
+
+    log(
+        "Reloading Nginx with temporary HTTP configuration."
+    )
+
+    run([
+        "systemctl",
+        "reload",
+        "nginx",
+    ])
+
+    log(
+        "Temporary HTTP configuration is active."
+    )
+
+
+def ensure_ssl_certificate() -> None:
+    if ssl_certificate_exists():
+        log(
+            "Existing SSL certificate found."
+        )
+        return
+
+    certbot = shutil.which("certbot")
+
+    if certbot is None:
+        raise RuntimeError(
+            "SSL certificate is missing and certbot "
+            "is not installed."
+        )
+
+    email = os.environ.get(
+        CERTBOT_EMAIL_ENV,
+    )
+
+    if not email:
+        raise RuntimeError(
+            f"SSL certificate is missing. Set "
+            f"{CERTBOT_EMAIL_ENV} before provisioning."
+        )
+
+    log(
+        "SSL certificate is missing."
+    )
+
+    log(
+        "Requesting SSL certificate from Let's Encrypt."
+    )
+
+    run([
+        certbot,
+        "certonly",
+        "--webroot",
+        "-w",
+        str(CURRENT),
+        "--non-interactive",
+        "--agree-tos",
+        "--email",
+        email,
+        "--keep-until-expiring",
+        "-d",
+        DOMAIN,
+        "-d",
+        WWW_DOMAIN,
+    ])
+
+    if not ssl_certificate_exists():
+        raise RuntimeError(
+            "Certbot completed, but the expected "
+            "SSL certificate files were not found."
+        )
+
+    log(
+        "SSL certificate is ready."
+    )
+
+
+# ---------------------------------------------------------------------------
+# HTTPS
+# ---------------------------------------------------------------------------
+
+def configure_https() -> None:
+    if not ssl_certificate_exists():
+        raise RuntimeError(
+            "Cannot configure HTTPS because the "
+            "SSL certificate is missing."
+        )
+
+    log(
+        "Writing final HTTPS Nginx configuration."
+    )
+
+    write_nginx_config(
+        NGINX_CONFIG,
+    )
+
+    validate_nginx()
+
+    log(
+        "Reloading Nginx with HTTPS configuration."
+    )
+
+    run([
+        "systemctl",
+        "reload",
+        "nginx",
+    ])
+
+    log(
+        "HTTPS Nginx configuration is active."
+    )
+
+
+def verify_https_listener() -> None:
+    log(
+        "Verifying HTTPS listener on port 443."
+    )
+
+    try:
+
+        with socket.create_connection(
+            (
+                "127.0.0.1",
+                443,
+            ),
+            timeout=5,
+        ):
+            pass
+
+    except OSError as error:
+
+        raise RuntimeError(
+            "Nginx HTTPS configuration was loaded, "
+            "but port 443 is not accepting connections."
+        ) from error
+
+    log(
+        "HTTPS listener is active on port 443."
+    )
+
+
+def ensure_https() -> None:
+    log("")
+    log("=" * 40)
+    log("BARKLY HTTPS")
+    log("=" * 40)
+
+    if not ssl_certificate_exists():
+
+        configure_http_for_certificate()
+
+        ensure_ssl_certificate()
+
+    else:
+
+        log(
+            "Existing SSL certificate found."
+        )
+
+    configure_https()
+
+    verify_https_listener()
+
+    log(
+        "BARKLY HTTPS READY"
+    )
+
+    log("=" * 40)
 
 
 # ---------------------------------------------------------------------------
@@ -429,17 +693,15 @@ def provision() -> None:
             "service was not detected."
         )
 
-    write_nginx_config()
-
     enable_nginx_site()
 
     disable_default_site()
 
-    validate_nginx()
-
     enable_nginx_service()
 
     start_nginx()
+
+    ensure_https()
 
     log("")
     log("=" * 40)
@@ -452,6 +714,10 @@ def provision() -> None:
 
     log(
         f"Domain: {DOMAIN}"
+    )
+
+    log(
+        "HTTPS: enabled"
     )
 
     log("=" * 40)
