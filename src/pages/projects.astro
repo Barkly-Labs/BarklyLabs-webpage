@@ -12,11 +12,14 @@ type GitHubRepository = {
   language: string | null;
   stargazers_count: number;
   forks_count: number;
+  watchers_count: number;
+  open_issues_count: number;
   updated_at: string;
   created_at: string;
   archived: boolean;
   fork: boolean;
   topics?: string[];
+  default_branch: string;
 };
 
 type Project = GitHubRepository & {
@@ -34,7 +37,7 @@ async function getRepositories(): Promise<Project[]> {
   try {
     while (true) {
       const response = await fetch(
-        `https://api.github.com/orgs/${GITHUB_ORG}/repos?per_page=${perPage}&page=${page}&sort=updated`,
+        `https://api.github.com/orgs/${GITHUB_ORG}/repos?per_page=${perPage}&page=${page}&sort=updated&direction=desc`,
         {
           headers: {
             Accept: "application/vnd.github+json",
@@ -64,7 +67,7 @@ async function getRepositories(): Promise<Project[]> {
 
       page++;
 
-      // Safety limit so a broken API response cannot loop forever.
+      // Safety limit.
       if (page > 10) {
         break;
       }
@@ -73,14 +76,12 @@ async function getRepositories(): Promise<Project[]> {
     console.error("Failed to fetch Barkly Labs repositories:", error);
   }
 
-  return repositories
-    .filter((repo) => !repo.archived)
-    .map((repo) => ({
-      ...repo,
-      projectType: getProjectType(repo),
-      projectStatus: getProjectStatus(repo),
-      statusClass: getStatusClass(repo),
-    }));
+  return repositories.map((repo) => ({
+    ...repo,
+    projectType: getProjectType(repo),
+    projectStatus: getProjectStatus(repo),
+    statusClass: getStatusClass(repo),
+  }));
 }
 
 function getProjectType(repo: GitHubRepository): string {
@@ -95,7 +96,8 @@ function getProjectType(repo: GitHubRepository): string {
     text.includes("llm") ||
     text.includes("model") ||
     text.includes("cyn-x") ||
-    text.includes("cynx")
+    text.includes("cynx") ||
+    text.includes("intelligence")
   ) {
     return "INTELLIGENCE";
   }
@@ -112,7 +114,8 @@ function getProjectType(repo: GitHubRepository): string {
     text.includes("hardware") ||
     text.includes("board") ||
     text.includes("gpio") ||
-    text.includes("pcb")
+    text.includes("pcb") ||
+    text.includes("embedded")
   ) {
     return "HARDWARE";
   }
@@ -120,7 +123,8 @@ function getProjectType(repo: GitHubRepository): string {
   if (
     text.includes("api") ||
     text.includes("backend") ||
-    text.includes("server")
+    text.includes("server") ||
+    text.includes("service")
   ) {
     return "INFRASTRUCTURE";
   }
@@ -129,9 +133,19 @@ function getProjectType(repo: GitHubRepository): string {
     text.includes("web") ||
     text.includes("site") ||
     text.includes("astro") ||
-    text.includes("frontend")
+    text.includes("frontend") ||
+    text.includes("interface")
   ) {
     return "INTERFACE";
+  }
+
+  if (
+    text.includes("vision") ||
+    text.includes("opencv") ||
+    text.includes("image") ||
+    text.includes("camera")
+  ) {
+    return "VISION";
   }
 
   return "RESEARCH";
@@ -174,11 +188,12 @@ const repositories = await getRepositories();
 const activeRepositories = repositories.filter(
   (repo) => !repo.archived && !repo.fork,
 );
-const archivedProjects = repositories.filter(
+
+const archivedRepositories = repositories.filter(
   (repo) => repo.archived,
 );
 
-const forkedProjects = repositories.filter(
+const forkedRepositories = repositories.filter(
   (repo) => repo.fork,
 );
 
@@ -193,39 +208,676 @@ const languageCounts = repositories.reduce<Record<string, number>>(
   {},
 );
 
-const primaryLanguages = Object.entries(languageCounts)
+const languages = Object.entries(languageCounts)
   .sort((a, b) => b[1] - a[1])
   .slice(0, 5);
+
+const totalStars = repositories.reduce(
+  (total, repo) => total + repo.stargazers_count,
+  0,
+);
+
+const totalForks = repositories.reduce(
+  (total, repo) => total + repo.forks_count,
+  0,
+);
+
+const lastUpdated =
+  repositories.length > 0
+    ? repositories.reduce((latest, repo) =>
+        new Date(repo.updated_at) > new Date(latest.updated_at)
+          ? repo
+          : latest,
+      )
+    : null;
 ---
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta
-      name="description"
-      content="Barkly Labs project registry. A live index of projects, experiments, infrastructure, and research repositories."
-    />
+  <title>Barkly Labs / Projects</title>
 
-    <title>Projects // Barkly Labs</title>
-  </head>
+  <meta
+    name="description"
+    content="The Barkly Labs project registry. Automatically generated from the public Barkly Labs GitHub organization."
+  />
+</head>
 
-  <body>
-    <header class="site-header">
-      <a href="/" class="brand" aria-label="Barkly Labs home">
-        <span>BARKLY</span>
-        <span>LABS</span>
-      </a>
+<body>
 
-      <nav>
-        <a href="/">HOME</a>
-        <a href="/projects" aria-current="page">PROJECTS</a>
-        <a href="/docs">DOCS</a>
+  <header class="topbar">
+
+    <a href="/" class="brand">
+      <span>BARKLY</span>
+      <span>LABS</span>
+    </a>
+
+    <div class="top-status">
+      PROJECT REGISTRY / PUBLIC RESEARCH
+    </div>
+
+    <a href="/" class="back">
+      ← RETURN TO LABS
+    </a>
+
+  </header>
+
+
+  <main>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+      <div class="hero-grid"></div>
+
+      <div class="hero-orbit orbit-one"></div>
+      <div class="hero-orbit orbit-two"></div>
+
+      <div class="hero-content">
+
+        <div class="eyebrow">
+          <span>01</span>
+          BARKLY PROJECT REGISTRY
+        </div>
+
+        <h1>
+          THE LAB
+          <span>IN MOTION.</span>
+        </h1>
+
+        <p>
+          A live view of the software, systems, experiments,
+          documentation, hardware, and research being built
+          inside Barkly Labs.
+        </p>
+
+        <p class="hero-dim">
+          This registry is generated directly from the public
+          Barkly Labs GitHub organization.
+        </p>
+
+        <div class="hero-actions">
+
+          <a
+            class="primary"
+            href={`https://github.com/${GITHUB_ORG}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            OPEN GITHUB ↗
+          </a>
+
+          <a href="#registry">
+            EXPLORE PROJECTS ↓
+          </a>
+
+        </div>
+
+      </div>
+
+      <div class="hero-side">
+        PUBLIC REPOSITORIES<br />
+        AUTOMATED REGISTRY<br />
+        BARKLY LABS
+      </div>
+
+      <div class="hero-scroll">
+        DISCOVER / BUILD / DOCUMENT / SHARE
+        <b></b>
+      </div>
+
+    </section>
+
+
+    <!-- CENTRAL QUESTION -->
+
+    <section class="section question">
+
+      <header class="section-header">
+
+        <small>02</small>
+
+        <div>
+          <label>THE CENTRAL QUESTION</label>
+
+          <h2>
+            WHAT ARE WE
+            <span>BUILDING?</span>
+          </h2>
+        </div>
+
+      </header>
+
+      <div class="question-grid">
+
+        <div class="question-large">
+          The repository is only the beginning.
+        </div>
+
+        <div class="question-copy">
+
+          <p>
+            Barkly Labs treats software repositories as pieces
+            of a larger research ecosystem.
+          </p>
+
+          <p>
+            A project can become a tool, an experiment,
+            infrastructure, a hardware platform, documentation,
+            or something nobody expected when it started.
+          </p>
+
+          <p class="bright">
+            The registry shows the shape of the lab
+            as it actually exists.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- REGISTRY -->
+
+    <section id="registry" class="section">
+
+      <header class="section-header">
+
+        <small>03</small>
+
+        <div>
+
+          <label>LIVE GITHUB REGISTRY</label>
+
+          <h2>
+            THE
+            <span>PROJECTS.</span>
+          </h2>
+
+        </div>
+
+      </header>
+
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="stat">
+
+          <span class="stat-number">
+            {repositories.length}
+          </span>
+
+          <span class="stat-label">
+            TOTAL REPOSITORIES
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="stat-number">
+            {activeRepositories.length}
+          </span>
+
+          <span class="stat-label">
+            ACTIVE PROJECTS
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="stat-number">
+            {totalStars}
+          </span>
+
+          <span class="stat-label">
+            STARS
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="stat-number">
+            {totalForks}
+          </span>
+
+          <span class="stat-label">
+            FORKS
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- LANGUAGES -->
+
+      {languages.length > 0 && (
+
+        <div class="language-strip">
+
+          <div class="language-title">
+            DETECTED LANGUAGES
+          </div>
+
+          <div class="language-list">
+
+            {languages.map(([language, count]) => (
+
+              <span class="language">
+
+                <b>{language}</b>
+
+                <small>
+                  {count}
+                  {count === 1 ? " REPO" : " REPOS"}
+                </small>
+
+              </span>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      )}
+
+
+      <!-- PROJECT CARDS -->
+
+      {repositories.length > 0 ? (
+
+        <div class="project-grid">
+
+          {repositories.map((project, index) => (
+
+            <article class="project-card">
+
+              <div class="project-top">
+
+                <span class="project-number">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                <span class={`status ${project.statusClass}`}>
+                  {project.projectStatus}
+                </span>
+
+              </div>
+
+
+              <div class="project-type">
+                {project.projectType}
+              </div>
+
+
+              <h3>
+                {project.name}
+              </h3>
+
+
+              <p class="project-description">
+
+                {project.description ||
+                  "No repository description has been provided yet."}
+
+              </p>
+
+
+              <div class="project-meta">
+
+                <div>
+
+                  <span>LANGUAGE</span>
+
+                  <strong>
+                    {project.language || "—"}
+                  </strong>
+
+                </div>
+
+
+                <div>
+
+                  <span>UPDATED</span>
+
+                  <strong>
+                    {formatDate(project.updated_at)}
+                  </strong>
+
+                </div>
+
+
+                <div>
+
+                  <span>STARS</span>
+
+                  <strong>
+                    {project.stargazers_count}
+                  </strong>
+
+                </div>
+
+
+                <div>
+
+                  <span>FORKS</span>
+
+                  <strong>
+                    {project.forks_count}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              {project.topics && project.topics.length > 0 && (
+
+                <div class="topics">
+
+                  {project.topics.slice(0, 6).map((topic) => (
+
+                    <span>
+                      #{topic}
+                    </span>
+
+                  ))}
+
+                </div>
+
+              )}
+
+
+              <a
+                class="project-link"
+                href={project.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                VIEW REPOSITORY
+                <span>↗</span>
+              </a>
+
+            </article>
+
+          ))}
+
+        </div>
+
+      ) : (
+
+        <div class="empty">
+
+          <div class="empty-mark">
+            [ ! ]
+          </div>
+
+          <h3>
+            NO REPOSITORIES RETURNED.
+          </h3>
+
+          <p>
+            GitHub did not return any public repositories for
+            the Barkly Labs organization.
+          </p>
+
+        </div>
+
+      )}
+
+    </section>
+
+
+    <!-- ARCHITECTURE -->
+
+    <section class="section architecture">
+
+      <header class="section-header">
+
+        <small>04</small>
+
+        <div>
+
+          <label>REGISTRY ARCHITECTURE</label>
+
+          <h2>
+            GITHUB
+            <span>→ BARKLY.</span>
+          </h2>
+
+        </div>
+
+      </header>
+
+
+      <div class="pipeline">
+
+        <div class="pipeline-node">
+
+          <span>01</span>
+
+          <strong>
+            GITHUB
+          </strong>
+
+          <p>
+            Public source repositories,
+            descriptions, metadata,
+            languages, topics, and history.
+          </p>
+
+        </div>
+
+
+        <div class="pipeline-arrow">
+          →
+        </div>
+
+
+        <div class="pipeline-node">
+
+          <span>02</span>
+
+          <strong>
+            REGISTRY
+          </strong>
+
+          <p>
+            Astro retrieves the public
+            GitHub organization and
+            normalizes repository data.
+          </p>
+
+        </div>
+
+
+        <div class="pipeline-arrow">
+          →
+        </div>
+
+
+        <div class="pipeline-node">
+
+          <span>03</span>
+
+          <strong>
+            BARKLY
+          </strong>
+
+          <p>
+            Repository information becomes
+            a human-readable research
+            registry.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- METADATA -->
+
+    <section class="section metadata">
+
+      <header class="section-header">
+
+        <small>05</small>
+
+        <div>
+
+          <label>WHAT THE REGISTRY KNOWS</label>
+
+          <h2>
+            SHOW THE
+            <span>SHAPE.</span>
+          </h2>
+
+        </div>
+
+      </header>
+
+
+      <div class="metadata-grid">
+
+        <article>
+          <span>01</span>
+          <h3>IDENTITY</h3>
+          <p>
+            Repository name, organization,
+            description, and GitHub URL.
+          </p>
+        </article>
+
+
+        <article>
+          <span>02</span>
+          <h3>TECHNOLOGY</h3>
+          <p>
+            Primary programming language
+            and repository topics.
+          </p>
+        </article>
+
+
+        <article>
+          <span>03</span>
+          <h3>ACTIVITY</h3>
+          <p>
+            Last update and repository
+            lifecycle state.
+          </p>
+        </article>
+
+
+        <article>
+          <span>04</span>
+          <h3>COMMUNITY</h3>
+          <p>
+            Stars, forks, and public
+            participation signals.
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- BARKLY STANDARD -->
+
+    <section class="section standard">
+
+      <header class="section-header">
+
+        <small>06</small>
+
+        <div>
+
+          <label>BARKLY STANDARD</label>
+
+          <h2>
+            MAKE THE
+            <span>MACHINE LEGIBLE.</span>
+          </h2>
+
+        </div>
+
+      </header>
+
+
+      <div class="standard-grid">
+
+        <div class="standard-statement">
+          Show the shape first.
+        </div>
+
+        <div class="standard-copy">
+
+          <p>
+            GitHub contains enormous amounts of technical
+            information, but humans should not have to dig
+            through every repository to understand what a lab
+            is building.
+          </p>
+
+          <p>
+            Barkly adds a human-facing layer over the raw
+            repository structure.
+          </p>
+
+          <p class="bright">
+            The computer already has the data.
+            Barkly makes the data understandable.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+      <div class="footer-brand">
+
+        <strong>
+          BARKLY
+          <span>LABS</span>
+        </strong>
+
+        <p>
+          PUBLIC PROJECT REGISTRY
+        </p>
+
+      </div>
+
+
+      <div class="footer-links">
+
+        <a href="/">
+          BARKLY LABS
+        </a>
+
         <a
           href={`https://github.com/${GITHUB_ORG}`}
           target="_blank"
@@ -233,1080 +885,1407 @@ const primaryLanguages = Object.entries(languageCounts)
         >
           GITHUB ↗
         </a>
-      </nav>
 
-      <div class="status">
-        <span class="status-dot"></span>
-        LIVE REGISTRY
-      </div>
-    </header>
-
-    <main>
-      <!-- HERO -->
-
-      <section class="hero">
-        <div class="eyebrow">
-          BARKLY LABS // PROJECT REGISTRY
-        </div>
-
-        <h1 class="hero-title">
-          THE<br />
-          <span>PROJECTS.</span>
-        </h1>
-
-        <div class="hero-bottom">
-          <p class="hero-description">
-            A live index of the systems, experiments, tools, standards,
-            interfaces, and research being developed across Barkly Labs.
-          </p>
-
-          <div class="hero-mark" aria-hidden="true">
-            <span>B</span><span>/</span><span>L</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- REGISTRY SUMMARY -->
-
-      <section class="registry-summary">
-        <div class="section-number">01</div>
-
-        <div class="summary-content">
-          <div class="summary-heading">
-            <h2>THE WORK.</h2>
-
-            <p>
-              Barkly projects are built as parts of a larger ecosystem.
-              GitHub provides the repository data; Barkly provides the
-              human-readable structure around it.
-            </p>
-          </div>
-
-          <div class="stats">
-            <div class="stat">
-              <span class="stat-number">{repositories.length}</span>
-              <span class="stat-label">REPOSITORIES</span>
-            </div>
-
-            <div class="stat">
-              <span class="stat-number">{activeRepositories.length}</span>
-              <span class="stat-label">ACTIVE</span>
-            </div>
-
-            <div class="stat">
-              <span class="stat-number">{languages.length}</span>
-              <span class="stat-label">LANGUAGES</span>
-            </div>
-
-            <div class="stat">
-              <span class="stat-number">{archivedRepositories.length}</span>
-              <span class="stat-label">ARCHIVED</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PROJECTS -->
-
-      <section class="projects-section">
-        <div class="section-heading">
-          <div class="section-number">02</div>
-
-          <div>
-            <p class="section-tag">PROJECT INDEX</p>
-            <h2>
-              ALL<br />
-              <span>PROJECTS.</span>
-            </h2>
-          </div>
-        </div>
-
-        {
-          repositories.length === 0 ? (
-            <div class="empty-state">
-              <span class="empty-code">ERR / 001</span>
-              <strong>NO REPOSITORIES RETURNED.</strong>
-              <p>
-                GitHub did not return any repositories for this organization.
-              </p>
-            </div>
-          ) : (
-            <div class="project-grid">
-              {repositories.map((repo, index) => (
-                <article class="project-card">
-                  <div class="card-top">
-                    <span class="card-number">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-
-                    <span class={`card-status ${statusClass(repo)}`}>
-                      <span class="status-dot"></span>
-                      {status(repo)}
-                    </span>
-                  </div>
-
-                  <div class="card-main">
-                    <p class="project-type">
-                      {projectType(repo)}
-                    </p>
-
-                    <h3>{repo.name}</h3>
-
-                    <p class="project-description">
-                      {repo.description ||
-                        "No repository description provided."}
-                    </p>
-                  </div>
-
-                  <div class="card-data">
-                    <div>
-                      <span>LANGUAGE</span>
-                      <strong>
-                        {repo.language || "UNSPECIFIED"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>UPDATED</span>
-                      <strong>{formatDate(repo.updated_at)}</strong>
-                    </div>
-
-                    <div>
-                      <span>STARS</span>
-                      <strong>{repo.stargazers_count}</strong>
-                    </div>
-
-                    <div>
-                      <span>FORKS</span>
-                      <strong>{repo.forks_count}</strong>
-                    </div>
-                  </div>
-
-                  {
-                    repo.topics?.length > 0 && (
-                      <div class="topics">
-                        {repo.topics.slice(0, 5).map((topic) => (
-                          <span>{topic}</span>
-                        ))}
-                      </div>
-                    )
-                  }
-
-                  <div class="card-footer">
-                    <span>
-                      {repo.full_name}
-                    </span>
-
-                    <a
-                      href={repo.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      GITHUB ↗
-                    </a>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )
-        }
-      </section>
-
-      <!-- ARCHITECTURE -->
-
-      <section class="architecture">
-        <div class="section-number">03</div>
-
-        <div class="architecture-content">
-          <p class="section-tag">REGISTRY ARCHITECTURE</p>
-
-          <h2>
-            ONE SOURCE.<br />
-            <span>HUMAN INTERFACE.</span>
-          </h2>
-
-          <div class="pipeline">
-            <div>
-              <span>01</span>
-              <strong>GITHUB</strong>
-              <small>REPOSITORY DATA</small>
-            </div>
-
-            <div class="arrow">→</div>
-
-            <div>
-              <span>02</span>
-              <strong>REGISTRY</strong>
-              <small>NORMALIZATION</small>
-            </div>
-
-            <div class="arrow">→</div>
-
-            <div>
-              <span>03</span>
-              <strong>BARKLY</strong>
-              <small>HUMAN INTERFACE</small>
-            </div>
-
-            <div class="arrow">→</div>
-
-            <div>
-              <span>04</span>
-              <strong>PROJECT CARD</strong>
-              <small>UNDERSTANDABLE OUTPUT</small>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- GITHUB LINK -->
-
-      <section class="github-section">
-        <div class="github-copy">
-          <p class="section-tag">SOURCE</p>
-
-          <h2>
-            THE CODE<br />
-            <span>IS PUBLIC.</span>
-          </h2>
-
-          <p>
-            The project registry is generated directly from the Barkly Labs
-            GitHub organization. Repository metadata remains connected to the
-            source rather than being manually duplicated on the website.
-          </p>
-        </div>
-
-        <a
-          class="github-button"
-          href={`https://github.com/${GITHUB_ORG}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          OPEN BARKLY ON GITHUB ↗
+        <a href="/docs">
+          DOCUMENTATION
         </a>
-      </section>
-    </main>
 
-    <footer>
-      <div class="footer-brand">
-        <strong>
-          <span>BARKLY</span> <span>LABS</span>
-        </strong>
-
-        <span>PROJECT REGISTRY</span>
       </div>
 
-      <div>
-        GITHUB // {GITHUB_ORG}
+
+      <div class="footer-meta">
+
+        <span>
+          {activeRepositories.length} ACTIVE
+        </span>
+
+        <span>
+          {archivedRepositories.length} ARCHIVED
+        </span>
+
+        <span>
+          {forkedRepositories.length} FORKS
+        </span>
+
+        {lastUpdated && (
+
+          <span>
+            LAST UPDATE:
+            {formatDate(lastUpdated.updated_at)}
+          </span>
+
+        )}
+
       </div>
 
-      <div>
-        © 2026 BARKLY LABS
-      </div>
+
+      <p class="copyright">
+        © 2026 BARKLY LABS ·
+        TECHNOLOGY SHOULD ADAPT TO HUMANS.
+      </p>
+
     </footer>
-  </body>
+
+  </main>
+
+</body>
 </html>
 
+
 <style>
-  :root {
-    --bg: #050505;
-    --surface: #0a0a0a;
-    --surface-2: #0f0f0f;
-    --surface-hover: #131313;
 
-    --text: #f1f1f1;
-    --white: #f1f1f1;
+:root {
+  --bg: #050505;
+  --surface: #0a0a0a;
+  --surface-2: #0f0f0f;
+  --surface-hover: #131313;
 
-    --muted: #a1a1a1;
-    --dim: #686868;
-    --faint: #444;
+  --white: #f1f1f1;
+  --text: #f1f1f1;
+  --muted: #a1a1a1;
+  --dim: #686868;
+  --faint: #444;
 
-    --line: rgba(255, 255, 255, 0.12);
-    --line-strong: rgba(255, 255, 255, 0.25);
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.25);
 
-    --pink: #ff2f92;
-    --pink-soft: rgba(255, 47, 146, 0.1);
-    --pink-line: rgba(255, 47, 146, 0.42);
+  --pink: #ff2f92;
+  --pink-soft: rgba(255, 47, 146, 0.10);
+  --pink-line: rgba(255, 47, 146, 0.42);
 
-    --max: 1400px;
+  --max: 1400px;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at 75% 5%,
+      var(--pink-soft),
+      transparent 32rem
+    ),
+    var(--bg);
+
+  color: var(--text);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+::selection {
+  background: var(--pink);
+  color: #050505;
+}
+
+
+/* TOPBAR */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  min-height: 68px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  padding: 0 5vw;
+
+  border-bottom: 1px solid var(--line);
+
+  background: rgba(5, 5, 5, 0.88);
+
+  backdrop-filter: blur(18px);
+
+  font:
+    10px "Courier New",
+    monospace;
+
+  letter-spacing: 0.18em;
+}
+
+
+.brand {
+  display: inline-flex;
+  gap: 7px;
+
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+
+.brand span:first-child {
+  color: var(--white);
+}
+
+
+.brand span:last-child {
+  color: var(--pink);
+}
+
+
+.top-status {
+  color: var(--dim);
+  text-align: center;
+}
+
+
+.back {
+  justify-self: end;
+  color: var(--muted);
+}
+
+
+.back:hover {
+  color: var(--pink);
+}
+
+
+/* HERO */
+
+.hero {
+  position: relative;
+
+  min-height: 88vh;
+
+  display: flex;
+  align-items: center;
+
+  padding:
+    120px
+    8vw
+    110px;
+
+  overflow: hidden;
+
+  border-bottom: 1px solid var(--line);
+}
+
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+
+  opacity: 0.32;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px
+    );
+
+  background-size: 64px 64px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      #000,
+      transparent 88%
+    );
+}
+
+
+.hero-orbit {
+  position: absolute;
+
+  border: 1px solid var(--pink-line);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+.orbit-one {
+  width: 58vw;
+  height: 58vw;
+
+  right: -22vw;
+  top: -25vw;
+}
+
+
+.orbit-two {
+  width: 32vw;
+  height: 32vw;
+
+  right: -5vw;
+  top: -9vw;
+}
+
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 930px;
+}
+
+
+.eyebrow {
+  display: flex;
+  gap: 18px;
+
+  margin-bottom: 30px;
+
+  color: var(--muted);
+
+  font:
+    10px "Courier New",
+    monospace;
+
+  letter-spacing: 0.2em;
+}
+
+
+.eyebrow span {
+  color: var(--pink);
+}
+
+
+.hero h1 {
+  margin: 0;
+
+  text-transform: uppercase;
+
+  font-size:
+    clamp(
+      68px,
+      11vw,
+      165px
+    );
+
+  line-height: 0.84;
+
+  letter-spacing: -0.075em;
+
+  color: var(--pink);
+}
+
+
+.hero h1 span {
+  display: block;
+
+  color: transparent;
+
+  -webkit-text-stroke:
+    2px
+    var(--white);
+}
+
+
+.hero-content > p {
+  max-width: 760px;
+
+  margin:
+    38px
+    0
+    0;
+
+  color: var(--muted);
+
+  font-size: 18px;
+
+  line-height: 1.7;
+}
+
+
+.hero-content .hero-dim {
+  margin-top: 14px;
+
+  color: var(--dim);
+
+  font-size: 14px;
+}
+
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 40px;
+}
+
+
+.hero-actions a {
+  display: inline-flex;
+
+  min-width: 190px;
+
+  justify-content: center;
+
+  padding:
+    15px
+    18px;
+
+  border: 1px solid var(--line);
+
+  font:
+    10px "Courier New",
+    monospace;
+
+  letter-spacing: 0.12em;
+}
+
+
+.hero-actions .primary {
+  color: #050505;
+
+  background: var(--pink);
+
+  border-color: var(--pink);
+
+  font-weight: 800;
+}
+
+
+.hero-actions a:hover {
+  border-color: var(--pink);
+}
+
+
+.hero-side {
+  position: absolute;
+
+  right: 4vw;
+  top: 50%;
+
+  transform:
+    rotate(90deg)
+    translateX(50%);
+
+  transform-origin: right center;
+
+  color: var(--dim);
+
+  font:
+    8px/2 "Courier New",
+    monospace;
+
+  letter-spacing: 0.18em;
+}
+
+
+.hero-scroll {
+  position: absolute;
+
+  left: 8vw;
+  right: 8vw;
+  bottom: 28px;
+
+  color: var(--faint);
+
+  font:
+    8px "Courier New",
+    monospace;
+
+  letter-spacing: 0.18em;
+}
+
+
+.hero-scroll b {
+  display: inline-block;
+
+  width: 100px;
+  height: 1px;
+
+  margin-left: 18px;
+
+  vertical-align: middle;
+
+  background: var(--pink);
+}
+
+
+/* SECTIONS */
+
+.section {
+  padding:
+    130px
+    8vw;
+
+  border-bottom: 1px solid var(--line);
+}
+
+
+.section-header {
+  display: grid;
+
+  grid-template-columns:
+    80px
+    1fr;
+
+  gap: 30px;
+
+  margin-bottom: 65px;
+}
+
+
+.section-header small {
+  padding-top: 9px;
+
+  color: var(--pink);
+
+  font:
+    13px "Courier New",
+    monospace;
+}
+
+
+.section-header label {
+  display: block;
+
+  margin-bottom: 20px;
+
+  color: var(--muted);
+
+  font:
+    10px "Courier New",
+    monospace;
+
+  letter-spacing: 0.2em;
+}
+
+
+.section-header h2 {
+  margin: 0;
+
+  text-transform: uppercase;
+
+  font-size:
+    clamp(
+      48px,
+      7vw,
+      105px
+    );
+
+  line-height: 0.86;
+
+  letter-spacing: -0.065em;
+}
+
+
+.section-header h2 span {
+  display: block;
+
+  color: transparent;
+
+  -webkit-text-stroke:
+    2px
+    var(--white);
+}
+
+
+/* QUESTION */
+
+.question-grid {
+  display: grid;
+
+  grid-template-columns:
+    1.1fr
+    0.9fr;
+
+  gap: 9vw;
+}
+
+
+.question-large {
+  font-size:
+    clamp(
+      34px,
+      4.5vw,
+      68px
+    );
+
+  line-height: 1.02;
+
+  letter-spacing: -0.045em;
+}
+
+
+.question-copy {
+  color: var(--muted);
+
+  line-height: 1.8;
+}
+
+
+.question-copy p {
+  margin:
+    0
+    0
+    24px;
+}
+
+
+.question-copy .bright {
+  color: var(--white);
+
+  font-weight: 600;
+}
+
+
+/* STATS */
+
+.stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+
+.stat {
+  min-height: 180px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding: 28px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+
+.stat-number {
+  color: var(--pink);
+
+  font-size:
+    clamp(
+      42px,
+      5vw,
+      72px
+    );
+
+  line-height: 1;
+
+  letter-spacing: -0.06em;
+}
+
+
+.stat-label {
+  color: var(--dim);
+
+  font:
+    9px "Courier New",
+    monospace;
+
+  letter-spacing: 0.16em;
+}
+
+
+/* LANGUAGES */
+
+.language-strip {
+  display: flex;
+
+  align-items: center;
+
+  gap: 35px;
+
+  padding: 24px 0;
+
+  border-bottom: 1px solid var(--line);
+}
+
+
+.language-title {
+  color: var(--dim);
+
+  font:
+    9px "Courier New",
+    monospace;
+
+  letter-spacing: 0.16em;
+}
+
+
+.language-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+
+.language {
+  display: inline-flex;
+
+  gap: 8px;
+
+  padding:
+    8px
+    11px;
+
+  border: 1px solid var(--line);
+
+  font:
+    10px "Courier New",
+    monospace;
+}
+
+
+.language b {
+  color: var(--white);
+}
+
+
+.language small {
+  color: var(--pink);
+}
+
+
+/* PROJECT GRID */
+
+.project-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+
+.project-card {
+  position: relative;
+
+  min-height: 510px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 32px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.025),
+      transparent 60%
+    );
+
+  transition:
+    background
+    180ms
+    ease,
+    border-color
+    180ms
+    ease;
+}
+
+
+.project-card:hover {
+  background:
+    linear-gradient(
+      145deg,
+      var(--pink-soft),
+      transparent 65%
+    );
+
+  border-color: var(--pink-line);
+}
+
+
+.project-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+
+.project-number {
+  color: var(--pink);
+
+  font:
+    12px "Courier New",
+    monospace;
+}
+
+
+.status {
+  padding:
+    6px
+    9px;
+
+  border: 1px solid var(--line);
+
+  font:
+    8px "Courier New",
+    monospace;
+
+  letter-spacing: 0.15em;
+}
+
+
+.status.active {
+  color: var(--pink);
+
+  border-color: var(--pink-line);
+}
+
+
+.status.archived {
+  color: var(--dim);
+}
+
+
+.status.fork {
+  color: var(--muted);
+}
+
+
+.project-type {
+  margin-top: 50px;
+
+  color: var(--pink);
+
+  font:
+    9px "Courier New",
+    monospace;
+
+  letter-spacing: 0.2em;
+}
+
+
+.project-card h3 {
+  margin:
+    13px
+    0
+    0;
+
+  color: var(--white);
+
+  font-size:
+    clamp(
+      30px,
+      4vw,
+      54px
+    );
+
+  line-height: 0.95;
+
+  letter-spacing: -0.055em;
+
+  text-transform: uppercase;
+
+  overflow-wrap: anywhere;
+}
+
+
+.project-description {
+  max-width: 650px;
+
+  margin:
+    24px
+    0
+    0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+.project-meta {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  margin-top: auto;
+
+  border-top: 1px solid var(--line);
+}
+
+
+.project-meta div {
+  padding:
+    18px
+    12px
+    0
+    0;
+}
+
+
+.project-meta span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--dim);
+
+  font:
+    8px "Courier New",
+    monospace;
+
+  letter-spacing: 0.14em;
+}
+
+
+.project-meta strong {
+  color: var(--white);
+
+  font:
+    11px "Courier New",
+    monospace;
+}
+
+
+.topics {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  margin-top: 20px;
+}
+
+
+.topics span {
+  color: var(--dim);
+
+  font:
+    8px "Courier New",
+    monospace;
+}
+
+
+.project-link {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 22px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid var(--line);
+
+  color: var(--white);
+
+  font:
+    9px "Courier New",
+    monospace;
+
+  letter-spacing: 0.15em;
+}
+
+
+.project-link span {
+  color: var(--pink);
+}
+
+
+.project-link:hover {
+  color: var(--pink);
+}
+
+
+/* EMPTY */
+
+.empty {
+  padding:
+    90px
+    30px;
+
+  text-align: center;
+
+  border:
+    1px solid
+    var(--line);
+}
+
+
+.empty-mark {
+  color: var(--pink);
+
+  font:
+    20px "Courier New",
+    monospace;
+}
+
+
+.empty h3 {
+  margin-top: 25px;
+}
+
+
+.empty p {
+  color: var(--muted);
+}
+
+
+/* PIPELINE */
+
+.pipeline {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    70px
+    1fr
+    70px
+    1fr;
+
+  align-items: stretch;
+}
+
+
+.pipeline-node {
+  min-height: 260px;
+
+  padding: 32px;
+
+  border:
+    1px solid
+    var(--line);
+}
+
+
+.pipeline-node span {
+  color: var(--pink);
+
+  font:
+    10px "Courier New",
+    monospace;
+}
+
+
+.pipeline-node strong {
+  display: block;
+
+  margin-top: 60px;
+
+  color: var(--pink);
+
+  font-size: 24px;
+
+  letter-spacing: -0.03em;
+}
+
+
+.pipeline-node p {
+  color: var(--muted);
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+
+.pipeline-arrow {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: var(--pink);
+
+  font-size: 24px;
+}
+
+
+/* METADATA */
+
+.metadata-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+
+.metadata-grid article {
+  min-height: 250px;
+
+  padding: 30px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+
+.metadata-grid article > span {
+  color: var(--pink);
+
+  font:
+    10px "Courier New",
+    monospace;
+}
+
+
+.metadata-grid h3 {
+  margin-top: 60px;
+
+  font-size: 17px;
+
+  letter-spacing: -0.02em;
+}
+
+
+.metadata-grid p {
+  color: var(--muted);
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+
+/* STANDARD */
+
+.standard-grid {
+  display: grid;
+
+  grid-template-columns:
+    1.1fr
+    0.9fr;
+
+  gap: 9vw;
+}
+
+
+.standard-statement {
+  font-size:
+    clamp(
+      38px,
+      5vw,
+      76px
+    );
+
+  line-height: 0.98;
+
+  letter-spacing: -0.05em;
+}
+
+
+.standard-copy {
+  color: var(--muted);
+
+  line-height: 1.8;
+}
+
+
+.standard-copy .bright {
+  color: var(--white);
+}
+
+
+/* FOOTER */
+
+footer {
+  padding:
+    80px
+    8vw
+    35px;
+}
+
+
+.footer-brand {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-end;
+}
+
+
+.footer-brand strong {
+  color: var(--white);
+
+  font-size:
+    clamp(
+      48px,
+      8vw,
+      110px
+    );
+
+  line-height: 0.8;
+
+  letter-spacing: -0.07em;
+}
+
+
+.footer-brand strong span {
+  color: var(--pink);
+}
+
+
+.footer-brand p {
+  color: var(--dim);
+
+  font:
+    9px "Courier New",
+    monospace;
+
+  letter-spacing: 0.18em;
+}
+
+
+.footer-links {
+  display: flex;
+
+  gap: 30px;
+
+  margin-top: 60px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid var(--line);
+}
+
+
+.footer-links a {
+  color: var(--muted);
+
+  font:
+    9px "Courier New",
+    monospace;
+
+  letter-spacing: 0.14em;
+}
+
+
+.footer-links a:hover {
+  color: var(--pink);
+}
+
+
+.footer-meta {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 25px;
+
+  margin-top: 25px;
+
+  color: var(--dim);
+
+  font:
+    8px "Courier New",
+    monospace;
+
+  letter-spacing: 0.12em;
+}
+
+
+.copyright {
+  margin-top: 55px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid var(--line);
+
+  color: var(--faint);
+
+  font:
+    8px "Courier New",
+    monospace;
+
+  letter-spacing: 0.12em;
+}
+
+
+/* TABLET */
+
+@media (max-width: 1000px) {
+
+  .top-status {
+    display: none;
   }
 
-  * {
-    box-sizing: border-box;
+  .topbar {
+    grid-template-columns:
+      1fr
+      auto;
   }
 
-  html {
-    background: var(--bg);
-    color: var(--text);
-    scroll-behavior: smooth;
+
+  .question-grid,
+  .standard-grid {
+    grid-template-columns: 1fr;
   }
 
-  body {
-    margin: 0;
-    background:
-      linear-gradient(
-        rgba(255, 255, 255, 0.018) 1px,
-        transparent 1px
-      ),
-      var(--bg);
-    background-size: 100% 5px;
-
-    color: var(--text);
-    font-family:
-      Arial,
-      Helvetica,
-      sans-serif;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .site-header {
-    width: min(var(--max), calc(100% - 48px));
-    margin: 0 auto;
-
-    min-height: 82px;
-
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-
-    border-bottom: 1px solid var(--line);
-  }
-
-  .brand {
-    display: inline-flex;
-    gap: 7px;
-
-    font-size: 18px;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-  }
-
-  .brand span:first-child {
-    color: var(--white);
-  }
-
-  .brand span:last-child {
-    color: var(--pink);
-  }
-
-  nav {
-    display: flex;
-    gap: 30px;
-
-    font-family:
-      "Courier New",
-      monospace;
-
-    font-size: 10px;
-    letter-spacing: 0.12em;
-  }
-
-  nav a {
-    color: var(--muted);
-    transition: color 180ms ease;
-  }
-
-  nav a:hover,
-  nav a[aria-current="page"] {
-    color: var(--pink);
-  }
-
-  .status {
-    justify-self: end;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    color: var(--dim);
-
-    font-family:
-      "Courier New",
-      monospace;
-
-    font-size: 9px;
-    letter-spacing: 0.12em;
-  }
-
-  .status-dot {
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-    background: var(--pink);
-
-    box-shadow: 0 0 10px rgba(255, 47, 146, 0.65);
-  }
-
-  main {
-    width: min(var(--max), calc(100% - 48px));
-    margin: 0 auto;
-  }
-
-  .hero {
-    min-height: 680px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    padding: 90px 0 110px;
-
-    border-bottom: 1px solid var(--line);
-  }
-
-  .eyebrow,
-  .section-tag,
-  .section-number,
-  .project-type,
-  .stat-label,
-  .card-data span,
-  .card-status,
-  .card-footer,
-  .empty-code,
-  footer {
-    font-family:
-      "Courier New",
-      monospace;
-  }
-
-  .eyebrow {
-    margin-bottom: 30px;
-
-    color: var(--muted);
-
-    font-size: 10px;
-    letter-spacing: 0.16em;
-  }
-
-  .hero-title {
-    margin: 0;
-
-    color: var(--pink);
-
-    font-size: clamp(90px, 16vw, 245px);
-    font-weight: 900;
-    line-height: 0.78;
-    letter-spacing: -0.085em;
-  }
-
-  .hero-title span {
-    color: transparent;
-    -webkit-text-stroke: 2px var(--white);
-  }
-
-  .hero-bottom {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-
-    margin-top: 70px;
-  }
-
-  .hero-description {
-    max-width: 620px;
-
-    margin: 0;
-
-    color: var(--muted);
-
-    font-size: 17px;
-    line-height: 1.65;
-  }
-
-  .hero-mark {
-    color: var(--pink);
-
-    font-size: 38px;
-    font-weight: 900;
-    letter-spacing: -0.1em;
-  }
-
-  .hero-mark span:nth-child(2) {
-    color: var(--white);
-  }
-
-  .registry-summary {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-
-    padding: 110px 0;
-
-    border-bottom: 1px solid var(--line);
-  }
-
-  .section-number {
-    color: var(--pink);
-
-    font-size: 11px;
-    letter-spacing: 0.12em;
-  }
-
-  .summary-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-  }
-
-  .summary-heading h2 {
-    margin: 0 0 28px;
-
-    color: var(--pink);
-
-    font-size: clamp(48px, 7vw, 100px);
-    line-height: 0.9;
-    letter-spacing: -0.06em;
-  }
-
-  .summary-heading p {
-    max-width: 580px;
-
-    margin: 0;
-
-    color: var(--muted);
-
-    font-size: 16px;
-    line-height: 1.7;
-  }
-
-  .stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    border-top: 1px solid var(--line);
-    border-left: 1px solid var(--line);
-  }
-
-  .stat {
-    min-height: 150px;
-
-    padding: 25px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .stat-number {
-    color: var(--pink);
-
-    font-size: 48px;
-    font-weight: 800;
-    letter-spacing: -0.06em;
-  }
-
-  .stat-label {
-    color: var(--dim);
-
-    font-size: 9px;
-    letter-spacing: 0.12em;
-  }
-
-  .projects-section {
-    padding: 110px 0;
-  }
-
-  .section-heading {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-
-    margin-bottom: 70px;
-  }
-
-  .section-heading h2,
-  .architecture h2,
-  .github-copy h2 {
-    margin: 15px 0 0;
-
-    color: var(--pink);
-
-    font-size: clamp(55px, 8vw, 120px);
-    font-weight: 900;
-    line-height: 0.83;
-    letter-spacing: -0.075em;
-  }
-
-  .section-heading h2 span,
-  .architecture h2 span,
-  .github-copy h2 span {
-    color: transparent;
-    -webkit-text-stroke: 2px var(--white);
-  }
-
-  .section-tag {
-    margin: 0;
-
-    color: var(--dim);
-
-    font-size: 9px;
-    letter-spacing: 0.15em;
-  }
 
   .project-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    border-top: 1px solid var(--line);
-    border-left: 1px solid var(--line);
+    grid-template-columns: 1fr;
   }
+
+
+  .metadata-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+
+  .pipeline {
+    grid-template-columns: 1fr;
+  }
+
+
+  .pipeline-arrow {
+    min-height: 60px;
+  }
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+
+  .topbar {
+    padding: 0 6vw;
+  }
+
+
+  .back {
+    font-size: 8px;
+  }
+
+
+  .hero {
+    min-height: 85vh;
+
+    padding:
+      100px
+      6vw
+      90px;
+  }
+
+
+  .hero-side {
+    display: none;
+  }
+
+
+  .hero-scroll {
+    left: 6vw;
+    right: 6vw;
+  }
+
+
+  .section {
+    padding:
+      90px
+      6vw;
+  }
+
+
+  .section-header {
+    grid-template-columns:
+      45px
+      1fr;
+
+    gap: 15px;
+
+    margin-bottom: 45px;
+  }
+
+
+  .stats {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+
+  .stat {
+    min-height: 140px;
+  }
+
+
+  .language-strip {
+    display: block;
+  }
+
+
+  .language-title {
+    margin-bottom: 15px;
+  }
+
 
   .project-card {
     min-height: 470px;
 
-    padding: 30px;
-
-    display: flex;
-    flex-direction: column;
-
-    background: var(--surface);
-
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-
-    transition:
-      background 180ms ease,
-      border-color 180ms ease;
+    padding: 25px;
   }
 
-  .project-card:hover {
-    background: var(--surface-hover);
-    border-color: var(--line-strong);
+
+  .metadata-grid {
+    grid-template-columns: 1fr;
   }
 
-  .card-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .card-number {
-    color: var(--pink);
-
-    font-family:
-      "Courier New",
-      monospace;
-
-    font-size: 10px;
-  }
-
-  .card-status {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-    letter-spacing: 0.1em;
-  }
-
-  .card-status.archived {
-    color: var(--dim);
-  }
-
-  .card-status.fork {
-    color: var(--muted);
-  }
-
-  .card-main {
-    flex: 1;
-
-    padding: 80px 0 50px;
-  }
-
-  .project-type {
-    margin: 0 0 15px;
-
-    color: var(--pink);
-
-    font-size: 9px;
-    letter-spacing: 0.13em;
-  }
-
-  .project-card h3 {
-    margin: 0 0 25px;
-
-    color: var(--pink);
-
-    font-size: clamp(34px, 4vw, 65px);
-    line-height: 0.9;
-    letter-spacing: -0.06em;
-
-    word-break: break-word;
-  }
-
-  .project-description {
-    max-width: 580px;
-
-    margin: 0;
-
-    color: var(--muted);
-
-    font-size: 14px;
-    line-height: 1.65;
-  }
-
-  .card-data {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-
-    margin-bottom: 24px;
-
-    border-top: 1px solid var(--line);
-    border-left: 1px solid var(--line);
-  }
-
-  .card-data div {
-    min-height: 72px;
-
-    padding: 12px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .card-data span {
-    color: var(--dim);
-
-    font-size: 8px;
-    letter-spacing: 0.08em;
-  }
-
-  .card-data strong {
-    color: var(--white);
-
-    font-size: 11px;
-    font-weight: 500;
-  }
-
-  .topics {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-
-    margin-bottom: 25px;
-  }
-
-  .topics span {
-    padding: 6px 8px;
-
-    color: var(--muted);
-
-    border: 1px solid var(--line);
-
-    font-family:
-      "Courier New",
-      monospace;
-
-    font-size: 8px;
-    letter-spacing: 0.06em;
-  }
-
-  .card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding-top: 20px;
-
-    border-top: 1px solid var(--line);
-
-    color: var(--dim);
-
-    font-size: 9px;
-  }
-
-  .card-footer a {
-    color: var(--pink);
-  }
-
-  .empty-state {
-    padding: 80px 30px;
-
-    border: 1px solid var(--line);
-
-    text-align: center;
-  }
-
-  .empty-state strong {
-    display: block;
-
-    margin: 20px 0 10px;
-
-    color: var(--pink);
-
-    font-size: 24px;
-  }
-
-  .empty-state p {
-    color: var(--muted);
-  }
-
-  .architecture {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-
-    padding: 110px 0;
-
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .architecture-content {
-    max-width: 1200px;
-  }
-
-  .pipeline {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
-    align-items: stretch;
-
-    margin-top: 80px;
-
-    border-top: 1px solid var(--pink-line);
-    border-left: 1px solid var(--pink-line);
-  }
-
-  .pipeline > div:not(.arrow) {
-    min-height: 150px;
-
-    padding: 20px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    border-right: 1px solid var(--pink-line);
-    border-bottom: 1px solid var(--pink-line);
-  }
-
-  .pipeline span {
-    color: var(--dim);
-
-    font-family:
-      "Courier New",
-      monospace;
-
-    font-size: 9px;
-  }
-
-  .pipeline strong {
-    color: var(--pink);
-
-    font-size: 18px;
-    letter-spacing: -0.04em;
-  }
-
-  .pipeline small {
-    color: var(--dim);
-
-    font-family:
-      "Courier New",
-      monospace;
-
-    font-size: 8px;
-  }
-
-  .pipeline .arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 10px;
-
-    color: var(--pink);
-  }
-
-  .github-section {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: end;
-    gap: 80px;
-
-    padding: 130px 0;
-  }
-
-  .github-copy {
-    max-width: 850px;
-  }
-
-  .github-copy > p:last-child {
-    max-width: 600px;
-
-    margin-top: 50px;
-
-    color: var(--muted);
-
-    font-size: 15px;
-    line-height: 1.7;
-  }
-
-  .github-button {
-    padding: 18px 22px;
-
-    background: var(--pink);
-    color: #050505;
-
-    font-family:
-      "Courier New",
-      monospace;
-
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-
-    transition:
-      transform 180ms ease,
-      background 180ms ease;
-  }
-
-  .github-button:hover {
-    transform: translateY(-3px);
-    background: var(--white);
-  }
-
-  footer {
-    width: min(var(--max), calc(100% - 48px));
-    margin: 0 auto;
-
-    min-height: 120px;
-
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
-
-    border-top: 1px solid var(--line);
-
-    color: var(--dim);
-
-    font-size: 9px;
-    letter-spacing: 0.08em;
-  }
 
   .footer-brand {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+    display: block;
   }
 
-  .footer-brand strong {
-    font-family:
-      Arial,
-      Helvetica,
-      sans-serif;
 
-    font-size: 16px;
-    letter-spacing: -0.04em;
+  .footer-brand p {
+    margin-top: 25px;
   }
 
-  .footer-brand strong span:first-child {
-    color: var(--white);
+
+  .footer-links {
+    flex-wrap: wrap;
   }
 
-  .footer-brand strong span:last-child {
-    color: var(--pink);
-  }
+}
 
-  footer > div:nth-child(2) {
-    text-align: center;
-  }
-
-  footer > div:last-child {
-    text-align: right;
-  }
-
-  @media (max-width: 900px) {
-    .site-header {
-      grid-template-columns: 1fr auto;
-    }
-
-    nav {
-      display: none;
-    }
-
-    .summary-content,
-    .github-section {
-      grid-template-columns: 1fr;
-    }
-
-    .project-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .pipeline {
-      grid-template-columns: 1fr;
-    }
-
-    .pipeline .arrow {
-      min-height: 40px;
-    }
-
-    .architecture {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-  }
-
-  @media (max-width: 640px) {
-    main,
-    .site-header,
-    footer {
-      width: min(100% - 28px, var(--max));
-    }
-
-    .hero {
-      min-height: 560px;
-      padding: 70px 0;
-    }
-
-    .hero-title {
-      font-size: 22vw;
-    }
-
-    .hero-bottom {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 40px;
-    }
-
-    .registry-summary,
-    .section-heading {
-      grid-template-columns: 1fr;
-      gap: 30px;
-    }
-
-    .card-data {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .card-footer {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 15px;
-    }
-
-    footer {
-      grid-template-columns: 1fr;
-      gap: 20px;
-
-      padding: 30px 0;
-    }
-
-    footer > div:nth-child(2),
-    footer > div:last-child {
-      text-align: left;
-    }
-  }
 </style>
