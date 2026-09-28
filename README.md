@@ -15,7 +15,7 @@ We just don't think humans should have to suffer through it. 🐾
 ---
 
 <p align="center">
-  <img src="docs/barkly-homepage.png" alt="Barkly Labs website" width="100%">
+  <img src="public/docs/barkly-homepage.png" alt="Barkly Labs website" width="100%">
 </p>
 
 <p align="center">
