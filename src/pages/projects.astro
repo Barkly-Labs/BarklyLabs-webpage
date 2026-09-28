@@ -695,165 +695,129 @@ const lastUpdated =
       <!-- PROJECT CARDS -->
 
       {repositories.length > 0 ? (
+  <div class="project-grid">
+    {repositories.map((project, index) => (
+      <a
+        class="project-card"
+        href={project.html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Open ${project.name} repository on GitHub`}
+      >
+        <!-- IDENTITY -->
+        <div class="project-top">
+          <span class="project-number">
+            {String(index + 1).padStart(2, "0")}
+          </span>
 
-        <div class="project-grid">
-
-          {repositories.map(
-            (project, index) => (
-
-              <article class="project-card">
-
-                <div class="project-top">
-
-                  <span class="project-number">
-                    {String(index + 1).padStart(
-                      2,
-                      "0",
-                    )}
-                  </span>
-
-                  <span
-                    class={`status ${project.statusClass}`}
-                  >
-                    {project.projectStatus}
-                  </span>
-
-                </div>
-
-                <div class="project-type">
-                  {project.projectType}
-                </div>
-
-                <h3>
-                  {project.name}
-                </h3>
-
-                <p class="project-description">
-                  {project.description ||
-                    "No repository description has been provided yet."}
-                </p>
-
-                <div class="project-meta">
-
-                  <div>
-                    <span>
-                      LANGUAGE
-                    </span>
-
-                    <strong>
-                      {project.language || "—"}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <span>
-                      LAST COMMIT
-                    </span>
-
-                    <strong>
-                      {project.latestCommitDate
-                        ? formatDate(
-                            project.latestCommitDate,
-                          )
-                        : "UNKNOWN"}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <span>
-                      STARS
-                    </span>
-
-                    <strong>
-                      {project.stargazers_count}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <span>
-                      FORKS
-                    </span>
-
-                    <strong>
-                      {project.forks_count}
-                    </strong>
-                  </div>
-
-                </div>
-
-                {project.latestCommitDate && (
-                  <div class="commit-info">
-
-                    <span>
-                      GIT HISTORY
-                    </span>
-
-                    <strong>
-                      {new Date(
-                        project.latestCommitDate,
-                      ).getFullYear()}
-                    </strong>
-
-                  </div>
-                )}
-
-                {project.topics &&
-                  project.topics.length > 0 && (
-
-                    <div class="topics">
-
-                      {project.topics
-                        .slice(0, 6)
-                        .map((topic) => (
-                          <span>
-                            #{topic}
-                          </span>
-                        ))}
-
-                    </div>
-
-                  )}
-
-                <a
-                  class="project-link"
-                  href={project.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  VIEW REPOSITORY
-                  <span>↗</span>
-                </a>
-
-              </article>
-
-            ),
-          )}
-
+          <span class={`status ${project.statusClass}`}>
+            {project.projectStatus}
+          </span>
         </div>
 
-      ) : (
+        <!-- TYPE -->
+        <div class="project-type">
+          {project.projectType}
+        </div>
 
-        <div class="empty">
+        <!-- PROJECT -->
+        <h3>
+          {project.name}
+        </h3>
 
-          <div class="empty-mark">
-            [ ! ]
+        <p class="project-description">
+          {project.description ||
+            "No repository description has been provided yet."}
+        </p>
+
+        <!-- METADATA -->
+        <div class="project-meta">
+          <div>
+            <span>LANGUAGE</span>
+            <strong>
+              {project.language || "—"}
+            </strong>
           </div>
 
-          <h3>
-            NO REPOSITORIES RETURNED.
-          </h3>
+          <div>
+            <span>LAST COMMIT</span>
+            <strong>
+              {project.latestCommitDate
+                ? formatDate(project.latestCommitDate)
+                : "UNKNOWN"}
+            </strong>
+          </div>
 
-          <p>
-            GitHub did not return any public
-            repositories for the Barkly Labs
-            organization.
-          </p>
+          <div>
+            <span>STARS</span>
+            <strong>
+              {project.stargazers_count}
+            </strong>
+          </div>
 
+          <div>
+            <span>FORKS</span>
+            <strong>
+              {project.forks_count}
+            </strong>
+          </div>
         </div>
 
-      )}
-    </section>
+        <!-- GIT HISTORY -->
+        <div class="commit-info">
+          <span>GIT HISTORY</span>
 
+          <strong>
+            {project.latestCommitDate
+              ? new Date(
+                  project.latestCommitDate,
+                ).getFullYear()
+              : "UNKNOWN"}
+          </strong>
+        </div>
+
+        <!-- TOPICS -->
+        {project.topics &&
+          project.topics.length > 0 && (
+            <div class="topics">
+              {project.topics
+                .slice(0, 6)
+                .map((topic) => (
+                  <span>
+                    #{topic}
+                  </span>
+                ))}
+            </div>
+          )}
+
+        <!-- ACTION -->
+        <div class="project-link">
+          <span>VIEW REPOSITORY</span>
+          <span class="project-link-arrow" aria-hidden="true">
+            ↗
+          </span>
+        </div>
+      </a>
+    ))}
+  </div>
+) : (
+  <div class="empty">
+    <div class="empty-mark">
+      [ ! ]
+    </div>
+
+    <h3>
+      NO REPOSITORIES RETURNED.
+    </h3>
+
+    <p>
+      GitHub did not return any public
+      repositories for the Barkly Labs
+      organization.
+    </p>
+  </div>
+)}
+</section>
     <!-- ARCHITECTURE -->
 
     <section class="section architecture">
