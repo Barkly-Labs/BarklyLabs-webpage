@@ -63,6 +63,7 @@ const principles = [
 
     <section id="funding" class="section">
       <header><small>03</small><div><label>ILLUSTRATIVE PLANNING MODEL</label><h2>WHERE THE <em>RESOURCES GO.</em></h2></div></header>
+      <div class="actions"><a class="primary" href="/financial">SEE THE BREAKDOWN</a></div>
       <div class="note"><b>[ i ]</b><p>These percentages are a planning model, not a promise of exact spending. Actual allocations would depend on the funding source, project requirements, organizational needs, and applicable grant restrictions. Public reporting would explain how funded work was actually used.</p></div>
       <div class="funding-grid">
         {funding.map(area => <article class="fund-card"><div class="card-top"><span>{area.n}</span><small>{area.tag}</small></div><strong class="share">{area.share}</strong><h3>{area.title}</h3><p>{area.text}</p><ul>{area.items.map(item => <li>→ {item}</li>)}</ul></article>)}
@@ -94,15 +95,173 @@ const principles = [
   </main>
 </body>
 </html>
-
 <style>
-:root{--bg:#050505;--text:#f2f2f2;--muted:rgba(255,255,255,.52);--faint:rgba(255,255,255,.28);--line:rgba(255,255,255,.12);--pink:#ff4fa3;--pf:rgba(255,79,163,.08);--ps:rgba(255,79,163,.22)}
-*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;background:radial-gradient(circle at 70% 5%,var(--pf),transparent 30rem),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,sans-serif}a{color:inherit;text-decoration:none}::selection{background:var(--pink);color:#050505}
-.topbar{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 5vw;min-height:68px;border-bottom:1px solid var(--line);background:rgba(5,5,5,.88);backdrop-filter:blur(18px);font:10px "Courier New",monospace;letter-spacing:.18em}.brand{font-weight:700}.mark{color:var(--pink);margin-right:10px}.top-status{text-align:center;color:var(--faint)}.back{justify-self:end;color:var(--muted)}
-.hero{position:relative;min-height:88vh;display:flex;align-items:center;padding:120px 8vw;overflow:hidden;border-bottom:1px solid var(--line)}.grid{position:absolute;inset:0;opacity:.3;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,#000,transparent 85%)}.orbit{position:absolute;border:1px solid var(--ps);border-radius:50%}.o1{width:55vw;height:55vw;right:-20vw;top:-20vw}.o2{width:30vw;height:30vw;right:-5vw;top:-7vw}.hero-copy{position:relative;z-index:2;max-width:900px}.eyebrow,label,.fund-card small,.projects b,footer small{font:10px "Courier New",monospace;letter-spacing:.2em}.eyebrow{display:flex;gap:16px;color:var(--muted);margin-bottom:28px}.eyebrow span,header small,.fund-card .card-top span,.projects article>span,.outreach span,.principles span{color:var(--pink)}h1,h2{margin:0;text-transform:uppercase;letter-spacing:-.065em;line-height:.88}h1{font-size:clamp(62px,10vw,150px)}h1 em,h2 em{display:block;color:var(--pink);font-style:normal}.hero-copy>p{max-width:760px;margin:36px 0 0;color:var(--muted);font-size:18px;line-height:1.7}.hero-copy .dim{color:rgba(255,255,255,.35);font-size:14px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:38px}.actions a{display:inline-flex;min-width:190px;justify-content:center;padding:15px 18px;border:1px solid var(--line);font:10px "Courier New",monospace;letter-spacing:.12em}.actions .primary{background:var(--pink);border-color:var(--pink);color:#050505;font-weight:700}.side{position:absolute;right:4vw;top:50%;transform:rotate(90deg) translateX(50%);transform-origin:right center;color:rgba(255,255,255,.25);font:8px/2 "Courier New",monospace;letter-spacing:.18em}.scroll{position:absolute;bottom:28px;left:8vw;right:8vw;color:var(--faint);font:8px "Courier New",monospace;letter-spacing:.18em}.scroll b{display:inline-block;width:100px;height:1px;background:var(--pink);vertical-align:middle;margin-left:18px}
-.section{padding:130px 8vw;border-bottom:1px solid var(--line)}section>header{display:grid;grid-template-columns:80px 1fr;gap:30px;margin-bottom:65px}header small{font:13px "Courier New",monospace;padding-top:9px}label{display:block;color:var(--muted);margin-bottom:20px}h2{font-size:clamp(48px,7vw,100px)}.two-col{display:grid;grid-template-columns:1.1fr .9fr;gap:9vw}.big{font-size:clamp(32px,4.4vw,65px);line-height:1.02;letter-spacing:-.045em}.copy{color:var(--muted);line-height:1.8}.bright{color:var(--text)!important;font-weight:600}.bright strong{color:var(--pink)}
-.note{display:flex;gap:20px;padding:22px;margin-bottom:38px;border:1px solid var(--ps);background:var(--pf)}.note>b{color:var(--pink);font-family:"Courier New",monospace}.note p{max-width:900px;margin:0;color:var(--muted);font-size:13px;line-height:1.7}.funding-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.fund-card{min-height:450px;padding:32px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.025),transparent)}.card-top{display:flex;justify-content:space-between}.card-top small{color:var(--faint)}.share{display:block;margin:50px 0 12px;color:var(--pink);font-size:42px;letter-spacing:-.06em}.fund-card h3,.projects h3,.outreach h3,.principles h3{margin:0;text-transform:uppercase;letter-spacing:-.025em}.fund-card h3{font-size:20px}.fund-card>p,.projects p,.outreach p,.principles p,.building p,.transparency p,.final>p{color:var(--muted);line-height:1.65;font-size:14px}.fund-card ul{list-style:none;padding:0;margin:28px 0 0}.fund-card li{padding:9px 0;border-top:1px solid var(--line);color:rgba(255,255,255,.58);font-size:12px}
-.projects{border-top:1px solid var(--line)}.projects article{display:grid;grid-template-columns:55px 190px 1fr 30px;gap:25px;align-items:center;padding:34px 0;border-bottom:1px solid var(--line)}.projects b{color:var(--faint)}.projects i{color:var(--pink);font-style:normal}.projects h3{font-size:21px}.projects p{max-width:720px;margin:10px 0 0}.panel,.transparency{display:grid;grid-template-columns:70px 1fr 300px;gap:55px;padding:65px;border:1px solid var(--line);background:linear-gradient(135deg,var(--pf),transparent 45%)}.panel h2,.transparency h2{font-size:clamp(45px,6vw,82px)}.panel p{max-width:720px}.panel dl{align-self:end;margin:0}.panel dl div{padding:16px 0;border-top:1px solid var(--line)}dt,dd{font:9px "Courier New",monospace;letter-spacing:.12em}dt{color:var(--faint);margin-bottom:6px}dd{margin:0}.outreach,.principles{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.outreach article,.principles article{min-height:250px;padding:30px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.outreach h3{margin-top:55px;font-size:17px}.principles article{min-height:210px}.principles h3{margin-top:38px;font-size:16px}.transparency{grid-template-columns:1fr 1fr}.transparency label{color:var(--pink)}.final{text-align:center;padding:160px 8vw;border-bottom:1px solid var(--line)}.final h2{max-width:1000px;margin:auto}.final>p{max-width:680px;margin:35px auto 0}.final .actions{justify-content:center}footer{padding:70px 8vw 30px}footer>div{display:flex;justify-content:space-between}footer strong{font-size:50px;letter-spacing:-.07em}footer small{display:block;color:var(--pink);letter-spacing:.55em;margin-top:4px}footer>span{color:var(--faint);font:10px/1.7 "Courier New",monospace;text-align:right}footer p{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--faint);font:8px "Courier New",monospace;letter-spacing:.12em}
-@media(max-width:900px){.topbar{grid-template-columns:1fr auto}.top-status,.side{display:none}.funding-grid,.outreach,.principles{grid-template-columns:repeat(2,1fr)}.two-col,.transparency{grid-template-columns:1fr}.panel{grid-template-columns:60px 1fr}.panel dl{grid-column:2}.projects article{grid-template-columns:45px 1fr 25px}.projects b{display:none}}
-@media(max-width:600px){.section{padding:90px 6vw}.hero{padding:110px 6vw 100px}.scroll{left:6vw;right:6vw}section>header{grid-template-columns:45px 1fr;gap:15px}.funding-grid,.outreach,.principles{grid-template-columns:1fr}.panel{grid-template-columns:1fr;padding:30px;gap:30px}.panel dl{grid-column:auto}.transparency{padding:30px}.final{padding:110px 6vw}footer>div{display:block}footer>span{text-align:left;display:block;margin-top:30px}}
+  /* ---------------------------------------------------------
+   FUNDING BREAKDOWN ACTION
+   Align the button with the section's content column.
+   --------------------------------------------------------- */
+
+#funding > .actions {
+  margin-top: 0;
+  margin-left: 110px;
+  margin-bottom: 8px;
+}
+
+#funding > .actions .primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 190px;
+  min-height: 44px;
+  padding: 0 22px;
+
+  background: var(--pink);
+  border: 1px solid var(--pink);
+
+  color: #050505;
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  line-height: 1;
+  text-transform: uppercase;
+
+  transition:
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease;
+}
+
+#funding > .actions .primary:hover {
+  background: transparent;
+  color: var(--pink);
+  border-color: var(--pink);
+}
+
+#funding > .actions .primary:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 4px;
+}
+
+
+/* ---------------------------------------------------------
+   TABLET
+   --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+  .topbar {
+    grid-template-columns: 1fr auto;
+  }
+
+  .top-status,
+  .side {
+    display: none;
+  }
+
+  .funding-grid,
+  .outreach,
+  .principles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .two-col,
+  .transparency {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .panel dl {
+    grid-column: 2;
+  }
+
+  .projects article {
+    grid-template-columns: 45px 1fr 25px;
+  }
+
+  .projects b {
+    display: none;
+  }
+
+  /* Funding button follows the content normally */
+  #funding > .actions {
+    margin-left: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 600px) {
+
+  .section {
+    padding: 90px 6vw;
+  }
+
+  .hero {
+    padding: 110px 6vw 100px;
+  }
+
+  .scroll {
+    left: 6vw;
+    right: 6vw;
+  }
+
+  section > header {
+    grid-template-columns: 45px 1fr;
+    gap: 15px;
+  }
+
+  .funding-grid,
+  .outreach,
+  .principles {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    grid-template-columns: 1fr;
+    padding: 30px;
+    gap: 30px;
+  }
+
+  .panel dl {
+    grid-column: auto;
+  }
+
+  .transparency {
+    padding: 30px;
+  }
+
+  .final {
+    padding: 110px 6vw;
+  }
+
+  footer > div {
+    display: block;
+  }
+
+  footer > span {
+    text-align: left;
+    display: block;
+    margin-top: 30px;
+  }
+
+  /* Mobile funding button */
+  #funding > .actions {
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  #funding > .actions .primary {
+    width: 100%;
+  }
+}
 </style>
