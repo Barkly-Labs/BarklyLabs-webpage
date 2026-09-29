@@ -1,0 +1,988 @@
+---
+const pageTitle = "Join — Barkly Labs";
+const pageDescription =
+  "Join Barkly Labs and help build human-centered software, hardware, research, education, and open technology.";
+
+const roles = [
+  {
+    id: "FIN-01",
+    title: "Finance & Operations",
+    text: "Help make the organization actually function.",
+    items: [
+      "Nonprofit bookkeeping",
+      "Budgeting and financial systems",
+      "Grant administration",
+      "Organizational operations",
+      "Documentation",
+      "Compliance support",
+    ],
+  },
+  {
+    id: "ENG-01",
+    title: "Engineering",
+    text: "Build software and hardware with us.",
+    items: [
+      "Python and web development",
+      "AI and machine learning",
+      "Computer vision",
+      "Linux and infrastructure",
+      "Embedded systems",
+      "Electronics and hardware",
+      "APIs and open-source development",
+    ],
+  },
+  {
+    id: "RES-01",
+    title: "Research",
+    text: "Help us answer the question: does this actually work?",
+    items: [
+      "Experiment design",
+      "Datasets",
+      "Evaluation",
+      "Reproducibility",
+      "Research documentation",
+      "Human-centered testing",
+      "Evidence collection",
+    ],
+  },
+  {
+    id: "DOC-01",
+    title: "Documentation",
+    text: "Make complicated systems understandable.",
+    items: [
+      "Barkly Docs",
+      "Technical documentation",
+      "Research records",
+      "Functional requirements",
+      "Tutorials",
+      "Public knowledge",
+    ],
+  },
+  {
+    id: "CRE-01",
+    title: "Design & Creative Technology",
+    text: "Technology can be rigorous and expressive.",
+    items: [
+      "Interface design",
+      "Visual design",
+      "Creative coding",
+      "Games",
+      "VR and AR",
+      "Animation",
+      "Experimental media",
+    ],
+  },
+  {
+    id: "COM-01",
+    title: "Community & Education",
+    text: "Help Barkly build with people, not just around them.",
+    items: [
+      "Community events",
+      "Workshops",
+      "Educational programs",
+      "Outreach",
+      "Partnerships",
+      "Creator communities",
+      "Accessibility initiatives",
+    ],
+  },
+];
+
+const participation = [
+  {
+    code: "P-01",
+    title: "Volunteer",
+    text: "Contribute time to Barkly projects and infrastructure.",
+  },
+  {
+    code: "P-02",
+    title: "Collaborator",
+    text: "Work with Barkly on a specific project, experiment, or research effort.",
+  },
+  {
+    code: "P-03",
+    title: "Advisor",
+    text: "Bring specialized knowledge to help Barkly make better decisions.",
+  },
+  {
+    code: "P-04",
+    title: "Research Contributor",
+    text: "Participate in experiments, studies, documentation, or technical research.",
+  },
+  {
+    code: "P-05",
+    title: "Future Staff",
+    text: "As sustainable funding becomes available, Barkly intends to create paid ongoing roles.",
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+
+    <style>
+      :root {
+        --bg: #080808;
+        --bg-soft: #101010;
+        --panel: #111111;
+        --panel-2: #151515;
+        --line: #292929;
+        --line-bright: #444444;
+        --text: #f4f4f4;
+        --muted: #a5a5a5;
+        --dim: #686868;
+        --pink: #ff2b9a;
+        --pink-bright: #ff58b2;
+        --pink-dark: #8f1457;
+        --white: #ffffff;
+        --max: 1180px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background:
+          linear-gradient(
+            rgba(255, 255, 255, 0.018) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.018) 1px,
+            transparent 1px
+          ),
+          var(--bg);
+        background-size: 32px 32px;
+        color: var(--text);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        min-height: 100vh;
+      }
+
+      .shell {
+        width: min(calc(100% - 40px), var(--max));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        border-bottom: 1px solid var(--line);
+        background: rgba(8, 8, 8, 0.92);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+
+      .topbar-inner {
+        min-height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 0.82rem;
+      }
+
+      .brand-mark {
+        width: 12px;
+        height: 12px;
+        background: var(--pink);
+        box-shadow: 0 0 18px rgba(255, 43, 154, 0.45);
+      }
+
+      .nav {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .nav a:hover {
+        color: var(--pink);
+      }
+
+      .hero {
+        padding: 110px 0 100px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .kicker {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--pink);
+        font-family: "Courier New", monospace;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .kicker::before {
+        content: "";
+        width: 34px;
+        height: 1px;
+        background: var(--pink);
+      }
+
+      h1 {
+        max-width: 900px;
+        margin: 20px 0 24px;
+        font-size: clamp(3.4rem, 9vw, 8.5rem);
+        line-height: 0.88;
+        letter-spacing: -0.065em;
+        text-transform: uppercase;
+      }
+
+      .hero-lead {
+        max-width: 760px;
+        color: #d1d1d1;
+        font-size: clamp(1.1rem, 2vw, 1.45rem);
+      }
+
+      .hero-question {
+        margin-top: 48px;
+        max-width: 900px;
+        padding: 28px;
+        border-left: 3px solid var(--pink);
+        background: linear-gradient(
+          90deg,
+          rgba(255, 43, 154, 0.08),
+          transparent
+        );
+        font-size: clamp(1.5rem, 3vw, 2.4rem);
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .section {
+        padding: 100px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 40px;
+        margin-bottom: 54px;
+      }
+
+      .section-number {
+        color: var(--pink);
+        font-family: "Courier New", monospace;
+        font-size: 0.82rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: clamp(2.2rem, 5vw, 4.5rem);
+        line-height: 0.95;
+        letter-spacing: -0.045em;
+        text-transform: uppercase;
+      }
+
+      .section-intro {
+        max-width: 720px;
+        margin-top: 20px;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .principles {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+
+      .principle {
+        padding: 30px;
+        background: var(--panel);
+      }
+
+      .principle strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--pink);
+        font-family: "Courier New", monospace;
+        font-size: 0.82rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .principle p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .roles {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .role {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 32px;
+        transition:
+          border-color 180ms ease,
+          transform 180ms ease,
+          background 180ms ease;
+      }
+
+      .role:hover {
+        border-color: var(--pink-dark);
+        background: var(--panel-2);
+        transform: translateY(-2px);
+      }
+
+      .role-code {
+        color: var(--pink);
+        font-family: "Courier New", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+      }
+
+      .role h3 {
+        margin: 12px 0 10px;
+        font-size: 1.5rem;
+        line-height: 1.05;
+        text-transform: uppercase;
+      }
+
+      .role p {
+        color: var(--muted);
+        margin: 0 0 22px;
+      }
+
+      .role ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+      }
+
+      .role li {
+        color: #d4d4d4;
+        font-size: 0.9rem;
+      }
+
+      .role li::before {
+        content: "→";
+        color: var(--pink);
+        margin-right: 9px;
+        font-family: "Courier New", monospace;
+      }
+
+      .statement {
+        max-width: 900px;
+        padding: 44px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      .statement p {
+        margin: 0;
+        font-size: clamp(1.4rem, 3vw, 2.2rem);
+        line-height: 1.25;
+      }
+
+      .participation {
+        display: grid;
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+
+      .participation-item {
+        display: grid;
+        grid-template-columns: 100px 220px 1fr;
+        gap: 24px;
+        align-items: start;
+        padding: 25px;
+        background: var(--panel);
+      }
+
+      .participation-code {
+        color: var(--pink);
+        font-family: "Courier New", monospace;
+        font-size: 0.75rem;
+      }
+
+      .participation-item h3 {
+        margin: 0;
+        font-size: 1rem;
+        text-transform: uppercase;
+      }
+
+      .participation-item p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .step {
+        min-height: 230px;
+        border: 1px solid var(--line);
+        padding: 28px;
+        background: var(--panel);
+      }
+
+      .step-number {
+        color: var(--pink);
+        font-family: "Courier New", monospace;
+        font-size: 0.8rem;
+      }
+
+      .step h3 {
+        margin: 35px 0 10px;
+        text-transform: uppercase;
+      }
+
+      .step p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .cta {
+        padding: 110px 0;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 43, 154, 0.1),
+            transparent 45%
+          );
+      }
+
+      .cta-box {
+        border: 1px solid var(--pink-dark);
+        padding: clamp(30px, 6vw, 70px);
+        background: #0b0b0b;
+      }
+
+      .cta-box h2 {
+        max-width: 800px;
+      }
+
+      .cta-box p {
+        max-width: 680px;
+        margin: 28px 0;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        border: 1px solid var(--pink);
+        background: var(--pink);
+        color: #080808;
+        text-decoration: none;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .button:hover {
+        background: var(--pink-bright);
+      }
+
+      .button.secondary {
+        background: transparent;
+        color: var(--text);
+        border-color: var(--line-bright);
+      }
+
+      .button.secondary:hover {
+        border-color: var(--pink);
+        color: var(--pink);
+      }
+
+      footer {
+        padding: 40px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+        color: var(--dim);
+        font-family: "Courier New", monospace;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      @media (max-width: 800px) {
+        .section-head {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .roles,
+        .principles {
+          grid-template-columns: 1fr;
+        }
+
+        .steps {
+          grid-template-columns: 1fr;
+        }
+
+        .participation-item {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+
+        .hero {
+          padding: 80px 0;
+        }
+
+        .section {
+          padding: 70px 0;
+        }
+
+        .nav {
+          display: none;
+        }
+      }
+
+      @media (max-width: 500px) {
+        .shell {
+          width: min(calc(100% - 28px), var(--max));
+        }
+
+        h1 {
+          font-size: 3.4rem;
+        }
+
+        .hero-question,
+        .statement {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="shell topbar-inner">
+          <a class="brand" href="/">
+            <span class="brand-mark"></span>
+            Barkly Labs
+          </a>
+
+          <nav class="nav" aria-label="Main navigation">
+            <a href="/projects">Projects</a>
+            <a href="/research">Research</a>
+            <a href="/standards">Standards</a>
+            <a href="/join" aria-current="page">Join</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="shell">
+            <div class="kicker">BARKLY / PEOPLE / 001</div>
+
+            <h1>Build With Us.</h1>
+
+            <p class="hero-lead">
+              Barkly Labs is a nonprofit technology research and education
+              organization building software, hardware, research systems,
+              open technology, and community infrastructure around people.
+            </p>
+
+            <div class="hero-question">
+              Can we make computers front-load the hard stuff for humans?
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="shell">
+            <div class="section-head">
+              <div class="section-number">01 / WHY JOIN</div>
+
+              <div>
+                <h2>Build something useful.</h2>
+
+                <p class="section-intro">
+                  Barkly is growing from an idea into an organization. We
+                  cannot — and should not — build all of it alone.
+                </p>
+              </div>
+            </div>
+
+            <div class="statement">
+              <p>
+                We are looking for people who want to think, build, question,
+                experiment, document, teach, and improve things with us.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="shell">
+            <div class="section-head">
+              <div class="section-number">02 / WHAT WE BUILD</div>
+
+              <div>
+                <h2>Connected systems.</h2>
+
+                <p class="section-intro">
+                  Barkly works across research, software, hardware, standards,
+                  education, and community.
+                </p>
+              </div>
+            </div>
+
+            <div class="principles">
+              <div class="principle">
+                <strong>Research</strong>
+                <p>
+                  Human-centered computing, AI, computer vision, experimental
+                  systems, and applied research.
+                </p>
+              </div>
+
+              <div class="principle">
+                <strong>Software</strong>
+                <p>
+                  CYN-X, Barkly Docs, Barkly Linux, open-source tools, APIs,
+                  and developer infrastructure.
+                </p>
+              </div>
+
+              <div class="principle">
+                <strong>Hardware</strong>
+                <p>
+                  PawBoard, reclaimed technology, embedded systems, and open
+                  hardware.
+                </p>
+              </div>
+
+              <div class="principle">
+                <strong>Standards</strong>
+                <p>
+                  Human-centered engineering practices around accessibility,
+                  autonomy, privacy, safety, and transparency.
+                </p>
+              </div>
+
+              <div class="principle">
+                <strong>Education</strong>
+                <p>
+                  Technical documentation, learning resources, workshops,
+                  research communication, and making complex systems
+                  understandable.
+                </p>
+              </div>
+
+              <div class="principle">
+                <strong>Community</strong>
+                <p>
+                  Connecting builders, artists, researchers, educators,
+                  creators, makers, and curious humans.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="shell">
+            <div class="section-head">
+              <div class="section-number">03 / WHO WE NEED</div>
+
+              <div>
+                <h2>Different brains. One lab.</h2>
+
+                <p class="section-intro">
+                  Barkly needs more than programmers. We need people who can
+                  help build the organization around the technology.
+                </p>
+              </div>
+            </div>
+
+            <div class="roles">
+              {
+                roles.map((role) => (
+                  <article class="role">
+                    <div class="role-code">{role.id}</div>
+
+                    <h3>{role.title}</h3>
+
+                    <p>{role.text}</p>
+
+                    <ul>
+                      {role.items.map((item) => <li>{item}</li>)}
+                    </ul>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="shell">
+            <div class="section-head">
+              <div class="section-number">04 / HOW WE WORK</div>
+
+              <div>
+                <h2>People before extraction.</h2>
+
+                <p class="section-intro">
+                  Barkly's organizational principles should reflect the same
+                  human-centered thinking we apply to our technology.
+                </p>
+              </div>
+            </div>
+
+            <div class="principles">
+              <div class="principle">
+                <strong>Human First</strong>
+                <p>People are not resources to be optimized.</p>
+              </div>
+
+              <div class="principle">
+                <strong>Understandable</strong>
+                <p>Systems should explain themselves.</p>
+              </div>
+
+              <div class="principle">
+                <strong>Private Where Practical</strong>
+                <p>
+                  People should have meaningful control over their information.
+                </p>
+              </div>
+
+              <div class="principle">
+                <strong>Experimental</strong>
+                <p>Try things, learn, document, and try again.</p>
+              </div>
+
+              <div class="principle">
+                <strong>Open When Possible</strong>
+                <p>Share knowledge and technology when safe and useful.</p>
+              </div>
+
+              <div class="principle">
+                <strong>Evidence Over Hype</strong>
+                <p>If we do not know, we say we do not know.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="shell">
+            <div class="section-head">
+              <div class="section-number">05 / YOU DON'T HAVE TO BE QUALIFIED</div>
+
+              <div>
+                <h2>Bring something real.</h2>
+
+                <p class="section-intro">
+                  Barkly cares about what you can contribute, not just what
+                  credentials you have.
+                </p>
+              </div>
+            </div>
+
+            <div class="statement">
+              <p>
+                You might be an engineer, student, researcher, artist, maker,
+                systems thinker, community organizer, self-taught programmer,
+                or simply someone with a really good idea.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="shell">
+            <div class="section-head">
+              <div class="section-number">06 / PARTICIPATION</div>
+
+              <div>
+                <h2>Start where you are.</h2>
+
+                <p class="section-intro">
+                  Barkly is currently growing. Different people may participate
+                  in different ways.
+                </p>
+              </div>
+            </div>
+
+            <div class="participation">
+              {
+                participation.map((item) => (
+                  <article class="participation-item">
+                    <div class="participation-code">{item.code}</div>
+
+                    <h3>{item.title}</h3>
+
+                    <p>{item.text}</p>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="shell">
+            <div class="section-head">
+              <div class="section-number">07 / START SMALL</div>
+
+              <div>
+                <h2>One thing is enough.</h2>
+
+                <p class="section-intro">
+                  You do not need to join everything.
+                </p>
+              </div>
+            </div>
+
+            <div class="steps">
+              <article class="step">
+                <div class="step-number">01</div>
+                <h3>One Project</h3>
+                <p>
+                  Start with something you actually want to build or explore.
+                </p>
+              </article>
+
+              <article class="step">
+                <div class="step-number">02</div>
+                <h3>One Contribution</h3>
+                <p>
+                  A pull request, research experiment, documentation page,
+                  design, or idea can be enough.
+                </p>
+              </article>
+
+              <article class="step">
+                <div class="step-number">03</div>
+                <h3>One Conversation</h3>
+                <p>
+                  Tell us what you care about and where you think you can help.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="cta">
+          <div class="shell">
+            <div class="cta-box">
+              <div class="kicker">08 / BUILD WITH US</div>
+
+              <h2>Barkly is still being built.</h2>
+
+              <p>
+                You do not have to wait until everything is finished. Help
+                shape what it becomes.
+              </p>
+
+              <div class="actions">
+                <a
+                  class="button"
+                  href="mailto:hello@barklylabs@outlook.com?subject=I%20want%20to%20join%20Barkly%20Labs"
+                >
+                  Contact Barkly
+                </a>
+
+                <a class="button secondary" href="/projects">
+                  View Projects
+                </a>
+
+                <a class="button secondary" href="/standard">
+                  Read Standards
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="shell footer-inner">
+          <span>BARKLY LABS</span>
+          <span>PEOPLE FIRST / SYSTEMS SECOND</span>
+          <span>BUILD TECHNOLOGY AROUND HUMAN BEINGS</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
