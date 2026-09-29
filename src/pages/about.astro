@@ -434,49 +434,123 @@ const sections = [
 
         <!-- FUTURE -->
 
-        <section
-          class="content-section future-section"
-          id="future"
-        >
-          <div class="section-heading">
-            <span class="section-number">06</span>
+        
+  <section class="content-section practice-section" id="practice">
 
-            <div>
-              <span class="eyebrow">WHAT COMES NEXT</span>
+    <div class="section-heading">
 
-              <h2>
-                THE LAB<br />
-                <span>KEEPS BUILDING.</span>
-              </h2>
-            </div>
-          </div>
+      <div class="section-number">04</div>
 
-          <div class="future-content">
-            <p class="large-copy">
-              Barkly is not finished.
-            </p>
+      <div>
+        <span class="eyebrow">PRACTICE</span>
 
-            <p>
-              New systems will emerge. Existing systems will change.
-              Experiments will fail. Ideas will evolve. Documentation
-              will grow. The standard will be tested against reality
-              and improved through what we learn.
-            </p>
+        <h2>
+          BUILD<br />
+          <span>WHAT COMES NEXT.</span>
+        </h2>
+      </div>
 
-            <p>
-              That is intentional.
-            </p>
+    </div>
 
-            <p>
-              A laboratory should not be frozen.
-              It should remain capable of discovery.
-            </p>
 
-            <div class="future-mark">
-              <span>BUILD THE FUTURE.</span>
-            </div>
-          </div>
-        </section>
+    <div class="practice-copy">
+
+      <p class="large-copy">
+        Barkly Labs exists to build useful things — and to build the
+        foundations that make the next useful thing possible.
+      </p>
+
+      <p>
+        We build through experimentation, documentation, collaboration,
+        reuse, and care. Every project is an opportunity to learn something,
+        leave something behind, and make the next project easier for someone
+        else to build.
+      </p>
+
+    </div>
+
+
+    <div class="practice-grid">
+
+      <div class="practice-item">
+        <span>BUILD</span>
+        <p>
+          We turn ideas into working systems. Hardware, software,
+          interfaces, infrastructure, and experiments are built to solve
+          real problems and explore what technology could make possible.
+        </p>
+      </div>
+
+      <div class="practice-item">
+        <span>DOCUMENT</span>
+        <p>
+          What we build should be understandable. We document how systems
+          work, why decisions were made, what we learned, and what another
+          person would need to continue the work.
+        </p>
+      </div>
+
+      <div class="practice-item">
+        <span>EXPERIMENT</span>
+        <p>
+          Barkly Labs is allowed to try things. Experiments can fail,
+          prototypes can change, and ideas can be replaced when we learn
+          something better. Failure is information, not wasted work.
+        </p>
+      </div>
+
+      <div class="practice-item">
+        <span>SHARE</span>
+        <p>
+          When knowledge, tools, documentation, or discoveries can help
+          others, we create a path for that work to leave the lab and
+          become useful beyond the original project.
+        </p>
+      </div>
+
+      <div class="practice-item">
+        <span>REUSE</span>
+        <p>
+          We do not want every project to begin from zero. Components,
+          infrastructure, documentation, interfaces, and lessons should
+          become foundations that make future work faster and more
+          accessible.
+        </p>
+      </div>
+
+      <div class="practice-item">
+        <span>CONNECT</span>
+        <p>
+          Barkly projects are designed to become part of an ecosystem.
+          Systems should be able to work together while remaining useful,
+          understandable, and maintainable on their own.
+        </p>
+      </div>
+
+      <div class="practice-item">
+        <span>DESIGN FOR PEOPLE</span>
+        <p>
+          Technology exists in service of people. We design around human
+          needs, accessibility, cognitive load, autonomy, dignity, and the
+          reality that people have different abilities and different ways
+          of interacting with technology.
+        </p>
+      </div>
+
+      <div class="practice-item">
+        <span>LEAVE SOMETHING BEHIND</span>
+        <p>
+          Every project should make the future a little easier to build.
+          The goal is not simply to finish a project, but to leave behind
+          knowledge, infrastructure, tools, or ideas that someone else can
+          build upon.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
 
 
         <!-- SUPPORT -->
@@ -656,6 +730,82 @@ const sections = [
 
 
 <style>
+
+
+/* HOW WE BUILD */
+
+.practice-copy {
+  grid-column: 2;
+
+  min-width: 0;
+  max-width: 750px;
+}
+
+.practice-copy p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.practice-copy p + p {
+  margin-top: 28px;
+}
+
+.practice-copy .large-copy {
+  color: var(--white);
+}
+
+.practice-grid {
+  grid-column: 1 / -1;
+
+  margin-top: 80px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.practice-item {
+  min-height: 190px;
+
+  padding: 30px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.practice-item span {
+  color: var(--pink);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.practice-item p {
+  max-width: 420px;
+
+  margin: auto 0 0;
+
+  color: var(--muted);
+
+  line-height: 1.55;
+}
+
+
 
 :global(*) {
   box-sizing: border-box;
