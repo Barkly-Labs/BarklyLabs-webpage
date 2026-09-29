@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>🌱 Barkly Plant Care — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            🌱 Barkly Plant Care
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barky Plant Care System.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>🌱 Barkly Plant Care</h1>
+<h2>Functional Requirements Document</h2>
+<h3>Human-Centered Autonomous Plant Care System</h3>
+<p class="paragraph body-text">Document Status: Draft
+Organization: Barkly Labs
+System: Barkly Plant Care
+Related Systems: PlantWater-API, CYN-X, Barkly Safety Layer</p>
+<h1>01. Purpose</h1>
+<p class="paragraph body-text">Barkly Plant Care SHALL provide an intelligent plant-care system capable of monitoring individual plants, understanding their care requirements, evaluating their current environment, and adjusting care actions accordingly.</p>
+<p class="paragraph body-text">The system SHALL move unnecessary plant-care complexity away from the human while preserving human visibility, control, and override capability.</p>
+<p class="paragraph body-text">The system SHALL combine:</p>
+<p class="paragraph body-text">PlantWater-API for plant-care hardware and sensor integration</p>
+<p class="paragraph body-text">CYN-X for contextual reasoning and decision support</p>
+<p class="paragraph body-text">Barkly Safety Layer for deterministic limits and physical-system protection</p>
+<p class="paragraph body-text">Plant Profiles for species- and individual-specific care requirements</p>
+<p class="paragraph body-text">Historical Data for understanding how an individual plant behaves over time</p>
+<h1>02. Core Principle</h1>
+<p class="paragraph body-text">Barkly Plant Care SHALL NOT operate primarily from fixed schedules.</p>
+<p class="paragraph body-text">The system SHOULD make decisions based on:</p>
+<p class="paragraph block-quotation">What plant is this? + What does this plant need? + What is happening right now? + What has happened previously?</p>
+<p class="paragraph body-text">For example:</p>
+<p class="paragraph preformatted-text">Traditional System</p>
+<p class="paragraph preformatted-text">Every 3 days</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Water plant</p>
+<p class="paragraph body-text">Barkly Plant Care:</p>
+<p class="paragraph preformatted-text">Plant Profile</p>
+<p class="paragraph preformatted-text">+</p>
+<p class="paragraph preformatted-text">Current Sensors</p>
+<p class="paragraph preformatted-text">+</p>
+<p class="paragraph preformatted-text">Environmental Conditions</p>
+<p class="paragraph preformatted-text">+</p>
+<p class="paragraph preformatted-text">Historical Behavior</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">CYN-X Evaluation</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Safety Validation</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Care Action</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Observe Result</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Update Plant History</p>
+<h1>03. System Architecture</h1>
+<p class="paragraph body-text">Barkly Plant Care SHALL consist of the following logical components:</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>Component</th>
+<th>Responsibility</th>
+</tr>
+<tr>
+<td>Plant Profile System</td>
+<td>Defines plant-specific requirements</td>
+</tr>
+<tr>
+<td>PlantWater-API</td>
+<td>Interfaces with sensors and watering hardware</td>
+</tr>
+<tr>
+<td>Sensor Layer</td>
+<td>Collects environmental measurements</td>
+</tr>
+<tr>
+<td>Plant State Engine</td>
+<td>Represents the plant&#x27;s current condition</td>
+</tr>
+<tr>
+<td>CYN-X</td>
+<td>Performs contextual reasoning</td>
+</tr>
+<tr>
+<td>Barkly Safety Layer</td>
+<td>Enforces physical and operational limits</td>
+</tr>
+<tr>
+<td>Decision Engine</td>
+<td>Converts evaluation into permitted actions</td>
+</tr>
+<tr>
+<td>History System</td>
+<td>Records observations and actions</td>
+</tr>
+<tr>
+<td>Human Interface</td>
+<td>Explains system state and decisions</td>
+</tr>
+<tr>
+<td>Notification System</td>
+<td>Alerts humans when intervention is required</td>
+</tr>
+</table>
+</div>
+<h1>04. Plant Profiles</h1>
+<h3>FR-PLANT-001 — Plant Identity</h3>
+<p class="paragraph body-text">The system SHALL maintain a unique identity for every managed plant.</p>
+<p class="paragraph body-text">Each plant SHALL have:</p>
+<p class="paragraph preformatted-text">plant_id</p>
+<p class="paragraph preformatted-text">name</p>
+<p class="paragraph preformatted-text">species</p>
+<p class="paragraph preformatted-text">location</p>
+<p class="paragraph preformatted-text">container</p>
+<p class="paragraph preformatted-text">soil_profile</p>
+<p class="paragraph preformatted-text">growth_stage</p>
+<h3>FR-PLANT-002 — Species Requirements</h3>
+<p class="paragraph body-text">The system SHALL support storing care requirements associated with a plant species.</p>
+<p class="paragraph body-text">Requirements MAY include:</p>
+<p class="paragraph body-text">preferred soil moisture</p>
+<p class="paragraph body-text">acceptable moisture range</p>
+<p class="paragraph body-text">watering behavior</p>
+<p class="paragraph body-text">light requirements</p>
+<p class="paragraph body-text">temperature range</p>
+<p class="paragraph body-text">humidity preferences</p>
+<p class="paragraph body-text">growth stage</p>
+<p class="paragraph body-text">expected drying behavior</p>
+<h3>FR-PLANT-003 — Individual Plant Characteristics</h3>
+<p class="paragraph body-text">The system SHOULD support characteristics specific to an individual plant.</p>
+<p class="paragraph body-text">Examples:</p>
+<p class="paragraph preformatted-text">container size</p>
+<p class="paragraph preformatted-text">soil composition</p>
+<p class="paragraph preformatted-text">pot drainage</p>
+<p class="paragraph preformatted-text">observed drying rate</p>
+<p class="paragraph preformatted-text">historical watering volume</p>
+<p class="paragraph preformatted-text">growth behavior</p>
+<p class="paragraph body-text">The system SHALL NOT assume that every plant of the same species behaves identically.</p>
+<h1>05. Environmental Monitoring</h1>
+<h3>FR-SENSOR-001 — Soil Moisture</h3>
+<p class="paragraph body-text">The system SHALL support measurement of soil moisture.</p>
+<h3>FR-SENSOR-002 — Temperature</h3>
+<p class="paragraph body-text">The system SHALL support environmental temperature measurement.</p>
+<h3>FR-SENSOR-003 — Humidity</h3>
+<p class="paragraph body-text">The system SHALL support environmental humidity measurement.</p>
+<h3>FR-SENSOR-004 — Light</h3>
+<p class="paragraph body-text">The system SHOULD support measurement of available light.</p>
+<h3>FR-SENSOR-005 — Water Reservoir</h3>
+<p class="paragraph body-text">The system SHALL support monitoring of available water when connected to an automated reservoir.</p>
+<h3>FR-SENSOR-006 — Sensor Health</h3>
+<p class="paragraph body-text">The system SHALL detect unavailable, invalid, stale, or abnormal sensor readings.</p>
+<h1>06. Plant State</h1>
+<p class="paragraph body-text">The system SHALL maintain a current representation of each plant&#x27;s observed state.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Plant State</p>
+<p class="paragraph preformatted-text">├── soil_moisture</p>
+<p class="paragraph preformatted-text">├── temperature</p>
+<p class="paragraph preformatted-text">├── humidity</p>
+<p class="paragraph preformatted-text">├── light</p>
+<p class="paragraph preformatted-text">├── reservoir_level</p>
+<p class="paragraph preformatted-text">├── last_watered</p>
+<p class="paragraph preformatted-text">├── recent_water_volume</p>
+<p class="paragraph preformatted-text">├── drying_rate</p>
+<p class="paragraph preformatted-text">└── sensor_health</p>
+<h3>FR-STATE-001</h3>
+<p class="paragraph body-text">The system SHALL update plant state when new sensor data becomes available.</p>
+<h3>FR-STATE-002</h3>
+<p class="paragraph body-text">The system SHALL preserve historical observations.</p>
+<h3>FR-STATE-003</h3>
+<p class="paragraph body-text">The system SHALL distinguish between:</p>
+<p class="paragraph preformatted-text">Observed</p>
+<p class="paragraph preformatted-text">Estimated</p>
+<p class="paragraph preformatted-text">Inferred</p>
+<p class="paragraph preformatted-text">Unknown</p>
+<p class="paragraph body-text">The system SHALL NOT present an inference as a direct measurement.</p>
+<h1>07. Intelligent Care Evaluation</h1>
+<h3>FR-AI-001 — Contextual Evaluation</h3>
+<p class="paragraph body-text">CYN-X SHALL be capable of evaluating plant state in relation to the plant&#x27;s profile.</p>
+<p class="paragraph body-text">The evaluation MAY consider:</p>
+<p class="paragraph body-text">current moisture</p>
+<p class="paragraph body-text">recent moisture trend</p>
+<p class="paragraph body-text">drying rate</p>
+<p class="paragraph body-text">recent watering</p>
+<p class="paragraph body-text">environmental conditions</p>
+<p class="paragraph body-text">plant requirements</p>
+<p class="paragraph body-text">growth stage</p>
+<p class="paragraph body-text">historical behavior</p>
+<h3>FR-AI-002 — Care Recommendation</h3>
+<p class="paragraph body-text">CYN-X SHALL be capable of producing a structured care recommendation.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Recommendation:</p>
+<p class="paragraph preformatted-text">action: water</p>
+<p class="paragraph preformatted-text">suggested_volume: 80 mL</p>
+<p class="paragraph preformatted-text">confidence: moderate</p>
+<p class="paragraph preformatted-text">reason:</p>
+<p class="paragraph preformatted-text">soil moisture has fallen below</p>
+<p class="paragraph preformatted-text">the plant&#x27;s preferred range</p>
+<h3>FR-AI-003 — No-Action Decision</h3>
+<p class="paragraph body-text">The system SHALL be capable of determining that no action is currently required.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">ACTION: NONE</p>
+<p class="paragraph preformatted-text">Reason:</p>
+<p class="paragraph preformatted-text">Plant moisture remains within</p>
+<p class="paragraph preformatted-text">its preferred operating range.</p>
+<h3>FR-AI-004 — Uncertainty</h3>
+<p class="paragraph body-text">CYN-X SHALL be capable of identifying insufficient information.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">STATUS: UNCERTAIN</p>
+<p class="paragraph preformatted-text">Reason:</p>
+<p class="paragraph preformatted-text">Soil sensor has not reported valid</p>
+<p class="paragraph preformatted-text">data for 14 hours.</p>
+<p class="paragraph body-text">The system SHALL NOT be required to make an automated care action when insufficient information exists.</p>
+<h1>08. Adaptive Plant Care</h1>
+<h3>FR-ADAPT-001 — Individual Behavior</h3>
+<p class="paragraph body-text">The system SHOULD learn from historical observations how an individual plant behaves.</p>
+<p class="paragraph body-text">For example:</p>
+<p class="paragraph preformatted-text">Average drying rate:</p>
+<p class="paragraph preformatted-text">4.2% / day</p>
+<p class="paragraph preformatted-text">Recent drying rate:</p>
+<p class="paragraph preformatted-text">6.1% / day</p>
+<p class="paragraph body-text">This information MAY influence future care evaluation.</p>
+<h3>FR-ADAPT-002 — Environmental Changes</h3>
+<p class="paragraph body-text">The system SHOULD account for environmental changes.</p>
+<p class="paragraph body-text">Examples:</p>
+<p class="paragraph preformatted-text">Higher temperature</p>
+<p class="paragraph preformatted-text">Lower humidity</p>
+<p class="paragraph preformatted-text">Increased sunlight</p>
+<p class="paragraph preformatted-text">Different season</p>
+<p class="paragraph preformatted-text">Different location</p>
+<h3>FR-ADAPT-003 — Growth Stage</h3>
+<p class="paragraph body-text">The system SHOULD support different care profiles for different growth stages.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Seedling</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Vegetative</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Flowering</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Mature</p>
+<h1>09. Automated Watering</h1>
+<h3>FR-WATER-001</h3>
+<p class="paragraph body-text">The system SHALL support automated watering when compatible hardware is connected.</p>
+<h3>FR-WATER-002</h3>
+<p class="paragraph body-text">Watering actions SHALL be generated from an evaluated plant state rather than solely from a fixed timer.</p>
+<h3>FR-WATER-003</h3>
+<p class="paragraph body-text">The system SHALL support configurable maximum watering volumes.</p>
+<h3>FR-WATER-004</h3>
+<p class="paragraph body-text">The system SHALL support configurable minimum intervals between watering events.</p>
+<h3>FR-WATER-005</h3>
+<p class="paragraph body-text">The system SHALL record every automated watering event.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">2026-09-29 11:42</p>
+<p class="paragraph preformatted-text">Plant: Tomato-01</p>
+<p class="paragraph preformatted-text">Volume: 80 mL</p>
+<p class="paragraph preformatted-text">Trigger: CYN-X recommendation</p>
+<p class="paragraph preformatted-text">Safety: Approved</p>
+<h1>10. Barkly Safety Layer</h1>
+<p class="paragraph body-text">CYN-X SHALL NOT directly control physical actuators without safety validation.</p>
+<p class="paragraph body-text">Architecture:</p>
+<p class="paragraph preformatted-text">CYN-X</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Care Recommendation</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Barkly Safety Controller</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">┌───────┼────────┐</p>
+<p class="paragraph preformatted-text">▼       ▼        ▼</p>
+<p class="paragraph preformatted-text">Volume   Cooldown   Sensors</p>
+<p class="paragraph preformatted-text">Limit     Limit    Validity</p>
+<p class="paragraph preformatted-text">│       │        │</p>
+<p class="paragraph preformatted-text">└───────┼────────┘</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">APPROVE / DENY</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">PlantWater-API</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Pump</p>
+<h3>FR-SAFE-001</h3>
+<p class="paragraph body-text">The Safety Layer SHALL enforce maximum watering volume.</p>
+<h3>FR-SAFE-002</h3>
+<p class="paragraph body-text">The Safety Layer SHALL enforce minimum watering intervals.</p>
+<h3>FR-SAFE-003</h3>
+<p class="paragraph body-text">The Safety Layer SHALL reject watering when required sensor information is invalid or unavailable.</p>
+<h3>FR-SAFE-004</h3>
+<p class="paragraph body-text">The system SHALL provide a physical or software emergency stop where supported by the hardware.</p>
+<h3>FR-SAFE-005</h3>
+<p class="paragraph body-text">A failed AI component SHALL NOT automatically bypass physical safety limits.</p>
+<h1>11. Human Control</h1>
+<p class="paragraph body-text">Barkly Plant Care SHALL remain human-controlled even when automation is enabled.</p>
+<h3>FR-HUMAN-001</h3>
+<p class="paragraph body-text">The human SHALL be able to view the current state of every plant.</p>
+<h3>FR-HUMAN-002</h3>
+<p class="paragraph body-text">The human SHALL be able to manually water a plant.</p>
+<h3>FR-HUMAN-003</h3>
+<p class="paragraph body-text">The human SHALL be able to disable automated watering.</p>
+<h3>FR-HUMAN-004</h3>
+<p class="paragraph body-text">The human SHALL be able to modify plant profiles.</p>
+<h3>FR-HUMAN-005</h3>
+<p class="paragraph body-text">The human SHALL be able to override an automated recommendation.</p>
+<h1>12. Explainability</h1>
+<p class="paragraph body-text">The system SHALL explain significant automated actions in human-readable language.</p>
+<p class="paragraph body-text">Instead of:</p>
+<p class="paragraph preformatted-text">WATER = TRUE</p>
+<p class="paragraph body-text">the system SHOULD display:</p>
+<p class="paragraph block-quotation">🌱 Tomato-01 needs water.
+Soil moisture has fallen below its preferred range and the plant has been drying faster than its recent average. Barkly recommends 80 mL.</p>
+<p class="paragraph body-text">The human SHOULD be able to inspect the information used to make the decision.</p>
+<h1>13. Notifications</h1>
+<p class="paragraph body-text">The system SHOULD notify the human when intervention is needed.</p>
+<p class="paragraph body-text">Examples:</p>
+<h3>Normal</h3>
+<p class="paragraph block-quotation">🌱 Fern is doing fine.</p>
+<h3>Attention</h3>
+<p class="paragraph block-quotation">🌱 Tomato-01 is drying faster than usual.</p>
+<h3>Sensor Problem</h3>
+<p class="paragraph block-quotation">⚠️ Tomato-01&#x27;s moisture sensor hasn&#x27;t reported valid data.</p>
+<h3>Hardware Problem</h3>
+<p class="paragraph block-quotation">🚨 PlantWater reservoir is empty.</p>
+<h3>Human Decision Required</h3>
+<p class="paragraph block-quotation">🐾 Barkly can&#x27;t confidently determine whether this plant should be watered.</p>
+<h1>14. Historical Records</h1>
+<p class="paragraph body-text">The system SHALL maintain a history of:</p>
+<p class="paragraph body-text">sensor observations</p>
+<p class="paragraph body-text">watering events</p>
+<p class="paragraph body-text">manual interventions</p>
+<p class="paragraph body-text">automated decisions</p>
+<p class="paragraph body-text">rejected actions</p>
+<p class="paragraph body-text">sensor failures</p>
+<p class="paragraph body-text">environmental conditions</p>
+<p class="paragraph body-text">plant-profile changes</p>
+<p class="paragraph body-text">This history SHOULD be exportable.</p>
+<h1>15. API Requirements</h1>
+<p class="paragraph body-text">PlantWater-API SHALL expose machine-readable interfaces for:</p>
+<p class="paragraph preformatted-text">GET    /plants</p>
+<p class="paragraph preformatted-text">GET    /plants/{id}</p>
+<p class="paragraph preformatted-text">POST   /plants</p>
+<p class="paragraph preformatted-text">PATCH  /plants/{id}</p>
+<p class="paragraph preformatted-text">GET    /plants/{id}/state</p>
+<p class="paragraph preformatted-text">GET    /plants/{id}/history</p>
+<p class="paragraph preformatted-text">GET    /plants/{id}/sensors</p>
+<p class="paragraph preformatted-text">GET    /plants/{id}/recommendations</p>
+<p class="paragraph preformatted-text">POST   /plants/{id}/water</p>
+<p class="paragraph preformatted-text">POST   /plants/{id}/automation/enable</p>
+<p class="paragraph preformatted-text">POST   /plants/{id}/automation/disable</p>
+<p class="paragraph body-text">Exact endpoint naming MAY change during implementation.</p>
+<h1>16. CYN-X Interface</h1>
+<p class="paragraph body-text">CYN-X SHOULD receive structured plant information rather than raw unorganized sensor streams.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">{</p>
+<p class="paragraph preformatted-text">&quot;plant&quot;: {</p>
+<p class="paragraph preformatted-text">&quot;species&quot;: &quot;example&quot;,</p>
+<p class="paragraph preformatted-text">&quot;growth_stage&quot;: &quot;vegetative&quot;</p>
+<p class="paragraph preformatted-text">},</p>
+<p class="paragraph preformatted-text">&quot;environment&quot;: {</p>
+<p class="paragraph preformatted-text">&quot;soil_moisture&quot;: 31,</p>
+<p class="paragraph preformatted-text">&quot;temperature&quot;: 74,</p>
+<p class="paragraph preformatted-text">&quot;humidity&quot;: 48,</p>
+<p class="paragraph preformatted-text">&quot;light&quot;: 820</p>
+<p class="paragraph preformatted-text">},</p>
+<p class="paragraph preformatted-text">&quot;history&quot;: {</p>
+<p class="paragraph preformatted-text">&quot;hours_since_watering&quot;: 19,</p>
+<p class="paragraph preformatted-text">&quot;recent_drying_rate&quot;: 0.061</p>
+<p class="paragraph preformatted-text">}</p>
+<p class="paragraph preformatted-text">}</p>
+<p class="paragraph body-text">CYN-X SHOULD return structured decisions rather than only natural-language text.</p>
+<h1>17. Failure Handling</h1>
+<p class="paragraph body-text">The system SHALL fail safely.</p>
+<p class="paragraph body-text">If:</p>
+<p class="paragraph preformatted-text">sensor fails</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">don&#x27;t guess</p>
+<p class="paragraph body-text">If:</p>
+<p class="paragraph preformatted-text">CYN-X unavailable</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">safe fallback behavior</p>
+<p class="paragraph body-text">If:</p>
+<p class="paragraph preformatted-text">pump reports failure</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">stop automated watering</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">notify human</p>
+<p class="paragraph body-text">If:</p>
+<p class="paragraph preformatted-text">reservoir empty</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">do not run pump</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">notify human</p>
+<h1>18. Privacy</h1>
+<p class="paragraph body-text">Plant data SHOULD remain local where practical.</p>
+<p class="paragraph body-text">The system SHOULD NOT require cloud AI for basic plant-care functionality.</p>
+<p class="paragraph body-text">Where CYN-X is locally available, plant data SHOULD be processed locally unless the human explicitly enables external services.</p>
+<h1>19. Accessibility / Human-Centered Requirements</h1>
+<p class="paragraph body-text">Barkly Plant Care SHALL follow the Barkly human-centered design principles.</p>
+<p class="paragraph body-text">The interface SHOULD:</p>
+<p class="paragraph body-text">minimize unnecessary decisions</p>
+<p class="paragraph body-text">use understandable language</p>
+<p class="paragraph body-text">expose complexity progressively</p>
+<p class="paragraph body-text">avoid requiring constant monitoring</p>
+<p class="paragraph body-text">clearly distinguish warnings from informational messages</p>
+<p class="paragraph body-text">provide manual control</p>
+<p class="paragraph body-text">provide explanations for automated actions</p>
+<p class="paragraph body-text">avoid overwhelming the user with raw sensor data</p>
+<p class="paragraph body-text">The system&#x27;s purpose is not to make the human become a plant scientist.</p>
+<p class="paragraph body-text">It is to make the computer handle the complicated parts.</p>
+<h1>20. MVP</h1>
+<p class="paragraph body-text">The first implementation SHOULD focus on:</p>
+<p class="paragraph preformatted-text">MVP</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── Plant profiles</p>
+<p class="paragraph preformatted-text">├── Soil moisture sensor</p>
+<p class="paragraph preformatted-text">├── Temperature/humidity</p>
+<p class="paragraph preformatted-text">├── PlantWater-API</p>
+<p class="paragraph preformatted-text">├── Automated pump</p>
+<p class="paragraph preformatted-text">├── Safety controller</p>
+<p class="paragraph preformatted-text">├── CYN-X evaluation</p>
+<p class="paragraph preformatted-text">├── Watering history</p>
+<p class="paragraph preformatted-text">├── Human dashboard</p>
+<p class="paragraph preformatted-text">└── Manual override</p>
+<p class="paragraph body-text">The MVP does not need to solve every plant-care problem.</p>
+<p class="paragraph body-text">The first goal is simply:</p>
+<p class="paragraph block-quotation">Identify what plant we are caring for, understand its current conditions, determine whether it needs water, safely act when appropriate, and explain what happened. 🌱🐾</p>
+<h1>21. Future Capabilities</h1>
+<p class="paragraph body-text">Future versions MAY add:</p>
+<p class="paragraph body-text">plant image recognition</p>
+<p class="paragraph body-text">disease/deficiency detection</p>
+<p class="paragraph body-text">camera-based growth tracking</p>
+<p class="paragraph body-text">automatic plant identification</p>
+<p class="paragraph body-text">fertilizer management</p>
+<p class="paragraph body-text">light-control integration</p>
+<p class="paragraph body-text">greenhouse control</p>
+<p class="paragraph body-text">multiple irrigation zones</p>
+<p class="paragraph body-text">weather integration</p>
+<p class="paragraph body-text">seasonal adaptation</p>
+<p class="paragraph body-text">plant-to-plant comparisons</p>
+<p class="paragraph body-text">predictive watering</p>
+<p class="paragraph body-text">computer vision</p>
+<p class="paragraph body-text">CYN-X vision models</p>
+<p class="paragraph body-text">voice interaction</p>
+<p class="paragraph body-text">Barkly Linux/PawBoard integration</p>
+<h1>22. Barkly Plant Care Principle</h1>
+<p class="paragraph block-quotation">The human should care about the plant.
+The computer should care about the complexity. 🌱💜</p>
+<p class="paragraph body-text">=</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
