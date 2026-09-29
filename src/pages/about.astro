@@ -1,5 +1,6 @@
 ---
 import SEO from "../components/SEO.astro";
+
 const sections = [
   {
     number: "01",
@@ -27,32 +28,46 @@ const sections = [
 
 <html lang="en">
   <head>
-<meta name="twitter:description" content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people.">
-<meta name="twitter:title" content="Barkly Labs — About">
-<meta name="twitter:card" content="summary_large_image">
-<meta property="og:site_name" content="Barkly Labs">
-<meta property="og:url" content="https://www.barklylabs.space/about/">
-<meta property="og:description" content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people.">
-<meta property="og:title" content="Barkly Labs — About">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://www.barklylabs.space/about/">
-<meta name="robots" content="index, follow">
-<meta name="description" content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people.">
-<title>Barkly Labs — About</title>
+    <meta
+      name="twitter:description"
+      content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people."
+    />
+    <meta name="twitter:title" content="Barkly Labs — About" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:site_name" content="Barkly Labs" />
+    <meta
+      property="og:url"
+      content="https://www.barklylabs.space/about/"
+    />
+    <meta
+      property="og:description"
+      content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people."
+    />
+    <meta property="og:title" content="Barkly Labs — About" />
+    <meta property="og:type" content="website" />
+    <link
+      rel="canonical"
+      href="https://www.barklylabs.space/about/"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="description"
+      content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people."
+    />
+    <title>Barkly Labs — About</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
     <SEO />
-
-
   </head>
 
   <body>
     <div class="page">
 
       <!-- HEADER -->
+
       <header class="site-header">
         <div class="header-logo">
           <a href={import.meta.env.BASE_URL + ""}>
@@ -67,7 +82,9 @@ const sections = [
         </div>
       </header>
 
+
       <!-- SIDE NAV -->
+
       <aside class="side-nav">
         <a href="#identity">
           <span>01</span>
@@ -98,9 +115,16 @@ const sections = [
           <span>06</span>
           FUTURE
         </a>
+
+        <a href="#support">
+          <span>07</span>
+          SUPPORT
+        </a>
       </aside>
 
+
       <!-- HERO -->
+
       <main>
 
         <section class="hero" id="identity">
@@ -132,6 +156,7 @@ const sections = [
 
 
         <!-- PURPOSE -->
+
         <section class="content-section" id="purpose">
           <div class="section-heading">
             <span class="section-number">02</span>
@@ -141,8 +166,9 @@ const sections = [
 
               <h2>
                 TECH<br />
-                SHOULD 
+                SHOULD
               </h2>
+
               <h2><span>HELP.</span></h2>
             </div>
           </div>
@@ -173,6 +199,7 @@ const sections = [
 
 
         <!-- THE LAB -->
+
         <section class="content-section lab-section" id="lab">
           <div class="section-heading">
             <span class="section-number">03</span>
@@ -203,7 +230,9 @@ const sections = [
             <div class="lab-process">
               <div>
                 <span>01</span>
+
                 <strong>BUILD</strong>
+
                 <p>
                   Turn ideas, problems, and experiments into
                   working systems.
@@ -212,7 +241,9 @@ const sections = [
 
               <div>
                 <span>02</span>
+
                 <strong>TEST</strong>
+
                 <p>
                   Put those systems in front of real humans and
                   discover what actually works.
@@ -221,7 +252,9 @@ const sections = [
 
               <div>
                 <span>03</span>
+
                 <strong>DOCUMENT</strong>
+
                 <p>
                   Preserve what was learned so knowledge does not
                   disappear with the experiment.
@@ -230,7 +263,9 @@ const sections = [
 
               <div>
                 <span>04</span>
+
                 <strong>SHARE</strong>
+
                 <p>
                   Release useful work so other people can inspect,
                   improve, adapt, and build upon it.
@@ -242,6 +277,7 @@ const sections = [
 
 
         <!-- SYSTEMS -->
+
         <section class="content-section" id="systems">
           <div class="section-heading">
             <span class="section-number">04</span>
@@ -257,7 +293,6 @@ const sections = [
           </div>
 
           <div class="ecosystem-content">
-
             <p class="large-copy">
               Barkly Labs is built as an ecosystem rather than
               a single product.
@@ -265,7 +300,10 @@ const sections = [
 
             <div class="system-list">
 
-              <a href={import.meta.env.BASE_URL + "cyn-x"} class="system-card">
+              <a
+                href={import.meta.env.BASE_URL + "cyn-x"}
+                class="system-card"
+              >
                 <div>
                   <span class="system-number">01</span>
                   <strong>CYN-X</strong>
@@ -279,7 +317,11 @@ const sections = [
                 <small>AI / RESEARCH / EXPERIMENTATION</small>
               </a>
 
-              <a href={import.meta.env.BASE_URL + "docs"} class="system-card">
+
+              <a
+                href={import.meta.env.BASE_URL + "docs"}
+                class="system-card"
+              >
                 <div>
                   <span class="system-number">02</span>
                   <strong>BARKLY DOCS</strong>
@@ -290,10 +332,16 @@ const sections = [
                   how systems are built and how they work.
                 </p>
 
-                <small>DOCUMENTATION / KNOWLEDGE / INFRASTRUCTURE</small>
+                <small>
+                  DOCUMENTATION / KNOWLEDGE / INFRASTRUCTURE
+                </small>
               </a>
 
-              <a href={import.meta.env.BASE_URL + "laas"} class="system-card">
+
+              <a
+                href={import.meta.env.BASE_URL + "laas"}
+                class="system-card"
+              >
                 <div>
                   <span class="system-number">03</span>
                   <strong>LAAS</strong>
@@ -305,10 +353,16 @@ const sections = [
                   for experimentation.
                 </p>
 
-                <small>LABORATORY / SERVICES / EXPERIMENTATION</small>
+                <small>
+                  LABORATORY / SERVICES / EXPERIMENTATION
+                </small>
               </a>
 
-              <a href={import.meta.env.BASE_URL + "standard"} class="system-card">
+
+              <a
+                href={import.meta.env.BASE_URL + "standard"}
+                class="system-card"
+              >
                 <div>
                   <span class="system-number">04</span>
                   <strong>PAW-HC</strong>
@@ -319,7 +373,9 @@ const sections = [
                   human-centered AI engineering standard.
                 </p>
 
-                <small>STANDARD / HUMAN-CENTERED / ENGINEERING</small>
+                <small>
+                  STANDARD / HUMAN-CENTERED / ENGINEERING
+                </small>
               </a>
 
             </div>
@@ -328,7 +384,11 @@ const sections = [
 
 
         <!-- PEOPLE -->
-        <section class="content-section people-section" id="people">
+
+        <section
+          class="content-section people-section"
+          id="people"
+        >
           <div class="section-heading">
             <span class="section-number">05</span>
 
@@ -343,7 +403,6 @@ const sections = [
           </div>
 
           <div class="people-content">
-
             <p class="large-copy">
               Barkly is being built before the community arrives.
             </p>
@@ -369,13 +428,16 @@ const sections = [
                 something here.
               </p>
             </div>
-
           </div>
         </section>
 
 
         <!-- FUTURE -->
-        <section class="content-section future-section" id="future">
+
+        <section
+          class="content-section future-section"
+          id="future"
+        >
           <div class="section-heading">
             <span class="section-number">06</span>
 
@@ -390,7 +452,6 @@ const sections = [
           </div>
 
           <div class="future-content">
-
             <p class="large-copy">
               Barkly is not finished.
             </p>
@@ -414,12 +475,155 @@ const sections = [
             <div class="future-mark">
               <span>BUILD THE FUTURE.</span>
             </div>
+          </div>
+        </section>
+
+
+        <!-- SUPPORT -->
+
+        <section
+          class="content-section support-section"
+          id="support"
+        >
+          <div class="section-heading">
+            <span class="section-number">07</span>
+
+            <div>
+              <span class="eyebrow">SUPPORT THE LAB</span>
+
+              <h2>
+                HELP BUILD<br />
+                <span>BARKLY.</span>
+              </h2>
+            </div>
+          </div>
+
+          <div class="support-content">
+
+            <div class="support-intro">
+              <p class="large-copy">
+                Barkly Labs is being built from the ground up.
+              </p>
+
+              <p>
+                The laboratory needs infrastructure, tools,
+                equipment, research resources, and the ability
+                to support people who want to turn ideas into
+                working technology.
+              </p>
+
+              <p>
+                Support helps Barkly continue building the systems
+                behind the lab while keeping human-centered
+                technology at the center of the work.
+              </p>
+            </div>
+
+
+            <div class="support-principle">
+              <span>THE BARKLY APPROACH</span>
+
+              <p>
+                Support should not disappear into a black box.
+                The goal is to make it possible to understand
+                what the lab is building, why it matters, and
+                how resources help make that work possible.
+              </p>
+            </div>
+
+
+            <div class="support-list">
+
+              <div class="support-card">
+                <div>
+                  <span class="system-number">01</span>
+                  <strong>INDIVIDUAL SUPPORT</strong>
+                </div>
+
+                <p>
+                  Individuals can help Barkly continue building
+                  open technology, research infrastructure,
+                  documentation, experiments, and community
+                  resources.
+                </p>
+
+                <small>
+                  DONATIONS / COMMUNITY / DIRECT SUPPORT
+                </small>
+              </div>
+
+
+              <div class="support-card">
+                <div>
+                  <span class="system-number">02</span>
+                  <strong>LAB SPONSORSHIP</strong>
+                </div>
+
+                <p>
+                  Organizations and companies can support the
+                  laboratory through sponsorships, partnerships,
+                  equipment, infrastructure, or project support.
+                </p>
+
+                <small>
+                  SPONSORS / PARTNERS / ORGANIZATIONS
+                </small>
+              </div>
+
+
+              <div class="support-card">
+                <div>
+                  <span class="system-number">03</span>
+                  <strong>WHAT SUPPORT ENABLES</strong>
+                </div>
+
+                <p>
+                  Support can help fund open-source development,
+                  hardware and prototyping, computing infrastructure,
+                  research, documentation, standards, and programs
+                  that help people build.
+                </p>
+
+                <small>
+                  SOFTWARE / HARDWARE / RESEARCH / INFRASTRUCTURE
+                </small>
+              </div>
+
+            </div>
+
+
+            <div class="support-callout">
+              <span>BUILD WITH US</span>
+
+              <p>
+                Barkly exists to make technology more possible
+                for humans. Supporting the lab helps make that
+                work possible too.
+              </p>
+
+              <div class="support-actions">
+                <a
+                  href={import.meta.env.BASE_URL + "support"}
+                  class="support-button"
+                >
+                  SUPPORT BARKLY →
+                </a>
+
+                <a
+                  href={import.meta.env.BASE_URL + "sponsors"}
+                  class="support-button secondary"
+                >
+                  SPONSOR THE LAB →
+                </a>
+              </div>
+            </div>
 
           </div>
         </section>
 
 
         <!-- FINAL -->
+
         <section class="final-section">
           <div class="final-label">
             BARKLY LABS / ABOUT
@@ -439,6 +643,7 @@ const sections = [
 
 
       <!-- FOOTER -->
+
       <footer class="site-footer">
         <span>BARKLY LABS</span>
         <span>HUMAN FIRST</span>
@@ -472,21 +677,16 @@ const sections = [
   --panel: #0a0a0a;
   --panel-raised: #0f0f0f;
   --panel-hover: #131313;
-
   --text: #f1f1f1;
   --white: #f1f1f1;
-
   --muted: #a1a1a1;
   --dim: #686868;
   --faint: #444;
-
   --line: rgba(255, 255, 255, 0.12);
   --line-strong: rgba(255, 255, 255, 0.25);
-
   --pink: #ff2f92;
   --pink-soft: rgba(255, 47, 146, 0.10);
   --pink-line: rgba(255, 47, 146, 0.42);
-
   --max: 1500px;
 }
 
@@ -497,11 +697,9 @@ const sections = [
   height: 72px;
   padding: 0 4vw;
   border-bottom: 1px solid var(--line);
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   font-family: "Courier New", monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -545,13 +743,10 @@ const sections = [
   left: 24px;
   top: 50%;
   z-index: 10;
-
   transform: translateY(-50%);
-
   display: flex;
   flex-direction: column;
   gap: 14px;
-
   font-family: "Courier New", monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
@@ -560,10 +755,8 @@ const sections = [
 .side-nav a {
   display: flex;
   gap: 9px;
-
   color: var(--dim);
   text-decoration: none;
-
   transition:
     color 0.2s ease,
     transform 0.2s ease;
@@ -584,10 +777,8 @@ const sections = [
 .hero {
   max-width: var(--max);
   min-height: 720px;
-
   margin: 0 auto;
   padding: 55px 10vw 100px;
-
   display: flex;
   flex-direction: column;
 }
@@ -595,9 +786,7 @@ const sections = [
 .section-meta {
   display: flex;
   gap: 110px;
-
   color: var(--dim);
-
   font-family: "Courier New", monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
@@ -613,7 +802,6 @@ const sections = [
 
 .hero-title h1 {
   margin: 0;
-
   font-size: clamp(76px, 10vw, 150px);
   line-height: 0.88;
   letter-spacing: -0.075em;
@@ -626,12 +814,10 @@ const sections = [
 
 .hero-bottom {
   margin-top: 90px;
-
   display: grid;
   grid-template-columns:
     minmax(0, 760px)
     minmax(0, 1fr);
-
   gap: 80px;
   align-items: end;
 }
@@ -639,18 +825,14 @@ const sections = [
 .hero-copy {
   max-width: 800px;
   margin: 0;
-
   color: var(--muted);
-
   font-size: clamp(20px, 2vw, 29px);
   line-height: 1.55;
 }
 
 .hero-mark {
   justify-self: end;
-
   color: var(--pink);
-
   font-size: 32px;
   line-height: 0.9;
   font-weight: 800;
@@ -662,17 +844,13 @@ const sections = [
 
 .content-section {
   max-width: var(--max);
-
   margin: 0 auto;
   padding: 130px 10vw;
-
   border-top: 1px solid var(--line);
-
   display: grid;
   grid-template-columns:
     minmax(280px, 0.8fr)
     minmax(0, 1.2fr);
-
   gap: 80px;
 }
 
@@ -681,7 +859,6 @@ const sections = [
 
 .section-heading {
   min-width: 0;
-
   display: flex;
   gap: 25px;
 }
@@ -692,9 +869,7 @@ const sections = [
 
 .section-number {
   flex-shrink: 0;
-
   color: var(--pink);
-
   font-family: "Courier New", monospace;
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -703,9 +878,7 @@ const sections = [
 .eyebrow {
   display: block;
   margin-bottom: 20px;
-
   color: var(--dim);
-
   font-family: "Courier New", monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
@@ -714,7 +887,6 @@ const sections = [
 .section-heading h2 {
   max-width: 100%;
   margin: 0;
-
   font-size: clamp(45px, 5vw, 78px);
   line-height: 0.92;
   letter-spacing: -0.06em;
@@ -731,7 +903,8 @@ const sections = [
 .lab-content,
 .ecosystem-content,
 .people-content,
-.future-content {
+.future-content,
+.support-content {
   min-width: 0;
   max-width: 800px;
 }
@@ -739,7 +912,8 @@ const sections = [
 .section-body p,
 .people-content p,
 .future-content p,
-.lab-intro p {
+.lab-intro p,
+.support-content p {
   color: var(--muted);
   font-size: 18px;
   line-height: 1.7;
@@ -747,7 +921,6 @@ const sections = [
 
 .large-copy {
   color: var(--white) !important;
-
   font-size: 30px !important;
   line-height: 1.35 !important;
   letter-spacing: -0.02em;
@@ -766,12 +939,9 @@ const sections = [
 
 .lab-process > div {
   padding: 28px 0;
-
   border-bottom: 1px solid var(--line);
-
   display: grid;
   grid-template-columns: 50px 180px minmax(0, 1fr);
-
   gap: 25px;
   align-items: start;
 }
@@ -779,23 +949,19 @@ const sections = [
 .lab-process span,
 .system-number {
   color: var(--pink);
-
   font-family: "Courier New", monospace;
   font-size: 10px;
 }
 
 .lab-process strong {
   color: var(--white);
-
   font-size: 16px;
   letter-spacing: 0.04em;
 }
 
 .lab-process p {
   margin: 0;
-
   color: var(--muted);
-
   font-size: 15px;
   line-height: 1.6;
 }
@@ -814,14 +980,10 @@ const sections = [
 
 .system-card {
   display: block;
-
   padding: 30px 0;
-
   border-bottom: 1px solid var(--line);
-
   color: inherit;
   text-decoration: none;
-
   transition:
     background 0.2s ease,
     padding-left 0.2s ease;
@@ -840,7 +1002,6 @@ const sections = [
 
 .system-card strong {
   color: var(--white);
-
   font-size: 18px;
   letter-spacing: 0.02em;
 }
@@ -848,16 +1009,13 @@ const sections = [
 .system-card p {
   max-width: 650px;
   margin: 18px 0;
-
   color: var(--muted);
-
   font-size: 15px;
   line-height: 1.6;
 }
 
 .system-card small {
   color: var(--pink);
-
   font-family: "Courier New", monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
@@ -873,14 +1031,12 @@ const sections = [
 .people-callout {
   margin-top: 70px;
   padding: 35px;
-
   border: 1px solid var(--pink-line);
   background: var(--pink-soft);
 }
 
 .people-callout span {
   color: var(--pink);
-
   font-family: "Courier New", monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
@@ -888,9 +1044,7 @@ const sections = [
 
 .people-callout p {
   margin: 25px 0 0;
-
   color: var(--white) !important;
-
   font-size: 24px !important;
   line-height: 1.35 !important;
 }
@@ -905,16 +1059,129 @@ const sections = [
 .future-mark {
   margin-top: 75px;
   padding-top: 25px;
-
   border-top: 1px solid var(--line);
 }
 
 .future-mark span {
   color: var(--pink);
-
   font-family: "Courier New", monospace;
   font-size: 11px;
   letter-spacing: 0.12em;
+}
+
+
+/* SUPPORT */
+
+.support-intro {
+  margin-bottom: 60px;
+}
+
+.support-principle {
+  margin: 0 0 60px;
+  padding: 30px;
+  border-left: 2px solid var(--pink);
+  background: var(--pink-soft);
+}
+
+.support-principle span,
+.support-callout > span {
+  color: var(--pink);
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.support-principle p {
+  margin: 18px 0 0;
+  color: var(--white);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.support-list {
+  border-top: 1px solid var(--line);
+}
+
+.support-card {
+  padding: 30px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.support-card > div {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.support-card strong {
+  color: var(--white);
+  font-size: 18px;
+  letter-spacing: 0.02em;
+}
+
+.support-card p {
+  max-width: 650px;
+  margin: 18px 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.support-card small {
+  color: var(--pink);
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.support-callout {
+  margin-top: 70px;
+  padding: 40px;
+  border: 1px solid var(--pink-line);
+  background: var(--pink-soft);
+}
+
+.support-callout > p {
+  margin: 25px 0 30px;
+  color: var(--white);
+  font-size: 26px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.support-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.support-button {
+  display: inline-block;
+  padding: 14px 18px;
+  border: 1px solid var(--pink);
+  color: var(--white);
+  text-decoration: none;
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.support-button:hover {
+  background: var(--pink);
+  color: #050505;
+  transform: translateY(-2px);
+}
+
+.support-button.secondary {
+  border-color: var(--line-strong);
+}
+
+.support-button.secondary:hover {
+  border-color: var(--pink);
 }
 
 
@@ -922,18 +1189,14 @@ const sections = [
 
 .final-section {
   max-width: var(--max);
-
   margin: 0 auto;
   padding: 170px 10vw 190px;
-
   border-top: 1px solid var(--line);
 }
 
 .final-label {
   margin-bottom: 35px;
-
   color: var(--pink);
-
   font-family: "Courier New", monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
@@ -942,7 +1205,6 @@ const sections = [
 .final-section h2 {
   max-width: 1200px;
   margin: 0;
-
   font-size: clamp(65px, 9vw, 145px);
   line-height: 0.87;
   letter-spacing: -0.075em;
@@ -954,9 +1216,7 @@ const sections = [
 
 .final-section p {
   margin-top: 55px;
-
   color: var(--dim);
-
   font-family: "Courier New", monospace;
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -967,17 +1227,12 @@ const sections = [
 
 .site-footer {
   max-width: var(--max);
-
   margin: 0 auto;
   padding: 30px 10vw;
-
   border-top: 1px solid var(--line);
-
   display: flex;
   justify-content: space-between;
-
   color: var(--dim);
-
   font-family: "Courier New", monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
@@ -987,7 +1242,6 @@ const sections = [
 /* RESPONSIVE */
 
 @media (max-width: 1100px) {
-
   .content-section {
     gap: 55px;
   }
@@ -998,12 +1252,9 @@ const sections = [
       150px
       minmax(0, 1fr);
   }
-
 }
 
-
 @media (max-width: 900px) {
-
   .side-nav {
     display: none;
   }
@@ -1024,7 +1275,6 @@ const sections = [
 
   .content-section {
     padding: 90px 7vw;
-
     grid-template-columns: 1fr;
     gap: 60px;
   }
@@ -1046,16 +1296,12 @@ const sections = [
 
   .site-footer {
     padding: 25px 7vw;
-
     flex-direction: column;
     gap: 10px;
   }
-
 }
 
-
 @media (max-width: 600px) {
-
   .site-header {
     padding: 0 20px;
   }
@@ -1104,10 +1350,22 @@ const sections = [
     font-size: 21px !important;
   }
 
+  .support-callout {
+    padding: 25px;
+  }
+
+  .support-callout > p {
+    font-size: 21px;
+  }
+
+  .support-button {
+    width: 100%;
+    text-align: center;
+  }
+
   .final-section h2 {
     font-size: 19vw;
   }
-
 }
 
 </style>
