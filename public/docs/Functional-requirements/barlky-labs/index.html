@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>BARKLY LABS — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            BARKLY LABS
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\BARLKY LABS.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>BARKLY LABS</h1>
+<h2>Nonprofit Formation &amp; Operations Master Plan</h2>
+<p class="paragraph body-text">Document Status: Working Master Plan
+Organization: Barkly Labs
+Jurisdiction: Michigan, United States
+Purpose: Establish Barkly Labs as a legally compliant, financially responsible, human-centered technology nonprofit.</p>
+<h1>01 — What Barkly Labs Is</h1>
+<p class="paragraph body-text">Barkly Labs is being established as a nonprofit technology organization focused on human-centered computing, accessible technology, open systems, research, hardware, software, documentation, and infrastructure.</p>
+<p class="paragraph body-text">The organization may develop projects including:</p>
+<p class="paragraph body-text">CYN-X</p>
+<p class="paragraph body-text">Barkly Standard / PAW-HC</p>
+<p class="paragraph body-text">Barkly Docs</p>
+<p class="paragraph body-text">Barkly Linux</p>
+<p class="paragraph body-text">PawBoard</p>
+<p class="paragraph body-text">Barkly Plant Care</p>
+<p class="paragraph body-text">Open hardware</p>
+<p class="paragraph body-text">Human-centered software</p>
+<p class="paragraph body-text">Developer tools</p>
+<p class="paragraph body-text">Research infrastructure</p>
+<p class="paragraph body-text">Educational materials</p>
+<p class="paragraph body-text">Public technical documentation</p>
+<p class="paragraph body-text">The nonprofit exists independently from its founder as a legal organization once properly incorporated.</p>
+<h1>02 — The Legal Structure</h1>
+<p class="paragraph body-text">Barkly Labs should be treated as two separate milestones:</p>
+<h3>State level</h3>
+<p class="paragraph body-text">Michigan nonprofit corporation</p>
+<p class="paragraph body-text">This creates the legal corporation under Michigan law.</p>
+<p class="paragraph body-text">Michigan currently lists the formation filing for a domestic nonprofit corporation as:</p>
+<p class="paragraph body-text">Articles of Incorporation — Nonprofit</p>
+<p class="paragraph body-text">Form 502</p>
+<p class="paragraph body-text">Total filing/franchise fees: $20</p>
+<h3>Federal level</h3>
+<p class="paragraph body-text">IRS 501(c)(3) tax-exempt recognition</p>
+<p class="paragraph body-text">This is separate from Michigan incorporation.</p>
+<p class="paragraph body-text">Barkly Labs should pursue federal recognition under Section 501(c)(3) if the intended mission and activities qualify.</p>
+<p class="paragraph body-text">Depending on the organization&#x27;s circumstances, the IRS may permit Form 1023-EZ or require the full Form 1023. The IRS requires organizations using Form 1023-EZ to complete the eligibility worksheet first.</p>
+<h1>03 — Formation Checklist</h1>
+<h2>A. Name</h2>
+<p class="paragraph body-text">Confirm legal name: Barkly Labs</p>
+<p class="paragraph body-text">Search Michigan entity records for conflicts</p>
+<p class="paragraph body-text">Search federal trademark database before committing to major branding</p>
+<p class="paragraph body-text">Secure barklylabs.space and other important domains</p>
+<p class="paragraph body-text">Establish official organization email addresses</p>
+<p class="paragraph body-text">Establish official social accounts where useful</p>
+<h2>B. Articles of Incorporation</h2>
+<p class="paragraph body-text">Prepare Michigan nonprofit Articles of Incorporation</p>
+<p class="paragraph body-text">Include appropriate nonprofit purpose language</p>
+<p class="paragraph body-text">Include appropriate dissolution language</p>
+<p class="paragraph body-text">Identify registered office/agent</p>
+<p class="paragraph body-text">Identify incorporator</p>
+<p class="paragraph body-text">File with Michigan LARA</p>
+<p class="paragraph body-text">Save stamped/accepted Articles permanently</p>
+<p class="paragraph body-text">Artifact:</p>
+<p class="paragraph body-text">legal/articles-of-incorporation.pdf</p>
+<h1>04 — Internal Governance</h1>
+<p class="paragraph body-text">After incorporation, Barkly Labs should establish its internal governance documents.</p>
+<h2>Board</h2>
+<p class="paragraph body-text">Create the initial board according to the organization&#x27;s Articles and bylaws.</p>
+<p class="paragraph body-text">Maintain:</p>
+<p class="paragraph body-text">Board member names</p>
+<p class="paragraph body-text">Officer positions</p>
+<p class="paragraph body-text">Terms</p>
+<p class="paragraph body-text">Contact information</p>
+<p class="paragraph body-text">Conflict-of-interest disclosures</p>
+<p class="paragraph body-text">Board meeting records</p>
+<p class="paragraph body-text">Board resolutions</p>
+<h2>Bylaws</h2>
+<p class="paragraph body-text">Create:</p>
+<p class="paragraph body-text">legal/bylaws.md</p>
+<p class="paragraph body-text">The bylaws should establish:</p>
+<p class="paragraph body-text">Board authority</p>
+<p class="paragraph body-text">Officer roles</p>
+<p class="paragraph body-text">Meetings</p>
+<p class="paragraph body-text">Voting</p>
+<p class="paragraph body-text">Quorum</p>
+<p class="paragraph body-text">Committees</p>
+<p class="paragraph body-text">Conflict-of-interest procedures</p>
+<p class="paragraph body-text">Financial controls</p>
+<p class="paragraph body-text">Record keeping</p>
+<p class="paragraph body-text">Amendments</p>
+<p class="paragraph body-text">Dissolution procedures</p>
+<h1>05 — Conflict of Interest</h1>
+<p class="paragraph body-text">Barkly Labs should adopt a written conflict-of-interest policy.</p>
+<p class="paragraph body-text">This is particularly important because Barkly may eventually:</p>
+<p class="paragraph body-text">Employ its founder</p>
+<p class="paragraph body-text">Purchase equipment</p>
+<p class="paragraph body-text">Contract with developers</p>
+<p class="paragraph body-text">License intellectual property</p>
+<p class="paragraph body-text">Receive donations</p>
+<p class="paragraph body-text">Receive grants</p>
+<p class="paragraph body-text">Work with companies</p>
+<p class="paragraph body-text">Operate projects created by its founder</p>
+<p class="paragraph body-text">The policy should require disclosure and appropriate independent review when a person has a financial interest in a transaction.</p>
+<p class="paragraph body-text">Artifact:</p>
+<p class="paragraph body-text">governance/conflict-of-interest-policy.md</p>
+<h1>06 — EIN</h1>
+<p class="paragraph body-text">Barkly Labs needs its own Employer Identification Number.</p>
+<p class="paragraph body-text">The IRS requires a nonprofit&#x27;s EIN application to identify a responsible party. The responsible party must be a person who controls or exercises effective control over the organization and its funds/assets.</p>
+<p class="paragraph body-text">Checklist:</p>
+<p class="paragraph body-text">Obtain EIN from IRS</p>
+<p class="paragraph body-text">Save IRS confirmation</p>
+<p class="paragraph body-text">Do not use the founder&#x27;s personal SSN as Barkly&#x27;s EIN</p>
+<p class="paragraph body-text">Store EIN documentation securely</p>
+<p class="paragraph body-text">Artifact:</p>
+<p class="paragraph body-text">legal/ein-confirmation.pdf</p>
+<h1>07 — Bank Account</h1>
+<p class="paragraph body-text">Barkly Labs should maintain a dedicated organizational bank account.</p>
+<h2>NEVER MIX</h2>
+<p class="paragraph body-text">Do not casually mix:</p>
+<p class="paragraph body-text">Piper&#x27;s personal money</p>
+<p class="paragraph body-text">with</p>
+<p class="paragraph body-text">Barkly Labs&#x27; money.</p>
+<p class="paragraph body-text">The organization should have:</p>
+<p class="paragraph body-text">Its own bank account</p>
+<p class="paragraph body-text">Its own debit/card products</p>
+<p class="paragraph body-text">Its own bookkeeping</p>
+<p class="paragraph body-text">Its own receipts</p>
+<p class="paragraph body-text">Its own accounting records</p>
+<p class="paragraph body-text">If the founder personally pays an organizational expense, document it as an appropriate organizational transaction rather than simply treating the organization&#x27;s money and personal money as interchangeable.</p>
+<h1>08 — Accounting System</h1>
+<p class="paragraph body-text">Create a simple accounting structure from Day 1.</p>
+<p class="paragraph body-text">Track:</p>
+<h3>Income</h3>
+<p class="paragraph body-text">Donations</p>
+<p class="paragraph body-text">Grants</p>
+<p class="paragraph body-text">Sponsorships</p>
+<p class="paragraph body-text">Memberships, if applicable</p>
+<p class="paragraph body-text">Program revenue</p>
+<p class="paragraph body-text">Merchandise, if applicable</p>
+<p class="paragraph body-text">Other permitted revenue</p>
+<h3>Expenses</h3>
+<p class="paragraph body-text">Software</p>
+<p class="paragraph body-text">Hosting</p>
+<p class="paragraph body-text">Hardware</p>
+<p class="paragraph body-text">Development</p>
+<p class="paragraph body-text">Insurance</p>
+<p class="paragraph body-text">Legal/accounting</p>
+<p class="paragraph body-text">Filing fees</p>
+<p class="paragraph body-text">Research</p>
+<p class="paragraph body-text">Accessibility</p>
+<p class="paragraph body-text">Travel</p>
+<p class="paragraph body-text">Contractors</p>
+<p class="paragraph body-text">Employee compensation</p>
+<p class="paragraph body-text">Office/lab expenses</p>
+<p class="paragraph body-text">Every transaction should have:</p>
+<p class="paragraph body-text">Date</p>
+<p class="paragraph body-text">Amount</p>
+<p class="paragraph body-text">Category</p>
+<p class="paragraph body-text">Description</p>
+<p class="paragraph body-text">Payee/payer</p>
+<p class="paragraph body-text">Receipt/document</p>
+<p class="paragraph body-text">Payment method</p>
+<h1>09 — $0 MONEY STATE</h1>
+<p class="paragraph body-text">Barkly Labs may begin with little or no money.</p>
+<p class="paragraph body-text">That does NOT mean:</p>
+<p class="paragraph block-quotation">&quot;Barkly owes a giant tax bill because it exists.&quot;</p>
+<p class="paragraph body-text">Instead, the organization still needs to maintain its legal and reporting obligations.</p>
+<p class="paragraph body-text">For a small 501(c)(3), the IRS generally allows organizations that normally have gross receipts of $50,000 or less to use Form 990-N instead of a full Form 990, subject to the applicable rules.</p>
+<p class="paragraph body-text">The IRS also warns that failing to file a required annual return/notice for three consecutive years can result in automatic revocation of tax-exempt status.</p>
+<p class="paragraph body-text">Therefore:</p>
+<p class="paragraph body-text">$0 revenue does not mean $0 paperwork.</p>
+<p class="paragraph body-text">But paperwork is not the same thing as owing income tax.</p>
+<h1>10 — Michigan Annual Compliance</h1>
+<p class="paragraph body-text">Michigan nonprofit corporations have an annual-report requirement.</p>
+<p class="paragraph body-text">Current Michigan information lists:</p>
+<p class="paragraph body-text">Nonprofit corporation annual report fee: $20</p>
+<p class="paragraph body-text">Michigan also states that nonprofit corporations generally do not have an annual report due in the year of incorporation.</p>
+<p class="paragraph body-text">Create:</p>
+<p class="paragraph body-text">compliance/michigan-annual-report.md</p>
+<p class="paragraph body-text">Track:</p>
+<p class="paragraph body-text">Formation date</p>
+<p class="paragraph body-text">Annual-report due date</p>
+<p class="paragraph body-text">Filing confirmation</p>
+<p class="paragraph body-text">Fee paid</p>
+<p class="paragraph body-text">Changes to officers/directors/address</p>
+<p class="paragraph body-text">Missing required filings can eventually result in loss of good standing or dissolution/revocation.</p>
+<h1>11 — 501(c)(3)</h1>
+<p class="paragraph body-text">Barkly Labs should prepare an IRS exemption package.</p>
+<p class="paragraph body-text">Potential filing:</p>
+<p class="paragraph body-text">Form 1023-EZ</p>
+<p class="paragraph body-text">or, if Barkly is not eligible:</p>
+<p class="paragraph body-text">Form 1023</p>
+<p class="paragraph body-text">The IRS determines eligibility based on the organization&#x27;s circumstances, including projected gross receipts, assets, activities, and organizational structure.</p>
+<p class="paragraph body-text">Prepare:</p>
+<p class="paragraph body-text">Articles of Incorporation</p>
+<p class="paragraph body-text">Bylaws</p>
+<p class="paragraph body-text">Mission statement</p>
+<p class="paragraph body-text">Detailed activity descriptions</p>
+<p class="paragraph body-text">Financial projections</p>
+<p class="paragraph body-text">Current financial information</p>
+<p class="paragraph body-text">Board information</p>
+<p class="paragraph body-text">Conflict-of-interest policy</p>
+<p class="paragraph body-text">Compensation policies</p>
+<p class="paragraph body-text">Intellectual-property policies</p>
+<p class="paragraph body-text">Fundraising plans</p>
+<p class="paragraph body-text">Program descriptions</p>
+<p class="paragraph body-text">Artifacts:</p>
+<p class="paragraph body-text">irs/form-1023-or-1023ez/</p>
+<p class="paragraph body-text">irs/financial-projections.xlsx</p>
+<p class="paragraph body-text">irs/program-descriptions.md</p>
+<h1>12 — Charitable Solicitation</h1>
+<p class="paragraph body-text">This is a separate compliance area.</p>
+<p class="paragraph body-text">If Barkly asks the public for donations in Michigan, Michigan&#x27;s Charitable Organizations and Solicitations Act may require registration.</p>
+<p class="paragraph body-text">Michigan states that most 501(c)(3) organizations that solicit or receive contributions in Michigan must register, while exemptions exist. One example is organizations that raise funds exclusively through volunteers and receive less than $25,000 per year.</p>
+<p class="paragraph body-text">Therefore:</p>
+<p class="paragraph body-text">Before launching a major public fundraising campaign:</p>
+<p class="paragraph body-text">Determine whether Barkly is exempt</p>
+<p class="paragraph body-text">If required, register with Michigan&#x27;s Attorney General</p>
+<p class="paragraph body-text">Maintain solicitation records</p>
+<p class="paragraph body-text">Renew when required</p>
+<p class="paragraph body-text">Keep donor acknowledgements</p>
+<p class="paragraph body-text">Do not assume that &quot;we&#x27;re a nonprofit&quot; automatically means fundraising registration is unnecessary.</p>
+<h1>13 — Donations</h1>
+<p class="paragraph body-text">Create a standardized donation process.</p>
+<p class="paragraph body-text">Every donation should be recorded.</p>
+<p class="paragraph body-text">For larger donations:</p>
+<p class="paragraph body-text">Donor</p>
+<p class="paragraph body-text">Date</p>
+<p class="paragraph body-text">Amount</p>
+<p class="paragraph body-text">Restrictions</p>
+<p class="paragraph body-text">Intended purpose</p>
+<p class="paragraph body-text">Receipt</p>
+<p class="paragraph body-text">Whether goods/services were provided in exchange</p>
+<p class="paragraph body-text">Barkly should never promise donors that their donation will be used for something the organization cannot legally or practically provide.</p>
+<h1>14 — Founder Compensation</h1>
+<p class="paragraph body-text">This is VERY IMPORTANT.</p>
+<p class="paragraph body-text">The founder can potentially be compensated for legitimate work performed for Barkly Labs.</p>
+<p class="paragraph body-text">Nonprofit does NOT mean:</p>
+<p class="paragraph block-quotation">&quot;Nobody can ever get paid.&quot;</p>
+<p class="paragraph body-text">It means organizational money must be used consistently with the organization&#x27;s charitable purpose and applicable rules.</p>
+<p class="paragraph body-text">Potential compensation categories include:</p>
+<p class="paragraph body-text">Executive/director work</p>
+<p class="paragraph body-text">Software engineering</p>
+<p class="paragraph body-text">Research</p>
+<p class="paragraph body-text">Documentation</p>
+<p class="paragraph body-text">Project management</p>
+<p class="paragraph body-text">Administrative work</p>
+<p class="paragraph body-text">Technical development</p>
+<p class="paragraph body-text">Compensation should be:</p>
+<p class="paragraph body-text">Approved through appropriate organizational procedures</p>
+<p class="paragraph body-text">Documented</p>
+<p class="paragraph body-text">Reasonable for the work performed</p>
+<p class="paragraph body-text">Properly recorded</p>
+<p class="paragraph body-text">Paid through the organization&#x27;s financial system</p>
+<p class="paragraph body-text">Do NOT simply transfer donated money from Barkly&#x27;s bank account to a personal account and call it salary.</p>
+<p class="paragraph body-text">Create:</p>
+<p class="paragraph body-text">governance/compensation-policy.md</p>
+<p class="paragraph body-text">governance/founder-compensation-resolution.md</p>
+<p class="paragraph body-text">When Barkly reaches the point of actually paying its founder, have a nonprofit attorney/accountant review the arrangement.</p>
+<h1>15 — Employees and Contractors</h1>
+<p class="paragraph body-text">When Barkly begins hiring:</p>
+<p class="paragraph body-text">Determine whether each person is:</p>
+<p class="paragraph body-text">Employee</p>
+<p class="paragraph body-text">Independent contractor</p>
+<p class="paragraph body-text">Volunteer</p>
+<p class="paragraph body-text">Board member</p>
+<p class="paragraph body-text">Officer</p>
+<p class="paragraph body-text">Maintain:</p>
+<p class="paragraph body-text">Contracts</p>
+<p class="paragraph body-text">W-4/I-9 documentation where applicable</p>
+<p class="paragraph body-text">W-9 documentation for contractors</p>
+<p class="paragraph body-text">Payroll records</p>
+<p class="paragraph body-text">Compensation records</p>
+<p class="paragraph body-text">Invoices</p>
+<p class="paragraph body-text">Timesheets where appropriate</p>
+<p class="paragraph body-text">Do not classify everyone as a contractor simply to avoid payroll obligations.</p>
+<h1>16 — Intellectual Property</h1>
+<p class="paragraph body-text">Barkly needs an explicit IP structure.</p>
+<p class="paragraph body-text">Projects may include:</p>
+<p class="paragraph body-text">CYN-X</p>
+<p class="paragraph body-text">Barkly Docs</p>
+<p class="paragraph body-text">Barkly Linux</p>
+<p class="paragraph body-text">PawBoard</p>
+<p class="paragraph body-text">Plant Care</p>
+<p class="paragraph body-text">PAW-HC</p>
+<p class="paragraph body-text">Hardware designs</p>
+<p class="paragraph body-text">Source code</p>
+<p class="paragraph body-text">Documentation</p>
+<p class="paragraph body-text">Logos</p>
+<p class="paragraph body-text">Branding</p>
+<p class="paragraph body-text">Research</p>
+<p class="paragraph body-text">Create:</p>
+<p class="paragraph body-text">legal/intellectual-property-policy.md</p>
+<p class="paragraph body-text">Decide project-by-project:</p>
+<p class="paragraph body-text">Copyright owner</p>
+<p class="paragraph body-text">License</p>
+<p class="paragraph body-text">Open-source license</p>
+<p class="paragraph body-text">Hardware license</p>
+<p class="paragraph body-text">Trademark ownership</p>
+<p class="paragraph body-text">Contributor agreements</p>
+<p class="paragraph body-text">Third-party dependencies</p>
+<p class="paragraph body-text">Patent considerations</p>
+<p class="paragraph body-text">The organization should document whether pre-existing founder-created work is:</p>
+<p class="paragraph body-text">Personally owned and licensed to Barkly</p>
+<p class="paragraph body-text">Assigned to Barkly</p>
+<p class="paragraph body-text">Developed directly by Barkly</p>
+<p class="paragraph body-text">Do not casually transfer valuable IP without documenting the transaction.</p>
+<h1>17 — Open Source</h1>
+<p class="paragraph body-text">For software released publicly, choose a license deliberately.</p>
+<p class="paragraph body-text">Potential categories include:</p>
+<p class="paragraph body-text">MIT</p>
+<p class="paragraph body-text">Apache-2.0</p>
+<p class="paragraph body-text">GPL</p>
+<p class="paragraph body-text">LGPL</p>
+<p class="paragraph body-text">AGPL</p>
+<p class="paragraph body-text">Creative Commons for documentation</p>
+<p class="paragraph body-text">CERN-OHL or another appropriate hardware license</p>
+<p class="paragraph body-text">Each project should contain:</p>
+<p class="paragraph body-text">LICENSE</p>
+<p class="paragraph body-text">and, where useful:</p>
+<p class="paragraph body-text">NOTICE</p>
+<p class="paragraph body-text">CONTRIBUTING.md</p>
+<p class="paragraph body-text">SECURITY.md</p>
+<h1>18 — Financial Controls</h1>
+<p class="paragraph body-text">As Barkly grows, no single person should casually control every financial function.</p>
+<p class="paragraph body-text">Eventually implement:</p>
+<p class="paragraph body-text">Two-person approval for significant expenditures</p>
+<p class="paragraph body-text">Monthly bank reconciliation</p>
+<p class="paragraph body-text">Expense documentation</p>
+<p class="paragraph body-text">Board-approved budgets</p>
+<p class="paragraph body-text">Spending limits</p>
+<p class="paragraph body-text">Conflict disclosures</p>
+<p class="paragraph body-text">Annual financial review</p>
+<p class="paragraph body-text">Start simple, then increase controls as the organization&#x27;s budget grows.</p>
+<h1>19 — Insurance</h1>
+<p class="paragraph body-text">Before Barkly begins significant public operations, investigate:</p>
+<p class="paragraph body-text">General liability</p>
+<p class="paragraph body-text">Directors &amp; Officers (D&amp;O)</p>
+<p class="paragraph body-text">Cyber liability</p>
+<p class="paragraph body-text">Equipment coverage</p>
+<p class="paragraph body-text">Event coverage</p>
+<p class="paragraph body-text">Workers&#x27; compensation if required</p>
+<p class="paragraph body-text">Volunteer-related coverage</p>
+<p class="paragraph body-text">Insurance requirements depend on what Barkly actually does.</p>
+<p class="paragraph body-text">A nonprofit operating a software repository is very different from a nonprofit operating a physical laboratory with visitors.</p>
+<h1>20 — Website</h1>
+<p class="paragraph body-text">The Barkly Labs website should clearly identify the organization.</p>
+<p class="paragraph body-text">Suggested pages:</p>
+<p class="paragraph body-text">Home</p>
+<p class="paragraph body-text">Mission</p>
+<p class="paragraph body-text">About</p>
+<p class="paragraph body-text">Projects</p>
+<p class="paragraph body-text">Research</p>
+<p class="paragraph body-text">Barkly Standard</p>
+<p class="paragraph body-text">Documentation</p>
+<p class="paragraph body-text">Open Source</p>
+<p class="paragraph body-text">Hardware</p>
+<p class="paragraph body-text">Governance</p>
+<p class="paragraph body-text">Financial Transparency</p>
+<p class="paragraph body-text">Sponsors</p>
+<p class="paragraph body-text">Donate</p>
+<p class="paragraph body-text">Contact</p>
+<p class="paragraph body-text">Until federal recognition is actually granted, avoid wording that falsely implies Barkly already has IRS-recognized 501(c)(3) status.</p>
+<h1>21 — Public Transparency</h1>
+<p class="paragraph body-text">Barkly&#x27;s philosophy should be:</p>
+<p class="paragraph body-text">Show the work.</p>
+<p class="paragraph body-text">Maintain public documentation for:</p>
+<p class="paragraph body-text">Mission</p>
+<p class="paragraph body-text">Governance</p>
+<p class="paragraph body-text">Major projects</p>
+<p class="paragraph body-text">Standards</p>
+<p class="paragraph body-text">Research</p>
+<p class="paragraph body-text">Financial information when appropriate</p>
+<p class="paragraph body-text">Board information when appropriate</p>
+<p class="paragraph body-text">Policies</p>
+<p class="paragraph body-text">Licenses</p>
+<p class="paragraph body-text">Major grants</p>
+<p class="paragraph body-text">Major sponsorships</p>
+<p class="paragraph body-text">This fits directly with Barkly&#x27;s existing documentation philosophy.</p>
+<h1>22 — Barkly Repository Structure</h1>
+<p class="paragraph body-text">Recommended top-level structure:</p>
+<p class="paragraph preformatted-text">Barkly-Labs/</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── README.md</p>
+<p class="paragraph preformatted-text">├── LICENSE</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── legal/</p>
+<p class="paragraph preformatted-text">│   ├── articles-of-incorporation.pdf</p>
+<p class="paragraph preformatted-text">│   ├── bylaws.md</p>
+<p class="paragraph preformatted-text">│   ├── ein-confirmation.pdf</p>
+<p class="paragraph preformatted-text">│   ├── conflict-of-interest-policy.md</p>
+<p class="paragraph preformatted-text">│   ├── compensation-policy.md</p>
+<p class="paragraph preformatted-text">│   ├── intellectual-property-policy.md</p>
+<p class="paragraph preformatted-text">│   └── records-retention-policy.md</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── governance/</p>
+<p class="paragraph preformatted-text">│   ├── board/</p>
+<p class="paragraph preformatted-text">│   ├── meetings/</p>
+<p class="paragraph preformatted-text">│   ├── resolutions/</p>
+<p class="paragraph preformatted-text">│   └── policies/</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── compliance/</p>
+<p class="paragraph preformatted-text">│   ├── michigan/</p>
+<p class="paragraph preformatted-text">│   ├── irs/</p>
+<p class="paragraph preformatted-text">│   └── fundraising/</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── finance/</p>
+<p class="paragraph preformatted-text">│   ├── budgets/</p>
+<p class="paragraph preformatted-text">│   ├── accounting/</p>
+<p class="paragraph preformatted-text">│   ├── donations/</p>
+<p class="paragraph preformatted-text">│   ├── grants/</p>
+<p class="paragraph preformatted-text">│   └── expenses/</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── projects/</p>
+<p class="paragraph preformatted-text">│   ├── cyn-x/</p>
+<p class="paragraph preformatted-text">│   ├── barkly-docs/</p>
+<p class="paragraph preformatted-text">│   ├── barkly-linux/</p>
+<p class="paragraph preformatted-text">│   ├── pawboard/</p>
+<p class="paragraph preformatted-text">│   └── plant-care/</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── research/</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── standards/</p>
+<p class="paragraph preformatted-text">│   └── paw-hc/</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">└── public/</p>
+<p class="paragraph preformatted-text">├── website/</p>
+<p class="paragraph preformatted-text">├── documentation/</p>
+<p class="paragraph preformatted-text">└── transparency/</p>
+<h1>23 — Master Status Board</h1>
+<h2>LEGAL</h2>
+<p class="paragraph body-text">Name confirmed</p>
+<p class="paragraph body-text">Michigan entity search completed</p>
+<p class="paragraph body-text">Articles prepared</p>
+<p class="paragraph body-text">Articles filed</p>
+<p class="paragraph body-text">Michigan approval received</p>
+<p class="paragraph body-text">EIN obtained</p>
+<p class="paragraph body-text">Bylaws adopted</p>
+<p class="paragraph body-text">Initial board established</p>
+<p class="paragraph body-text">Conflict-of-interest policy adopted</p>
+<p class="paragraph body-text">Records system established</p>
+<h2>FEDERAL</h2>
+<p class="paragraph body-text">501(c)(3) eligibility reviewed</p>
+<p class="paragraph body-text">Form 1023-EZ eligibility worksheet completed</p>
+<p class="paragraph body-text">Form 1023-EZ OR Form 1023 prepared</p>
+<p class="paragraph body-text">IRS application submitted</p>
+<p class="paragraph body-text">IRS determination received</p>
+<p class="paragraph body-text">Determination letter stored</p>
+<h2>MICHIGAN</h2>
+<p class="paragraph body-text">Annual report calendar created</p>
+<p class="paragraph body-text">Annual report filed when due</p>
+<p class="paragraph body-text">Charitable solicitation exemption/registration reviewed</p>
+<p class="paragraph body-text">Required AG filings completed</p>
+<h2>MONEY</h2>
+<p class="paragraph body-text">Barkly bank account</p>
+<p class="paragraph body-text">Bookkeeping system</p>
+<p class="paragraph body-text">Expense policy</p>
+<p class="paragraph body-text">Donation records</p>
+<p class="paragraph body-text">Budget</p>
+<p class="paragraph body-text">Financial controls</p>
+<p class="paragraph body-text">Founder compensation policy</p>
+<p class="paragraph body-text">Payroll process if needed</p>
+<h2>TECHNOLOGY</h2>
+<p class="paragraph body-text">Barkly domain</p>
+<p class="paragraph body-text">Organization email</p>
+<p class="paragraph body-text">GitHub organization</p>
+<p class="paragraph body-text">Website</p>
+<p class="paragraph body-text">Documentation</p>
+<p class="paragraph body-text">Source-code licensing</p>
+<p class="paragraph body-text">Security policy</p>
+<p class="paragraph body-text">Privacy policy</p>
+<p class="paragraph body-text">Data-management policy</p>
+<h2>PROGRAMS</h2>
+<p class="paragraph body-text">CYN-X</p>
+<p class="paragraph body-text">Barkly Docs</p>
+<p class="paragraph body-text">Barkly Standard / PAW-HC</p>
+<p class="paragraph body-text">Barkly Linux</p>
+<p class="paragraph body-text">PawBoard</p>
+<p class="paragraph body-text">Barkly Plant Care</p>
+<p class="paragraph body-text">Research program</p>
+<p class="paragraph body-text">Open hardware program</p>
+<h1>24 — The Golden Rule</h1>
+<p class="paragraph body-text">Barkly Labs should operate with this separation:</p>
+<p class="paragraph preformatted-text">PIPER</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">│ founder / worker</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">BARKLY LABS</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── Bank account</p>
+<p class="paragraph preformatted-text">├── Assets</p>
+<p class="paragraph preformatted-text">├── Intellectual property</p>
+<p class="paragraph preformatted-text">├── Donations</p>
+<p class="paragraph preformatted-text">├── Grants</p>
+<p class="paragraph preformatted-text">├── Projects</p>
+<p class="paragraph preformatted-text">├── Contracts</p>
+<p class="paragraph preformatted-text">└── Employees/contractors</p>
+<p class="paragraph body-text">Barkly&#x27;s money belongs to Barkly.</p>
+<p class="paragraph body-text">Piper&#x27;s money belongs to Piper.</p>
+<p class="paragraph body-text">If Barkly pays Piper for legitimate work, that should happen through a documented compensation arrangement.</p>
+<p class="paragraph body-text">This separation protects both the organization and its founder.</p>
+<h1>25 — First Five Things To Do</h1>
+<p class="paragraph body-text">Do NOT try to complete this entire document in one day.</p>
+<p class="paragraph body-text">The first sequence is:</p>
+<h3>STEP 1</h3>
+<p class="paragraph body-text">Confirm the exact Michigan legal status of Barkly Labs.</p>
+<h3>STEP 2</h3>
+<p class="paragraph body-text">Finish the organizational documents:</p>
+<p class="paragraph body-text">Articles</p>
+<p class="paragraph body-text">Bylaws</p>
+<p class="paragraph body-text">Initial governance</p>
+<p class="paragraph body-text">Conflict-of-interest policy</p>
+<h3>STEP 3</h3>
+<p class="paragraph body-text">Obtain the EIN.</p>
+<h3>STEP 4</h3>
+<p class="paragraph body-text">Open the dedicated Barkly financial account and establish bookkeeping.</p>
+<h3>STEP 5</h3>
+<p class="paragraph body-text">Prepare the 501(c)(3) application.</p>
+<p class="paragraph body-text">Everything else can grow around those foundations.</p>
+<h1>26 — Barkly Labs Definition of Done</h1>
+<p class="paragraph body-text">Barkly Labs is considered legally established and operationally ready when:</p>
+<p class="paragraph body-text">Michigan nonprofit formation is accepted</p>
+<p class="paragraph body-text">EIN exists</p>
+<p class="paragraph body-text">Governance documents are adopted</p>
+<p class="paragraph body-text">Dedicated finances exist</p>
+<p class="paragraph body-text">Accounting is functioning</p>
+<p class="paragraph body-text">Required Michigan registrations are addressed</p>
+<p class="paragraph body-text">501(c)(3) application is submitted/recognized as appropriate</p>
+<p class="paragraph body-text">Policies exist for conflicts, compensation, IP, records, privacy, and security</p>
+<p class="paragraph body-text">Projects have documented ownership/licensing</p>
+<p class="paragraph body-text">Public website accurately represents the organization&#x27;s legal status</p>
+<p class="paragraph body-text">Annual compliance calendar exists</p>
+<h2>Important</h2>
+<p class="paragraph body-text">This document is an organizational planning document, not legal or tax advice.</p>
+<p class="paragraph body-text">Before major fundraising, hiring, founder compensation, significant IP transfers, or major contracts, Barkly should have a qualified nonprofit attorney or tax professional review the specific transaction.</p>
+<p class="paragraph body-text">The goal is not to make Barkly complicated.</p>
+<p class="paragraph body-text">The goal is to make the complicated parts visible, documented, and manageable.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>

@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>BARKLY DOCS v2 — Barkly Docs</title>
+<title>BARKLY DOCS v3 — Barkly Docs</title>
 
 <style>
 
@@ -329,7 +329,7 @@ footer {
         </div>
 
         <h1>
-            BARKLY DOCS v2
+            BARKLY DOCS v3
         </h1>
 
         <p>
@@ -349,634 +349,651 @@ footer {
 
     <article class="document-card">
 
-        <h1>BARKLY DOCS v2</h1>
+        <h1>BARKLY DOCS v3</h1>
 <h2>Functional Requirements Document</h2>
-<h3>1. Purpose</h3>
-<p class="paragraph normal">Barkly Docs SHALL analyze software projects and transform their source structure into understandable, human-readable project documentation.</p>
-<p class="paragraph normal">The system SHALL progress beyond documenting individual files and functions.</p>
-<p class="paragraph normal">It SHALL be capable of answering:</p>
-<p class="paragraph normal">“What is this project, how is it structured, how do its parts relate, and what does each part appear to do?”</p>
-<p class="paragraph normal">The source code remains authoritative.</p>
-<p class="paragraph normal">AI-assisted interpretation MAY be used to explain project structure and intent, but SHALL NOT replace deterministic source analysis.</p>
+<h3>A Project Understanding and Documentation System for Human-Centered Software</h3>
+<h1>1. Purpose</h1>
+<p class="paragraph body-text">Barkly Docs SHALL analyze software projects and transform their source structure, documentation, configuration, and relationships into understandable, human-readable project documentation.</p>
+<p class="paragraph body-text">Barkly Docs SHALL progress beyond documenting individual files, classes, and functions.</p>
+<p class="paragraph body-text">The system SHALL be capable of helping a human understand:</p>
+<p class="paragraph body-text">What is this project?</p>
+<p class="paragraph body-text">What technologies does it use?</p>
+<p class="paragraph body-text">How is it structured?</p>
+<p class="paragraph body-text">What languages are present?</p>
+<p class="paragraph body-text">What are the major components?</p>
+<p class="paragraph body-text">How do the components relate?</p>
+<p class="paragraph body-text">What does each component appear to do?</p>
+<p class="paragraph body-text">What depends on what?</p>
+<p class="paragraph body-text">Where are the important interfaces?</p>
+<p class="paragraph body-text">What documentation describes the system?</p>
+<p class="paragraph body-text">Which parts are known, detected, inferred, or unknown?</p>
+<p class="paragraph body-text">How does the project fit together as a whole?</p>
+<p class="paragraph body-text">The source project SHALL remain authoritative.</p>
+<p class="paragraph body-text">AI-assisted interpretation MAY be used to explain project structure and apparent intent, but SHALL NOT replace deterministic source analysis.</p>
+<p class="paragraph body-text">Barkly Docs is therefore not merely a code documentation generator.</p>
+<p class="paragraph body-text">Barkly Docs is a project understanding system.</p>
+<p class="paragraph body-text">The documentation generator is one layer of the system.</p>
+<p class="paragraph body-text">Language readers provide the source-analysis layer.</p>
+<p class="paragraph body-text">The Barkly Project Model provides the normalized representation.</p>
+<p class="paragraph body-text">The relationship engine provides structural understanding.</p>
+<p class="paragraph body-text">The project graph provides a connected representation of the system.</p>
+<p class="paragraph body-text">Deterministic generation produces reproducible documentation.</p>
+<p class="paragraph body-text">Optional CYN-X interpretation MAY provide additional human-oriented explanations.</p>
+<p class="paragraph body-text">The Barkly website provides the human-facing exploration layer.</p>
 <h1>2. Core Architecture</h1>
-<p class="paragraph normal">BARKLY DOCS</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">┌───────────┴───────────┐</p>
-<p class="paragraph normal">│                       │</p>
-<p class="paragraph normal">LANGUAGE READERS         PROJECT READER</p>
-<p class="paragraph normal">│                       │</p>
-<p class="paragraph normal">┌─────────┼─────────┐             │</p>
-<p class="paragraph normal">│         │         │             │</p>
-<p class="paragraph normal">Python     JS/TS    Astro          Git</p>
-<p class="paragraph normal">HTML       CSS      Markdown       Config</p>
-<p class="paragraph normal">│         │         │             │</p>
-<p class="paragraph normal">└─────────┴─────────┴─────────────┘</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">BARKLY PROJECT MODEL</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">RELATIONSHIP ENGINE</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">PROJECT INTERPRETATION</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">┌──────────┴──────────┐</p>
-<p class="paragraph normal">│                     │</p>
-<p class="paragraph normal">Deterministic Docs      AI Explanation</p>
-<p class="paragraph normal">│                     │</p>
-<p class="paragraph normal">└──────────┬──────────┘</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">BARKLY DOCUMENTS</p>
-<h1>3. Functional Requirements</h1>
+<p class="paragraph body-text">Barkly Docs SHALL use a layered architecture.</p>
+<p class="paragraph preformatted-text">SOURCE PROJECT</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">PROJECT DISCOVERY</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── Language Detection</p>
+<p class="paragraph preformatted-text">├── File Detection</p>
+<p class="paragraph preformatted-text">├── Documentation Detection</p>
+<p class="paragraph preformatted-text">├── Configuration Detection</p>
+<p class="paragraph preformatted-text">├── Build-System Detection</p>
+<p class="paragraph preformatted-text">└── Git Detection</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">LANGUAGE / FORMAT READERS</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── Python</p>
+<p class="paragraph preformatted-text">├── JavaScript</p>
+<p class="paragraph preformatted-text">├── TypeScript</p>
+<p class="paragraph preformatted-text">├── Rust</p>
+<p class="paragraph preformatted-text">├── Ruby</p>
+<p class="paragraph preformatted-text">├── Java</p>
+<p class="paragraph preformatted-text">├── C++</p>
+<p class="paragraph preformatted-text">├── Astro</p>
+<p class="paragraph preformatted-text">├── HTML</p>
+<p class="paragraph preformatted-text">├── CSS</p>
+<p class="paragraph preformatted-text">└── Markdown</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">BARKLY PROJECT MODEL</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">RELATIONSHIP ENGINE</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">PROJECT GRAPH</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">PROJECT INTERPRETATION</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── Deterministic Analysis</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">└── Optional CYN-X Interpretation</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">BARKLY DOCUMENTATION</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── Markdown</p>
+<p class="paragraph preformatted-text">├── HTML</p>
+<p class="paragraph preformatted-text">└── JSON</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">BARKLY WEBSITE / OTHER OUTPUTS</p>
+<p class="paragraph body-text">Language-specific readers SHALL perform source-specific analysis.</p>
+<p class="paragraph body-text">Readers SHALL NOT independently generate final documentation.</p>
+<p class="paragraph body-text">All readers SHALL produce normalized data for the Barkly Project Model.</p>
+<h1>3. Project Discovery</h1>
 <h2>FR-001 — Project Discovery</h2>
-<p class="paragraph normal">Barkly Docs SHALL accept a project directory as its primary input.</p>
-<p class="paragraph normal">It SHALL recursively discover relevant project files.</p>
-<p class="paragraph normal">The discovery system SHALL identify:</p>
-<p class="paragraph normal">source files</p>
-<p class="paragraph normal">documentation</p>
-<p class="paragraph normal">configuration</p>
-<p class="paragraph normal">package manifests</p>
-<p class="paragraph normal">build configuration</p>
-<p class="paragraph normal">test files</p>
-<p class="paragraph normal">static assets</p>
-<p class="paragraph normal">generated files</p>
-<p class="paragraph normal">Git metadata where available</p>
+<p class="paragraph body-text">Barkly Docs SHALL accept a project directory as its primary input.</p>
+<p class="paragraph body-text">It SHALL recursively discover relevant project files.</p>
+<p class="paragraph body-text">The discovery system SHALL identify, where applicable:</p>
+<p class="paragraph body-text">source files</p>
+<p class="paragraph body-text">documentation</p>
+<p class="paragraph body-text">configuration</p>
+<p class="paragraph body-text">package manifests</p>
+<p class="paragraph body-text">dependency manifests</p>
+<p class="paragraph body-text">build configuration</p>
+<p class="paragraph body-text">test files</p>
+<p class="paragraph body-text">static assets</p>
+<p class="paragraph body-text">generated files</p>
+<p class="paragraph body-text">Git metadata</p>
+<p class="paragraph body-text">language indicators</p>
+<p class="paragraph body-text">framework indicators</p>
+<p class="paragraph body-text">project metadata</p>
+<p class="paragraph body-text">Barkly Docs SHOULD distinguish source-controlled files from generated or ignored files where sufficient information exists.</p>
+<h1>4. Multi-Language Project Analysis</h1>
 <h2>FR-002 — Multi-Language Analysis</h2>
-<p class="paragraph normal">Barkly Docs SHALL support analysis of multiple programming and markup languages.</p>
-<p class="paragraph normal">Initial target languages:</p>
-<p class="paragraph normal">Python</p>
-<p class="paragraph normal">JavaScript</p>
-<p class="paragraph normal">TypeScript</p>
-<p class="paragraph normal">Astro</p>
-<p class="paragraph normal">HTML</p>
-<p class="paragraph normal">CSS</p>
-<p class="paragraph normal">Markdown</p>
-<p class="paragraph normal">Additional languages MAY be added through the same adapter architecture.</p>
-<h1>4. Language Adapter Architecture</h1>
-<h2>FR-003 — Language Adapters</h2>
-<p class="paragraph normal">Each supported language SHALL have a dedicated reader/adapter.</p>
-<p class="paragraph normal">barkly_docs/</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">├── readers/</p>
-<p class="paragraph normal">│   ├── python.py</p>
-<p class="paragraph normal">│   ├── javascript.py</p>
-<p class="paragraph normal">│   ├── typescript.py</p>
-<p class="paragraph normal">│   ├── astro.py</p>
-<p class="paragraph normal">│   ├── html.py</p>
-<p class="paragraph normal">│   ├── css.py</p>
-<p class="paragraph normal">│   └── markdown.py</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">├── model/</p>
-<p class="paragraph normal">├── relationships/</p>
-<p class="paragraph normal">├── interpretation/</p>
-<p class="paragraph normal">├── rendering/</p>
-<p class="paragraph normal">└── cli/</p>
-<p class="paragraph normal">Each reader SHALL translate language-specific structures into the common Barkly Project Model.</p>
+<p class="paragraph body-text">Barkly Docs SHALL support projects containing multiple programming languages, markup languages, configuration formats, and documentation formats.</p>
+<p class="paragraph body-text">Initial programming-language support SHALL include:</p>
+<p class="paragraph body-text">Python</p>
+<p class="paragraph body-text">JavaScript</p>
+<p class="paragraph body-text">TypeScript</p>
+<p class="paragraph body-text">Rust</p>
+<p class="paragraph body-text">Ruby</p>
+<p class="paragraph body-text">Java</p>
+<p class="paragraph body-text">C++</p>
+<p class="paragraph body-text">Existing project/web support SHALL include:</p>
+<p class="paragraph body-text">Astro</p>
+<p class="paragraph body-text">HTML</p>
+<p class="paragraph body-text">CSS</p>
+<p class="paragraph body-text">Markdown</p>
+<p class="paragraph body-text">A project MAY contain any combination of supported languages.</p>
+<p class="paragraph body-text">Barkly Docs SHALL analyze supported languages as parts of one project rather than treating each language as an isolated project.</p>
+<p class="paragraph body-text">For example:</p>
+<p class="paragraph preformatted-text">BARKLY PROJECT</p>
+<p class="paragraph preformatted-text">Rust</p>
+<p class="paragraph preformatted-text">└── core system</p>
+<p class="paragraph preformatted-text">C++</p>
+<p class="paragraph preformatted-text">└── hardware / native component</p>
+<p class="paragraph preformatted-text">Python</p>
+<p class="paragraph preformatted-text">└── tooling / automation</p>
+<p class="paragraph preformatted-text">TypeScript</p>
+<p class="paragraph preformatted-text">└── application logic</p>
+<p class="paragraph preformatted-text">JavaScript</p>
+<p class="paragraph preformatted-text">└── runtime / web behavior</p>
+<p class="paragraph preformatted-text">Markdown</p>
+<p class="paragraph preformatted-text">└── documentation</p>
+<p class="paragraph body-text">The final Project Model SHALL represent these as components of the same project.</p>
+<p class="paragraph body-text">Additional languages MAY be added without redesigning the core Project Model.</p>
+<h1>5. Language Adapter Architecture</h1>
+<h2>FR-003 — Language Readers</h2>
+<p class="paragraph body-text">Each supported programming language SHALL have a dedicated reader or adapter.</p>
+<p class="paragraph body-text">The architecture SHOULD support a structure similar to:</p>
+<p class="paragraph preformatted-text">barkly_docs/</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── readers/</p>
+<p class="paragraph preformatted-text">│   ├── python.py</p>
+<p class="paragraph preformatted-text">│   ├── javascript.py</p>
+<p class="paragraph preformatted-text">│   ├── typescript.py</p>
+<p class="paragraph preformatted-text">│   ├── rust.py</p>
+<p class="paragraph preformatted-text">│   ├── ruby.py</p>
+<p class="paragraph preformatted-text">│   ├── java.py</p>
+<p class="paragraph preformatted-text">│   ├── cpp.py</p>
+<p class="paragraph preformatted-text">│   ├── astro.py</p>
+<p class="paragraph preformatted-text">│   ├── html.py</p>
+<p class="paragraph preformatted-text">│   ├── css.py</p>
+<p class="paragraph preformatted-text">│   └── markdown.py</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── model/</p>
+<p class="paragraph preformatted-text">├── relationships/</p>
+<p class="paragraph preformatted-text">├── graph/</p>
+<p class="paragraph preformatted-text">├── interpretation/</p>
+<p class="paragraph preformatted-text">├── rendering/</p>
+<p class="paragraph preformatted-text">├── validation/</p>
+<p class="paragraph preformatted-text">└── cli/</p>
+<p class="paragraph body-text">Each reader SHALL translate language-specific structures into the common Barkly Project Model.</p>
+<p class="paragraph body-text">Readers SHALL be independently testable.</p>
+<p class="paragraph body-text">A failure in one reader SHOULD NOT prevent other supported readers from analyzing the remainder of a project.</p>
+<h1>6. Common Barkly Project Model</h1>
 <h2>FR-004 — Common Project Model</h2>
-<p class="paragraph normal">Language-specific readers SHALL NOT directly generate final documentation.</p>
-<p class="paragraph normal">They SHALL produce normalized project objects.</p>
-<p class="paragraph normal">The common model SHALL support objects such as:</p>
-<p class="paragraph normal">Project</p>
-<p class="paragraph normal">File</p>
-<p class="paragraph normal">Module</p>
-<p class="paragraph normal">Component</p>
-<p class="paragraph normal">Function</p>
-<p class="paragraph normal">Method</p>
-<p class="paragraph normal">Class</p>
-<p class="paragraph normal">Interface</p>
-<p class="paragraph normal">Variable</p>
-<p class="paragraph normal">Route</p>
-<p class="paragraph normal">Endpoint</p>
-<p class="paragraph normal">Import</p>
-<p class="paragraph normal">Export</p>
-<p class="paragraph normal">Dependency</p>
-<p class="paragraph normal">Configuration</p>
-<p class="paragraph normal">Test</p>
-<p class="paragraph normal">Documentation</p>
-<p class="paragraph normal">Relationship</p>
-<h1>5. Python Reader</h1>
+<p class="paragraph body-text">Language-specific readers SHALL NOT directly generate final documentation.</p>
+<p class="paragraph body-text">They SHALL produce normalized project objects.</p>
+<p class="paragraph body-text">The common model SHALL support objects including, where applicable:</p>
+<p class="paragraph body-text">Project</p>
+<p class="paragraph body-text">File</p>
+<p class="paragraph body-text">Directory</p>
+<p class="paragraph body-text">Module</p>
+<p class="paragraph body-text">Package</p>
+<p class="paragraph body-text">Component</p>
+<p class="paragraph body-text">Function</p>
+<p class="paragraph body-text">Method</p>
+<p class="paragraph body-text">Class</p>
+<p class="paragraph body-text">Struct</p>
+<p class="paragraph body-text">Interface</p>
+<p class="paragraph body-text">Trait</p>
+<p class="paragraph body-text">Enum</p>
+<p class="paragraph body-text">Type</p>
+<p class="paragraph body-text">Variable</p>
+<p class="paragraph body-text">Constant</p>
+<p class="paragraph body-text">Parameter</p>
+<p class="paragraph body-text">Property</p>
+<p class="paragraph body-text">Route</p>
+<p class="paragraph body-text">Endpoint</p>
+<p class="paragraph body-text">Import</p>
+<p class="paragraph body-text">Export</p>
+<p class="paragraph body-text">Dependency</p>
+<p class="paragraph body-text">Configuration</p>
+<p class="paragraph body-text">Build Target</p>
+<p class="paragraph body-text">Test</p>
+<p class="paragraph body-text">Documentation</p>
+<p class="paragraph body-text">Command</p>
+<p class="paragraph body-text">Relationship</p>
+<p class="paragraph body-text">The model SHALL preserve language-specific information where normalization alone would cause meaningful information loss.</p>
+<h1>7. Python Reader</h1>
 <h2>FR-005 — Python Static Analysis</h2>
-<p class="paragraph normal">The Python reader SHALL use static analysis where practical.</p>
-<p class="paragraph normal">It SHALL identify:</p>
-<p class="paragraph normal">modules</p>
-<p class="paragraph normal">imports</p>
-<p class="paragraph normal">classes</p>
-<p class="paragraph normal">methods</p>
-<p class="paragraph normal">functions</p>
-<p class="paragraph normal">parameters</p>
-<p class="paragraph normal">return annotations</p>
-<p class="paragraph normal">decorators</p>
-<p class="paragraph normal">constants</p>
-<p class="paragraph normal">assignments</p>
-<p class="paragraph normal">docstrings</p>
-<p class="paragraph normal">type annotations</p>
-<p class="paragraph normal">module relationships</p>
-<p class="paragraph normal">Source code SHALL NOT need to be imported or executed merely to document it.</p>
-<h1>6. JavaScript Reader</h1>
+<p class="paragraph body-text">The Python reader SHALL analyze Python source statically where practical.</p>
+<p class="paragraph body-text">It SHALL identify, where supported:</p>
+<p class="paragraph body-text">modules</p>
+<p class="paragraph body-text">packages</p>
+<p class="paragraph body-text">imports</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">methods</p>
+<p class="paragraph body-text">functions</p>
+<p class="paragraph body-text">parameters</p>
+<p class="paragraph body-text">return annotations</p>
+<p class="paragraph body-text">decorators</p>
+<p class="paragraph body-text">constants</p>
+<p class="paragraph body-text">assignments</p>
+<p class="paragraph body-text">docstrings</p>
+<p class="paragraph body-text">type annotations</p>
+<p class="paragraph body-text">exceptions</p>
+<p class="paragraph body-text">module relationships</p>
+<p class="paragraph body-text">function relationships</p>
+<p class="paragraph body-text">The Python reader SHALL use the Python AST or another static representation where practical.</p>
+<p class="paragraph body-text">Source code SHALL NOT need to be imported or executed merely to document it.</p>
+<h1>8. JavaScript Reader</h1>
 <h2>FR-006 — JavaScript Analysis</h2>
-<p class="paragraph normal">The JavaScript reader SHALL identify, where supported:</p>
-<p class="paragraph normal">modules</p>
-<p class="paragraph normal">imports</p>
-<p class="paragraph normal">exports</p>
-<p class="paragraph normal">functions</p>
-<p class="paragraph normal">arrow functions</p>
-<p class="paragraph normal">classes</p>
-<p class="paragraph normal">methods</p>
-<p class="paragraph normal">variables</p>
-<p class="paragraph normal">constants</p>
-<p class="paragraph normal">objects</p>
-<p class="paragraph normal">calls</p>
-<p class="paragraph normal">comments</p>
-<p class="paragraph normal">documentation</p>
-<p class="paragraph normal">relationships</p>
-<h1>7. TypeScript Reader</h1>
+<p class="paragraph body-text">The JavaScript reader SHALL identify, where supported:</p>
+<p class="paragraph body-text">modules</p>
+<p class="paragraph body-text">imports</p>
+<p class="paragraph body-text">exports</p>
+<p class="paragraph body-text">functions</p>
+<p class="paragraph body-text">arrow functions</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">methods</p>
+<p class="paragraph body-text">variables</p>
+<p class="paragraph body-text">constants</p>
+<p class="paragraph body-text">objects</p>
+<p class="paragraph body-text">calls</p>
+<p class="paragraph body-text">comments</p>
+<p class="paragraph body-text">documentation</p>
+<p class="paragraph body-text">relationships</p>
+<p class="paragraph body-text">The reader SHOULD distinguish common module/export patterns where determinable.</p>
+<h1>9. TypeScript Reader</h1>
 <h2>FR-007 — TypeScript Analysis</h2>
-<p class="paragraph normal">The TypeScript reader SHALL additionally recognize:</p>
-<p class="paragraph normal">interfaces</p>
-<p class="paragraph normal">types</p>
-<p class="paragraph normal">enums</p>
-<p class="paragraph normal">generics</p>
-<p class="paragraph normal">type annotations</p>
-<p class="paragraph normal">access modifiers</p>
-<p class="paragraph normal">decorators where applicable</p>
-<p class="paragraph normal">TypeScript-specific exports/imports</p>
-<h1>8. Astro Reader</h1>
-<h2>FR-008 — Astro Analysis</h2>
-<p class="paragraph normal">The Astro reader SHALL understand the mixed structure of Astro files.</p>
-<p class="paragraph normal">It SHALL distinguish, where possible:</p>
-<p class="paragraph normal">Astro file</p>
-<p class="paragraph normal">├── frontmatter</p>
-<p class="paragraph normal">│   └── JavaScript / TypeScript</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">├── template</p>
-<p class="paragraph normal">│   ├── HTML</p>
-<p class="paragraph normal">│   ├── Astro components</p>
-<p class="paragraph normal">│   └── expressions</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">└── client script</p>
-<p class="paragraph normal">└── JavaScript</p>
-<p class="paragraph normal">It SHALL identify:</p>
-<p class="paragraph normal">pages</p>
-<p class="paragraph normal">routes</p>
-<p class="paragraph normal">layouts</p>
-<p class="paragraph normal">components</p>
-<p class="paragraph normal">imports</p>
-<p class="paragraph normal">props</p>
-<p class="paragraph normal">frontmatter</p>
-<p class="paragraph normal">scripts</p>
-<p class="paragraph normal">links</p>
-<p class="paragraph normal">metadata</p>
-<p class="paragraph normal">component relationships</p>
-<p class="paragraph normal">This is particularly important for the Barkly website itself.</p>
-<h1>9. HTML Reader</h1>
-<h2>FR-009 — HTML Analysis</h2>
-<p class="paragraph normal">The HTML reader SHALL identify:</p>
-<p class="paragraph normal">document structure</p>
-<p class="paragraph normal">headings</p>
-<p class="paragraph normal">navigation</p>
-<p class="paragraph normal">links</p>
-<p class="paragraph normal">forms</p>
-<p class="paragraph normal">semantic elements</p>
-<p class="paragraph normal">IDs</p>
-<p class="paragraph normal">classes</p>
-<p class="paragraph normal">metadata</p>
-<p class="paragraph normal">embedded resources</p>
-<h1>10. CSS Reader</h1>
-<h2>FR-010 — CSS Analysis</h2>
-<p class="paragraph normal">The CSS reader SHALL identify:</p>
-<p class="paragraph normal">stylesheets</p>
-<p class="paragraph normal">selectors</p>
-<p class="paragraph normal">classes</p>
-<p class="paragraph normal">IDs</p>
-<p class="paragraph normal">media queries</p>
-<p class="paragraph normal">CSS variables</p>
-<p class="paragraph normal">animations</p>
-<p class="paragraph normal">keyframes</p>
-<p class="paragraph normal">imports</p>
-<p class="paragraph normal">dependencies between stylesheets where determinable</p>
-<h1>11. Markdown Reader</h1>
-<h2>FR-011 — Markdown Analysis</h2>
-<p class="paragraph normal">The Markdown reader SHALL identify:</p>
-<p class="paragraph normal">headings</p>
-<p class="paragraph normal">sections</p>
-<p class="paragraph normal">links</p>
-<p class="paragraph normal">lists</p>
-<p class="paragraph normal">code blocks</p>
-<p class="paragraph normal">tables</p>
-<p class="paragraph normal">images</p>
-<p class="paragraph normal">references</p>
-<p class="paragraph normal">documentation relationships</p>
-<p class="paragraph normal">Markdown SHALL be treated as project knowledge rather than merely another text file.</p>
-<h1>12. Project Relationship Engine</h1>
-<p class="paragraph normal">This is the big upgrade.</p>
-<h2>FR-012 — Relationship Detection</h2>
-<p class="paragraph normal">Barkly Docs SHALL construct relationships between discovered project entities.</p>
-<p class="paragraph normal">Examples:</p>
-<p class="paragraph normal">Page</p>
-<p class="paragraph normal">↓ imports</p>
-<p class="paragraph normal">Component</p>
-<p class="paragraph normal">↓ imports</p>
-<p class="paragraph normal">Utility</p>
-<p class="paragraph normal">↓ calls</p>
-<p class="paragraph normal">Function</p>
-<p class="paragraph normal">↓ reads</p>
-<p class="paragraph normal">Configuration</p>
-<p class="paragraph normal">Relationships SHALL include, where determinable:</p>
-<p class="paragraph normal">imports</p>
-<p class="paragraph normal">exports</p>
-<p class="paragraph normal">calls</p>
-<p class="paragraph normal">references</p>
-<p class="paragraph normal">inheritance</p>
-<p class="paragraph normal">implementation</p>
-<p class="paragraph normal">composition</p>
-<p class="paragraph normal">route ownership</p>
-<p class="paragraph normal">component usage</p>
-<p class="paragraph normal">documentation references</p>
-<p class="paragraph normal">configuration relationships</p>
-<h1>13. Project Graph</h1>
-<h2>FR-013 — Project Graph</h2>
-<p class="paragraph normal">Barkly Docs SHALL maintain an internal representation of project relationships.</p>
-<p class="paragraph normal">Conceptually:</p>
-<p class="paragraph normal">Project</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">┌─────────┼─────────┐</p>
-<p class="paragraph normal">↓         ↓         ↓</p>
-<p class="paragraph normal">Pages    Components   API</p>
-<p class="paragraph normal">│         │         │</p>
-<p class="paragraph normal">↓         ↓         ↓</p>
-<p class="paragraph normal">Layouts    Functions  Services</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Modules</p>
-<p class="paragraph normal">This graph becomes the foundation for project-level interpretation.</p>
-<h1>14. Project Interpretation</h1>
-<h2>FR-014 — Project Summary</h2>
-<p class="paragraph normal">Barkly Docs SHALL generate a deterministic project summary from the Project Model.</p>
-<p class="paragraph normal">It SHOULD be able to describe:</p>
-<p class="paragraph normal">project type</p>
-<p class="paragraph normal">major technologies</p>
-<p class="paragraph normal">major components</p>
-<p class="paragraph normal">entry points</p>
-<p class="paragraph normal">routes</p>
-<p class="paragraph normal">APIs</p>
-<p class="paragraph normal">dependencies</p>
-<p class="paragraph normal">build system</p>
-<p class="paragraph normal">documentation</p>
-<p class="paragraph normal">tests</p>
-<p class="paragraph normal">deployment structure</p>
-<h2>FR-015 — Architectural Interpretation</h2>
-<p class="paragraph normal">Barkly Docs SHOULD identify recognizable architectural patterns when sufficient evidence exists.</p>
-<p class="paragraph normal">Examples:</p>
-<p class="paragraph normal">Astro website</p>
-<p class="paragraph normal">Static site</p>
-<p class="paragraph normal">API service</p>
-<p class="paragraph normal">CLI application</p>
-<p class="paragraph normal">Python library</p>
-<p class="paragraph normal">Monorepo</p>
-<p class="paragraph normal">Frontend application</p>
-<p class="paragraph normal">Backend service</p>
-<p class="paragraph normal">Embedded project</p>
-<p class="paragraph normal">Documentation project</p>
-<p class="paragraph normal">Interpretations SHALL distinguish observed facts from inferred descriptions.</p>
-<h1>15. AI-Assisted Interpretation</h1>
-<h2>FR-016 — Optional AI Layer</h2>
-<p class="paragraph normal">AI interpretation SHALL be optional.</p>
-<p class="paragraph normal">The core documentation pipeline SHALL remain functional without an AI model.</p>
-<p class="paragraph normal">WITHOUT AI</p>
-<p class="paragraph normal">Source</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Readers</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Project Model</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Relationships</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Documentation</p>
-<p class="paragraph normal">With AI:</p>
-<p class="paragraph normal">Project Model</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">CYN-X</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Human-oriented explanation</p>
-<p class="paragraph normal">This is particularly important because CYN-X&#x27;s available hardware may vary.</p>
-<p class="paragraph normal">Barkly Docs SHALL NOT require local high-end GPU hardware to perform its fundamental documentation functions.</p>
-<h1>16. Evidence-Based Interpretation</h1>
-<h2>FR-017 — Source Authority</h2>
-<p class="paragraph normal">Generated explanations SHALL be traceable to discovered project evidence whenever practical.</p>
-<p class="paragraph normal">Barkly Docs SHOULD be able to indicate:</p>
-<p class="paragraph normal">Observed:</p>
-<p class="paragraph normal">src/components/SEO.astro imports...</p>
-<p class="paragraph normal">Observed:</p>
-<p class="paragraph normal">src/pages/index.astro references...</p>
-<p class="paragraph normal">Inferred:</p>
-<p class="paragraph normal">These components appear to form the site&#x27;s metadata system.</p>
-<p class="paragraph normal">The system SHALL avoid presenting uncertain interpretation as confirmed source fact.</p>
-<h1>17. Documentation Generation</h1>
-<h2>FR-018 — Structured Documentation</h2>
-<p class="paragraph normal">Barkly Docs SHALL generate structured documentation covering:</p>
-<p class="paragraph normal">01 Project</p>
-<p class="paragraph normal">02 Principles</p>
-<p class="paragraph normal">03 Components</p>
-<p class="paragraph normal">04 API Endpoints</p>
-<p class="paragraph normal">05 Functions &amp; Methods</p>
-<p class="paragraph normal">06 Classes</p>
-<p class="paragraph normal">07 Modules</p>
-<p class="paragraph normal">08 Imports</p>
-<p class="paragraph normal">09 Lifecycle</p>
-<p class="paragraph normal">10 Git</p>
-<p class="paragraph normal">11 Changelog</p>
-<p class="paragraph normal">The existing “show the shape first” philosophy SHALL remain the organizing principle.</p>
-<h1>18. Project Knowledge</h1>
-<h2>FR-019 — Project-Level Explanation</h2>
-<p class="paragraph normal">Barkly Docs SHOULD produce a higher-level explanation such as:</p>
-<p class="paragraph normal">WHAT IS THIS?</p>
-<p class="paragraph normal">HOW IS IT STRUCTURED?</p>
-<p class="paragraph normal">WHAT ARE THE IMPORTANT PARTS?</p>
-<p class="paragraph normal">HOW DO THEY CONNECT?</p>
-<p class="paragraph normal">HOW DOES DATA MOVE THROUGH IT?</p>
-<p class="paragraph normal">HOW IS IT BUILT?</p>
-<p class="paragraph normal">HOW IS IT TESTED?</p>
-<p class="paragraph normal">HOW IS IT DEPLOYED?</p>
-<p class="paragraph normal">WHAT APPEARS TO BE INCOMPLETE?</p>
-<p class="paragraph normal">This is the difference between:</p>
-<p class="paragraph normal">“Here are 83 functions.”</p>
-<p class="paragraph normal">and:</p>
-<p class="paragraph normal">“Here is how this system works.”</p>
-<h1>19. Git Integration</h1>
-<h2>FR-020 — Git Awareness</h2>
-<p class="paragraph normal">Where a Git repository exists, Barkly Docs SHOULD analyze:</p>
-<p class="paragraph normal">current branch</p>
-<p class="paragraph normal">current commit</p>
-<p class="paragraph normal">recent commits</p>
-<p class="paragraph normal">contributors where available</p>
-<p class="paragraph normal">changed files</p>
-<p class="paragraph normal">project history</p>
-<p class="paragraph normal">changelog information</p>
-<p class="paragraph normal">Git information SHALL remain separate from source-code facts.</p>
-<h1>20. Documentation Website Integration</h1>
-<h2>FR-021 — Machine-Readable Output</h2>
-<p class="paragraph normal">Barkly Docs SHALL support structured output that can be consumed by the Barkly website.</p>
-<p class="paragraph normal">Preferred intermediate representation:</p>
-<p class="paragraph normal">Project Model</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">JSON</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Markdown / HTML</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Barkly Website</p>
-<p class="paragraph normal">This means the website doesn&#x27;t need to understand every programming language.</p>
-<p class="paragraph normal">Barkly Docs does that work.</p>
-<h1>21. Deterministic + AI Pipeline</h1>
-<p class="paragraph normal">The complete future pipeline becomes:</p>
-<p class="paragraph normal">SOURCE PROJECT</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">FILE DISCOVERY</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">LANGUAGE DETECTION</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">┌────────────────┼────────────────┐</p>
-<p class="paragraph normal">▼                ▼                ▼</p>
-<p class="paragraph normal">Python           JS / TS           Astro</p>
-<p class="paragraph normal">│                │                │</p>
-<p class="paragraph normal">└────────────────┼────────────────┘</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">BARKLY PROJECT MODEL</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">RELATIONSHIP ENGINE</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">PROJECT GRAPH</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">┌─────────┴─────────┐</p>
-<p class="paragraph normal">▼                   ▼</p>
-<p class="paragraph normal">FACTUAL ANALYSIS     CYN-X / AI</p>
-<p class="paragraph normal">│                   │</p>
-<p class="paragraph normal">└─────────┬─────────┘</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">PROJECT EXPLANATION</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">BARKLY DOCUMENTS</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">BARKLY WEBSITE</p>
-<h1>22. Resource Requirements</h1>
-<h2>FR-022 — Resource Independence</h2>
-<p class="paragraph normal">Barkly Docs SHALL prioritize lightweight deterministic processing.</p>
-<p class="paragraph normal">The system SHOULD operate on ordinary consumer hardware for source analysis.</p>
-<p class="paragraph normal">Large language models SHALL NOT be required for:</p>
-<p class="paragraph normal">file discovery</p>
-<p class="paragraph normal">syntax analysis</p>
-<p class="paragraph normal">project structure</p>
-<p class="paragraph normal">dependency extraction</p>
-<p class="paragraph normal">route discovery</p>
-<p class="paragraph normal">import analysis</p>
-<p class="paragraph normal">documentation generation</p>
-<p class="paragraph normal">basic project summaries</p>
-<p class="paragraph normal">This keeps Barkly Docs useful even when CYN-X cannot run a sufficiently large model locally.</p>
-<h1>23. Extensibility</h1>
-<h2>FR-023 — New Language Support</h2>
-<p class="paragraph normal">Adding another language SHOULD require implementing a new reader rather than modifying the entire documentation system.</p>
-<p class="paragraph normal">Conceptually:</p>
-<p class="paragraph normal">class LanguageReader:</p>
-<p class="paragraph normal">def can_read(self, path):</p>
-<p class="paragraph normal">...</p>
-<p class="paragraph normal">def analyze(self, path):</p>
-<p class="paragraph normal">...</p>
-<p class="paragraph normal">Then:</p>
-<p class="paragraph normal">PythonReader</p>
-<p class="paragraph normal">JavaScriptReader</p>
-<p class="paragraph normal">TypeScriptReader</p>
-<p class="paragraph normal">AstroReader</p>
-<p class="paragraph normal">HTMLReader</p>
-<p class="paragraph normal">CSSReader</p>
-<p class="paragraph normal">MarkdownReader</p>
-<p class="paragraph normal">all feed the same model.</p>
-<h1>24. Testing</h1>
-<h2>FR-024 — Parser Regression Tests</h2>
-<p class="paragraph normal">Every language reader SHALL have representative fixtures.</p>
-<p class="paragraph normal">Example:</p>
-<p class="paragraph normal">tests/</p>
-<p class="paragraph normal">├── python/</p>
-<p class="paragraph normal">├── javascript/</p>
-<p class="paragraph normal">├── typescript/</p>
-<p class="paragraph normal">├── astro/</p>
-<p class="paragraph normal">├── html/</p>
-<p class="paragraph normal">├── css/</p>
-<p class="paragraph normal">└── markdown/</p>
-<p class="paragraph normal">Tests SHALL verify that known source structures produce the expected Project Model objects.</p>
-<p class="paragraph normal">This is especially important for CYN-X regression: Barkly Docs should have its own regression suite and shouldn&#x27;t depend on CYN-X behaving correctly.</p>
-<h1>25. Failure Isolation</h1>
-<h2>FR-025 — Reader Failure Isolation</h2>
-<p class="paragraph normal">A malformed or unsupported file SHALL NOT cause the entire project analysis to fail when practical.</p>
-<p class="paragraph normal">Instead:</p>
-<p class="paragraph normal">Project</p>
-<p class="paragraph normal">├── Python ✓</p>
-<p class="paragraph normal">├── JavaScript ✓</p>
-<p class="paragraph normal">├── TypeScript ✓</p>
-<p class="paragraph normal">├── Astro ✓</p>
-<p class="paragraph normal">├── CSS ✓</p>
-<p class="paragraph normal">├── Markdown ✓</p>
-<p class="paragraph normal">└── Unknown file ⚠</p>
-<p class="paragraph normal">Barkly Docs SHOULD report the problem and continue analyzing the remaining project.</p>
-<h1>26. Human-Centered Output</h1>
-<h2>FR-026 — Understandability</h2>
-<p class="paragraph normal">Generated documentation SHALL prioritize human understanding over maximum information density.</p>
-<p class="paragraph normal">The system SHALL prefer:</p>
-<p class="paragraph normal">Show the shape first.</p>
-<p class="paragraph normal">Reveal the details when the human asks.</p>
-<p class="paragraph normal">This aligns directly with Barkly&#x27;s existing human-centered philosophy: the website itself describes complex systems as something people should be able to understand, question, modify, and build upon.</p>
-<h1>27. The Actual Goal</h1>
-<p class="paragraph normal">And this is the part I really want us to put near the top of the repo:</p>
-<p class="paragraph normal">Barkly Docs is not merely a code documentation generator.</p>
-<p class="paragraph normal">It is a project understanding system.</p>
-<p class="paragraph normal">The documentation generator is the first layer.</p>
-<p class="paragraph normal">The seven language readers are the input layer.</p>
-<p class="paragraph normal">The Barkly Project Model is the foundation.</p>
-<p class="paragraph normal">The relationship graph is how Barkly understands structure.</p>
-<p class="paragraph normal">The optional CYN-X layer helps turn that structure into richer human explanations.</p>
-<p class="paragraph normal">And the website becomes the place where humans actually explore what the machine discovered.</p>
-<p class="paragraph normal">That gives us a very clean next implementation order:</p>
-<p class="paragraph normal">1. Update Barkly Docs FRD</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">2. Define Project Model</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">3. Refactor existing Python analyzer</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">4. Create LanguageReader interface</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">5. Add 7 readers</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">6. Build relationship engine</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">7. Build project graph</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">8. Generate deterministic explanations</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">9. Add optional CYN-X interpretation</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">10. Feed everything into the website</p>
-<h3>21. Automated Document Ingestion</h3>
-<p class="paragraph normal">FR-022 — Document Source Discovery</p>
-<p class="paragraph normal">Barkly Docs SHOULD support approved external document sources in addition to local project directories.</p>
-<p class="paragraph normal">Initial source types MAY include:</p>
-<p class="paragraph normal">Google Drive</p>
-<p class="paragraph normal">Network-attached storage (NAS)</p>
-<p class="paragraph normal">Local document directories</p>
-<p class="paragraph normal">Additional document sources MAY be added through the same adapter architecture used by language readers.</p>
-<p class="paragraph normal">FR-023 — Document Retrieval</p>
-<p class="paragraph normal">Barkly Docs SHALL retrieve documents from configured sources without modifying or destroying the original source document.</p>
-<p class="paragraph normal">The system SHALL preserve source identity and, where available:</p>
-<p class="paragraph normal">source location</p>
-<p class="paragraph normal">filename</p>
-<p class="paragraph normal">document type</p>
-<p class="paragraph normal">author information</p>
-<p class="paragraph normal">creation and modification timestamps</p>
-<p class="paragraph normal">source version information</p>
-<p class="paragraph normal">FR-024 — Change Detection</p>
-<p class="paragraph normal">Barkly Docs SHOULD detect new, modified, and unchanged source documents.</p>
-<p class="paragraph normal">Unchanged documents SHOULD NOT be unnecessarily reprocessed.</p>
-<p class="paragraph normal">The system SHOULD maintain sufficient source metadata to determine whether a document requires processing.</p>
-<p class="paragraph normal">FR-025 — Document Extraction</p>
-<p class="paragraph normal">Barkly Docs SHALL extract usable content from supported document formats.</p>
-<p class="paragraph normal">Initial target formats MAY include:</p>
-<p class="paragraph normal">PDF</p>
-<p class="paragraph normal">DOCX</p>
-<p class="paragraph normal">Markdown</p>
-<p class="paragraph normal">TXT</p>
-<p class="paragraph normal">HTML</p>
-<p class="paragraph normal">Additional formats MAY be added through the same adapter architecture.</p>
-<p class="paragraph normal">FR-026 — Document Normalization</p>
-<p class="paragraph normal">Extracted documents SHALL be converted into a normalized Barkly document representation before publication.</p>
-<p class="paragraph normal">The normalized representation SHOULD preserve, where available:</p>
-<p class="paragraph normal">document title</p>
-<p class="paragraph normal">headings</p>
-<p class="paragraph normal">sections</p>
-<p class="paragraph normal">paragraphs</p>
-<p class="paragraph normal">lists</p>
-<p class="paragraph normal">tables</p>
-<p class="paragraph normal">links</p>
-<p class="paragraph normal">images or image references</p>
-<p class="paragraph normal">code blocks</p>
-<p class="paragraph normal">metadata</p>
-<p class="paragraph normal">The source document SHALL remain authoritative for the extracted content.</p>
-<p class="paragraph normal">FR-027 — Document Knowledge Integration</p>
-<p class="paragraph normal">Normalized documents SHOULD become part of the Barkly Project Model and project knowledge system.</p>
-<p class="paragraph normal">Technical documents MAY be related to discovered project entities such as:</p>
-<p class="paragraph normal">Projects</p>
-<p class="paragraph normal">Components</p>
-<p class="paragraph normal">Modules</p>
-<p class="paragraph normal">Functions</p>
-<p class="paragraph normal">Classes</p>
-<p class="paragraph normal">APIs</p>
-<p class="paragraph normal">Configuration</p>
-<p class="paragraph normal">Tests</p>
-<p class="paragraph normal">Deployment structures</p>
-<p class="paragraph normal">Where relationships can be determined, Barkly Docs SHOULD represent them in the same relationship graph used for source-code analysis.</p>
-<p class="paragraph normal">FR-028 — Automated Documentation Pipeline</p>
-<p class="paragraph normal">The future document pipeline SHOULD support the following flow:</p>
-<p class="paragraph normal">SOURCE DOCUMENTS</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">DOCUMENT SOURCE DISCOVERY</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">CHANGE DETECTION</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">DOCUMENT RETRIEVAL</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">CONTENT EXTRACTION</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">BARKLY DOCUMENT MODEL</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">RELATIONSHIP / PROJECT KNOWLEDGE</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">VALIDATION</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">HUMAN REVIEW WHEN REQUIRED</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">BARKLY DOCUMENTATION</p>
-<p class="paragraph normal">│</p>
-<p class="paragraph normal">▼</p>
-<p class="paragraph normal">BARKLY WEBSITE</p>
-<p class="paragraph normal">FR-029 — Source Traceability</p>
-<p class="paragraph normal">Generated documentation SHALL remain traceable to its source document whenever practical.</p>
-<p class="paragraph normal">The system SHOULD be able to identify which source document and source version produced a generated document.</p>
-<p class="paragraph normal">Generated documentation SHALL NOT silently replace authoritative source material.</p>
-<p class="paragraph normal">FR-030 — Validation and Failure Isolation</p>
-<p class="paragraph normal">A malformed, unavailable, unsupported, or partially unreadable document SHALL NOT cause the entire document pipeline to fail when practical.</p>
-<p class="paragraph normal">Barkly Docs SHOULD report the source, processing stage, and reason for failure while continuing with other documents.</p>
-<p class="paragraph normal">Generated documentation SHALL NOT be published as valid documentation when required validation fails.</p>
-<p class="paragraph normal">FR-031 — Human Review</p>
-<p class="paragraph normal">Barkly Docs SHOULD support human review before publishing generated documentation when the source or transformation requires approval.</p>
-<p class="paragraph normal">Human review SHOULD be configurable by source, document type, destination, or publication policy.</p>
-<p class="paragraph normal">FR-032 — Document Publication</p>
-<p class="paragraph normal">Validated normalized documents SHOULD be publishable to Barkly&#x27;s existing documentation outputs.</p>
-<p class="paragraph normal">Preferred flow:</p>
-<p class="paragraph normal">Document Source</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Barkly Document Model</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">JSON / Markdown / HTML</p>
-<p class="paragraph normal">↓</p>
-<p class="paragraph normal">Barkly Website</p>
-<p class="paragraph normal">The website SHALL NOT need to understand every source document format directly.</p>
-<p class="paragraph normal">Barkly Docs SHALL perform the source-specific work.</p>
-<p class="paragraph normal">FR-033 — Human-Centered Automation</p>
-<p class="paragraph normal">The document ingestion system SHALL prioritize reducing the work required of humans.</p>
-<p class="paragraph normal">A human SHOULD be able to place an approved technical document into a configured source location without needing to understand the underlying ingestion, conversion, validation, or publication pipeline.</p>
-<p class="paragraph normal">Automation SHALL remain understandable, traceable, and controllable by humans.</p>
+<p class="paragraph body-text">The TypeScript reader SHALL additionally recognize, where supported:</p>
+<p class="paragraph body-text">interfaces</p>
+<p class="paragraph body-text">types</p>
+<p class="paragraph body-text">enums</p>
+<p class="paragraph body-text">generics</p>
+<p class="paragraph body-text">type annotations</p>
+<p class="paragraph body-text">access modifiers</p>
+<p class="paragraph body-text">decorators</p>
+<p class="paragraph body-text">namespaces</p>
+<p class="paragraph body-text">modules</p>
+<p class="paragraph body-text">imports</p>
+<p class="paragraph body-text">exports</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">methods</p>
+<p class="paragraph body-text">functions</p>
+<p class="paragraph body-text">type relationships</p>
+<p class="paragraph body-text">TypeScript-specific structures SHALL remain distinguishable from equivalent JavaScript structures when that distinction is meaningful.</p>
+<h1>10. Rust Reader</h1>
+<h2>FR-008 — Rust Analysis</h2>
+<p class="paragraph body-text">The Rust reader SHALL analyze Rust source statically where practical.</p>
+<p class="paragraph body-text">It SHALL identify, where supported:</p>
+<p class="paragraph body-text">crates</p>
+<p class="paragraph body-text">modules</p>
+<p class="paragraph body-text">functions</p>
+<p class="paragraph body-text">structs</p>
+<p class="paragraph body-text">enums</p>
+<p class="paragraph body-text">traits</p>
+<p class="paragraph body-text">implementations</p>
+<p class="paragraph body-text">methods</p>
+<p class="paragraph body-text">constants</p>
+<p class="paragraph body-text">statics</p>
+<p class="paragraph body-text">type aliases</p>
+<p class="paragraph body-text">generics</p>
+<p class="paragraph body-text">lifetimes where determinable</p>
+<p class="paragraph body-text">macros</p>
+<p class="paragraph body-text">attributes</p>
+<p class="paragraph body-text">visibility</p>
+<p class="paragraph body-text">imports</p>
+<p class="paragraph body-text">exports</p>
+<p class="paragraph body-text">dependencies</p>
+<p class="paragraph body-text">tests</p>
+<p class="paragraph body-text">documentation comments</p>
+<p class="paragraph body-text">The reader SHALL identify relationships such as:</p>
+<p class="paragraph preformatted-text">Module</p>
+<p class="paragraph preformatted-text">└── contains</p>
+<p class="paragraph preformatted-text">├── Struct</p>
+<p class="paragraph preformatted-text">├── Enum</p>
+<p class="paragraph preformatted-text">├── Trait</p>
+<p class="paragraph preformatted-text">└── Function</p>
+<p class="paragraph preformatted-text">Struct</p>
+<p class="paragraph preformatted-text">└── implemented by</p>
+<p class="paragraph preformatted-text">└── impl block</p>
+<p class="paragraph preformatted-text">Trait</p>
+<p class="paragraph preformatted-text">└── implemented by</p>
+<p class="paragraph preformatted-text">└── Type</p>
+<p class="paragraph body-text">Cargo metadata SHOULD be recognized where available.</p>
+<h1>11. Ruby Reader</h1>
+<h2>FR-009 — Ruby Analysis</h2>
+<p class="paragraph body-text">The Ruby reader SHALL analyze Ruby source statically where practical.</p>
+<p class="paragraph body-text">It SHALL identify, where supported:</p>
+<p class="paragraph body-text">modules</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">methods</p>
+<p class="paragraph body-text">singleton methods</p>
+<p class="paragraph body-text">constants</p>
+<p class="paragraph body-text">attributes</p>
+<p class="paragraph body-text">blocks</p>
+<p class="paragraph body-text">mixins</p>
+<p class="paragraph body-text">includes</p>
+<p class="paragraph body-text">extensions</p>
+<p class="paragraph body-text">requires</p>
+<p class="paragraph body-text">dependencies</p>
+<p class="paragraph body-text">documentation comments</p>
+<p class="paragraph body-text">inheritance</p>
+<p class="paragraph body-text">method relationships</p>
+<p class="paragraph body-text">The reader SHOULD recognize common Ruby project structures including Gemfiles and gem metadata where available.</p>
+<h1>12. Java Reader</h1>
+<h2>FR-010 — Java Analysis</h2>
+<p class="paragraph body-text">The Java reader SHALL analyze Java source statically where practical.</p>
+<p class="paragraph body-text">It SHALL identify, where supported:</p>
+<p class="paragraph body-text">packages</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">interfaces</p>
+<p class="paragraph body-text">enums</p>
+<p class="paragraph body-text">records</p>
+<p class="paragraph body-text">methods</p>
+<p class="paragraph body-text">constructors</p>
+<p class="paragraph body-text">fields</p>
+<p class="paragraph body-text">annotations</p>
+<p class="paragraph body-text">generics</p>
+<p class="paragraph body-text">inheritance</p>
+<p class="paragraph body-text">implementations</p>
+<p class="paragraph body-text">imports</p>
+<p class="paragraph body-text">dependencies</p>
+<p class="paragraph body-text">visibility</p>
+<p class="paragraph body-text">exceptions</p>
+<p class="paragraph body-text">documentation comments</p>
+<p class="paragraph body-text">tests</p>
+<p class="paragraph body-text">The reader SHOULD recognize common Java project structures and build metadata where available.</p>
+<p class="paragraph body-text">Initial build-system awareness SHOULD include common project indicators such as:</p>
+<p class="paragraph body-text">Maven</p>
+<p class="paragraph body-text">Gradle</p>
+<h1>13. C++ Reader</h1>
+<h2>FR-011 — C++ Analysis</h2>
+<p class="paragraph body-text">The C++ reader SHALL analyze C++ source statically where practical.</p>
+<p class="paragraph body-text">It SHALL identify, where supported:</p>
+<p class="paragraph body-text">source files</p>
+<p class="paragraph body-text">header files</p>
+<p class="paragraph body-text">namespaces</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">structs</p>
+<p class="paragraph body-text">unions</p>
+<p class="paragraph body-text">functions</p>
+<p class="paragraph body-text">methods</p>
+<p class="paragraph body-text">constructors</p>
+<p class="paragraph body-text">destructors</p>
+<p class="paragraph body-text">templates</p>
+<p class="paragraph body-text">type aliases</p>
+<p class="paragraph body-text">enums</p>
+<p class="paragraph body-text">macros</p>
+<p class="paragraph body-text">includes</p>
+<p class="paragraph body-text">declarations</p>
+<p class="paragraph body-text">definitions</p>
+<p class="paragraph body-text">inheritance</p>
+<p class="paragraph body-text">access modifiers</p>
+<p class="paragraph body-text">constants</p>
+<p class="paragraph body-text">dependencies</p>
+<p class="paragraph body-text">The reader SHOULD distinguish declarations from definitions where determinable.</p>
+<p class="paragraph body-text">Build-system awareness SHOULD recognize common project indicators where available, including:</p>
+<p class="paragraph body-text">CMake</p>
+<p class="paragraph body-text">Make</p>
+<p class="paragraph body-text">Ninja</p>
+<p class="paragraph body-text">other supported build metadata</p>
+<p class="paragraph body-text">C and C++ MAY share implementation infrastructure where practical, but C++ SHALL remain a first-class supported language.</p>
+<h1>14. Astro Reader</h1>
+<h2>FR-012 — Astro Analysis</h2>
+<p class="paragraph body-text">The Astro reader SHALL understand the mixed structure of Astro files.</p>
+<p class="paragraph body-text">It SHALL distinguish, where possible:</p>
+<p class="paragraph preformatted-text">Astro File</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── Frontmatter</p>
+<p class="paragraph preformatted-text">│   └── JavaScript / TypeScript</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">├── Template</p>
+<p class="paragraph preformatted-text">│   ├── HTML</p>
+<p class="paragraph preformatted-text">│   ├── Astro Components</p>
+<p class="paragraph preformatted-text">│   └── Expressions</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">└── Client Script</p>
+<p class="paragraph preformatted-text">└── JavaScript / TypeScript</p>
+<p class="paragraph body-text">It SHALL identify, where supported:</p>
+<p class="paragraph body-text">pages</p>
+<p class="paragraph body-text">routes</p>
+<p class="paragraph body-text">layouts</p>
+<p class="paragraph body-text">components</p>
+<p class="paragraph body-text">imports</p>
+<p class="paragraph body-text">props</p>
+<p class="paragraph body-text">frontmatter</p>
+<p class="paragraph body-text">scripts</p>
+<p class="paragraph body-text">links</p>
+<p class="paragraph body-text">metadata</p>
+<p class="paragraph body-text">component relationships</p>
+<p class="paragraph body-text">This is particularly important for the Barkly website itself.</p>
+<h1>15. HTML Reader</h1>
+<h2>FR-013 — HTML Analysis</h2>
+<p class="paragraph body-text">The HTML reader SHALL identify:</p>
+<p class="paragraph body-text">document structure</p>
+<p class="paragraph body-text">headings</p>
+<p class="paragraph body-text">navigation</p>
+<p class="paragraph body-text">links</p>
+<p class="paragraph body-text">forms</p>
+<p class="paragraph body-text">semantic elements</p>
+<p class="paragraph body-text">IDs</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">metadata</p>
+<p class="paragraph body-text">embedded resources</p>
+<p class="paragraph body-text">HTML relationships SHOULD be represented in the Project Model where meaningful.</p>
+<h1>16. CSS Reader</h1>
+<h2>FR-014 — CSS Analysis</h2>
+<p class="paragraph body-text">The CSS reader SHALL identify:</p>
+<p class="paragraph body-text">stylesheets</p>
+<p class="paragraph body-text">selectors</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">IDs</p>
+<p class="paragraph body-text">media queries</p>
+<p class="paragraph body-text">CSS variables</p>
+<p class="paragraph body-text">animations</p>
+<p class="paragraph body-text">keyframes</p>
+<p class="paragraph body-text">imports</p>
+<p class="paragraph body-text">stylesheet relationships</p>
+<p class="paragraph body-text">dependencies where determinable</p>
+<h1>17. Markdown Reader</h1>
+<h2>FR-015 — Markdown Analysis</h2>
+<p class="paragraph body-text">The Markdown reader SHALL identify:</p>
+<p class="paragraph body-text">headings</p>
+<p class="paragraph body-text">sections</p>
+<p class="paragraph body-text">links</p>
+<p class="paragraph body-text">lists</p>
+<p class="paragraph body-text">code blocks</p>
+<p class="paragraph body-text">tables</p>
+<p class="paragraph body-text">images</p>
+<p class="paragraph body-text">references</p>
+<p class="paragraph body-text">metadata</p>
+<p class="paragraph body-text">documentation relationships</p>
+<p class="paragraph body-text">Markdown SHALL be treated as project knowledge rather than merely another text file.</p>
+<h1>18. Static Analysis Safety</h1>
+<h2>FR-016 — Safe Source Analysis</h2>
+<p class="paragraph body-text">Barkly Docs SHALL prioritize static analysis.</p>
+<p class="paragraph body-text">Barkly Docs SHALL NOT require arbitrary target-project code to execute merely to document the project.</p>
+<p class="paragraph body-text">Target-project imports SHALL NOT be required for normal analysis.</p>
+<p class="paragraph body-text">Target-project execution SHALL NOT be silently performed.</p>
+<p class="paragraph body-text">If runtime execution is ever introduced as an optional capability, it SHALL be explicitly configured and separately controlled.</p>
+<h1>19. Evidence and Confidence</h1>
+<h2>FR-017 — Evidence States</h2>
+<p class="paragraph body-text">Barkly Docs SHALL distinguish between information that is:</p>
+<p class="paragraph body-text">DECLARED</p>
+<p class="paragraph body-text">DETECTED</p>
+<p class="paragraph body-text">INFERRED</p>
+<p class="paragraph body-text">UNKNOWN</p>
+<p class="paragraph body-text">The system SHALL NOT present inferred information as directly observed source facts.</p>
+<p class="paragraph body-text">Where practical, generated documentation SHOULD identify the source or evidence supporting significant claims.</p>
+<h1>20. Language Feature Normalization</h1>
+<h2>FR-018 — Normalized Language Semantics</h2>
+<p class="paragraph body-text">Barkly Docs SHALL normalize equivalent concepts across supported languages while preserving language-specific distinctions.</p>
+<p class="paragraph body-text">For example:</p>
+<p class="paragraph preformatted-text">Python Class</p>
+<p class="paragraph preformatted-text">Java Class</p>
+<p class="paragraph preformatted-text">C++ Class</p>
+<p class="paragraph preformatted-text">Rust Struct</p>
+<p class="paragraph preformatted-text">Ruby Class</p>
+<p class="paragraph preformatted-text">TypeScript Class</p>
+<p class="paragraph body-text">MAY all map to appropriate Project Model entities while retaining their original language and semantic type.</p>
+<p class="paragraph body-text">Likewise:</p>
+<p class="paragraph preformatted-text">Python import</p>
+<p class="paragraph preformatted-text">Java import</p>
+<p class="paragraph preformatted-text">C++ include</p>
+<p class="paragraph preformatted-text">Rust use</p>
+<p class="paragraph preformatted-text">Ruby require</p>
+<p class="paragraph preformatted-text">JavaScript import</p>
+<p class="paragraph body-text">MAY become normalized dependency relationships while preserving their original syntax and meaning.</p>
+<h1>21. Cross-Language Project Support</h1>
+<h2>FR-019 — Cross-Language Projects</h2>
+<p class="paragraph body-text">Barkly Docs SHALL support projects containing multiple supported programming languages.</p>
+<p class="paragraph body-text">The system SHALL be capable of representing relationships between languages when those relationships can be determined.</p>
+<p class="paragraph body-text">Examples include:</p>
+<p class="paragraph preformatted-text">Python</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">└── invokes</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">C++ library</p>
+<p class="paragraph preformatted-text">Rust</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">└── exposes</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">JavaScript binding</p>
+<p class="paragraph preformatted-text">TypeScript</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">└── documents</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Rust service</p>
+<p class="paragraph body-text">Where a relationship cannot be reliably determined, Barkly Docs SHALL mark it as unknown rather than inventing a relationship.</p>
+<h1>22. Relationship Engine</h1>
+<h2>FR-020 — Relationship Detection</h2>
+<p class="paragraph body-text">Barkly Docs SHALL construct relationships between discovered project entities.</p>
+<p class="paragraph body-text">Relationships SHALL include, where determinable:</p>
+<p class="paragraph body-text">imports</p>
+<p class="paragraph body-text">exports</p>
+<p class="paragraph body-text">includes</p>
+<p class="paragraph body-text">calls</p>
+<p class="paragraph body-text">references</p>
+<p class="paragraph body-text">inheritance</p>
+<p class="paragraph body-text">implementation</p>
+<p class="paragraph body-text">composition</p>
+<p class="paragraph body-text">dependency</p>
+<p class="paragraph body-text">route ownership</p>
+<p class="paragraph body-text">component usage</p>
+<p class="paragraph body-text">documentation references</p>
+<p class="paragraph body-text">configuration relationships</p>
+<p class="paragraph body-text">test relationships</p>
+<p class="paragraph body-text">build relationships</p>
+<p class="paragraph body-text">The relationship engine SHALL operate on the normalized Project Model rather than being permanently tied to a single language.</p>
+<h1>23. Project Graph</h1>
+<h2>FR-021 — Project Graph</h2>
+<p class="paragraph body-text">Barkly Docs SHALL construct a project graph representing discovered entities and their relationships.</p>
+<p class="paragraph body-text">The graph SHOULD allow a human or downstream system to answer questions such as:</p>
+<p class="paragraph body-text">What depends on this component?</p>
+<p class="paragraph body-text">What does this module import?</p>
+<p class="paragraph body-text">Which files implement this interface?</p>
+<p class="paragraph body-text">Which tests relate to this component?</p>
+<p class="paragraph body-text">Which documentation describes this subsystem?</p>
+<p class="paragraph body-text">Which routes use this component?</p>
+<p class="paragraph body-text">Which build target contains this source?</p>
+<p class="paragraph body-text">Which parts of the project cross language boundaries?</p>
+<p class="paragraph body-text">The graph SHALL preserve source relationships without pretending that uncertain relationships are certain.</p>
+<h1>24. Project-Level Interpretation</h1>
+<h2>FR-022 — Project Summary</h2>
+<p class="paragraph body-text">Barkly Docs SHALL generate a project-level summary.</p>
+<p class="paragraph body-text">The summary SHOULD describe:</p>
+<p class="paragraph body-text">project identity</p>
+<p class="paragraph body-text">primary languages</p>
+<p class="paragraph body-text">frameworks</p>
+<p class="paragraph body-text">major components</p>
+<p class="paragraph body-text">directory structure</p>
+<p class="paragraph body-text">dependency structure</p>
+<p class="paragraph body-text">build systems</p>
+<p class="paragraph body-text">testing structure</p>
+<p class="paragraph body-text">documentation</p>
+<p class="paragraph body-text">major relationships</p>
+<p class="paragraph body-text">detected entry points</p>
+<p class="paragraph body-text">project status where determinable</p>
+<h2>FR-023 — Architectural Interpretation</h2>
+<p class="paragraph body-text">Barkly Docs SHOULD derive higher-level architectural descriptions from deterministic project evidence.</p>
+<p class="paragraph body-text">Examples MAY include:</p>
+<p class="paragraph body-text">layered architecture</p>
+<p class="paragraph body-text">service architecture</p>
+<p class="paragraph body-text">CLI application</p>
+<p class="paragraph body-text">web application</p>
+<p class="paragraph body-text">library</p>
+<p class="paragraph body-text">monorepo</p>
+<p class="paragraph body-text">hardware/software project</p>
+<p class="paragraph body-text">documentation system</p>
+<p class="paragraph body-text">automation system</p>
+<p class="paragraph body-text">Architectural interpretations SHALL be identified as interpretations rather than direct source facts when they cannot be deterministically established.</p>
+<h1>25. Optional CYN-X Interpretation</h1>
+<h2>FR-024 — AI-Assisted Interpretation</h2>
+<p class="paragraph body-text">Barkly Docs MAY provide discovered project information to CYN-X or another approved AI system for human-oriented interpretation.</p>
+<p class="paragraph body-text">The AI layer SHALL receive structured evidence produced by Barkly Docs.</p>
+<p class="paragraph body-text">AI interpretation SHALL NOT replace deterministic analysis.</p>
+<p class="paragraph body-text">AI-generated claims SHOULD remain traceable to available project evidence.</p>
+<p class="paragraph body-text">AI output SHOULD clearly distinguish:</p>
+<p class="paragraph body-text">observed facts</p>
+<p class="paragraph body-text">reasonable interpretation</p>
+<p class="paragraph body-text">uncertainty</p>
+<p class="paragraph body-text">missing information</p>
+<h1>26. Source Authority</h1>
+<h2>FR-025 — Source Authority</h2>
+<p class="paragraph body-text">The source project SHALL remain authoritative.</p>
+<p class="paragraph body-text">Generated documentation SHALL NOT silently modify source code.</p>
+<p class="paragraph body-text">Generated interpretations SHALL NOT silently become source facts.</p>
+<p class="paragraph body-text">Barkly Docs SHALL preserve sufficient provenance to determine where generated information originated whenever practical.</p>
+<h1>27. Structured Documentation</h1>
+<h2>FR-026 — Documentation Generation</h2>
+<p class="paragraph body-text">Barkly Docs SHALL generate structured documentation from the normalized Project Model.</p>
+<p class="paragraph body-text">Generated documentation SHOULD include appropriate sections for:</p>
+<p class="paragraph body-text">project overview</p>
+<p class="paragraph body-text">architecture</p>
+<p class="paragraph body-text">languages</p>
+<p class="paragraph body-text">directory structure</p>
+<p class="paragraph body-text">components</p>
+<p class="paragraph body-text">modules</p>
+<p class="paragraph body-text">functions</p>
+<p class="paragraph body-text">classes</p>
+<p class="paragraph body-text">interfaces</p>
+<p class="paragraph body-text">dependencies</p>
+<p class="paragraph body-text">APIs</p>
+<p class="paragraph body-text">configuration</p>
+<p class="paragraph body-text">tests</p>
+<p class="paragraph body-text">relationships</p>
+<p class="paragraph body-text">source references</p>
+<p class="paragraph body-text">unknowns</p>
+<p class="paragraph body-text">analysis status</p>
+<h1>28. Machine-Readable Output</h1>
+<h2>FR-027 — Machine-Readable Output</h2>
+<p class="paragraph body-text">Barkly Docs SHALL support machine-readable project output.</p>
+<p class="paragraph body-text">The initial structured output format SHALL be JSON.</p>
+<p class="paragraph body-text">JSON output SHOULD contain:</p>
+<p class="paragraph body-text">project metadata</p>
+<p class="paragraph body-text">detected languages</p>
+<p class="paragraph body-text">project entities</p>
+<p class="paragraph body-text">relationships</p>
+<p class="paragraph body-text">dependencies</p>
+<p class="paragraph body-text">documentation entities</p>
+<p class="paragraph body-text">evidence states</p>
+<p class="paragraph body-text">source locations</p>
+<p class="paragraph body-text">analysis warnings</p>
+<p class="paragraph body-text">reader status</p>
+<p class="paragraph body-text">This output SHALL allow the Barkly website or future systems to consume Barkly Docs without re-analyzing the source project.</p>
+<h1>29. Language Regression Testing</h1>
+<h2>FR-028 — Language Regression Tests</h2>
+<p class="paragraph body-text">Each language reader SHALL have regression tests.</p>
+<p class="paragraph body-text">Tests SHALL verify that known source structures produce expected Project Model objects.</p>
+<p class="paragraph body-text">Regression coverage SHALL include representative fixtures for:</p>
+<p class="paragraph body-text">Python</p>
+<p class="paragraph body-text">JavaScript</p>
+<p class="paragraph body-text">TypeScript</p>
+<p class="paragraph body-text">Rust</p>
+<p class="paragraph body-text">Ruby</p>
+<p class="paragraph body-text">Java</p>
+<p class="paragraph body-text">C++</p>
+<p class="paragraph body-text">Astro</p>
+<p class="paragraph body-text">HTML</p>
+<p class="paragraph body-text">CSS</p>
+<p class="paragraph body-text">Markdown</p>
+<p class="paragraph body-text">Barkly Docs SHALL maintain its own regression suite.</p>
+<p class="paragraph body-text">The behavior of a target project SHALL NOT be treated as a prerequisite for Barkly D</p>
 
     </article>
 
