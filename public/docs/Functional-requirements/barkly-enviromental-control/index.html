@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Environmental Control — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Environmental Control
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barkly Enviromental Control.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Environmental Control</h1>
+<h2>Functional Requirements Document</h2>
+<p class="paragraph body-text">Project: Barkly Environmental Control (BEC)
+Interface: CYN-X Environmental Interface
+Status: Draft
+Version: 0.1
+Organization: Barkly Labs</p>
+<h2>01 — Purpose</h2>
+<p class="paragraph body-text">Barkly Environmental Control (BEC) is a human-centered environmental control system that allows people to control building environments using natural interaction rather than requiring them to manually operate individual devices.</p>
+<p class="paragraph body-text">BEC provides a software abstraction layer between CYN-X and physical environmental systems such as network speakers, lighting, displays, notifications, and other connected devices.</p>
+<p class="paragraph body-text">The system shall allow a person to express an environmental need such as:</p>
+<p class="paragraph block-quotation">“CYN, that&#x27;s too loud.”</p>
+<p class="paragraph body-text">and have the environment adapt accordingly.</p>
+<p class="paragraph body-text">The system shall prioritize human control, accessibility, predictability, and local operation.</p>
+<h2>02 — Human Need</h2>
+<p class="paragraph body-text">Traditional building-control systems require humans to understand the structure of the technology before they can change their environment.</p>
+<p class="paragraph body-text">BEC reverses this relationship.</p>
+<p class="paragraph body-text">Instead of:</p>
+<p class="paragraph body-text">Human → Learn device → Find control → Change setting</p>
+<p class="paragraph body-text">BEC shall support:</p>
+<p class="paragraph body-text">Human → Express need → System interprets need → Environment adapts</p>
+<p class="paragraph body-text">The system exists to reduce cognitive load and make physical environments responsive to their occupants.</p>
+<h2>03 — Scope</h2>
+<p class="paragraph body-text">BEC shall provide an abstraction layer for:</p>
+<p class="paragraph body-text">Audio</p>
+<p class="paragraph body-text">Speaker volume</p>
+<p class="paragraph body-text">Music playback</p>
+<p class="paragraph body-text">Room/zone control</p>
+<p class="paragraph body-text">Environmental scenes</p>
+<p class="paragraph body-text">Announcements</p>
+<p class="paragraph body-text">Notifications</p>
+<p class="paragraph body-text">Lighting integrations</p>
+<p class="paragraph body-text">Future building-control hardware</p>
+<p class="paragraph body-text">The first hardware integration may use ZYCOO network audio equipment.</p>
+<p class="paragraph body-text">BEC shall not make CYN-X dependent on a specific hardware manufacturer.</p>
+<h1>04 — System Architecture</h1>
+<p class="paragraph body-text">The system shall use the following conceptual architecture:</p>
+<p class="paragraph body-text">Human</p>
+<p class="paragraph body-text">↓</p>
+<p class="paragraph body-text">CYN-X</p>
+<p class="paragraph body-text">↓</p>
+<p class="paragraph body-text">Barkly Environmental Control API</p>
+<p class="paragraph body-text">↓</p>
+<p class="paragraph body-text">Hardware Adapter</p>
+<p class="paragraph body-text">↓</p>
+<p class="paragraph body-text">Physical Environment</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph body-text">Human → CYN-X → BEC → ZYCOO Adapter → Network Speakers</p>
+<p class="paragraph body-text">The BEC API shall provide a stable Barkly-defined interface regardless of the hardware vendor underneath it.</p>
+<h1>05 — Functional Requirements</h1>
+<h3>FR-001 — Human Environmental Command</h3>
+<p class="paragraph body-text">The system shall accept natural-language environmental commands from an authorized human.</p>
+<p class="paragraph body-text">Examples:</p>
+<p class="paragraph body-text">“CYN, that&#x27;s too loud.”</p>
+<p class="paragraph body-text">“CYN, turn the music down.”</p>
+<p class="paragraph body-text">“CYN, quiet please.”</p>
+<p class="paragraph body-text">“CYN, workshop mode.”</p>
+<p class="paragraph body-text">“CYN, study mode.”</p>
+<p class="paragraph body-text">“CYN, turn everything off.”</p>
+<h3>FR-002 — Intent Detection</h3>
+<p class="paragraph body-text">CYN-X shall interpret environmental commands into structured intents.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Human:</p>
+<p class="paragraph preformatted-text">&quot;CYN, that&#x27;s too loud.&quot;</p>
+<p class="paragraph preformatted-text">Intent:</p>
+<p class="paragraph preformatted-text">REDUCE_AUDIO_STIMULATION</p>
+<p class="paragraph body-text">The intent shall be converted into one or more BEC operations.</p>
+<h3>FR-003 — Zone Identification</h3>
+<p class="paragraph body-text">BEC shall support independently controllable environmental zones.</p>
+<p class="paragraph body-text">Example zones:</p>
+<p class="paragraph preformatted-text">Entrance</p>
+<p class="paragraph preformatted-text">Study</p>
+<p class="paragraph preformatted-text">Workshop</p>
+<p class="paragraph preformatted-text">Computer Lab</p>
+<p class="paragraph preformatted-text">Documentation Room</p>
+<p class="paragraph preformatted-text">Community Room</p>
+<p class="paragraph preformatted-text">Kitchen</p>
+<p class="paragraph preformatted-text">Outdoor</p>
+<p class="paragraph body-text">A command affecting one zone shall not modify unrelated zones unless explicitly requested.</p>
+<h3>FR-004 — Volume Control</h3>
+<p class="paragraph body-text">BEC shall provide an abstract volume-control operation.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">set_zone_volume(&quot;study&quot;, 25)</p>
+<p class="paragraph body-text">The underlying hardware implementation shall be handled by the appropriate hardware adapter.</p>
+<h3>FR-005 — Zone Muting</h3>
+<p class="paragraph body-text">BEC shall support muting individual environmental zones.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">mute_zone(&quot;workshop&quot;)</p>
+<p class="paragraph body-text">Muting one zone shall not automatically mute other zones.</p>
+<h3>FR-006 — Audio Playback</h3>
+<p class="paragraph body-text">BEC shall support requesting playback of an approved audio source or scene.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">play_scene(&quot;study&quot;)</p>
+<p class="paragraph body-text">The implementation shall determine the appropriate physical playback devices.</p>
+<h3>FR-007 — Environmental Scenes</h3>
+<p class="paragraph body-text">BEC shall support predefined environmental scenes.</p>
+<p class="paragraph body-text">Initial scenes shall include:</p>
+<h3>Study Mode</h3>
+<p class="paragraph preformatted-text">Audio:</p>
+<p class="paragraph preformatted-text">Low-volume lo-fi</p>
+<p class="paragraph preformatted-text">Lighting:</p>
+<p class="paragraph preformatted-text">Calm</p>
+<p class="paragraph preformatted-text">Notifications:</p>
+<p class="paragraph preformatted-text">Reduced</p>
+<p class="paragraph preformatted-text">Announcements:</p>
+<p class="paragraph preformatted-text">Quiet</p>
+<p class="paragraph preformatted-text">Other zones:</p>
+<p class="paragraph preformatted-text">Unchanged</p>
+<h3>Workshop Mode</h3>
+<p class="paragraph preformatted-text">Audio:</p>
+<p class="paragraph preformatted-text">Workshop playlist</p>
+<p class="paragraph preformatted-text">Lighting:</p>
+<p class="paragraph preformatted-text">Work lighting</p>
+<p class="paragraph preformatted-text">Notifications:</p>
+<p class="paragraph preformatted-text">Normal</p>
+<p class="paragraph preformatted-text">Announcements:</p>
+<p class="paragraph preformatted-text">Normal</p>
+<h3>Community Mode</h3>
+<p class="paragraph preformatted-text">Audio:</p>
+<p class="paragraph preformatted-text">Community playlist</p>
+<p class="paragraph preformatted-text">Lighting:</p>
+<p class="paragraph preformatted-text">Community/event lighting</p>
+<p class="paragraph preformatted-text">Notifications:</p>
+<p class="paragraph preformatted-text">Normal</p>
+<p class="paragraph preformatted-text">Announcements:</p>
+<p class="paragraph preformatted-text">Enabled</p>
+<h3>Quiet Mode</h3>
+<p class="paragraph preformatted-text">Audio:</p>
+<p class="paragraph preformatted-text">Muted or minimal</p>
+<p class="paragraph preformatted-text">Lighting:</p>
+<p class="paragraph preformatted-text">Reduced stimulation</p>
+<p class="paragraph preformatted-text">Notifications:</p>
+<p class="paragraph preformatted-text">Reduced</p>
+<p class="paragraph preformatted-text">Announcements:</p>
+<p class="paragraph preformatted-text">Suppressed where appropriate</p>
+<h2>FR-008 — Natural-Language Scene Activation</h2>
+<p class="paragraph body-text">CYN-X shall be capable of activating scenes through natural language.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Human:</p>
+<p class="paragraph preformatted-text">&quot;CYN, I&#x27;m studying.&quot;</p>
+<p class="paragraph preformatted-text">CYN-X:</p>
+<p class="paragraph preformatted-text">Detected intent: STUDY_MODE</p>
+<p class="paragraph preformatted-text">BEC:</p>
+<p class="paragraph preformatted-text">activate_scene(&quot;study&quot;)</p>
+<h2>FR-009 — Environmental Adaptation</h2>
+<p class="paragraph body-text">The system shall be capable of modifying multiple environmental systems in response to a single human request.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Human:</p>
+<p class="paragraph preformatted-text">&quot;CYN, I&#x27;m overwhelmed.&quot;</p>
+<p class="paragraph body-text">Possible response:</p>
+<p class="paragraph preformatted-text">Audio → Reduce</p>
+<p class="paragraph preformatted-text">Lighting → Reduce stimulation</p>
+<p class="paragraph preformatted-text">Notifications → Suppress</p>
+<p class="paragraph preformatted-text">Announcements → Quiet</p>
+<p class="paragraph preformatted-text">Displays → Simplify</p>
+<p class="paragraph body-text">The system shall not modify unrelated environmental systems without an applicable rule.</p>
+<h2>FR-010 — Human Override</h2>
+<p class="paragraph body-text">A human shall always be able to override an automated environmental decision.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">CYN:</p>
+<p class="paragraph preformatted-text">&quot;Study Mode activated.&quot;</p>
+<p class="paragraph preformatted-text">Human:</p>
+<p class="paragraph preformatted-text">&quot;No, keep the lights on.&quot;</p>
+<p class="paragraph preformatted-text">System:</p>
+<p class="paragraph preformatted-text">Restore/retain requested lighting state.</p>
+<p class="paragraph body-text">Automated behavior shall never permanently prevent manual control.</p>
+<h2>FR-011 — Explicit Confirmation</h2>
+<p class="paragraph body-text">BEC shall request confirmation before executing potentially disruptive or high-impact actions when configured to do so.</p>
+<p class="paragraph body-text">Examples:</p>
+<p class="paragraph body-text">Whole-building shutdown</p>
+<p class="paragraph body-text">Emergency broadcast interruption</p>
+<p class="paragraph body-text">Changing another person&#x27;s protected environment</p>
+<p class="paragraph body-text">Disabling safety-related systems</p>
+<h2>FR-012 — Device Abstraction</h2>
+<p class="paragraph body-text">BEC shall not expose vendor-specific commands to CYN-X&#x27;s primary intent system.</p>
+<p class="paragraph body-text">CYN-X shall interact with Barkly-defined operations such as:</p>
+<p class="paragraph preformatted-text">set_zone_volume()</p>
+<p class="paragraph preformatted-text">mute_zone()</p>
+<p class="paragraph preformatted-text">unmute_zone()</p>
+<p class="paragraph preformatted-text">play_scene()</p>
+<p class="paragraph preformatted-text">activate_scene()</p>
+<p class="paragraph preformatted-text">get_zone_status()</p>
+<p class="paragraph body-text">Hardware-specific translation shall occur inside adapters.</p>
+<h2>FR-013 — Hardware Adapter</h2>
+<p class="paragraph body-text">BEC shall support hardware adapters.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">BEC</p>
+<p class="paragraph preformatted-text">├── ZYCOO Adapter</p>
+<p class="paragraph preformatted-text">├── Lighting Adapter</p>
+<p class="paragraph preformatted-text">├── Display Adapter</p>
+<p class="paragraph preformatted-text">└── Future Adapter</p>
+<p class="paragraph body-text">Replacing a hardware vendor shall not require redesigning the CYN-X intent system.</p>
+<h2>FR-014 — Device Status</h2>
+<p class="paragraph body-text">BEC shall provide device and zone status information where supported by the connected hardware.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Study</p>
+<p class="paragraph preformatted-text">Volume: 25%</p>
+<p class="paragraph preformatted-text">Playback: Lo-fi</p>
+<p class="paragraph preformatted-text">Status: Online</p>
+<h2>FR-015 — Failure Reporting</h2>
+<p class="paragraph body-text">If a requested environmental change cannot be completed, BEC shall report the failure.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Human:</p>
+<p class="paragraph preformatted-text">&quot;CYN, turn the workshop speakers down.&quot;</p>
+<p class="paragraph preformatted-text">System:</p>
+<p class="paragraph preformatted-text">&quot;I couldn&#x27;t reach the workshop speaker controller.&quot;</p>
+<p class="paragraph body-text">The system shall not falsely report successful execution.</p>
+<h2>FR-016 — Partial Failure</h2>
+<p class="paragraph body-text">If only part of an environmental operation succeeds, BEC shall report which operations succeeded and which failed.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Study Mode:</p>
+<p class="paragraph preformatted-text">Audio:        ✓</p>
+<p class="paragraph preformatted-text">Lighting:     ✓</p>
+<p class="paragraph preformatted-text">Notifications: ✓</p>
+<p class="paragraph preformatted-text">Speaker 2:    ✗ unreachable</p>
+<h2>FR-017 — Local Operation</h2>
+<p class="paragraph body-text">Where technically possible, environmental control shall continue operating locally without requiring an external cloud service.</p>
+<p class="paragraph body-text">Local operation should be preferred for:</p>
+<p class="paragraph body-text">Basic control</p>
+<p class="paragraph body-text">Device discovery</p>
+<p class="paragraph body-text">Scene activation</p>
+<p class="paragraph body-text">Status monitoring</p>
+<p class="paragraph body-text">Safety functions</p>
+<h2>FR-018 — Access Control</h2>
+<p class="paragraph body-text">BEC shall distinguish between authorized and unauthorized users or devices.</p>
+<p class="paragraph body-text">Environmental controls shall not be exposed as unrestricted network commands.</p>
+<h2>FR-019 — Audit Logging</h2>
+<p class="paragraph body-text">BEC shall optionally record environmental control events.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">2026-09-28 19:42</p>
+<p class="paragraph preformatted-text">User request:</p>
+<p class="paragraph preformatted-text">&quot;CYN, that&#x27;s too loud.&quot;</p>
+<p class="paragraph preformatted-text">Intent:</p>
+<p class="paragraph preformatted-text">REDUCE_AUDIO_STIMULATION</p>
+<p class="paragraph preformatted-text">Action:</p>
+<p class="paragraph preformatted-text">Study volume 40% → 25%</p>
+<p class="paragraph preformatted-text">Result:</p>
+<p class="paragraph preformatted-text">SUCCESS</p>
+<p class="paragraph body-text">Logs shall avoid storing unnecessary personal information.</p>
+<h2>FR-020 — Accessibility</h2>
+<p class="paragraph body-text">BEC shall support multiple interaction methods where available:</p>
+<p class="paragraph body-text">Voice</p>
+<p class="paragraph body-text">Text</p>
+<p class="paragraph body-text">Physical controls</p>
+<p class="paragraph body-text">Web interface</p>
+<p class="paragraph body-text">Mobile interface</p>
+<p class="paragraph body-text">Automatic scenes</p>
+<p class="paragraph body-text">No single interaction method shall be required for basic environmental control.</p>
+<h1>06 — Safety Requirements</h1>
+<h3>FR-021 — Safety System Isolation</h3>
+<p class="paragraph body-text">BEC shall not disable or override systems that are designated as safety-critical unless explicitly authorized by the safety architecture.</p>
+<p class="paragraph body-text">Examples:</p>
+<p class="paragraph body-text">Fire alarms</p>
+<p class="paragraph body-text">Emergency notifications</p>
+<p class="paragraph body-text">Required evacuation systems</p>
+<p class="paragraph body-text">Life-safety equipment</p>
+<h3>FR-022 — Emergency Priority</h3>
+<p class="paragraph body-text">Emergency communication shall have higher priority than ordinary environmental scenes.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">Study Mode</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Emergency Broadcast</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Emergency message takes priority</p>
+<h3>FR-023 — Fail-Safe Behavior</h3>
+<p class="paragraph body-text">Loss of BEC, CYN-X, network connectivity, or an adapter shall not create an unsafe physical environment.</p>
+<h1>07 — Privacy Requirements</h1>
+<h3>FR-024 — Data Minimization</h3>
+<p class="paragraph body-text">BEC shall collect only information required to operate the environmental system.</p>
+<h3>FR-025 — Local Processing</h3>
+<p class="paragraph body-text">Where practical, environmental commands shall be processed locally.</p>
+<h3>FR-026 — Human Visibility</h3>
+<p class="paragraph body-text">The system shall provide a human-readable indication of significant automated environmental changes.</p>
+<h1>08 — Configuration</h1>
+<p class="paragraph body-text">BEC shall support configuration of:</p>
+<p class="paragraph body-text">Zones</p>
+<p class="paragraph body-text">Devices</p>
+<p class="paragraph body-text">Device adapters</p>
+<p class="paragraph body-text">Maximum/minimum volume</p>
+<p class="paragraph body-text">Default scenes</p>
+<p class="paragraph body-text">Scene permissions</p>
+<p class="paragraph body-text">Quiet hours</p>
+<p class="paragraph body-text">Accessibility preferences</p>
+<p class="paragraph body-text">Emergency priority</p>
+<p class="paragraph body-text">Logging settings</p>
+<h1>09 — API Requirements</h1>
+<p class="paragraph body-text">BEC shall expose a stable internal API.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">set_zone_volume(zone, volume)</p>
+<p class="paragraph preformatted-text">mute_zone(zone)</p>
+<p class="paragraph preformatted-text">unmute_zone(zone)</p>
+<p class="paragraph preformatted-text">play_scene(scene)</p>
+<p class="paragraph preformatted-text">activate_scene(scene)</p>
+<p class="paragraph preformatted-text">get_zone_status(zone)</p>
+<p class="paragraph preformatted-text">get_device_status(device)</p>
+<p class="paragraph body-text">The API shall remain independent of the underlying hardware vendor.</p>
+<h1>10 — Example Interaction</h1>
+<h3>Scenario: Speaker Too Loud</h3>
+<p class="paragraph preformatted-text">Human:</p>
+<p class="paragraph preformatted-text">&quot;CYN, that&#x27;s too loud.&quot;</p>
+<p class="paragraph body-text">CYN-X:</p>
+<p class="paragraph preformatted-text">Intent:</p>
+<p class="paragraph preformatted-text">REDUCE_AUDIO_STIMULATION</p>
+<p class="paragraph body-text">BEC:</p>
+<p class="paragraph preformatted-text">Current zone:</p>
+<p class="paragraph preformatted-text">Study</p>
+<p class="paragraph preformatted-text">Current volume:</p>
+<p class="paragraph preformatted-text">40%</p>
+<p class="paragraph preformatted-text">Requested adaptation:</p>
+<p class="paragraph preformatted-text">Reduce stimulation</p>
+<p class="paragraph body-text">BEC:</p>
+<p class="paragraph preformatted-text">set_zone_volume(&quot;study&quot;, 25)</p>
+<p class="paragraph body-text">Hardware adapter:</p>
+<p class="paragraph preformatted-text">ZYCOO → Volume 25%</p>
+<p class="paragraph body-text">CYN-X:</p>
+<p class="paragraph preformatted-text">&quot;Okay. I turned the study speakers down.&quot;</p>
+<h1>11 — Regression Testing</h1>
+<p class="paragraph body-text">BEC shall maintain automated tests for:</p>
+<p class="paragraph body-text">Intent recognition</p>
+<p class="paragraph body-text">Zone selection</p>
+<p class="paragraph body-text">Volume limits</p>
+<p class="paragraph body-text">Scene activation</p>
+<p class="paragraph body-text">Human overrides</p>
+<p class="paragraph body-text">Hardware failures</p>
+<p class="paragraph body-text">Network failures</p>
+<p class="paragraph body-text">Partial failures</p>
+<p class="paragraph body-text">Access control</p>
+<p class="paragraph body-text">Emergency priority</p>
+<p class="paragraph body-text">API compatibility</p>
+<p class="paragraph body-text">Example regression:</p>
+<p class="paragraph preformatted-text">Input:</p>
+<p class="paragraph preformatted-text">&quot;CYN, that&#x27;s too loud.&quot;</p>
+<p class="paragraph preformatted-text">Expected intent:</p>
+<p class="paragraph preformatted-text">REDUCE_AUDIO_STIMULATION</p>
+<p class="paragraph preformatted-text">Expected action:</p>
+<p class="paragraph preformatted-text">Reduce active zone audio</p>
+<p class="paragraph preformatted-text">Expected result:</p>
+<p class="paragraph preformatted-text">Audio volume decreases</p>
+<h1>12 — Acceptance Criteria</h1>
+<p class="paragraph body-text">BEC shall be considered functionally complete for the initial release when:</p>
+<p class="paragraph body-text">A human can issue a natural-language environmental request.</p>
+<p class="paragraph body-text">CYN-X can translate that request into a structured intent.</p>
+<p class="paragraph body-text">BEC can translate the intent into hardware-independent operations.</p>
+<p class="paragraph body-text">A hardware adapter can execute those operations.</p>
+<p class="paragraph body-text">The system reports success or failure accurately.</p>
+<p class="paragraph body-text">A human can override automated behavior.</p>
+<p class="paragraph body-text">Individual zones can be controlled independently.</p>
+<p class="paragraph body-text">At least one environmental scene can be activated.</p>
+<p class="paragraph body-text">Safety-critical systems remain protected.</p>
+<p class="paragraph body-text">Core functionality continues to work locally where supported.</p>
+<p class="paragraph body-text">Automated regression tests exist for the core control paths.</p>
+<p class="paragraph body-text">The system can operate without CYN-X being directly coupled to a specific hardware vendor.</p>
+<h1>13 — Design Principle</h1>
+<p class="paragraph body-text">BEC follows the Barkly Labs system pattern:</p>
+<p class="paragraph body-text">Human → Need → System → Adaptation → Feedback → Improvement</p>
+<p class="paragraph body-text">The building is treated as an interface.</p>
+<p class="paragraph body-text">The human should not need to understand the underlying technology in order to communicate what they need from their environment.</p>
+<p class="paragraph body-text">Technology should adapt to humans.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
