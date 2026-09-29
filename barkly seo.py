@@ -1,710 +1,588 @@
+
 #!/usr/bin/env python3
 """
-BARKLY SEO WIRER
+Barkly Labs — Astro SEO Metadata Automator
 
-Automatically wires SEO.astro into every Astro page.
+Updates SEO metadata for Barkly Labs Astro pages.
 
 What it does:
-- Recursively scans src/pages/
-- Finds every .astro page
-- Adds the correct relative SEO.astro import
-- Adds <SEO /> inside <head>
-- Removes old basic SEO tags that SEO.astro now owns
-- Creates .bak backups before changing files
-- Never duplicates the SEO import or component
-- Supports nested Astro routes
-- Uses Python standard library only
+- Finds the configured public Astro routes.
+- Adds or updates:
+    <title>
+    meta description
+    meta robots
+    canonical
+    Open Graph metadata
+    Twitter metadata
+- Adds Organization JSON-LD to the homepage.
+- Preserves existing page body/content.
+- Does NOT modify robots.txt or sitemap generation.
+- Creates .bak backups before modifying files.
+- Prints a verification report.
 
-Usage:
+Run from the Astro project root:
 
     python barkly_seo.py
 
-    python barkly_seo.py --project .
-
-    python barkly_seo.py --project . --dry-run
-
-    python barkly_seo.py --project . --no-backups
 """
 
 from __future__ import annotations
 
-import argparse
-import os
+import json
 import re
+import shutil
 from pathlib import Path
 
 
-SEO_MARKER = "SEO.astro"
-SEO_COMPONENT = "<SEO />"
+SITE = "https://www.barklylabs.space"
+
+# Change this if your GitHub organization URL is different.
+GITHUB_ORG = "https://github.com/Barkly-Labs"
 
 
-# ============================================================
-# PROJECT DISCOVERY
-# ============================================================
+PAGES = {
+    "/": {
+        "file": "src/pages/index.astro",
+        "title": "Barkly Labs — Human-Centered Computing",
+        "description": (
+            "Barkly Labs is a Detroit-based human-centered technology "
+            "laboratory exploring AI, software, hardware, robotics, "
+            "computer vision, creative technology, education, and community."
+        ),
+    },
+
+    "/about/": {
+        "file": "src/pages/about.astro",
+        "title": "Barkly Labs — About",
+        "description": (
+            "Learn about Barkly Labs, a human-centered technology laboratory "
+            "building software, hardware, AI systems, documentation, and "
+            "creative technology for people."
+        ),
+    },
+
+    "/architecture/": {
+        "file": "src/pages/architecture.astro",
+        "title": "Barkly Labs — Architecture",
+        "description": (
+            "Explore the technical architecture behind Barkly Labs and its "
+            "human-centered computing systems, software, hardware, and interfaces."
+        ),
+    },
+
+    "/capabilities/": {
+        "file": "src/pages/capabilities.astro",
+        "title": "Barkly Labs — Capabilities",
+        "description": (
+            "Explore Barkly Labs capabilities across AI, software engineering, "
+            "hardware, robotics, computer vision, documentation, and creative technology."
+        ),
+    },
+
+    "/charter/": {
+        "file": "src/pages/charter.astro",
+        "title": "Barkly Labs — Charter",
+        "description": (
+            "Read the Barkly Labs charter describing the laboratory's mission, "
+            "values, human-centered approach, and commitment to accessible technology."
+        ),
+    },
+
+    "/contact/": {
+        "file": "src/pages/contact.astro",
+        "title": "Barkly Labs — Contact",
+        "description": (
+            "Contact Barkly Labs about projects, research, collaboration, "
+            "technology, documentation, and human-centered computing."
+        ),
+    },
+
+    "/core/": {
+        "file": "src/pages/core.astro",
+        "title": "Barkly Labs — Core Systems",
+        "description": (
+            "Explore the core systems and technologies developed by Barkly Labs "
+            "for human-centered computing."
+        ),
+    },
+
+    "/cyn-x/": {
+        "file": "src/pages/cyn-x.astro",
+        "title": "Barkly Labs — CYN-X",
+        "description": (
+            "CYN-X is Barkly Labs' local AI and human-centered computing system "
+            "for building understandable, accessible, and useful AI interfaces."
+        ),
+    },
+
+    "/docs/": {
+        "file": "src/pages/docs.astro",
+        "title": "Barkly Labs — Barkly Docs",
+        "description": (
+            "Barkly Docs is an automated documentation system designed to make "
+            "software architecture and project structure easier for humans to understand."
+        ),
+    },
+
+    "/financial/": {
+        "file": "src/pages/financial.astro",
+        "title": "Barkly Labs — Financial Information",
+        "description": (
+            "Financial information and transparency documentation for Barkly Labs "
+            "and its technology laboratory projects."
+        ),
+    },
+
+    "/funding/": {
+        "file": "src/pages/funding.astro",
+        "title": "Barkly Labs — Funding",
+        "description": (
+            "Learn about Barkly Labs funding, support, sustainability, and resources "
+            "for developing human-centered technology."
+        ),
+    },
+
+    "/laas/": {
+        "file": "src/pages/laas.astro",
+        "title": "Barkly Labs — Labs as a Service",
+        "description": (
+            "Explore Labs as a Service from Barkly Labs for collaborative technology "
+            "research, experimentation, software, hardware, and human-centered design."
+        ),
+    },
+
+    "/principles/": {
+        "file": "src/pages/principles.astro",
+        "title": "Barkly Labs — Principles",
+        "description": (
+            "Explore the principles guiding Barkly Labs' approach to human-centered "
+            "technology, accessibility, transparency, autonomy, and responsible innovation."
+        ),
+    },
+
+    "/projects/": {
+        "file": "src/pages/projects.astro",
+        "title": "Barkly Labs — Projects",
+        "description": (
+            "Explore Barkly Labs projects spanning AI, software, hardware, robotics, "
+            "computer vision, documentation, and human-centered computing."
+        ),
+    },
+
+    "/standard/": {
+        "file": "src/pages/standard.astro",
+        "title": "Barkly Standard — Human-Centered Technology",
+        "description": (
+            "The Barkly Standard is a proposed human-centered technology standard "
+            "focused on accessibility, autonomy, privacy, transparency, safety, and evidence."
+        ),
+    },
+
+    "/standardfull/": {
+        "file": "src/pages/standardfull.astro",
+        "title": "Barkly Standard — Full Standard",
+        "description": (
+            "Read the full Barkly Standard for human-centered technology engineering, "
+            "including accessibility, cognitive load, privacy, autonomy, safety, and transparency."
+        ),
+    },
+}
 
 
-def find_project_root(start: Path) -> Path:
-    """
-    Find the nearest Astro project root.
-
-    Looks for:
-        astro.config.mjs
-        astro.config.js
-        astro.config.ts
-    """
-
-    start = start.resolve()
-
-    for directory in [start, *start.parents]:
-
-        if (
-            (directory / "astro.config.mjs").exists()
-            or (directory / "astro.config.js").exists()
-            or (directory / "astro.config.ts").exists()
-        ):
-            return directory
-
-    return start
+def escape_html(value: str) -> str:
+    """Escape text for safe HTML attribute/content insertion."""
+    return (
+        value.replace("&", "&amp;")
+        .replace('"', "&quot;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
 
 
-# ============================================================
-# IMPORT GENERATION
-# ============================================================
+def normalize_url(route: str) -> str:
+    if route == "/":
+        return SITE + "/"
+    return SITE + route
 
 
-def seo_import_for(
-    page: Path,
-    project_root: Path,
+def replace_or_insert_tag(
+    head: str,
+    pattern: str,
+    replacement: str,
+    *,
+    flags: int = re.IGNORECASE,
 ) -> str:
     """
-    Generate the correct relative import for SEO.astro.
-
-    Example:
-
-        src/pages/about.astro
-
-    becomes:
-
-        import SEO from "../components/SEO.astro";
+    Replace an existing metadata tag.
+    If none exists, insert it immediately after <head...>.
     """
 
-    seo_file = (
-        project_root
-        / "src"
-        / "components"
-        / "SEO.astro"
-    )
-
-    relative = os.path.relpath(
-        seo_file,
-        start=page.parent,
-    )
-
-    import_path = Path(relative).as_posix()
-
-    if not import_path.startswith("."):
-        import_path = "./" + import_path
-
-    return f'import SEO from "{import_path}";'
-
-
-# ============================================================
-# FRONTMATTER
-# ============================================================
-
-
-def add_import(
-    content: str,
-    import_line: str,
-) -> tuple[str, bool]:
-    """
-    Add SEO import to Astro frontmatter.
-
-    If frontmatter exists:
-
-        ---
-        existing code
-        ---
-
-    the import is inserted into it.
-
-    If frontmatter does not exist,
-    a new frontmatter block is created.
-    """
-
-    if SEO_MARKER in content:
-        return content, False
-
-    match = re.match(
-        r"(?s)^(\s*---\s*\n)(.*?)(\n---\s*)",
-        content,
-    )
-
-    if match:
-
-        start, body, end = match.groups()
-
-        new_body = (
-            import_line
-            + "\n"
-            + body.lstrip("\n")
-        )
-
-        new_frontmatter = (
-            start
-            + new_body
-            + end
-        )
-
-        content = (
-            content[: match.start()]
-            + new_frontmatter
-            + content[match.end() :]
-        )
-
-        return content, True
-
-    # No frontmatter.
-    content = (
-        "---\n"
-        + import_line
-        + "\n"
-        + "---\n\n"
-        + content.lstrip()
-    )
-
-    return content, True
-
-
-# ============================================================
-# OLD SEO REMOVAL
-# ============================================================
-
-
-def remove_existing_seo_tags(
-    head: str,
-) -> tuple[str, int]:
-    """
-    Remove SEO tags now generated by SEO.astro.
-
-    This intentionally leaves unrelated <head> content alone.
-    """
-
-    patterns = [
-
-        # ----------------------------------------------------
-        # Title
-        # ----------------------------------------------------
-
-        r"<title\b[^>]*>.*?</title\s*>",
-
-        # ----------------------------------------------------
-        # Standard metadata
-        # ----------------------------------------------------
-
-        r'<meta\b[^>]*\bname=["\']description["\'][^>]*>',
-
-        r'<meta\b[^>]*\bname=["\']robots["\'][^>]*>',
-
-        # ----------------------------------------------------
-        # Canonical
-        # ----------------------------------------------------
-
-        r'<link\b[^>]*\brel=["\']canonical["\'][^>]*>',
-
-        # ----------------------------------------------------
-        # Open Graph
-        # ----------------------------------------------------
-
-        r'<meta\b[^>]*\bproperty=["\']og:type["\'][^>]*>',
-
-        r'<meta\b[^>]*\bproperty=["\']og:site_name["\'][^>]*>',
-
-        r'<meta\b[^>]*\bproperty=["\']og:title["\'][^>]*>',
-
-        r'<meta\b[^>]*\bproperty=["\']og:description["\'][^>]*>',
-
-        r'<meta\b[^>]*\bproperty=["\']og:url["\'][^>]*>',
-
-        # ----------------------------------------------------
-        # Twitter / X
-        # ----------------------------------------------------
-
-        r'<meta\b[^>]*\bname=["\']twitter:card["\'][^>]*>',
-
-        r'<meta\b[^>]*\bname=["\']twitter:title["\'][^>]*>',
-
-        r'<meta\b[^>]*\bname=["\']twitter:description["\'][^>]*>',
-
-        # ----------------------------------------------------
-        # Theme
-        # ----------------------------------------------------
-
-        r'<meta\b[^>]*\bname=["\']theme-color["\'][^>]*>',
-
-    ]
-
-    removed = 0
-
-    for pattern in patterns:
-
-        head, count = re.subn(
-            pattern,
-            "",
-            head,
-            flags=re.IGNORECASE | re.DOTALL,
-        )
-
-        removed += count
-
-    # Clean excessive blank lines.
-
-    head = re.sub(
-        r"\n[ \t]*\n[ \t]*\n+",
-        "\n\n",
+    updated, count = re.subn(
+        pattern,
+        replacement,
         head,
+        count=1,
+        flags=flags,
     )
 
-    return head, removed
+    if count:
+        return updated
 
+    match = re.search(r"<head\b[^>]*>", updated, flags=re.IGNORECASE)
 
-# ============================================================
-# PAGE WIRING
-# ============================================================
+    if not match:
+        raise RuntimeError("Could not find <head>.")
 
-
-def wire_page(
-    page: Path,
-    project_root: Path,
-    *,
-    dry_run: bool,
-    backups: bool,
-) -> tuple[str, bool, str]:
-
-    original = page.read_text(
-        encoding="utf-8"
+    return (
+        updated[: match.end()]
+        + "\n"
+        + replacement
+        + updated[match.end() :]
     )
 
-    content = original
 
-    # --------------------------------------------------------
-    # Check existing SEO
-    # --------------------------------------------------------
+def update_metadata(html: str, route: str, title: str, description: str) -> str:
+    """Update metadata inside the document <head>."""
 
-    has_component = bool(
-        re.search(
-            r"<SEO\s*/>",
-            content,
-            flags=re.IGNORECASE,
-        )
+    canonical = normalize_url(route)
+
+    title_html = f"<title>{escape_html(title)}</title>"
+
+    description_html = (
+        '<meta name="description" '
+        f'content="{escape_html(description)}">'
     )
 
-    has_import = SEO_MARKER in content
+    robots_html = '<meta name="robots" content="index, follow">'
 
-    # --------------------------------------------------------
-    # Add import
-    # --------------------------------------------------------
+    canonical_html = (
+        f'<link rel="canonical" href="{escape_html(canonical)}">'
+    )
 
-    if not has_import:
+    og_tags = "\n".join(
+        [
+            '<meta property="og:type" content="website">',
+            f'<meta property="og:title" content="{escape_html(title)}">',
+            (
+                '<meta property="og:description" '
+                f'content="{escape_html(description)}">'
+            ),
+            f'<meta property="og:url" content="{escape_html(canonical)}">',
+            '<meta property="og:site_name" content="Barkly Labs">',
+        ]
+    )
 
-        import_line = seo_import_for(
-            page,
-            project_root,
-        )
+    twitter_tags = "\n".join(
+        [
+            '<meta name="twitter:card" content="summary_large_image">',
+            f'<meta name="twitter:title" content="{escape_html(title)}">',
+            (
+                '<meta name="twitter:description" '
+                f'content="{escape_html(description)}">'
+            ),
+        ]
+    )
 
-        content, _ = add_import(
-            content,
-            import_line,
-        )
-
-    # --------------------------------------------------------
-    # Find <head>
-    # --------------------------------------------------------
-
-    head_match = re.search(
-        r"<head\b[^>]*>(.*?)</head\s*>",
-        content,
+    # <title>
+    html = replace_or_insert_tag(
+        html,
+        r"<title\b[^>]*>.*?</title>",
+        title_html,
         flags=re.IGNORECASE | re.DOTALL,
     )
 
-    if not head_match:
+    # Description
+    html = replace_or_insert_tag(
+        html,
+        r'<meta\s+name=["\']description["\'][^>]*>',
+        description_html,
+    )
 
-        return (
-            "SKIP",
-            False,
-            "no <head>...</head> block found",
-        )
+    # Robots
+    html = replace_or_insert_tag(
+        html,
+        r'<meta\s+name=["\']robots["\'][^>]*>',
+        robots_html,
+    )
 
-    head = head_match.group(1)
+    # Canonical
+    html = replace_or_insert_tag(
+        html,
+        r'<link\s+rel=["\']canonical["\'][^>]*>',
+        canonical_html,
+    )
 
-    removed = 0
-
-    # --------------------------------------------------------
-    # Add SEO component
-    # --------------------------------------------------------
-
-    if not has_component:
-
-        head, removed = remove_existing_seo_tags(
-            head
-        )
-
-        # Put SEO after existing meta tags.
-
-        meta_matches = list(
-            re.finditer(
-                r"<meta\b[^>]*>",
-                head,
-                flags=re.IGNORECASE,
-            )
-        )
-
-        insertion = (
-            "\n    "
-            + SEO_COMPONENT
-            + "\n"
-        )
-
-        if meta_matches:
-
-            last_meta = meta_matches[-1]
-
-            insert_at = last_meta.end()
-
-            head = (
-                head[:insert_at]
-                + insertion
-                + head[insert_at:]
-            )
-
+    # Open Graph
+    for tag in og_tags.splitlines():
+        if 'property="og:type"' in tag:
+            pattern = r'<meta\s+property=["\']og:type["\'][^>]*>'
+        elif 'property="og:title"' in tag:
+            pattern = r'<meta\s+property=["\']og:title["\'][^>]*>'
+        elif 'property="og:description"' in tag:
+            pattern = r'<meta\s+property=["\']og:description["\'][^>]*>'
+        elif 'property="og:url"' in tag:
+            pattern = r'<meta\s+property=["\']og:url["\'][^>]*>'
+        elif 'property="og:site_name"' in tag:
+            pattern = r'<meta\s+property=["\']og:site_name["\'][^>]*>'
         else:
+            continue
 
-            head = (
-                insertion
-                + head
-            )
-
-    # --------------------------------------------------------
-    # Reassemble document
-    # --------------------------------------------------------
-
-    new_content = (
-        content[: head_match.start(1)]
-        + head
-        + content[head_match.end(1) :]
-    )
-
-    # --------------------------------------------------------
-    # Nothing changed
-    # --------------------------------------------------------
-
-    if new_content == original:
-
-        return (
-            "OK",
-            False,
-            "already wired",
+        html = replace_or_insert_tag(
+            html,
+            pattern,
+            tag,
         )
 
-    # --------------------------------------------------------
-    # Dry run
-    # --------------------------------------------------------
+    # Twitter
+    for tag in twitter_tags.splitlines():
+        if 'name="twitter:card"' in tag:
+            pattern = r'<meta\s+name=["\']twitter:card["\'][^>]*>'
+        elif 'name="twitter:title"' in tag:
+            pattern = r'<meta\s+name=["\']twitter:title["\'][^>]*>'
+        elif 'name="twitter:description"' in tag:
+            pattern = r'<meta\s+name=["\']twitter:description["\'][^>]*>'
+        else:
+            continue
 
-    if dry_run:
-
-        detail = "would update"
-
-        if removed:
-            detail += (
-                f", remove {removed} old SEO tag(s)"
-            )
-
-        return (
-            "PLAN",
-            True,
-            detail,
+        html = replace_or_insert_tag(
+            html,
+            pattern,
+            tag,
         )
 
-    # --------------------------------------------------------
-    # Backup
-    # --------------------------------------------------------
+    return html
 
-    if backups:
 
-        backup = page.with_suffix(
-            page.suffix + ".bak"
-        )
+def organization_schema() -> str:
+    """Return the homepage Organization JSON-LD."""
 
-        if not backup.exists():
+    data = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": f"{SITE}/#organization",
+        "name": "Barkly Labs",
+        "url": f"{SITE}/",
+        "description": (
+            "Barkly Labs is a Detroit-based human-centered technology "
+            "laboratory exploring AI, software, hardware, robotics, "
+            "computer vision, creative technology, education, and community."
+        ),
+        "slogan": "Technology should adapt to humans.",
+        "sameAs": [
+            GITHUB_ORG,
+        ],
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Detroit",
+            "addressRegion": "Michigan",
+            "addressCountry": "United States",
+        },
+        "knowsAbout": [
+            "human-centered technology",
+            "artificial intelligence",
+            "local AI",
+            "software engineering",
+            "hardware",
+            "embedded systems",
+            "robotics",
+            "computer vision",
+            "creative technology",
+            "accessibility",
+            "documentation",
+            "education",
+            "community technology",
+        ],
+    }
 
-            backup.write_text(
-                original,
-                encoding="utf-8",
-            )
-
-    # --------------------------------------------------------
-    # Write
-    # --------------------------------------------------------
-
-    page.write_text(
-        new_content,
-        encoding="utf-8",
-    )
-
-    detail = "updated"
-
-    if removed:
-
-        detail += (
-            f", removed {removed} old SEO tag(s)"
-        )
+    serialized = json.dumps(data, indent=2, ensure_ascii=False)
 
     return (
-        "UPDATED",
-        True,
-        detail,
+        '<script type="application/ld+json">\n'
+        f"{serialized}\n"
+        "</script>"
     )
 
 
-# ============================================================
-# MAIN
-# ============================================================
+def add_homepage_schema(html: str) -> str:
+    """Add or replace the homepage Organization schema."""
+
+    schema = organization_schema()
+
+    pattern = (
+        r'<script\s+type=["\']application/ld\+json["\']>'
+        r'.*?'
+        r'</script>'
+    )
+
+    # If there is already JSON-LD, leave existing structured data alone.
+    # This avoids destroying project-specific schemas.
+    if re.search(pattern, html, flags=re.IGNORECASE | re.DOTALL):
+        return html
+
+    return replace_or_insert_tag(
+        html,
+        r"(?!)",  # Never matches; forces insertion after <head>.
+        schema,
+    )
+
+
+def process_page(root: Path, route: str, config: dict) -> bool:
+    """Process one Astro page."""
+
+    path = root / config["file"]
+
+    if not path.exists():
+        print(f"  [MISSING] {route}: {path}")
+        return False
+
+    original = path.read_text(encoding="utf-8")
+
+    updated = update_metadata(
+        original,
+        route,
+        config["title"],
+        config["description"],
+    )
+
+    if route == "/":
+        updated = add_homepage_schema(updated)
+
+    if updated == original:
+        print(f"  [OK]      {route}: already up to date")
+        return True
+
+    backup = path.with_suffix(path.suffix + ".bak")
+
+    if not backup.exists():
+        shutil.copy2(path, backup)
+
+    path.write_text(updated, encoding="utf-8")
+
+    print(f"  [UPDATED] {route}: {path}")
+    return True
+
+
+def verify_page(root: Path, route: str, config: dict) -> list[str]:
+    """Perform basic source-level SEO verification."""
+
+    path = root / config["file"]
+
+    if not path.exists():
+        return [f"{route}: file missing"]
+
+    html = path.read_text(encoding="utf-8")
+
+    problems = []
+
+    if not re.search(r"<title\b[^>]*>.*?</title>", html, re.I | re.S):
+        problems.append("missing title")
+
+    if config["title"] not in html:
+        problems.append("expected title not found")
+
+    if not re.search(
+        r'<meta\s+name=["\']description["\']',
+        html,
+        re.I,
+    ):
+        problems.append("missing description")
+
+    if not re.search(
+        r'<meta\s+name=["\']robots["\']',
+        html,
+        re.I,
+    ):
+        problems.append("missing robots metadata")
+
+    if not re.search(
+        r'<link\s+rel=["\']canonical["\']',
+        html,
+        re.I,
+    ):
+        problems.append("missing canonical")
+
+    if not re.search(
+        r'property=["\']og:title["\']',
+        html,
+        re.I,
+    ):
+        problems.append("missing og:title")
+
+    if not re.search(
+        r'name=["\']twitter:title["\']',
+        html,
+        re.I,
+    ):
+        problems.append("missing twitter:title")
+
+    return problems
 
 
 def main() -> int:
-
-    parser = argparse.ArgumentParser(
-        description=(
-            "Automatically wire Barkly SEO.astro "
-            "into every Astro page."
-        )
-    )
-
-    parser.add_argument(
-        "--project",
-        type=Path,
-        default=Path("."),
-        help=(
-            "Astro project directory "
-            "(default: current directory)"
-        ),
-    )
-
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help=(
-            "Show what would change "
-            "without modifying files."
-        ),
-    )
-
-    parser.add_argument(
-        "--no-backups",
-        action="store_true",
-        help="Do not create .bak files.",
-    )
-
-    args = parser.parse_args()
-
-    # --------------------------------------------------------
-    # Find project
-    # --------------------------------------------------------
-
-    project_root = find_project_root(
-        args.project
-    )
-
-    pages_dir = (
-        project_root
-        / "src"
-        / "pages"
-    )
-
-    seo_file = (
-        project_root
-        / "src"
-        / "components"
-        / "SEO.astro"
-    )
-
-    # --------------------------------------------------------
-    # Header
-    # --------------------------------------------------------
+    root = Path.cwd()
 
     print()
-    print("BARKLY SEO WIRER")
-    print("═" * 60)
-
-    print(
-        f"Project : {project_root}"
-    )
-
-    print(
-        f"Pages   : {pages_dir}"
-    )
-
-    print(
-        f"SEO     : {seo_file}"
-    )
-
+    print("🐾 Barkly Labs SEO Automator")
+    print("============================")
+    print(f"Project: {root}")
+    print(f"Site:    {SITE}")
     print()
 
-    # --------------------------------------------------------
-    # Validation
-    # --------------------------------------------------------
+    package_json = root / "package.json"
 
-    if not pages_dir.exists():
-
-        print(
-            "ERROR: src/pages/ was not found."
-        )
-
+    if not package_json.exists():
+        print("[ERROR] package.json was not found.")
+        print("Run this script from the Astro project root.")
         return 1
 
-    if not seo_file.exists():
-
-        print(
-            "ERROR: src/components/SEO.astro "
-            "was not found."
-        )
-
-        print(
-            "Create SEO.astro first."
-        )
-
-        return 1
-
-    # --------------------------------------------------------
-    # Find pages
-    # --------------------------------------------------------
-
-    pages = sorted(
-        page
-        for page in pages_dir.rglob(
-            "*.astro"
-        )
-        if page.is_file()
-    )
-
-    if not pages:
-
-        print(
-            "ERROR: No Astro pages found."
-        )
-
-        return 1
-
-    print(
-        f"Found {len(pages)} Astro page(s)."
-    )
-
+    print("Updating SEO metadata...")
     print()
 
-    # --------------------------------------------------------
-    # Statistics
-    # --------------------------------------------------------
+    success = 0
 
-    updated = 0
-    unchanged = 0
-    skipped = 0
-    errors = 0
+    for route, config in PAGES.items():
+        if process_page(root, route, config):
+            success += 1
 
-    # --------------------------------------------------------
-    # Process
-    # --------------------------------------------------------
+    print()
+    print(f"Processed {success}/{len(PAGES)} pages.")
+    print()
 
-    for page in pages:
+    print("Verifying...")
+    print()
 
-        relative = page.relative_to(
-            project_root
-        )
+    failures = 0
 
-        try:
+    for route, config in PAGES.items():
+        problems = verify_page(root, route, config)
 
-            status, changed, detail = wire_page(
-                page,
-                project_root,
-                dry_run=args.dry_run,
-                backups=not args.no_backups,
-            )
-
-        except Exception as exc:
-
-            status = "ERROR"
-            changed = False
-            detail = str(exc)
-
-        print(
-            f"[{status:<7}] "
-            f"{relative} — {detail}"
-        )
-
-        if status in {
-            "UPDATED",
-            "PLAN",
-        }:
-
-            updated += 1
-
-        elif status == "OK":
-
-            unchanged += 1
-
-        elif status == "SKIP":
-
-            skipped += 1
-
+        if problems:
+            failures += 1
+            print(f"  [CHECK] {route}")
+            for problem in problems:
+                print(f"          - {problem}")
         else:
-
-            errors += 1
-
-    # --------------------------------------------------------
-    # Summary
-    # --------------------------------------------------------
+            print(f"  [PASS]  {route}")
 
     print()
 
-    print("─" * 60)
-    print("SEO PIPELINE COMPLETE")
-    print("─" * 60)
+    if failures:
+        print(f"⚠️  {failures} page(s) need attention.")
+    else:
+        print("✅ All configured pages passed source-level SEO checks.")
 
-    print(
-        f"Pages scanned : {len(pages)}"
-    )
+    print()
+    print("Important:")
+    print("  • robots.txt was not modified.")
+    print("  • Astro sitemap configuration was not modified.")
+    print("  • .bak files were created for changed pages.")
+    print()
+    print("Next:")
+    print("  npm run build")
+    print()
 
-    print(
-        f"Updated       : {updated}"
-    )
-
-    print(
-        f"Already wired : {unchanged}"
-    )
-
-    print(
-        f"Skipped       : {skipped}"
-    )
-
-    print(
-        f"Errors        : {errors}"
-    )
-
-    if args.dry_run:
-
-        print()
-        print(
-            "DRY RUN: "
-            "no files were modified."
-        )
-
-    if errors:
-
-        return 1
-
-    return 0
+    return 0 if failures == 0 else 2
 
 
 if __name__ == "__main__":
-    raise SystemExit(
-        main()
-    )
+    raise SystemExit(main())
