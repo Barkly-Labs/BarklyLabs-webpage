@@ -38,18 +38,6 @@ const sections = [
 
 <html lang="en">
   <head>
-<meta name="twitter:description" content="Read the full Barkly Standard for human-centered technology engineering, including accessibility, cognitive load, privacy, autonomy, safety, and transparency.">
-<meta name="twitter:title" content="Barkly Standard — Full Standard">
-<meta name="twitter:card" content="summary_large_image">
-<meta property="og:site_name" content="Barkly Labs">
-<meta property="og:url" content="https://www.barklylabs.space/standardfull/">
-<meta property="og:description" content="Read the full Barkly Standard for human-centered technology engineering, including accessibility, cognitive load, privacy, autonomy, safety, and transparency.">
-<meta property="og:title" content="Barkly Standard — Full Standard">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://www.barklylabs.space/standardfull/">
-<meta name="robots" content="index, follow">
-<meta name="description" content="Read the full Barkly Standard for human-centered technology engineering, including accessibility, cognitive load, privacy, autonomy, safety, and transparency.">
-<title>Barkly Standard — Full Standard</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <SEO />

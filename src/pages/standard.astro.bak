@@ -85,18 +85,6 @@ const standardRules = [
 
 <html lang="en">
 <head>
-<meta name="twitter:description" content="The Barkly Standard is a proposed human-centered technology standard focused on accessibility, autonomy, privacy, transparency, safety, and evidence.">
-<meta name="twitter:title" content="Barkly Standard — Human-Centered Technology">
-<meta name="twitter:card" content="summary_large_image">
-<meta property="og:site_name" content="Barkly Labs">
-<meta property="og:url" content="https://www.barklylabs.space/standard/">
-<meta property="og:description" content="The Barkly Standard is a proposed human-centered technology standard focused on accessibility, autonomy, privacy, transparency, safety, and evidence.">
-<meta property="og:title" content="Barkly Standard — Human-Centered Technology">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://www.barklylabs.space/standard/">
-<meta name="robots" content="index, follow">
-<meta name="description" content="The Barkly Standard is a proposed human-centered technology standard focused on accessibility, autonomy, privacy, transparency, safety, and evidence.">
-<title>Barkly Standard — Human-Centered Technology</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <SEO />

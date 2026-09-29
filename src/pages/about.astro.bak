@@ -27,18 +27,6 @@ const sections = [
 
 <html lang="en">
   <head>
-<meta name="twitter:description" content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people.">
-<meta name="twitter:title" content="Barkly Labs — About">
-<meta name="twitter:card" content="summary_large_image">
-<meta property="og:site_name" content="Barkly Labs">
-<meta property="og:url" content="https://www.barklylabs.space/about/">
-<meta property="og:description" content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people.">
-<meta property="og:title" content="Barkly Labs — About">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://www.barklylabs.space/about/">
-<meta name="robots" content="index, follow">
-<meta name="description" content="Learn about Barkly Labs, a human-centered technology laboratory building software, hardware, AI systems, documentation, and creative technology for people.">
-<title>Barkly Labs — About</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
