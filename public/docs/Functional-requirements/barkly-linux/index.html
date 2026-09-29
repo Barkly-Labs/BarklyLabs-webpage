@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>BARKLY LINUX — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            BARKLY LINUX
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\BARKLY LINUX.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>BARKLY LINUX</h1>
+<h2>Functional Requirements Document</h2>
+<h3>A Human-Centered Linux Environment for Barkly Compute</h3>
+<h1>01. What Is Barkly Linux?</h1>
+<p class="paragraph normal">Barkly Linux is a proposed Ubuntu-based Linux distribution designed around the Barkly Standard and the principles of human-centered computing.</p>
+<p class="paragraph normal">Barkly Linux SHALL provide a complete operating environment for Barkly hardware, Barkly software, developers, creators, researchers, builders, and ordinary humans.</p>
+<p class="paragraph normal">The operating system SHALL treat the computer as a tool for the human rather than treating the human as an operator for the computer.</p>
+<p class="paragraph normal">The goal is not to hide complexity because complexity exists.</p>
+<p class="paragraph normal">The goal is to make complexity understandable, navigable, and manageable.</p>
+<p class="paragraph normal">The computer should carry the hard stuff.</p>
+<p class="paragraph normal">Barkly Linux is intended to become the software foundation for future Barkly Compute hardware while remaining useful on ordinary compatible computers.</p>
+<h1>02. The Barkly Feeling</h1>
+<p class="paragraph normal">Barkly Linux SHOULD feel like Barkly.</p>
+<p class="paragraph normal">That means the system may intentionally use:</p>
+<p class="paragraph normal">playful visual language</p>
+<p class="paragraph normal">expressive status messages</p>
+<p class="paragraph normal">friendly terminology</p>
+<p class="paragraph normal">paw/Barkly visual elements</p>
+<p class="paragraph normal">approachable documentation</p>
+<p class="paragraph normal">strong visual hierarchy</p>
+<p class="paragraph normal">understandable system state</p>
+<p class="paragraph normal">personality where personality improves usability</p>
+<p class="paragraph normal">The system SHALL NOT sacrifice accessibility, reliability, security, or clarity merely for aesthetics.</p>
+<p class="paragraph normal">Personality is an interface layer.</p>
+<p class="paragraph normal">It is not an excuse to make the system harder to use.</p>
+<h1>03. Core Philosophy</h1>
+<p class="paragraph normal">Barkly Linux SHALL be guided by the following principles.</p>
+<h2>Human First</h2>
+<p class="paragraph normal">The system SHALL prioritize the needs of the person using it.</p>
+<h2>Reduce Mental Load</h2>
+<p class="paragraph normal">The system SHOULD automatically perform repetitive, predictable, and low-value work whenever doing so is safe.</p>
+<h2>Explain the Shape First</h2>
+<p class="paragraph normal">The system SHOULD show the overall state and structure before exposing unnecessary implementation detail.</p>
+<p class="paragraph normal">Show the shape first. Reveal the details when the human asks.</p>
+<h2>Don&#x27;t Make Humans Become Computers</h2>
+<p class="paragraph normal">Users SHOULD NOT be required to memorize unnecessary commands, locations, identifiers, configuration formats, or system procedures when the system can reasonably provide an understandable interface.</p>
+<h2>Human Control</h2>
+<p class="paragraph normal">Automation SHALL remain understandable and controllable.</p>
+<p class="paragraph normal">The user SHOULD be able to determine:</p>
+<p class="paragraph normal">what the system is doing</p>
+<p class="paragraph normal">why it is doing it</p>
+<p class="paragraph normal">what it changed</p>
+<p class="paragraph normal">what failed</p>
+<p class="paragraph normal">what requires human attention</p>
+<h2>Fail Gracefully</h2>
+<p class="paragraph normal">One broken component SHOULD NOT unnecessarily take down unrelated parts of the system.</p>
+<h2>Evidence Over Guessing</h2>
+<p class="paragraph normal">System information SHOULD distinguish between:</p>
+<p class="paragraph normal">observed facts</p>
+<p class="paragraph normal">detected state</p>
+<p class="paragraph normal">inferred information</p>
+<p class="paragraph normal">recommendations</p>
+<p class="paragraph normal">AI-generated explanations</p>
+<h1>04. Base Operating System</h1>
+<p class="paragraph normal">Barkly Linux SHOULD initially be based on Ubuntu.</p>
+<p class="paragraph normal">The Ubuntu/Linux foundation SHALL provide the underlying ecosystem for:</p>
+<p class="paragraph normal">kernel support</p>
+<p class="paragraph normal">hardware drivers</p>
+<p class="paragraph normal">networking</p>
+<p class="paragraph normal">storage</p>
+<p class="paragraph normal">security</p>
+<p class="paragraph normal">package management</p>
+<p class="paragraph normal">system services</p>
+<p class="paragraph normal">compatibility</p>
+<p class="paragraph normal">existing Linux applications</p>
+<p class="paragraph normal">Barkly SHALL avoid unnecessarily rebuilding infrastructure that can safely be inherited from the underlying Linux ecosystem.</p>
+<p class="paragraph normal">The Barkly layer exists to provide the human-centered experience and platform integration above that foundation.</p>
+<h1>05. Barkly System Layer</h1>
+<p class="paragraph normal">Barkly Linux SHOULD provide a collection of Barkly system services above the base operating system.</p>
+<p class="paragraph normal">Potential services include:</p>
+<p class="paragraph normal">Barkly System Manager</p>
+<p class="paragraph normal">Barkly Update Manager</p>
+<p class="paragraph normal">Barkly Hardware Manager</p>
+<p class="paragraph normal">Barkly Diagnostics</p>
+<p class="paragraph normal">Barkly Documentation</p>
+<p class="paragraph normal">Barkly Project Manager</p>
+<p class="paragraph normal">Barkly AI Services</p>
+<p class="paragraph normal">Barkly Compute Manager</p>
+<p class="paragraph normal">Barkly Accessibility Services</p>
+<p class="paragraph normal">Barkly Recovery Services</p>
+<p class="paragraph normal">These services SHOULD communicate through well-defined interfaces rather than becoming one inseparable application.</p>
+<h1>06. Barkly Interface</h1>
+<p class="paragraph normal">The primary Barkly interface SHOULD provide a unified human-facing layer for the operating system.</p>
+<p class="paragraph normal">The interface SHOULD expose:</p>
+<p class="paragraph normal">applications</p>
+<p class="paragraph normal">files</p>
+<p class="paragraph normal">projects</p>
+<p class="paragraph normal">hardware</p>
+<p class="paragraph normal">system health</p>
+<p class="paragraph normal">networking</p>
+<p class="paragraph normal">updates</p>
+<p class="paragraph normal">documentation</p>
+<p class="paragraph normal">diagnostics</p>
+<p class="paragraph normal">compute resources</p>
+<p class="paragraph normal">AI tools</p>
+<p class="paragraph normal">settings</p>
+<p class="paragraph normal">The interface SHOULD avoid forcing users to understand Linux internals merely to accomplish ordinary tasks.</p>
+<p class="paragraph normal">Advanced users SHALL still have access to the underlying Linux environment.</p>
+<p class="paragraph normal">Barkly SHALL add abstraction without removing legitimate control.</p>
+<h1>07. The Human Status Model</h1>
+<p class="paragraph normal">Barkly Linux SHOULD provide an understandable representation of system state.</p>
+<p class="paragraph normal">For example:</p>
+<p class="paragraph normal">🐾 BARKLY STATUS</p>
+<p class="paragraph normal">System        Healthy</p>
+<p class="paragraph normal">Storage       72% used</p>
+<p class="paragraph normal">Memory        11.4 / 32 GB</p>
+<p class="paragraph normal">GPU           Available</p>
+<p class="paragraph normal">NPU           Available</p>
+<p class="paragraph normal">Network       Connected</p>
+<p class="paragraph normal">Updates       3 available</p>
+<p class="paragraph normal">Human Action  None required</p>
+<p class="paragraph normal">When human action IS required, the system SHOULD explain:</p>
+<p class="paragraph normal">🐾 BARKLY NEEDS YOU</p>
+<p class="paragraph normal">A system update requires a restart.</p>
+<p class="paragraph normal">Why:</p>
+<p class="paragraph normal">The Linux kernel has been updated.</p>
+<p class="paragraph normal">What happens:</p>
+<p class="paragraph normal">Your computer will restart and finish installing</p>
+<p class="paragraph normal">the update.</p>
+<p class="paragraph normal">You can:</p>
+<p class="paragraph normal">[ Restart Now ]</p>
+<p class="paragraph normal">[ Schedule Later ]</p>
+<p class="paragraph normal">[ View Details ]</p>
+<p class="paragraph normal">The system SHOULD communicate the consequence of an action before asking the human to perform it.</p>
+<h1>08. Barkly Compute</h1>
+<p class="paragraph normal">Barkly Linux SHALL support future Barkly Compute platforms.</p>
+<p class="paragraph normal">The compute architecture MAY contain multiple processing resources, including:</p>
+<p class="paragraph normal">CPU</p>
+<p class="paragraph normal">GPU</p>
+<p class="paragraph normal">NPU</p>
+<p class="paragraph normal">TPU or accelerator hardware</p>
+<p class="paragraph normal">memory</p>
+<p class="paragraph normal">storage</p>
+<p class="paragraph normal">network interfaces</p>
+<p class="paragraph normal">specialized daughterboards</p>
+<p class="paragraph normal">GPIO</p>
+<p class="paragraph normal">external compute devices</p>
+<p class="paragraph normal">The Barkly interface SHOULD present these resources as a coherent compute environment rather than forcing users to understand every individual processor.</p>
+<p class="paragraph normal">For example:</p>
+<p class="paragraph normal">BARKLY COMPUTE</p>
+<p class="paragraph normal">CPU       ███████░░░</p>
+<p class="paragraph normal">GPU       █████░░░░░</p>
+<p class="paragraph normal">NPU       ███░░░░░░░</p>
+<p class="paragraph normal">Memory    ████████░░</p>
+<p class="paragraph normal">Current workload:</p>
+<p class="paragraph normal">CYN-X inference</p>
+<p class="paragraph normal">Barkly selected:</p>
+<p class="paragraph normal">GPU + NPU</p>
+<p class="paragraph normal">Reason:</p>
+<p class="paragraph normal">Best available combination for this workload.</p>
+<p class="paragraph normal">The system MAY automatically select appropriate compute resources when doing so is safe and understandable.</p>
+<h1>09. Barkly Hardware</h1>
+<p class="paragraph normal">Barkly Linux SHALL provide a hardware abstraction layer for future Barkly Compute hardware.</p>
+<p class="paragraph normal">The system SHOULD expose hardware capabilities through stable interfaces.</p>
+<p class="paragraph normal">Potential hardware capabilities include:</p>
+<p class="paragraph normal">GPIO</p>
+<p class="paragraph normal">USB</p>
+<p class="paragraph normal">HDMI</p>
+<p class="paragraph normal">audio</p>
+<p class="paragraph normal">networking</p>
+<p class="paragraph normal">storage</p>
+<p class="paragraph normal">wireless connectivity</p>
+<p class="paragraph normal">camera interfaces</p>
+<p class="paragraph normal">sensors</p>
+<p class="paragraph normal">expansion buses</p>
+<p class="paragraph normal">accelerator devices</p>
+<p class="paragraph normal">Barkly hardware SHOULD be documented automatically wherever practical.</p>
+<p class="paragraph normal">Hardware documentation SHOULD connect:</p>
+<p class="paragraph normal">Hardware</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Driver</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">System Interface</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">API</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Application</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">Human</p>
+<h1>10. Barkly Docs Integration</h1>
+<p class="paragraph normal">Barkly Docs SHALL be a first-class component of Barkly Linux.</p>
+<p class="paragraph normal">The operating system SHOULD be capable of generating or exposing documentation for:</p>
+<p class="paragraph normal">installed software</p>
+<p class="paragraph normal">system components</p>
+<p class="paragraph normal">hardware</p>
+<p class="paragraph normal">APIs</p>
+<p class="paragraph normal">services</p>
+<p class="paragraph normal">configuration</p>
+<p class="paragraph normal">projects</p>
+<p class="paragraph normal">diagnostics</p>
+<p class="paragraph normal">development environments</p>
+<p class="paragraph normal">The computer SHOULD be able to explain itself.</p>
+<h1>11. Automatic Documentation</h1>
+<p class="paragraph normal">Barkly Linux SHOULD support automatic documentation discovery from configured sources.</p>
+<p class="paragraph normal">Potential sources include:</p>
+<p class="paragraph normal">local project directories</p>
+<p class="paragraph normal">Google Drive</p>
+<p class="paragraph normal">NAS</p>
+<p class="paragraph normal">Git repositories</p>
+<p class="paragraph normal">documentation directories</p>
+<p class="paragraph normal">project repositories</p>
+<p class="paragraph normal">hardware documentation</p>
+<p class="paragraph normal">The document pipeline SHOULD support:</p>
+<p class="paragraph normal">SOURCE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DISCOVER</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DETECT CHANGES</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">READ</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">NORMALIZE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">UNDERSTAND</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">CONNECT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">VALIDATE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">PUBLISH</p>
+<p class="paragraph normal">A human SHOULD NOT need to manually copy information between systems when Barkly can safely perform the transformation.</p>
+<h1>12. CYN-X Integration</h1>
+<p class="paragraph normal">CYN-X MAY provide an optional AI layer for Barkly Linux.</p>
+<p class="paragraph normal">CYN-X SHALL NOT be required for fundamental operating-system functionality.</p>
+<p class="paragraph normal">Deterministic system functions SHALL remain functional without an AI model.</p>
+<p class="paragraph normal">CYN-X MAY assist with:</p>
+<p class="paragraph normal">explanations</p>
+<p class="paragraph normal">troubleshooting</p>
+<p class="paragraph normal">natural-language system queries</p>
+<p class="paragraph normal">documentation interpretation</p>
+<p class="paragraph normal">project understanding</p>
+<p class="paragraph normal">developer assistance</p>
+<p class="paragraph normal">accessibility</p>
+<p class="paragraph normal">system navigation</p>
+<p class="paragraph normal">AI-generated information SHOULD remain distinguishable from authoritative system state.</p>
+<h1>13. Barkly Safety Model</h1>
+<p class="paragraph normal">Barkly Linux SHALL distinguish between actions that are:</p>
+<h3>Safe to automate</h3>
+<p class="paragraph normal">Predictable actions with low risk.</p>
+<h3>Safe with confirmation</h3>
+<p class="paragraph normal">Actions that can be automated but meaningfully affect the user&#x27;s system.</p>
+<h3>Human-controlled</h3>
+<p class="paragraph normal">Actions where automation could cause significant harm or loss of control.</p>
+<p class="paragraph normal">For example:</p>
+<p class="paragraph normal">SAFE</p>
+<p class="paragraph normal">Read system information</p>
+<p class="paragraph normal">Generate documentation</p>
+<p class="paragraph normal">Detect stale files</p>
+<p class="paragraph normal">CONFIRM</p>
+<p class="paragraph normal">Install updates</p>
+<p class="paragraph normal">Change network configuration</p>
+<p class="paragraph normal">Remove files</p>
+<p class="paragraph normal">HUMAN CONTROL</p>
+<p class="paragraph normal">Erase storage</p>
+<p class="paragraph normal">Modify security controls</p>
+<p class="paragraph normal">Change critical system configuration</p>
+<p class="paragraph normal">The system SHOULD explain why confirmation is required.</p>
+<h1>14. Recovery</h1>
+<p class="paragraph normal">Barkly Linux SHOULD prioritize recovery over catastrophic failure.</p>
+<p class="paragraph normal">The system SHOULD provide understandable recovery information when possible.</p>
+<p class="paragraph normal">Instead of:</p>
+<p class="paragraph normal">ERROR 0x8F29C</p>
+<p class="paragraph normal">the interface SHOULD provide:</p>
+<p class="paragraph normal">🐾 Something went wrong.</p>
+<p class="paragraph normal">Barkly could not start the network service.</p>
+<p class="paragraph normal">What we know:</p>
+<p class="paragraph normal">The network configuration could not be loaded.</p>
+<p class="paragraph normal">What still works:</p>
+<p class="paragraph normal">Your files are safe.</p>
+<p class="paragraph normal">Local applications can still run.</p>
+<p class="paragraph normal">What you can do:</p>
+<p class="paragraph normal">[ Try Again ]</p>
+<p class="paragraph normal">[ Repair Network ]</p>
+<p class="paragraph normal">[ View Technical Details ]</p>
+<p class="paragraph normal">Technical logs SHALL remain available.</p>
+<p class="paragraph normal">Human-readable explanations SHALL exist alongside them.</p>
+<h1>15. Accessibility</h1>
+<p class="paragraph normal">Accessibility SHALL be part of the system architecture rather than an afterthought.</p>
+<p class="paragraph normal">Barkly Linux SHOULD support:</p>
+<p class="paragraph normal">keyboard navigation</p>
+<p class="paragraph normal">screen readers</p>
+<p class="paragraph normal">scalable interfaces</p>
+<p class="paragraph normal">high contrast</p>
+<p class="paragraph normal">reduced motion</p>
+<p class="paragraph normal">clear focus states</p>
+<p class="paragraph normal">understandable notifications</p>
+<p class="paragraph normal">alternative input methods</p>
+<p class="paragraph normal">configurable interface density</p>
+<p class="paragraph normal">reduced cognitive load</p>
+<p class="paragraph normal">The interface SHOULD allow users to choose how much information they see.</p>
+<h1>16. Developer Mode</h1>
+<p class="paragraph normal">Barkly Linux SHALL remain friendly to developers.</p>
+<p class="paragraph normal">Advanced users SHOULD be able to access:</p>
+<p class="paragraph normal">terminal</p>
+<p class="paragraph normal">shell</p>
+<p class="paragraph normal">package managers</p>
+<p class="paragraph normal">system logs</p>
+<p class="paragraph normal">configuration files</p>
+<p class="paragraph normal">development tools</p>
+<p class="paragraph normal">compilers</p>
+<p class="paragraph normal">containers</p>
+<p class="paragraph normal">Git</p>
+<p class="paragraph normal">networking tools</p>
+<p class="paragraph normal">debugging tools</p>
+<p class="paragraph normal">Barkly does not replace the underlying system.</p>
+<p class="paragraph normal">It makes the underlying system easier to understand.</p>
+<h1>17. Barkly Standard Compliance</h1>
+<p class="paragraph normal">Barkly Linux SHOULD serve as a real implementation of the Barkly Standard.</p>
+<p class="paragraph normal">The operating system SHOULD continuously test itself against Barkly principles.</p>
+<p class="paragraph normal">Potential checks include:</p>
+<p class="paragraph normal">cognitive-load checks</p>
+<p class="paragraph normal">accessibility checks</p>
+<p class="paragraph normal">documentation completeness</p>
+<p class="paragraph normal">system transparency</p>
+<p class="paragraph normal">automation safety</p>
+<p class="paragraph normal">failure isolation</p>
+<p class="paragraph normal">source traceability</p>
+<p class="paragraph normal">human control</p>
+<p class="paragraph normal">privacy</p>
+<p class="paragraph normal">explainability</p>
+<p class="paragraph normal">The system SHOULD be able to document its own compliance state.</p>
+<h1>18. Self-Documentation</h1>
+<p class="paragraph normal">A long-term Barkly Linux goal SHALL be for the system to understand and document its own architecture.</p>
+<p class="paragraph normal">The operating system SHOULD be capable of producing:</p>
+<p class="paragraph normal">Barkly Linux</p>
+<p class="paragraph normal">├── Kernel</p>
+<p class="paragraph normal">├── Drivers</p>
+<p class="paragraph normal">├── System Services</p>
+<p class="paragraph normal">├── Barkly Services</p>
+<p class="paragraph normal">├── Interface</p>
+<p class="paragraph normal">├── AI Layer</p>
+<p class="paragraph normal">├── Documentation</p>
+<p class="paragraph normal">└── Hardware Integration</p>
+<p class="paragraph normal">Barkly Docs SHOULD be able to analyze the relevant source code and configuration and produce human-readable documentation automatically.</p>
+<h1>19. The Barkly Loop</h1>
+<p class="paragraph normal">Barkly Linux SHALL participate in the Barkly development loop:</p>
+<p class="paragraph normal">BUILD</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DOCUMENT</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">TEST</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">USE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">OBSERVE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">IMPROVE</p>
+<p class="paragraph normal">↓</p>
+<p class="paragraph normal">DOCUMENT AGAIN</p>
+<p class="paragraph normal">The standard SHALL evolve from evidence gathered through real implementations.</p>
+<p class="paragraph normal">The implementation SHALL also be evaluated against the standard.</p>
+<p class="paragraph normal">This creates a feedback loop between:</p>
+<p class="paragraph normal">Barkly Standard</p>
+<p class="paragraph normal">↕</p>
+<p class="paragraph normal">Barkly Software</p>
+<p class="paragraph normal">↕</p>
+<p class="paragraph normal">Barkly Hardware</p>
+<p class="paragraph normal">↕</p>
+<p class="paragraph normal">Human Experience</p>
+<h1>20. Long-Term Platform Goal</h1>
+<p class="paragraph normal">Barkly Linux is intended to become the software foundation for the broader Barkly ecosystem.</p>
+<p class="paragraph normal">Potential future components include:</p>
+<p class="paragraph normal">Barkly Compute</p>
+<p class="paragraph normal">PawBoard</p>
+<p class="paragraph normal">Barkly hardware</p>
+<p class="paragraph normal">Barkly Docs</p>
+<p class="paragraph normal">CYN-X</p>
+<p class="paragraph normal">Barkly Interface</p>
+<p class="paragraph normal">Barkly developer tools</p>
+<p class="paragraph normal">Barkly accessibility tools</p>
+<p class="paragraph normal">Barkly civic technology</p>
+<p class="paragraph normal">Barkly research systems</p>
+<p class="paragraph normal">The operating system SHALL remain modular enough that these components can evolve independently.</p>
+<h1>21. The Actual Goal</h1>
+<p class="paragraph normal">Barkly Linux is not intended to create another operating system merely for the sake of creating another operating system.</p>
+<p class="paragraph normal">The goal is to explore a different relationship between humans and computers.</p>
+<p class="paragraph normal">A computer should not merely execute commands.</p>
+<p class="paragraph normal">It should help the human understand what is happening.</p>
+<p class="paragraph normal">It should carry repetitive work.</p>
+<p class="paragraph normal">It should expose complexity when complexity matters.</p>
+<p class="paragraph normal">It should hide unnecessary complexity when it does not.</p>
+<p class="paragraph normal">It should preserve human control.</p>
+<p class="paragraph normal">It should explain failures.</p>
+<p class="paragraph normal">It should document itself.</p>
+<p class="paragraph normal">It should be accessible.</p>
+<p class="paragraph normal">It should be hackable.</p>
+<p class="paragraph normal">It should be understandable.</p>
+<p class="paragraph normal">And sometimes—</p>
+<p class="paragraph normal">it should just be cute.</p>
+<p class="paragraph normal">People are worth designing for.</p>
+<p class="paragraph normal">The computer should carry the hard stuff.</p>
+<p class="paragraph normal">Show the shape first. Reveal the details when the human asks.</p>
+<p class="paragraph normal">Build systems that work for humans.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
