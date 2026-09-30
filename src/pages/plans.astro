@@ -16,7 +16,7 @@ const plans = [
       "Open-source development",
     ],
     action: "SUPPORT THE LAB →",
-    href: "support",
+    href: "",
   },
   {
     number: "02",
@@ -286,12 +286,27 @@ const plans = [
                     </ul>
                   </div>
 
-                  <a
-                    href={import.meta.env.BASE_URL + plan.href}
-                    class="plan-button"
-                  >
-                    {plan.action}
-                  </a>
+                 <div id="paypal-button-container-P-82X56570H82375259NK6QCCQ"></div>
+                <script src="https://www.paypal.com/sdk/js?client-id=BAAEYRnviGT0I3FZPIawR4swzp0FRet0CH4CzGr0T8mWkLh0OQRdmbPFCCkbx7QZpe4FuuQvhzNKmBr014&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+                <script>
+                paypal.Buttons({
+                    style: {
+                        shape: 'rect',
+                        color: 'gold',
+                        layout: 'vertical',
+                        label: 'subscribe'
+                    },
+                    createSubscription: function(data, actions) {
+                        return actions.subscription.create({
+                        /* Creates the subscription */
+                        plan_id: 'P-82X56570H82375259NK6QCCQ'
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        alert(data.subscriptionID); // You can add optional success message for the subscriber here
+                    }
+                }).render('#paypal-button-container-P-82X56570H82375259NK6QCCQ'); // Renders the PayPal button
+                </script>
 
                 </article>
               ))
