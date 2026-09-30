@@ -1,0 +1,1659 @@
+---
+import SEO from "../components/SEO.astro";
+
+const plans = [
+  {
+    number: "01",
+    label: "FOUNDATION",
+    title: "KEEP THE<br /><span>LAB RUNNING.</span>",
+    description:
+      "A flexible way for individuals to help Barkly Labs maintain the infrastructure that makes experimentation possible.",
+    items: [
+      "Computing infrastructure",
+      "Software and development tools",
+      "Hosting and domains",
+      "Documentation infrastructure",
+      "Open-source development",
+    ],
+    action: "SUPPORT THE LAB →",
+    href: "support",
+  },
+  {
+    number: "02",
+    label: "BUILDER",
+    title: "BUILD<br /><span>WITH US.</span>",
+    description:
+      "Support Barkly's experimental work directly by helping fund prototypes, hardware, software, research, and new systems.",
+    items: [
+      "Hardware prototyping",
+      "Experimental systems",
+      "AI research",
+      "Interface development",
+      "Engineering experiments",
+    ],
+    action: "BUILD WITH BARKLY →",
+    href: "support",
+  },
+  {
+    number: "03",
+    label: "LAB PARTNER",
+    title: "GROW THE<br /><span>ECOSYSTEM.</span>",
+    description:
+      "Organizations and collaborators can support Barkly through partnerships, equipment, infrastructure, research, or project sponsorship.",
+    items: [
+      "Project sponsorship",
+      "Equipment and hardware",
+      "Research partnerships",
+      "Infrastructure support",
+      "Collaborative development",
+    ],
+    action: "PARTNER WITH US →",
+    href: "sponsors",
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta
+      name="twitter:description"
+      content="Explore ways to participate in, support, and build with Barkly Labs."
+    />
+    <meta name="twitter:title" content="Barkly Labs — Plans" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta property="og:site_name" content="Barkly Labs" />
+    <meta
+      property="og:url"
+      content="https://www.barklylabs.space/plans/"
+    />
+    <meta
+      property="og:description"
+      content="Explore ways to participate in, support, and build with Barkly Labs."
+    />
+    <meta property="og:title" content="Barkly Labs — Plans" />
+    <meta property="og:type" content="website" />
+
+    <link
+      rel="canonical"
+      href="https://www.barklylabs.space/plans/"
+    />
+
+    <meta name="robots" content="index, follow" />
+
+    <meta
+      name="description"
+      content="Explore ways to participate in, support, and build with Barkly Labs."
+    />
+
+    <title>Barkly Labs — Plans</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+
+    <SEO />
+  </head>
+
+  <body>
+    <div class="page">
+
+      <!-- HEADER -->
+
+      <header class="site-header">
+        <div class="header-logo">
+          <a href={import.meta.env.BASE_URL}>
+            <span>BARKLY</span> <strong>LABS</strong>
+          </a>
+        </div>
+
+        <div class="header-document">
+          <span>PLANS</span>
+          <span>/</span>
+          <span>DOCUMENT 003</span>
+        </div>
+      </header>
+
+
+      <!-- SIDE NAV -->
+
+      <aside class="side-nav">
+        <a href="#plans">
+          <span>01</span>
+          PLANS
+        </a>
+
+        <a href="#foundation">
+          <span>02</span>
+          FOUNDATION
+        </a>
+
+        <a href="#builder">
+          <span>03</span>
+          BUILDER
+        </a>
+
+        <a href="#partner">
+          <span>04</span>
+          PARTNER
+        </a>
+
+        <a href="#principles">
+          <span>05</span>
+          PRINCIPLES
+        </a>
+
+        <a href="#future">
+          <span>06</span>
+          FUTURE
+        </a>
+      </aside>
+
+
+      <main>
+
+        <!-- HERO -->
+
+        <section class="hero" id="plans">
+          <div class="section-meta">
+            <span>BARKLY LABS</span>
+            <span>PLANS / DOCUMENT 003</span>
+          </div>
+
+          <div class="hero-title">
+            <h1>
+              BUILD<br />
+              <span>WITH US.</span>
+            </h1>
+          </div>
+
+          <div class="hero-bottom">
+            <p class="hero-copy">
+              Barkly Labs is built as an ecosystem.
+              There are different ways to participate,
+              contribute, support the infrastructure,
+              and help turn experiments into useful technology.
+            </p>
+
+            <div class="hero-mark">
+              MANY<br />
+              PATHS
+            </div>
+          </div>
+        </section>
+
+
+        <!-- INTRO -->
+
+        <section class="content-section intro-section">
+          <div class="section-heading">
+            <span class="section-number">01</span>
+
+            <div>
+              <span class="eyebrow">THE IDEA</span>
+
+              <h2>
+                ONE LAB.<br />
+                <span>MANY WAYS.</span>
+              </h2>
+            </div>
+          </div>
+
+          <div class="section-body">
+            <p class="large-copy">
+              There is no single way to belong in a laboratory.
+            </p>
+
+            <p>
+              Some people contribute resources. Some build software.
+              Some bring hardware, research, ideas, documentation,
+              experience, or simply curiosity.
+            </p>
+
+            <p>
+              Barkly's plans are designed around that reality.
+            </p>
+
+            <p>
+              The goal is not to turn participation into a transaction.
+              The goal is to make the different ways people can help
+              understandable and accessible.
+            </p>
+          </div>
+        </section>
+
+
+        <!-- PLAN GRID -->
+
+        <section class="plans-section" id="foundation">
+
+          <div class="plans-heading">
+            <span class="eyebrow">WAYS TO PARTICIPATE</span>
+
+            <h2>
+              FIND YOUR<br />
+              <span>PATH.</span>
+            </h2>
+
+            <p>
+              Choose the kind of involvement that makes sense for you,
+              your organization, or your project.
+            </p>
+          </div>
+
+
+          <div class="plans-grid">
+
+            {
+              plans.map((plan, index) => (
+                <article
+                  class={`plan-card ${index === 0 ? "featured" : ""}`}
+                  id={
+                    index === 0
+                      ? "foundation"
+                      : index === 1
+                        ? "builder"
+                        : "partner"
+                  }
+                >
+
+                  <div class="plan-top">
+                    <span class="plan-number">
+                      {plan.number}
+                    </span>
+
+                    <span class="plan-label">
+                      {plan.label}
+                    </span>
+                  </div>
+
+                  <h3 set:html={plan.title} />
+
+                  <p class="plan-description">
+                    {plan.description}
+                  </p>
+
+                  <div class="plan-divider"></div>
+
+                  <div class="plan-includes">
+                    <span>CAN HELP ENABLE</span>
+
+                    <ul>
+                      {plan.items.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <a
+                    href={import.meta.env.BASE_URL + plan.href}
+                    class="plan-button"
+                  >
+                    {plan.action}
+                  </a>
+
+                </article>
+              ))
+            }
+
+          </div>
+        </section>
+
+
+        <!-- FOUNDATION -->
+
+        <section
+          class="content-section detail-section"
+          id="foundation-detail"
+        >
+          <div class="section-heading">
+            <span class="section-number">02</span>
+
+            <div>
+              <span class="eyebrow">FOUNDATION</span>
+
+              <h2>
+                KEEP THE<br />
+                <span>LAB ALIVE.</span>
+              </h2>
+            </div>
+          </div>
+
+          <div class="detail-content">
+
+            <p class="large-copy">
+              Infrastructure is part of the work.
+            </p>
+
+            <p>
+              Servers, hosting, development tools, domains, computing
+              resources, documentation systems, test equipment, and
+              countless small pieces of infrastructure make
+              experimentation possible.
+            </p>
+
+            <p>
+              Foundation support helps Barkly maintain those systems
+              so that projects can continue being built instead of
+              constantly stopping to rebuild their foundations.
+            </p>
+
+            <div class="detail-callout">
+              <span>THE PRINCIPLE</span>
+
+              <p>
+                Support the infrastructure that lets people
+                build what comes next.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- BUILDER -->
+
+        <section
+          class="content-section detail-section builder-section"
+          id="builder"
+        >
+          <div class="section-heading">
+            <span class="section-number">03</span>
+
+            <div>
+              <span class="eyebrow">BUILDER</span>
+
+              <h2>
+                MAKE<br />
+                <span>THINGS REAL.</span>
+              </h2>
+            </div>
+          </div>
+
+          <div class="detail-content">
+
+            <p class="large-copy">
+              Experiments need somewhere to happen.
+            </p>
+
+            <p>
+              Builder support can help turn concepts into prototypes,
+              prototypes into working systems, and working systems
+              into documented projects.
+            </p>
+
+            <p>
+              This can include hardware, software, AI systems,
+              interfaces, research environments, test equipment,
+              computing resources, and experimental infrastructure.
+            </p>
+
+            <div class="builder-list">
+
+              <div>
+                <span>01</span>
+                <strong>SOFTWARE</strong>
+                <p>
+                  Applications, APIs, tools, interfaces,
+                  documentation systems, and open-source projects.
+                </p>
+              </div>
+
+              <div>
+                <span>02</span>
+                <strong>HARDWARE</strong>
+                <p>
+                  Prototypes, electronics, embedded systems,
+                  test equipment, and physical computing.
+                </p>
+              </div>
+
+              <div>
+                <span>03</span>
+                <strong>RESEARCH</strong>
+                <p>
+                  Experiments, benchmarks, standards, studies,
+                  and technical investigation.
+                </p>
+              </div>
+
+              <div>
+                <span>04</span>
+                <strong>DOCUMENTATION</strong>
+                <p>
+                  Knowledge infrastructure that allows work
+                  to remain useful after an experiment ends.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- PARTNER -->
+
+        <section
+          class="content-section detail-section"
+          id="partner"
+        >
+          <div class="section-heading">
+            <span class="section-number">04</span>
+
+            <div>
+              <span class="eyebrow">LAB PARTNER</span>
+
+              <h2>
+                BUILD THE<br />
+                <span>ECOSYSTEM.</span>
+              </h2>
+            </div>
+          </div>
+
+          <div class="detail-content">
+
+            <p class="large-copy">
+              Some projects need more than one builder.
+            </p>
+
+            <p>
+              Organizations, companies, researchers, educational
+              institutions, and other groups can work with Barkly
+              through sponsorship, equipment, infrastructure,
+              research collaboration, or project partnerships.
+            </p>
+
+            <p>
+              Partnerships can be structured around a specific
+              project or around the broader laboratory.
+            </p>
+
+            <div class="partner-grid">
+
+              <div>
+                <span>SPONSORSHIP</span>
+                <p>
+                  Support a specific project, research effort,
+                  or area of laboratory development.
+                </p>
+              </div>
+
+              <div>
+                <span>EQUIPMENT</span>
+                <p>
+                  Provide hardware, tools, computing resources,
+                  or other equipment that enables experimentation.
+                </p>
+              </div>
+
+              <div>
+                <span>RESEARCH</span>
+                <p>
+                  Collaborate on experiments, technical research,
+                  standards, or human-centered engineering.
+                </p>
+              </div>
+
+              <div>
+                <span>INFRASTRUCTURE</span>
+                <p>
+                  Help create the physical and digital systems
+                  that allow the laboratory to grow.
+                </p>
+              </div>
+
+            </div>
+
+            <div class="action-row">
+              <a
+                href={import.meta.env.BASE_URL + "sponsors"}
+                class="support-button"
+              >
+                SPONSOR THE LAB →
+              </a>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- PRINCIPLES -->
+
+        <section
+          class="content-section principles-section"
+          id="principles"
+        >
+          <div class="section-heading">
+            <span class="section-number">05</span>
+
+            <div>
+              <span class="eyebrow">THE BARKLY MODEL</span>
+
+              <h2>
+                SUPPORT<br />
+                <span>WITH PURPOSE.</span>
+              </h2>
+            </div>
+          </div>
+
+          <div class="principles-content">
+
+            <p class="large-copy">
+              Resources should become visible work.
+            </p>
+
+            <p>
+              Barkly Labs wants support to connect to real infrastructure,
+              real experiments, real documentation, and real opportunities
+              for people to build.
+            </p>
+
+            <div class="principles-grid">
+
+              <div class="principle">
+                <span>01</span>
+                <strong>TRANSPARENT</strong>
+                <p>
+                  Make it possible to understand what the laboratory
+                  is building and what resources make that work possible.
+                </p>
+              </div>
+
+              <div class="principle">
+                <span>02</span>
+                <strong>HUMAN FIRST</strong>
+                <p>
+                  Technology remains grounded in human needs,
+                  accessibility, understanding, autonomy, and dignity.
+                </p>
+              </div>
+
+              <div class="principle">
+                <span>03</span>
+                <strong>REUSABLE</strong>
+                <p>
+                  Infrastructure and knowledge should become foundations
+                  that make future projects easier to build.
+                </p>
+              </div>
+
+              <div class="principle">
+                <span>04</span>
+                <strong>EXPERIMENTAL</strong>
+                <p>
+                  Barkly is allowed to try things, learn from failure,
+                  and change direction when evidence demands it.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- FUTURE -->
+
+        <section
+          class="content-section future-section"
+          id="future"
+        >
+          <div class="section-heading">
+            <span class="section-number">06</span>
+
+            <div>
+              <span class="eyebrow">WHAT COMES NEXT</span>
+
+              <h2>
+                THE LAB<br />
+                <span>GROWS.</span>
+              </h2>
+            </div>
+          </div>
+
+          <div class="future-content">
+
+            <p class="large-copy">
+              These plans are a starting point, not a finished system.
+            </p>
+
+            <p>
+              As Barkly Labs grows, additional programs, partnerships,
+              memberships, research opportunities, equipment programs,
+              and community pathways can be developed around the needs
+              of the people actually using the laboratory.
+            </p>
+
+            <p>
+              The infrastructure should grow with the work.
+            </p>
+
+            <div class="future-mark">
+              <span>BARKLY LABS / PLAN SYSTEM</span>
+
+              <p>
+                BUILD THE FOUNDATION.<br />
+                BUILD THE SYSTEM.<br />
+                BUILD WHAT COMES NEXT.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- FINAL -->
+
+        <section class="final-section">
+
+          <div class="final-label">
+            BARKLY LABS / PLANS
+          </div>
+
+          <h2>
+            THERE IS<br />
+            <span>ROOM TO BUILD.</span>
+          </h2>
+
+          <p>
+            THE LAB IS OPEN.
+          </p>
+
+        </section>
+
+      </main>
+
+
+      <!-- FOOTER -->
+
+      <footer class="site-footer">
+        <span>BARKLY LABS</span>
+        <span>HUMAN FIRST</span>
+        <span>DOCUMENT 003</span>
+      </footer>
+
+    </div>
+  </body>
+</html>
+
+
+<style>
+
+:global(*) {
+  box-sizing: border-box;
+}
+
+:global(html) {
+  scroll-behavior: smooth;
+}
+
+:global(body) {
+  margin: 0;
+  background: #050505;
+  color: #f1f1f1;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+  --bg: #050505;
+  --panel: #0a0a0a;
+  --panel-raised: #0f0f0f;
+  --panel-hover: #131313;
+
+  --text: #f1f1f1;
+  --white: #f1f1f1;
+  --muted: #a1a1a1;
+  --dim: #686868;
+  --faint: #444;
+
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.25);
+
+  --pink: #ff2f92;
+  --pink-soft: rgba(255, 47, 146, 0.1);
+  --pink-line: rgba(255, 47, 146, 0.42);
+
+  --max: 1500px;
+}
+
+
+/* HEADER */
+
+.site-header {
+  height: 72px;
+  padding: 0 4vw;
+
+  border-bottom: 1px solid var(--line);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.header-logo a {
+  color: var(--white);
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.header-logo a span {
+  color: var(--pink);
+}
+
+.header-logo a strong {
+  color: var(--white);
+}
+
+.header-document {
+  display: flex;
+  gap: 10px;
+  color: var(--dim);
+}
+
+.header-document span:first-child {
+  color: var(--white);
+}
+
+.header-document span:last-child {
+  color: var(--pink);
+}
+
+
+/* SIDE NAV */
+
+.side-nav {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  z-index: 10;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.side-nav a {
+  display: flex;
+  gap: 9px;
+
+  color: var(--dim);
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.side-nav a span {
+  color: var(--pink);
+}
+
+.side-nav a:hover {
+  color: var(--white);
+  transform: translateX(3px);
+}
+
+
+/* HERO */
+
+.hero {
+  max-width: var(--max);
+  min-height: 720px;
+
+  margin: 0 auto;
+  padding: 55px 10vw 100px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.section-meta {
+  display: flex;
+  gap: 110px;
+
+  color: var(--dim);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.section-meta span:first-child {
+  color: var(--pink);
+}
+
+.hero-title {
+  margin-top: 35px;
+}
+
+.hero-title h1 {
+  margin: 0;
+
+  font-size: clamp(76px, 10vw, 150px);
+  line-height: 0.88;
+
+  letter-spacing: -0.075em;
+  font-weight: 800;
+}
+
+.hero-title h1 span {
+  color: var(--pink);
+}
+
+.hero-bottom {
+  margin-top: 90px;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 760px)
+    minmax(0, 1fr);
+
+  gap: 80px;
+  align-items: end;
+}
+
+.hero-copy {
+  max-width: 800px;
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: clamp(20px, 2vw, 29px);
+  line-height: 1.55;
+}
+
+.hero-mark {
+  justify-self: end;
+
+  color: var(--pink);
+
+  font-size: 32px;
+  line-height: 0.9;
+
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+
+/* GENERAL SECTIONS */
+
+.content-section {
+  max-width: var(--max);
+
+  margin: 0 auto;
+  padding: 130px 10vw;
+
+  border-top: 1px solid var(--line);
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(280px, 0.8fr)
+    minmax(0, 1.2fr);
+
+  gap: 80px;
+}
+
+
+/* HEADINGS */
+
+.section-heading {
+  min-width: 0;
+
+  display: flex;
+  gap: 25px;
+}
+
+.section-heading > div:last-child {
+  min-width: 0;
+}
+
+.section-number {
+  flex-shrink: 0;
+
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 20px;
+
+  color: var(--dim);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.section-heading h2 {
+  max-width: 100%;
+  margin: 0;
+
+  font-size: clamp(45px, 5vw, 78px);
+  line-height: 0.92;
+
+  letter-spacing: -0.06em;
+}
+
+.section-heading h2 span {
+  color: var(--pink);
+}
+
+
+/* BODY */
+
+.section-body,
+.detail-content,
+.principles-content,
+.future-content {
+  min-width: 0;
+  max-width: 800px;
+}
+
+.section-body p,
+.detail-content p,
+.principles-content p,
+.future-content p {
+  color: var(--muted);
+
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.large-copy {
+  color: var(--white) !important;
+
+  font-size: 30px !important;
+  line-height: 1.35 !important;
+
+  letter-spacing: -0.02em;
+}
+
+
+/* PLANS */
+
+.plans-section {
+  max-width: var(--max);
+
+  margin: 0 auto;
+  padding: 130px 10vw;
+
+  border-top: 1px solid var(--line);
+}
+
+.plans-heading {
+  max-width: 900px;
+  margin-bottom: 80px;
+}
+
+.plans-heading h2 {
+  margin: 0;
+
+  font-size: clamp(60px, 7vw, 105px);
+  line-height: 0.88;
+
+  letter-spacing: -0.07em;
+}
+
+.plans-heading h2 span {
+  color: var(--pink);
+}
+
+.plans-heading p {
+  max-width: 650px;
+
+  margin-top: 35px;
+
+  color: var(--muted);
+
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.plans-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.plan-card {
+  min-height: 650px;
+
+  padding: 35px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--bg);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.plan-card:hover {
+  background: var(--panel-hover);
+}
+
+.plan-card.featured {
+  background: var(--pink-soft);
+}
+
+.plan-card.featured:hover {
+  background: rgba(255, 47, 146, 0.14);
+}
+
+.plan-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.plan-number {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+}
+
+.plan-label {
+  color: var(--dim);
+
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+
+  letter-spacing: 0.12em;
+}
+
+.plan-card h3 {
+  margin: 80px 0 0;
+
+  font-size: clamp(42px, 4vw, 62px);
+  line-height: 0.9;
+
+  letter-spacing: -0.065em;
+}
+
+.plan-card h3 span {
+  color: var(--pink);
+}
+
+.plan-description {
+  margin: 35px 0 0;
+
+  color: var(--muted);
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.plan-divider {
+  margin: 35px 0;
+
+  border-top: 1px solid var(--line);
+}
+
+.plan-includes > span {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.plan-includes ul {
+  padding: 0;
+  margin: 20px 0 0;
+
+  list-style: none;
+}
+
+.plan-includes li {
+  padding: 9px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  color: var(--muted);
+
+  font-size: 13px;
+}
+
+.plan-includes li::before {
+  content: "+";
+
+  margin-right: 10px;
+
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+}
+
+.plan-button {
+  margin-top: auto;
+
+  display: block;
+
+  padding: 15px 18px;
+
+  border: 1px solid var(--pink);
+
+  color: var(--white);
+  text-decoration: none;
+
+  text-align: center;
+
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.plan-button:hover {
+  background: var(--pink);
+  color: #050505;
+  transform: translateY(-2px);
+}
+
+
+/* DETAIL SECTIONS */
+
+.detail-content > p:first-child {
+  margin-top: 0;
+}
+
+.detail-callout {
+  margin-top: 65px;
+
+  padding: 35px;
+
+  border: 1px solid var(--pink-line);
+
+  background: var(--pink-soft);
+}
+
+.detail-callout span {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.detail-callout p {
+  margin: 20px 0 0;
+
+  color: var(--white) !important;
+
+  font-size: 25px !important;
+  line-height: 1.4 !important;
+}
+
+
+/* BUILDER */
+
+.builder-list {
+  margin-top: 70px;
+
+  border-top: 1px solid var(--line);
+}
+
+.builder-list > div {
+  padding: 28px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  display: grid;
+
+  grid-template-columns:
+    45px
+    170px
+    minmax(0, 1fr);
+
+  gap: 25px;
+}
+
+.builder-list span {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+}
+
+.builder-list strong {
+  color: var(--white);
+
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+
+.builder-list p {
+  margin: 0;
+
+  font-size: 14px !important;
+}
+
+
+/* PARTNER */
+
+.partner-grid {
+  margin-top: 70px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.partner-grid > div {
+  min-height: 180px;
+
+  padding: 28px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.partner-grid span {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+
+  letter-spacing: 0.12em;
+}
+
+.partner-grid p {
+  margin-top: 35px;
+
+  font-size: 14px !important;
+}
+
+.action-row {
+  margin-top: 45px;
+}
+
+.support-button {
+  display: inline-block;
+
+  padding: 14px 18px;
+
+  border: 1px solid var(--pink);
+
+  color: var(--white);
+
+  text-decoration: none;
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.support-button:hover {
+  background: var(--pink);
+  color: #050505;
+
+  transform: translateY(-2px);
+}
+
+
+/* PRINCIPLES */
+
+.principles-content > p:first-child {
+  margin-top: 0;
+}
+
+.principles-grid {
+  margin-top: 70px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.principle {
+  min-height: 220px;
+
+  padding: 30px;
+
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.principle span {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+}
+
+.principle strong {
+  margin-top: 25px;
+
+  color: var(--white);
+
+  font-size: 16px;
+  letter-spacing: 0.04em;
+}
+
+.principle p {
+  margin-top: auto;
+
+  font-size: 14px !important;
+}
+
+
+/* FUTURE */
+
+.future-mark {
+  margin-top: 75px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid var(--line);
+}
+
+.future-mark span {
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+
+  letter-spacing: 0.12em;
+}
+
+.future-mark p {
+  margin-top: 25px;
+
+  color: var(--white) !important;
+
+  font-family: "Courier New", monospace;
+
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+}
+
+
+/* FINAL */
+
+.final-section {
+  max-width: var(--max);
+
+  margin: 0 auto;
+
+  padding: 170px 10vw 190px;
+
+  border-top: 1px solid var(--line);
+}
+
+.final-label {
+  margin-bottom: 35px;
+
+  color: var(--pink);
+
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.final-section h2 {
+  max-width: 1200px;
+
+  margin: 0;
+
+  font-size: clamp(65px, 9vw, 145px);
+  line-height: 0.87;
+
+  letter-spacing: -0.075em;
+}
+
+.final-section h2 span {
+  color: var(--pink);
+}
+
+.final-section p {
+  margin-top: 55px;
+
+  color: var(--dim);
+
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+
+  letter-spacing: 0.08em;
+}
+
+
+/* FOOTER */
+
+.site-footer {
+  max-width: var(--max);
+
+  margin: 0 auto;
+  padding: 30px 10vw;
+
+  border-top: 1px solid var(--line);
+
+  display: flex;
+  justify-content: space-between;
+
+  color: var(--dim);
+
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+
+  letter-spacing: 0.1em;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-card {
+    min-height: auto;
+  }
+
+  .plan-card h3 {
+    margin-top: 55px;
+  }
+
+  .content-section {
+    gap: 55px;
+  }
+
+  .builder-list > div {
+    grid-template-columns:
+      45px
+      150px
+      minmax(0, 1fr);
+  }
+
+}
+
+
+@media (max-width: 900px) {
+
+  .side-nav {
+    display: none;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 50px 7vw 90px;
+  }
+
+  .hero-bottom {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .hero-mark {
+    justify-self: start;
+  }
+
+  .content-section {
+    padding: 90px 7vw;
+
+    grid-template-columns: 1fr;
+
+    gap: 60px;
+  }
+
+  .plans-section {
+    padding: 90px 7vw;
+  }
+
+  .builder-list > div {
+    grid-template-columns:
+      45px
+      minmax(0, 1fr);
+  }
+
+  .builder-list strong,
+  .builder-list p {
+    grid-column: 2;
+  }
+
+  .partner-grid,
+  .principles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .final-section {
+    padding: 120px 7vw;
+  }
+
+  .site-footer {
+    padding: 25px 7vw;
+
+    flex-direction: column;
+    gap: 10px;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .site-header {
+    padding: 0 20px;
+  }
+
+  .header-document {
+    display: none;
+  }
+
+  .hero-title h1 {
+    font-size: 20vw;
+  }
+
+  .hero-bottom {
+    margin-top: 60px;
+  }
+
+  .hero-copy {
+    font-size: 19px;
+  }
+
+  .section-heading {
+    gap: 18px;
+  }
+
+  .section-heading h2 {
+    font-size: 48px;
+  }
+
+  .section-number {
+    font-size: 10px;
+  }
+
+  .plans-heading h2 {
+    font-size: 19vw;
+  }
+
+  .plan-card {
+    padding: 25px;
+  }
+
+  .plan-card h3 {
+    font-size: 48px;
+  }
+
+  .plan-description {
+    font-size: 15px;
+  }
+
+  .detail-callout {
+    padding: 25px;
+  }
+
+  .detail-callout p {
+    font-size: 21px !important;
+  }
+
+  .partner-grid > div,
+  .principle {
+    padding: 25px;
+  }
+
+  .support-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .final-section h2 {
+    font-size: 19vw;
+  }
+
+}
+
+</style>
