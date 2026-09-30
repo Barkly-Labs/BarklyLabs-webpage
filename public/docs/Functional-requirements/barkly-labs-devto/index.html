@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Dev.to Automation — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Dev.to Automation
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barkly labs devto.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Dev.to Automation</h1>
+<h2>Functional Requirements Document</h2>
+<p class="paragraph body-text">Project: Barkly Dev.to
+Organization: Barkly Labs
+Document Type: Functional Requirements
+Status: Draft — v0.1
+Purpose: Automatically transform structured Barkly project information into human-readable Dev.to publications while preserving human control over publication.</p>
+<h1>1. Purpose</h1>
+<p class="paragraph body-text">Barkly Dev.to shall provide an automated publication pipeline capable of examining Barkly Labs repositories and documentation, determining what information is relevant to a publication, assembling that information into a coherent technical article, validating the article against Barkly requirements, and preparing or publishing the resulting article to Dev.to.</p>
+<p class="paragraph body-text">The system shall reduce the repetitive cognitive and administrative work involved in documenting and communicating software projects.</p>
+<p class="paragraph body-text">The system shall not require contributors to manually reconstruct project context every time a publication is created.</p>
+<h1>2. Core Principle</h1>
+<p class="paragraph body-text">Barkly Dev.to shall follow the principle:</p>
+<p class="paragraph block-quotation">Computers should handle the hard, repetitive work so humans can focus on understanding, deciding, creating, and communicating.</p>
+<p class="paragraph body-text">The system should therefore prioritize:</p>
+<p class="paragraph body-text">human-readable output</p>
+<p class="paragraph body-text">structured project information</p>
+<p class="paragraph body-text">automation</p>
+<p class="paragraph body-text">transparency</p>
+<p class="paragraph body-text">reproducibility</p>
+<p class="paragraph body-text">human review</p>
+<p class="paragraph body-text">contributor autonomy</p>
+<p class="paragraph body-text">reusable documentation</p>
+<p class="paragraph body-text">The system shall not represent automated content as having been manually authored when it was generated by the pipeline.</p>
+<h1>3. Problem Statement</h1>
+<p class="paragraph body-text">Software projects contain information across many different locations:</p>
+<p class="paragraph preformatted-text">source code</p>
+<p class="paragraph preformatted-text">README files</p>
+<p class="paragraph preformatted-text">Barkly Docs</p>
+<p class="paragraph preformatted-text">changelogs</p>
+<p class="paragraph preformatted-text">Git history</p>
+<p class="paragraph preformatted-text">configuration</p>
+<p class="paragraph preformatted-text">requirements</p>
+<p class="paragraph preformatted-text">architecture documentation</p>
+<p class="paragraph preformatted-text">functional requirements</p>
+<p class="paragraph preformatted-text">technical documentation</p>
+<p class="paragraph preformatted-text">project metadata</p>
+<p class="paragraph body-text">Manually gathering this information into a coherent publication requires repeatedly locating, reading, interpreting, organizing, and formatting the same information.</p>
+<p class="paragraph body-text">Barkly Dev.to shall automate this process.</p>
+<h1>4. System Context</h1>
+<p class="paragraph preformatted-text">Git Repository</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Barkly Docs</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">┌────────────┼────────────┐</p>
+<p class="paragraph preformatted-text">▼            ▼            ▼</p>
+<p class="paragraph preformatted-text">Project       Git          Changes</p>
+<p class="paragraph preformatted-text">Structure    History       / Docs</p>
+<p class="paragraph preformatted-text">│            │            │</p>
+<p class="paragraph preformatted-text">└────────────┼────────────┘</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Barkly Dev.to Engine</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Article Generation</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Barkly Validation</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Human Review</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">Dev.to</p>
+<h1>5. Functional Requirements</h1>
+<h2>FR-001 — Repository Discovery</h2>
+<p class="paragraph body-text">The system shall accept a Barkly Labs repository as an input source.</p>
+<p class="paragraph body-text">The system shall identify relevant project files and directories without requiring every file to be explicitly specified by the user.</p>
+<h2>FR-002 — Barkly Docs Discovery</h2>
+<p class="paragraph body-text">The system shall detect Barkly Docs within a repository.</p>
+<p class="paragraph body-text">The system shall identify available documentation surfaces including, where present:</p>
+<p class="paragraph preformatted-text">project</p>
+<p class="paragraph preformatted-text">principles</p>
+<p class="paragraph preformatted-text">components</p>
+<p class="paragraph preformatted-text">endpoints</p>
+<p class="paragraph preformatted-text">functions</p>
+<p class="paragraph preformatted-text">classes</p>
+<p class="paragraph preformatted-text">modules</p>
+<p class="paragraph preformatted-text">imports</p>
+<p class="paragraph preformatted-text">lifecycle</p>
+<p class="paragraph preformatted-text">git</p>
+<p class="paragraph preformatted-text">changelog</p>
+<p class="paragraph body-text">The system shall treat Barkly Docs as a structured source of project information.</p>
+<h2>FR-003 — Project Identification</h2>
+<p class="paragraph body-text">The system shall determine the project name from available repository or Barkly Docs metadata.</p>
+<p class="paragraph body-text">The system shall preserve the project&#x27;s documented name rather than inventing an alternative name.</p>
+<h2>FR-004 — Project Purpose Discovery</h2>
+<p class="paragraph body-text">The system shall locate available descriptions of:</p>
+<p class="paragraph body-text">project purpose</p>
+<p class="paragraph body-text">project goals</p>
+<p class="paragraph body-text">problem being addressed</p>
+<p class="paragraph body-text">intended users</p>
+<p class="paragraph body-text">documented principles</p>
+<p class="paragraph body-text">project scope</p>
+<p class="paragraph body-text">The system shall use documented information when available.</p>
+<h2>FR-005 — Architecture Discovery</h2>
+<p class="paragraph body-text">The system shall identify documented architectural information.</p>
+<p class="paragraph body-text">Relevant sources may include:</p>
+<p class="paragraph body-text">architecture documentation</p>
+<p class="paragraph body-text">component documentation</p>
+<p class="paragraph body-text">module documentation</p>
+<p class="paragraph body-text">lifecycle documentation</p>
+<p class="paragraph body-text">endpoint documentation</p>
+<p class="paragraph body-text">project structure</p>
+<p class="paragraph body-text">The system shall use this information to explain how the project works.</p>
+<h2>FR-006 — Change Discovery</h2>
+<p class="paragraph body-text">The system shall identify relevant project changes.</p>
+<p class="paragraph body-text">Possible sources shall include:</p>
+<p class="paragraph body-text">Git commits</p>
+<p class="paragraph body-text">changelogs</p>
+<p class="paragraph body-text">release information</p>
+<p class="paragraph body-text">modified documentation</p>
+<p class="paragraph body-text">modified source files</p>
+<p class="paragraph body-text">The system shall be capable of generating a publication focused on a specific change or group of changes.</p>
+<h2>FR-007 — Evidence Collection</h2>
+<p class="paragraph body-text">The system shall associate generated claims with available project evidence.</p>
+<p class="paragraph body-text">Evidence may include:</p>
+<p class="paragraph preformatted-text">documentation</p>
+<p class="paragraph preformatted-text">source files</p>
+<p class="paragraph preformatted-text">Git commits</p>
+<p class="paragraph preformatted-text">configuration</p>
+<p class="paragraph preformatted-text">tests</p>
+<p class="paragraph preformatted-text">changelogs</p>
+<p class="paragraph preformatted-text">project metadata</p>
+<p class="paragraph body-text">The system shall avoid presenting unsupported project details as documented facts.</p>
+<h1>6. Article Generation</h1>
+<h2>FR-008 — Article Structure</h2>
+<p class="paragraph body-text">The system shall generate a human-readable article structure.</p>
+<p class="paragraph body-text">A generated article may contain:</p>
+<p class="paragraph preformatted-text">Title</p>
+<p class="paragraph preformatted-text">Introduction</p>
+<p class="paragraph preformatted-text">Why the project exists</p>
+<p class="paragraph preformatted-text">What changed</p>
+<p class="paragraph preformatted-text">How it works</p>
+<p class="paragraph preformatted-text">Technical implementation</p>
+<p class="paragraph preformatted-text">Design decisions</p>
+<p class="paragraph preformatted-text">Barkly Standard relationship</p>
+<p class="paragraph preformatted-text">Examples</p>
+<p class="paragraph preformatted-text">What was learned</p>
+<p class="paragraph preformatted-text">What&#x27;s next</p>
+<p class="paragraph preformatted-text">Project links</p>
+<p class="paragraph body-text">The exact sections shall be determined by the information available.</p>
+<p class="paragraph body-text">The system shall not generate empty sections when sufficient information is unavailable.</p>
+<h2>FR-009 — Human-Oriented Explanation</h2>
+<p class="paragraph body-text">The system shall transform technical project information into explanations understandable to a human reader.</p>
+<p class="paragraph body-text">The system shall prioritize explanation over raw information dumping.</p>
+<p class="paragraph body-text">For example:</p>
+<p class="paragraph preformatted-text">SOURCE:</p>
+<p class="paragraph preformatted-text">src/audit/paypal.py</p>
+<p class="paragraph preformatted-text">src/docs/parser.py</p>
+<p class="paragraph preformatted-text">src/git/history.py</p>
+<p class="paragraph preformatted-text">OUTPUT:</p>
+<p class="paragraph preformatted-text">&quot;Barkly Dev.to reads the project&#x27;s documentation,</p>
+<p class="paragraph preformatted-text">examines its repository structure, and uses Git history</p>
+<p class="paragraph preformatted-text">to determine what changed before assembling the article.&quot;</p>
+<h2>FR-010 — Project Context</h2>
+<p class="paragraph body-text">The system shall provide sufficient context for a reader unfamiliar with the project.</p>
+<p class="paragraph body-text">A generated article should answer:</p>
+<p class="paragraph preformatted-text">What is this?</p>
+<p class="paragraph preformatted-text">Why does it exist?</p>
+<p class="paragraph preformatted-text">What problem does it address?</p>
+<p class="paragraph preformatted-text">How does it work?</p>
+<p class="paragraph preformatted-text">What changed?</p>
+<p class="paragraph preformatted-text">Why does the change matter?</p>
+<p class="paragraph preformatted-text">Where can I learn more?</p>
+<h1>7. Barkly Standard Integration</h1>
+<h2>FR-011 — Standard Detection</h2>
+<p class="paragraph body-text">The system shall detect relevant Barkly Standard documentation when available.</p>
+<h2>FR-012 — Human-Centered Validation</h2>
+<p class="paragraph body-text">The system shall validate generated publications for required Barkly publication characteristics.</p>
+<p class="paragraph body-text">Examples may include:</p>
+<p class="paragraph body-text">understandable language</p>
+<p class="paragraph body-text">accessibility considerations</p>
+<p class="paragraph body-text">transparency</p>
+<p class="paragraph body-text">privacy considerations</p>
+<p class="paragraph body-text">safety considerations</p>
+<p class="paragraph body-text">autonomy</p>
+<p class="paragraph body-text">documentation</p>
+<p class="paragraph body-text">experimental status where applicable</p>
+<h2>FR-013 — Barkly Metadata</h2>
+<p class="paragraph body-text">The system shall support Barkly-specific publication metadata.</p>
+<p class="paragraph body-text">Examples:</p>
+<p class="paragraph preformatted-text">organization: Barkly Labs</p>
+<p class="paragraph preformatted-text">project: CYN-X</p>
+<p class="paragraph preformatted-text">standard: Barkly Standard</p>
+<p class="paragraph preformatted-text">generated_by: Barkly Dev.to</p>
+<h1>8. Human Review</h1>
+<h2>FR-014 — Human Approval</h2>
+<p class="paragraph body-text">The system shall support human review before publication.</p>
+<p class="paragraph body-text">The default workflow shall be:</p>
+<p class="paragraph preformatted-text">Generate</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Validate</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Review</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Approve</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Publish</p>
+<h2>FR-015 — No Mandatory Automatic Publication</h2>
+<p class="paragraph body-text">The system shall not require immediate publication after generation.</p>
+<p class="paragraph body-text">A contributor shall be able to generate a draft without publishing it.</p>
+<h2>FR-016 — Review Changes</h2>
+<p class="paragraph body-text">The system shall allow a human to modify generated content before publication.</p>
+<p class="paragraph body-text">The system shall not overwrite human edits without explicit action.</p>
+<h1>9. Dev.to Integration</h1>
+<h2>FR-017 — Dev.to API</h2>
+<p class="paragraph body-text">The system shall support publication through the Dev.to API.</p>
+<h2>FR-018 — Draft Publication</h2>
+<p class="paragraph body-text">The system shall support creating a Dev.to article as an unpublished draft where supported.</p>
+<h2>FR-019 — Publication</h2>
+<p class="paragraph body-text">The system shall support publishing an approved article to Dev.to.</p>
+<p class="paragraph body-text">Publication shall require the appropriate credentials.</p>
+<p class="paragraph body-text">Credentials shall not be stored directly in source code.</p>
+<h2>FR-020 — Idempotent Publication</h2>
+<p class="paragraph body-text">The system shall prevent accidental duplicate publications.</p>
+<p class="paragraph body-text">The system shall maintain an identifier allowing it to determine whether a project/change has already been published.</p>
+<p class="paragraph body-text">Example:</p>
+<p class="paragraph preformatted-text">repository</p>
+<p class="paragraph preformatted-text">+</p>
+<p class="paragraph preformatted-text">commit</p>
+<p class="paragraph preformatted-text">+</p>
+<p class="paragraph preformatted-text">article type</p>
+<p class="paragraph preformatted-text">=</p>
+<p class="paragraph preformatted-text">publication identity</p>
+<h1>10. GitHub Actions</h1>
+<h2>FR-021 — CI Integration</h2>
+<p class="paragraph body-text">The system shall support execution through GitHub Actions.</p>
+<p class="paragraph body-text">Example workflow:</p>
+<p class="paragraph preformatted-text">Git Push</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">GitHub Actions</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Barkly Docs discovery</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Change detection</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Article generation</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Barkly validation</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Draft</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Human approval</p>
+<p class="paragraph preformatted-text">↓</p>
+<p class="paragraph preformatted-text">Dev.to</p>
+<h2>FR-022 — Automated Generation</h2>
+<p class="paragraph body-text">A GitHub workflow shall be capable of generating a publication when configured repository events occur.</p>
+<p class="paragraph body-text">Possible triggers include:</p>
+<p class="paragraph preformatted-text">push</p>
+<p class="paragraph preformatted-text">release</p>
+<p class="paragraph preformatted-text">tag</p>
+<p class="paragraph preformatted-text">manual workflow dispatch</p>
+<p class="paragraph preformatted-text">scheduled workflow</p>
+<h2>FR-023 — Manual Execution</h2>
+<p class="paragraph body-text">The system shall provide a manual workflow trigger.</p>
+<p class="paragraph body-text">This allows a contributor to intentionally request publication generation without modifying project code.</p>
+<h1>11. Transparency</h1>
+<h2>FR-024 — Generated Content Disclosure</h2>
+<p class="paragraph body-text">Generated articles shall be identifiable as machine-assisted or machine-generated when appropriate.</p>
+<p class="paragraph body-text">The system shall not falsely represent automated work as manually authored.</p>
+<h2>FR-025 — Source Links</h2>
+<p class="paragraph body-text">Generated articles shall provide links to relevant source material when available.</p>
+<p class="paragraph body-text">Examples:</p>
+<p class="paragraph preformatted-text">GitHub repository</p>
+<p class="paragraph preformatted-text">Barkly Docs</p>
+<p class="paragraph preformatted-text">project documentation</p>
+<p class="paragraph preformatted-text">Barkly Standard</p>
+<p class="paragraph preformatted-text">release</p>
+<p class="paragraph preformatted-text">specific implementation</p>
+<h1>12. Failure Handling</h1>
+<h2>FR-026 — Missing Documentation</h2>
+<p class="paragraph body-text">If required information cannot be found, the system shall report what information is missing.</p>
+<p class="paragraph body-text">It shall not silently invent the missing information.</p>
+<h2>FR-027 — Invalid Repository</h2>
+<p class="paragraph body-text">If the repository cannot be interpreted, the system shall stop generation and provide an actionable error.</p>
+<h2>FR-028 — API Failure</h2>
+<p class="paragraph body-text">If Dev.to is unavailable or the API request fails, the generated article shall remain available locally or as a CI artifact where possible.</p>
+<p class="paragraph body-text">The system shall not lose the generated publication solely because publication failed.</p>
+<h1>13. Outputs</h1>
+<p class="paragraph body-text">The system shall be capable of producing:</p>
+<p class="paragraph preformatted-text">article.md</p>
+<p class="paragraph preformatted-text">article metadata</p>
+<p class="paragraph preformatted-text">validation report</p>
+<p class="paragraph preformatted-text">source/evidence report</p>
+<p class="paragraph preformatted-text">publication identifier</p>
+<p class="paragraph preformatted-text">Dev.to URL</p>
+<p class="paragraph body-text">Future outputs may include:</p>
+<p class="paragraph preformatted-text">website article</p>
+<p class="paragraph preformatted-text">release notes</p>
+<p class="paragraph preformatted-text">social post</p>
+<p class="paragraph preformatted-text">newsletter entry</p>
+<p class="paragraph preformatted-text">project changelog</p>
+<p class="paragraph preformatted-text">documentation update</p>
+<h1>14. Non-Functional Requirements</h1>
+<h2>NFR-001 — Reproducibility</h2>
+<p class="paragraph body-text">Given the same documented repository state and configuration, the system should produce substantially reproducible output.</p>
+<h2>NFR-002 — Portability</h2>
+<p class="paragraph body-text">The core system should run locally and within GitHub Actions.</p>
+<h2>NFR-003 — Security</h2>
+<p class="paragraph body-text">Secrets such as Dev.to API credentials shall be supplied through secure environment variables or GitHub Actions secrets.</p>
+<h2>NFR-004 — Explainability</h2>
+<p class="paragraph body-text">The system should be able to identify which documentation or repository information contributed to an article.</p>
+<h2>NFR-005 — Maintainability</h2>
+<p class="paragraph body-text">The system shall remain modular so additional publication targets can be added without rewriting the documentation discovery layer.</p>
+<h1>15. Future Architecture</h1>
+<p class="paragraph body-text">The eventual Barkly ecosystem could look like:</p>
+<p class="paragraph preformatted-text">BARKLY DOCS</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">Structured knowledge</p>
+<p class="paragraph preformatted-text">│</p>
+<p class="paragraph preformatted-text">┌─────────────┼─────────────┐</p>
+<p class="paragraph preformatted-text">│             │             │</p>
+<p class="paragraph preformatted-text">▼             ▼             ▼</p>
+<p class="paragraph preformatted-text">WEBSITE        DEV.TO       GITHUB</p>
+<p class="paragraph preformatted-text">│             │             │</p>
+<p class="paragraph preformatted-text">▼             ▼             ▼</p>
+<p class="paragraph preformatted-text">Project pages    Articles    Releases</p>
+<p class="paragraph preformatted-text">│             │             │</p>
+<p class="paragraph preformatted-text">└─────────────┼─────────────┘</p>
+<p class="paragraph preformatted-text">▼</p>
+<p class="paragraph preformatted-text">COMMUNITY KNOWLEDGE</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
