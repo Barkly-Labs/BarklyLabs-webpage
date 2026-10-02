@@ -1,0 +1,22 @@
+name: Barkly Dev
+version: 1.0.0
+schema: v1
+
+models:
+  - name: GPT-5
+    provider: openai
+    model: gpt-5
+    apiKey: ${{ secrets.OPENAI_API_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+
+  - name: qwen2.5-coder 7b
+    provider: ollama
+    model: qwen2.5-coder:7b
+    roles:
+      - autocomplete
+      - chat
+      - edit
+      - apply
