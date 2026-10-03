@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Community Market — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Community Market
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barkly Store.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Community Market</h1>
+<h2>Functional Requirements Document (FRD)</h2>
+<p class="paragraph body-text">Project: Barkly Community Market
+Organization: Barkly Labs
+Document version: 1.0
+Status: Draft — proposed requirements
+Priority: MVP-first
+Migration approach: Extend the existing Barkly Labs avatar-store web application.</p>
+<h2>1. Purpose</h2>
+<p class="paragraph body-text">Barkly Community Market is a community-oriented marketplace that enables independent creators, artists, makers, and developers to showcase and sell digital and physical products.</p>
+<p class="paragraph body-text">The marketplace will evolve from the existing Barkly Labs avatar store. The implementation must preserve reusable code, existing assets, working features, and compatible product data wherever practical.</p>
+<p class="paragraph body-text">The marketplace will support:</p>
+<p class="paragraph body-text">Digital products, including avatars, emotes, icons, profile pictures, and downloadable creative assets.</p>
+<p class="paragraph body-text">Physical products, including stickers, prints, handmade goods, maker projects, and small hardware products.</p>
+<p class="paragraph body-text">Custom commissions and creator services.</p>
+<p class="paragraph body-text">Individual seller profiles and product listings.</p>
+<p class="paragraph body-text">Product discovery, purchasing, and order fulfillment.</p>
+<p class="paragraph body-text">Administrative review, moderation, and marketplace management.</p>
+<p class="paragraph body-text">The marketplace is intended to support Barkly Labs&#x27; wider mission of making technology and creative opportunities more accessible to people.</p>
+<h2>2. Goals</h2>
+<p class="paragraph body-text">Convert the existing avatar store into a general-purpose community marketplace.</p>
+<p class="paragraph body-text">Reuse the existing application architecture and assets rather than unnecessarily rebuilding them.</p>
+<p class="paragraph body-text">Enable approved community members to submit products for sale.</p>
+<p class="paragraph body-text">Provide a consistent shopping experience for digital and physical goods.</p>
+<p class="paragraph body-text">Establish a manageable administrative workflow for sellers, listings, and orders.</p>
+<p class="paragraph body-text">Support a small pilot before opening the marketplace to the wider community.</p>
+<p class="paragraph body-text">Maintain accessibility, privacy, security, and transparent marketplace policies.</p>
+<h2>3. Scope</h2>
+<h3>3.1 MVP scope</h3>
+<p class="paragraph body-text">The initial release must include:</p>
+<p class="paragraph body-text">Public marketplace storefront.</p>
+<p class="paragraph body-text">Product browsing, search, and category filtering.</p>
+<p class="paragraph body-text">Product detail pages.</p>
+<p class="paragraph body-text">Seller profiles.</p>
+<p class="paragraph body-text">Digital, physical, and commission product types.</p>
+<p class="paragraph body-text">Seller applications or administrator-created seller accounts.</p>
+<p class="paragraph body-text">Product submission and approval workflows.</p>
+<p class="paragraph body-text">Shopping cart and checkout, subject to payment-provider integration.</p>
+<p class="paragraph body-text">Order records and status tracking.</p>
+<p class="paragraph body-text">Digital delivery or fulfillment instructions.</p>
+<p class="paragraph body-text">Physical inventory and shipping-status tracking.</p>
+<p class="paragraph body-text">Administrator dashboard and moderation controls.</p>
+<p class="paragraph body-text">Preservation or migration of existing avatar products and assets.</p>
+<p class="paragraph body-text">Responsive layouts and basic accessibility support.</p>
+<h3>3.2 Future scope</h3>
+<p class="paragraph body-text">The following features may be introduced after the MVP:</p>
+<p class="paragraph body-text">Automated seller payouts and configurable marketplace commissions.</p>
+<p class="paragraph body-text">Multi-seller carts and split payments.</p>
+<p class="paragraph body-text">Reviews and ratings.</p>
+<p class="paragraph body-text">Seller subscriptions.</p>
+<p class="paragraph body-text">Advanced analytics and recommendations.</p>
+<p class="paragraph body-text">Shipping-label integrations.</p>
+<p class="paragraph body-text">Promotional campaigns, coupons, and loyalty systems.</p>
+<p class="paragraph body-text">Advanced dispute management.</p>
+<p class="paragraph body-text">These features must not be assumed to exist in the MVP unless the existing application already provides them and they pass testing.</p>
+<h2>4. User roles</h2>
+<h3>FR-ROLE-001: Visitor</h3>
+<p class="paragraph body-text">A visitor must be able to browse published products, search the marketplace, view seller profiles, and read marketplace policies without creating an account.</p>
+<h3>FR-ROLE-002: Customer</h3>
+<p class="paragraph body-text">An authenticated customer must be able to manage their shopping activity, view their orders, and access products they have purchased according to the applicable delivery rules.</p>
+<h3>FR-ROLE-003: Seller</h3>
+<p class="paragraph body-text">An approved seller must be able to manage their seller profile, create and edit product listings, submit listings for review, and fulfill orders assigned to them.</p>
+<h3>FR-ROLE-004: Administrator</h3>
+<p class="paragraph body-text">An administrator must be able to manage users, approve sellers, moderate listings, review orders, and manage marketplace configuration.</p>
+<h3>FR-ROLE-005: Moderator</h3>
+<p class="paragraph body-text">If a separate moderator role is implemented, moderators must be able to review reported content and take explicitly authorized moderation actions without automatically receiving payment or financial administration permissions.</p>
+<h3>FR-ROLE-006: Role-based permissions</h3>
+<p class="paragraph body-text">The application must enforce permissions on the server, not only by hiding interface elements. Users must not be able to access another seller&#x27;s private listings, orders, customer information, or administrative functions by modifying a URL or request.</p>
+<h2>5. Functional requirements</h2>
+<h3>5.1 Storefront and navigation</h3>
+<p class="paragraph body-text">FR-STORE-001 — Marketplace homepage</p>
+<p class="paragraph body-text">The system shall display a marketplace homepage containing marketplace branding, product categories, featured products, and links to seller shops.</p>
+<p class="paragraph body-text">FR-STORE-002 — Product catalog</p>
+<p class="paragraph body-text">The system shall display published products in a browsable catalog.</p>
+<p class="paragraph body-text">Each product card shall display, where applicable:</p>
+<p class="paragraph body-text">Product image.</p>
+<p class="paragraph body-text">Product title.</p>
+<p class="paragraph body-text">Price and currency.</p>
+<p class="paragraph body-text">Product type.</p>
+<p class="paragraph body-text">Seller or shop name.</p>
+<p class="paragraph body-text">Availability status.</p>
+<p class="paragraph body-text">FR-STORE-003 — Search</p>
+<p class="paragraph body-text">Visitors and customers shall be able to search published products by relevant text fields, including product title and description.</p>
+<p class="paragraph body-text">FR-STORE-004 — Category filtering</p>
+<p class="paragraph body-text">Users shall be able to filter products by category and product type.</p>
+<p class="paragraph body-text">FR-STORE-005 — Sorting</p>
+<p class="paragraph body-text">The catalog shall support basic sorting, such as newest products first and price ascending or descending.</p>
+<p class="paragraph body-text">FR-STORE-006 — Empty and error states</p>
+<p class="paragraph body-text">The interface shall display understandable messages when no products match a search, a category contains no products, or a request fails.</p>
+<p class="paragraph body-text">FR-STORE-007 — Responsive presentation</p>
+<p class="paragraph body-text">The storefront shall remain usable on desktop, tablet, and mobile screen sizes.</p>
+<h3>5.2 Product management</h3>
+<p class="paragraph body-text">FR-PROD-001 — General product model</p>
+<p class="paragraph body-text">The system shall support a common product model that can represent digital products, physical products, and commissions without requiring separate storefront applications.</p>
+<p class="paragraph body-text">FR-PROD-002 — Required listing fields</p>
+<p class="paragraph body-text">Each product listing shall contain:</p>
+<p class="paragraph body-text">Unique product identifier.</p>
+<p class="paragraph body-text">Seller identifier.</p>
+<p class="paragraph body-text">Product title.</p>
+<p class="paragraph body-text">Description.</p>
+<p class="paragraph body-text">Price.</p>
+<p class="paragraph body-text">Currency.</p>
+<p class="paragraph body-text">Product type.</p>
+<p class="paragraph body-text">Category.</p>
+<p class="paragraph body-text">At least one product image or an approved visual placeholder.</p>
+<p class="paragraph body-text">Listing status.</p>
+<p class="paragraph body-text">Creation and modification timestamps.</p>
+<p class="paragraph body-text">FR-PROD-003 — Product types</p>
+<p class="paragraph body-text">The system shall support the following product types:</p>
+<p class="paragraph body-text">Digital product.</p>
+<p class="paragraph body-text">Physical product.</p>
+<p class="paragraph body-text">Commission or custom service.</p>
+<p class="paragraph body-text">FR-PROD-004 — Digital product details</p>
+<p class="paragraph body-text">Digital listings shall support a digital delivery method and, where applicable, a downloadable asset reference.</p>
+<p class="paragraph body-text">Paid downloadable files shall not be exposed through unrestricted public file URLs.</p>
+<p class="paragraph body-text">FR-PROD-005 — Physical product details</p>
+<p class="paragraph body-text">Physical listings shall support inventory quantity, availability, and applicable shipping information.</p>
+<p class="paragraph body-text">FR-PROD-006 — Commission details</p>
+<p class="paragraph body-text">Commission listings shall support information such as service description, expected deliverables, estimated turnaround, and instructions for requesting custom work.</p>
+<p class="paragraph body-text">FR-PROD-007 — Listing validation</p>
+<p class="paragraph body-text">The system shall reject or flag listings that lack required fields, have invalid prices, or contain unsupported product types.</p>
+<p class="paragraph body-text">FR-PROD-008 — Listing ownership</p>
+<p class="paragraph body-text">Sellers shall be able to create and edit their own listings but shall not be able to modify listings owned by other sellers.</p>
+<p class="paragraph body-text">FR-PROD-009 — Listing states</p>
+<p class="paragraph body-text">Listings shall support the following states:</p>
+<p class="paragraph body-text">Draft.</p>
+<p class="paragraph body-text">Pending review.</p>
+<p class="paragraph body-text">Published.</p>
+<p class="paragraph body-text">Rejected.</p>
+<p class="paragraph body-text">Archived.</p>
+<p class="paragraph body-text">Only published listings shall appear in the public catalog.</p>
+<p class="paragraph body-text">FR-PROD-010 — Listing preservation</p>
+<p class="paragraph body-text">Existing avatar products shall remain available for migration. The migration must preserve compatible product identifiers, titles, descriptions, images, prices, and other useful metadata.</p>
+<h3>5.3 Seller accounts and profiles</h3>
+<p class="paragraph body-text">FR-SELL-001 — Seller application</p>
+<p class="paragraph body-text">The system shall allow eligible users to request seller access, unless an administrator creates their seller account directly.</p>
+<p class="paragraph body-text">FR-SELL-002 — Seller approval</p>
+<p class="paragraph body-text">An administrator shall be able to approve or reject a seller application.</p>
+<p class="paragraph body-text">FR-SELL-003 — Seller profile</p>
+<p class="paragraph body-text">Each approved seller shall have a public profile containing a shop name, description, profile image or avatar, and published products.</p>
+<p class="paragraph body-text">FR-SELL-004 — Seller editing</p>
+<p class="paragraph body-text">Sellers shall be able to update their permitted profile fields.</p>
+<p class="paragraph body-text">FR-SELL-005 — Seller status</p>
+<p class="paragraph body-text">Administrators shall be able to suspend or deactivate seller access. Suspension shall prevent new listings and other seller actions according to the configured permissions.</p>
+<p class="paragraph body-text">FR-SELL-006 — Seller attribution</p>
+<p class="paragraph body-text">Each published product shall identify its seller.</p>
+<p class="paragraph body-text">FR-SELL-007 — Seller privacy</p>
+<p class="paragraph body-text">The public profile shall not expose private account details, payment credentials, private contact information, or customer order information.</p>
+<h3>5.4 Shopping cart and checkout</h3>
+<p class="paragraph body-text">FR-CART-001 — Add to cart</p>
+<p class="paragraph body-text">Customers shall be able to add eligible products to a shopping cart.</p>
+<p class="paragraph body-text">FR-CART-002 — Cart management</p>
+<p class="paragraph body-text">Customers shall be able to view cart contents, change permitted quantities, and remove items.</p>
+<p class="paragraph body-text">FR-CART-003 — Availability validation</p>
+<p class="paragraph body-text">Before accepting an order, the system shall validate that each item is still published and available and that sufficient physical inventory exists.</p>
+<p class="paragraph body-text">FR-CART-004 — Price validation</p>
+<p class="paragraph body-text">The server shall calculate the authoritative product subtotal and any applicable shipping, tax, fees, and discounts. The client shall not be trusted to supply the final order amount.</p>
+<p class="paragraph body-text">FR-CART-005 — Checkout</p>
+<p class="paragraph body-text">The system shall provide a checkout process through a supported payment provider or an explicitly configured alternative purchasing workflow.</p>
+<p class="paragraph body-text">FR-CART-006 — Payment confirmation</p>
+<p class="paragraph body-text">The system shall mark an order as paid only after receiving and validating a trusted payment confirmation. Duplicate payment notifications shall not create duplicate orders or fulfillment actions.</p>
+<p class="paragraph body-text">FR-CART-007 — Payment failure</p>
+<p class="paragraph body-text">If payment fails or is canceled, the system shall not treat the order as paid or release paid digital downloads.</p>
+<p class="paragraph body-text">FR-CART-008 — Clear pricing</p>
+<p class="paragraph body-text">Customers shall see the applicable total and any known additional charges before confirming the purchase.</p>
+<p class="paragraph body-text">FR-CART-009 — Mixed-seller orders</p>
+<p class="paragraph body-text">The initial implementation may restrict a cart to one seller if that substantially simplifies payment and fulfillment. If so, the restriction must be communicated before checkout.</p>
+<p class="paragraph body-text">FR-CART-010 — Payment-provider configuration</p>
+<p class="paragraph body-text">Payment processing shall use a supported provider and secure configuration. The application shall not store raw payment-card details.</p>
+<h3>5.5 Orders and fulfillment</h3>
+<p class="paragraph body-text">FR-ORDER-001 — Order creation</p>
+<p class="paragraph body-text">The system shall create a persistent order record associated with the customer and the purchased products.</p>
+<p class="paragraph body-text">FR-ORDER-002 — Order line items</p>
+<p class="paragraph body-text">Each order shall preserve the product title, quantity, unit price, seller, and relevant fulfillment information as recorded at purchase time.</p>
+<p class="paragraph body-text">FR-ORDER-003 — Order status</p>
+<p class="paragraph body-text">Orders shall support distinguishable payment and fulfillment states, such as:</p>
+<p class="paragraph body-text">Awaiting payment.</p>
+<p class="paragraph body-text">Paid.</p>
+<p class="paragraph body-text">Processing.</p>
+<p class="paragraph body-text">Fulfilled.</p>
+<p class="paragraph body-text">Completed.</p>
+<p class="paragraph body-text">Canceled.</p>
+<p class="paragraph body-text">Refunded.</p>
+<p class="paragraph body-text">The implementation may use separate payment and fulfillment status fields to avoid conflicting states.</p>
+<p class="paragraph body-text">FR-ORDER-004 — Customer order history</p>
+<p class="paragraph body-text">Customers shall be able to view their own orders and relevant status information.</p>
+<p class="paragraph body-text">FR-ORDER-005 — Seller order access</p>
+<p class="paragraph body-text">Sellers shall be able to view only the order information necessary to fulfill their own sales.</p>
+<p class="paragraph body-text">FR-ORDER-006 — Digital fulfillment</p>
+<p class="paragraph body-text">After confirmed payment, the system shall make eligible digital products available to the purchasing customer or provide the configured delivery instructions.</p>
+<p class="paragraph body-text">FR-ORDER-007 — Download authorization</p>
+<p class="paragraph body-text">Digital download access shall be restricted to eligible purchasers and authorized administrators. Access shall be revocable where technically supported.</p>
+<p class="paragraph body-text">FR-ORDER-008 — Physical fulfillment</p>
+<p class="paragraph body-text">Sellers shall be able to mark physical orders as processing and shipped, and provide tracking information when available.</p>
+<p class="paragraph body-text">FR-ORDER-009 — Inventory</p>
+<p class="paragraph body-text">The system shall update physical inventory when an order is confirmed according to the chosen reservation policy. It shall prevent inventory from becoming negative.</p>
+<p class="paragraph body-text">FR-ORDER-010 — Notifications</p>
+<p class="paragraph body-text">The system shall provide appropriate order confirmations and status notifications through the available notification mechanism.</p>
+<p class="paragraph body-text">FR-ORDER-011 — Refunds and cancellations</p>
+<p class="paragraph body-text">The system shall record authorized refunds and cancellations and reflect them in the order history. Refund processing must be consistent with the payment provider and marketplace policy.</p>
+<h3>5.6 Marketplace administration and moderation</h3>
+<p class="paragraph body-text">FR-ADMIN-001 — Administrative dashboard</p>
+<p class="paragraph body-text">Administrators shall have access to a protected dashboard for managing sellers, listings, and orders.</p>
+<p class="paragraph body-text">FR-ADMIN-002 — Listing review</p>
+<p class="paragraph body-text">Administrators shall be able to review pending listings and publish or reject them.</p>
+<p class="paragraph body-text">FR-ADMIN-003 — Rejection reasons</p>
+<p class="paragraph body-text">Administrators shall be able to record a reason for rejecting a listing and make that reason available to the seller.</p>
+<p class="paragraph body-text">FR-ADMIN-004 — Content reporting</p>
+<p class="paragraph body-text">Users shall have a way to report a product or seller for review.</p>
+<p class="paragraph body-text">FR-ADMIN-005 — Listing removal</p>
+<p class="paragraph body-text">Authorized administrators shall be able to unpublish or archive listings that violate marketplace policy.</p>
+<p class="paragraph body-text">FR-ADMIN-006 — Seller management</p>
+<p class="paragraph body-text">Administrators shall be able to review seller applications, approve or reject applicants, and suspend seller access when necessary.</p>
+<p class="paragraph body-text">FR-ADMIN-007 — Order oversight</p>
+<p class="paragraph body-text">Administrators shall be able to inspect order status and investigate fulfillment problems within their authorized access.</p>
+<p class="paragraph body-text">FR-ADMIN-008 — Audit records</p>
+<p class="paragraph body-text">The system shall record important administrative actions, including listing approvals, seller suspensions, and order-status overrides.</p>
+<p class="paragraph body-text">FR-ADMIN-009 — Permission enforcement</p>
+<p class="paragraph body-text">Administrative operations shall require explicit server-side authorization.</p>
+<h3>5.7 Migration from the avatar store</h3>
+<p class="paragraph body-text">FR-MIG-001 — Existing application audit</p>
+<p class="paragraph body-text">Before implementation, the development process shall identify the existing framework, routes, components, data models, database, authentication, storage, payment integration, and tests.</p>
+<p class="paragraph body-text">FR-MIG-002 — Reuse assessment</p>
+<p class="paragraph body-text">Existing code shall be classified as reusable, reusable with modification, replaceable, or obsolete. Working components shall not be replaced without a documented reason.</p>
+<p class="paragraph body-text">FR-MIG-003 — Asset preservation</p>
+<p class="paragraph body-text">Existing logos, icons, avatar artwork, product images, fonts, styles, and other relevant assets shall be preserved where licensing and technical compatibility permit.</p>
+<p class="paragraph body-text">FR-MIG-004 — Data migration</p>
+<p class="paragraph body-text">Existing avatar products shall be migrated or mapped into the generalized product model.</p>
+<p class="paragraph body-text">FR-MIG-005 — Migration safety</p>
+<p class="paragraph body-text">The migration shall be repeatable or safely recoverable. It shall not silently duplicate products or discard existing data.</p>
+<p class="paragraph body-text">FR-MIG-006 — Compatibility</p>
+<p class="paragraph body-text">Existing account functionality and useful URLs shall be preserved where practical. Any changed routes shall have appropriate redirects when supported by the application.</p>
+<p class="paragraph body-text">FR-MIG-007 — Rollback</p>
+<p class="paragraph body-text">The team shall retain a backup and a documented method to restore the previous application if the migration fails.</p>
+<p class="paragraph body-text">FR-MIG-008 — Regression testing</p>
+<p class="paragraph body-text">Existing storefront functionality shall be tested after migration, including product display, navigation, and any retained cart or account functionality.</p>
+<h3>5.8 Marketplace policies and seller transparency</h3>
+<p class="paragraph body-text">FR-POLICY-001 — Marketplace rules</p>
+<p class="paragraph body-text">The marketplace shall publish rules for prohibited products, intellectual property, harassment, fraud, and seller conduct.</p>
+<p class="paragraph body-text">FR-POLICY-002 — Seller terms</p>
+<p class="paragraph body-text">Sellers shall be shown the applicable seller terms before being approved or before publishing their first listing.</p>
+<p class="paragraph body-text">FR-POLICY-003 — Product rights</p>
+<p class="paragraph body-text">Sellers shall confirm that they have the rights necessary to sell the content they submit.</p>
+<p class="paragraph body-text">FR-POLICY-004 — Digital licensing</p>
+<p class="paragraph body-text">Digital listings shall describe the applicable usage license or terms, such as personal use or commercial use, where relevant.</p>
+<p class="paragraph body-text">FR-POLICY-005 — Returns and refunds</p>
+<p class="paragraph body-text">The marketplace shall explain applicable cancellation, refund, and return policies before purchase.</p>
+<p class="paragraph body-text">FR-POLICY-006 — Physical shipping</p>
+<p class="paragraph body-text">Physical listings shall communicate shipping arrangements, relevant delivery restrictions, and any known shipping charges.</p>
+<p class="paragraph body-text">FR-POLICY-007 — Fees and payouts</p>
+<p class="paragraph body-text">Any marketplace fees, seller charges, payout arrangements, and payout timing shall be clearly disclosed before a seller agrees to participate.</p>
+<p class="paragraph body-text">FR-POLICY-008 — Privacy</p>
+<p class="paragraph body-text">The marketplace shall publish a privacy notice describing the collection and use of account, order, and seller information.</p>
+<h2>6. Core data entities</h2>
+<p class="paragraph body-text">The implementation shall provide equivalent data structures using the project&#x27;s existing database conventions.</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>Entity</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td>User</td>
+<td>Authentication and account identity</td>
+</tr>
+<tr>
+<td>SellerProfile</td>
+<td>Shop information and seller status</td>
+</tr>
+<tr>
+<td>Product</td>
+<td>Shared representation of digital, physical, and commission listings</td>
+</tr>
+<tr>
+<td>ProductAsset</td>
+<td>Product images, downloadable files, and other associated assets</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>Marketplace product classification</td>
+</tr>
+<tr>
+<td>Cart</td>
+<td>Customer&#x27;s pending shopping selection</td>
+</tr>
+<tr>
+<td>CartItem</td>
+<td>Product and quantity within a cart</td>
+</tr>
+<tr>
+<td>Order</td>
+<td>Customer purchase and overall order information</td>
+</tr>
+<tr>
+<td>OrderItem</td>
+<td>Purchased product snapshot, seller, quantity, and price</td>
+</tr>
+<tr>
+<td>PaymentRecord</td>
+<td>Payment provider references and payment status</td>
+</tr>
+<tr>
+<td>FulfillmentRecord</td>
+<td>Download availability, shipping status, and delivery details</td>
+</tr>
+<tr>
+<td>Report</td>
+<td>Reported products, sellers, and moderation status</td>
+</tr>
+<tr>
+<td>AuditEvent</td>
+<td>Record of important administrative actions</td>
+</tr>
+</table>
+</div>
+<p class="paragraph body-text">The project may use existing entities where suitable. The table is a logical model, not a requirement to create exactly one database table per entity.</p>
+<h2>7. Non-functional requirements</h2>
+<p class="paragraph body-text">Although this document focuses on functionality, the MVP shall also satisfy these baseline requirements:</p>
+<p class="paragraph body-text">NFR-001 — Security: Authentication, authorization, input validation, file handling, and payment confirmation must be implemented securely.</p>
+<p class="paragraph body-text">NFR-002 — Accessibility: Core shopping and seller workflows must be usable with keyboard navigation, clear focus indicators, labels, readable contrast, and appropriate alternative text.</p>
+<p class="paragraph body-text">NFR-003 — Privacy: Users must not be able to access other users&#x27; private information or orders without authorization.</p>
+<p class="paragraph body-text">NFR-004 — Reliability: Order creation, payment processing, and fulfillment transitions must be designed to prevent duplicate or inconsistent operations.</p>
+<p class="paragraph body-text">NFR-005 — Maintainability: New marketplace functionality should reuse the existing architecture and avoid unnecessary dependencies or duplicated components.</p>
+<p class="paragraph body-text">NFR-006 — Performance: Product listings and product details should load without unnecessary full-catalog queries or excessive image downloads. Performance shall be measured against a documented test dataset.</p>
+<p class="paragraph body-text">NFR-007 — Recoverability: The application, database, and product assets must have a documented backup and recovery process.</p>
+<p class="paragraph body-text">NFR-008 — Compatibility: Existing supported browsers and mobile layouts shall continue to work after migration.</p>
+<p class="paragraph body-text">NFR-009 — Secrets management: Credentials, payment secrets, and private configuration shall not be committed to the source repository.</p>
+<p class="paragraph body-text">NFR-010 — Observability: Errors in checkout, fulfillment, and administrative operations shall be recorded without unnecessarily logging sensitive information.</p>
+<h2>8. MVP acceptance criteria</h2>
+<p class="paragraph body-text">The MVP shall be considered functionally complete only when the following scenarios pass.</p>
+<h3>Catalog and migration</h3>
+<p class="paragraph body-text">Existing avatar products and assets are preserved or migrated correctly.</p>
+<p class="paragraph body-text">Visitors can browse, search, and filter published products.</p>
+<p class="paragraph body-text">Product pages display accurate prices, product types, and seller attribution.</p>
+<p class="paragraph body-text">Digital, physical, and commission listings can be represented.</p>
+<h3>Seller workflow</h3>
+<p class="paragraph body-text">A user can apply for seller access or be added by an administrator.</p>
+<p class="paragraph body-text">An administrator can approve a seller.</p>
+<p class="paragraph body-text">An approved seller can submit and edit their own listings.</p>
+<p class="paragraph body-text">Pending listings remain hidden from the public catalog.</p>
+<p class="paragraph body-text">An administrator can publish or reject a listing.</p>
+<p class="paragraph body-text">Sellers cannot edit other sellers&#x27; listings.</p>
+<h3>Purchasing and fulfillment</h3>
+<p class="paragraph body-text">A customer can add an eligible product to the cart.</p>
+<p class="paragraph body-text">The server validates product availability and calculates the purchase total.</p>
+<p class="paragraph body-text">A successful test payment creates a correctly recorded paid order.</p>
+<p class="paragraph body-text">A failed or canceled payment does not release paid digital content.</p>
+<p class="paragraph body-text">An authorized purchaser can access their digital product.</p>
+<p class="paragraph body-text">Physical inventory and fulfillment status update correctly.</p>
+<p class="paragraph body-text">Customers and sellers see only the order information they are authorized to access.</p>
+<h3>Administration and reliability</h3>
+<p class="paragraph body-text">Administrators can manage sellers, listings, and order status.</p>
+<p class="paragraph body-text">Reported content can be reviewed and moderated.</p>
+<p class="paragraph body-text">Important administrative actions are recorded.</p>
+<p class="paragraph body-text">Core workflows pass automated or documented end-to-end tests.</p>
+<p class="paragraph body-text">Existing storefront functionality has no unresolved critical regressions.</p>
+<p class="paragraph body-text">The application can be restored from a tested backup.</p>
+<p class="paragraph body-text">If payment-provider integration is intentionally deferred, checkout and real purchases are not complete MVP features. In that case, the first milestone must be described as a catalog and seller-submission pilot, not a fully transactional marketplace.</p>
+<h2>9. Suggested implementation order</h2>
+<p class="paragraph body-text">Audit and back up the existing avatar-store project.</p>
+<p class="paragraph body-text">Identify reusable components and document the existing data model.</p>
+<p class="paragraph body-text">Generalize the product model while preserving avatar listings.</p>
+<p class="paragraph body-text">Update branding, navigation, categories, and product pages.</p>
+<p class="paragraph body-text">Implement seller profiles and listing submission.</p>
+<p class="paragraph body-text">Implement administrative listing approval and moderation.</p>
+<p class="paragraph body-text">Implement order, payment, and fulfillment workflows.</p>
+<p class="paragraph body-text">Add security, accessibility, migration, and regression tests.</p>
+<p class="paragraph body-text">Run a small private pilot with approved sellers.</p>
+<p class="paragraph body-text">Resolve pilot issues before public launch.</p>
+<h2>10. Assumptions and unresolved decisions</h2>
+<p class="paragraph body-text">The following details must be confirmed against the existing project or decided before the relevant implementation begins:</p>
+<p class="paragraph body-text">Existing frontend framework and backend architecture.</p>
+<p class="paragraph body-text">Database technology and current product schema.</p>
+<p class="paragraph body-text">Authentication and account-management implementation.</p>
+<p class="paragraph body-text">Existing cart and payment-provider capabilities.</p>
+<p class="paragraph body-text">Whether seller payouts will be automated at launch.</p>
+<p class="paragraph body-text">Whether a cart may contain products from multiple sellers.</p>
+<p class="paragraph body-text">Whether commissions are purchased directly or begin with a request-and-quote workflow.</p>
+<p class="paragraph body-text">Which shipping regions the marketplace will support.</p>
+<p class="paragraph body-text">Whether the marketplace will charge seller fees or retain a commission.</p>
+<p class="paragraph body-text">Which staff members will have administrative and moderation permissions.</p>
+<p class="paragraph body-text">These decisions should be resolved using the smallest implementation that satisfies the MVP, rather than adding infrastructure without a demonstrated need.</p>
+<h2>11. Definition of success</h2>
+<p class="paragraph body-text">Barkly Community Market succeeds at the MVP stage when the existing avatar-store foundation has been preserved, multiple product types can be listed, approved sellers can manage their products, customers can complete the supported purchasing workflow, and administrators can safely oversee the marketplace.</p>
+<p class="paragraph body-text">The implementation should leave the project ready for future community growth without requiring a complete rewrite.</p>
+<p class="paragraph body-text">Guiding principle: Reuse what works, make the missing pieces explicit, and front-load complexity for the people using the marketplace.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
