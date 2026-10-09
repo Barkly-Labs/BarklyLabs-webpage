@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Broadcast — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Broadcast
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\barkly brodcast.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Broadcast</h1>
+<h2>Functional Requirements Specification (FRS)</h2>
+<p class="paragraph body-text">Document Version: 0.1
+Status: Draft for implementation
+Project: Barkly Labs
+System Type: Automated development activity reporting and publishing system
+Initial Runtime: Linux VPS alongside the existing Barkly Labs web server
+Initial Publishing Destination: Barkly Labs website
+Future Destination: Social media platforms through authorized APIs
+Publication Mode: Automatic, subject to mandatory validation</p>
+<h2>1. Purpose</h2>
+<p class="paragraph body-text">Barkly Broadcast is an automated development-to-publication system designed to communicate verified progress across Barkly Labs projects.</p>
+<p class="paragraph body-text">The system shall observe development activity, collect supporting evidence, generate project-aware updates, validate their factual claims, and publish qualifying updates to configured destinations without requiring the developer to manually write each post.</p>
+<p class="paragraph body-text">The system shall reduce the administrative and promotional work required to maintain public project updates while preserving accuracy, transparency, security, and the actual development status of each project.</p>
+<h3>1.1 Mission</h3>
+<p class="paragraph body-text">Barkly Broadcast exists to make communicating development progress easier for developers, particularly those who have limited time, energy, or capacity for repetitive administrative work.</p>
+<h3>1.2 Design principle</h3>
+<p class="paragraph body-text">Automate communication, not truth.</p>
+<p class="paragraph body-text">The system shall never interpret the existence of development activity as proof of project readiness, successful testing, or completed functionality.</p>
+<h2>2. Scope</h2>
+<h3>2.1 Included in the initial release</h3>
+<p class="paragraph body-text">GitHub repository monitoring.</p>
+<p class="paragraph body-text">GitHub webhook ingestion.</p>
+<p class="paragraph body-text">Scheduled repository reconciliation.</p>
+<p class="paragraph body-text">Development activity and evidence collection.</p>
+<p class="paragraph body-text">Project-specific configuration.</p>
+<p class="paragraph body-text">Automated post generation using an LLM.</p>
+<p class="paragraph body-text">Evidence-based claim validation.</p>
+<p class="paragraph body-text">Project status enforcement.</p>
+<p class="paragraph body-text">Duplicate-event and duplicate-publication prevention.</p>
+<p class="paragraph body-text">Automatic website publishing.</p>
+<p class="paragraph body-text">Persistent publication records.</p>
+<p class="paragraph body-text">Operational logging and failure handling.</p>
+<p class="paragraph body-text">Background service operation on the existing VPS.</p>
+<h3>2.2 Planned extensions</h3>
+<p class="paragraph body-text">Social media publishing through official platform APIs.</p>
+<p class="paragraph body-text">Additional repository providers.</p>
+<p class="paragraph body-text">Administrative dashboard.</p>
+<p class="paragraph body-text">Additional content formats, including release summaries and development digests.</p>
+<p class="paragraph body-text">Configurable publishing schedules and frequency limits.</p>
+<p class="paragraph body-text">Optional notifications about rejected posts and service failures.</p>
+<h3>2.3 Out of scope for v0.1</h3>
+<p class="paragraph body-text">Autonomous modification of project source code.</p>
+<p class="paragraph body-text">Autonomous merging of pull requests.</p>
+<p class="paragraph body-text">Autonomous deployment of application code.</p>
+<p class="paragraph body-text">Generating fabricated test results or benchmarks.</p>
+<p class="paragraph body-text">Publishing private repository content without explicit authorization.</p>
+<p class="paragraph body-text">Making project completion or quality decisions solely through an LLM.</p>
+<p class="paragraph body-text">Circumventing social platform restrictions or rate limits.</p>
+<h2>3. System context</h2>
+<p class="paragraph body-text">Barkly Broadcast shall operate as a separate background service alongside the existing Barkly Labs website infrastructure.</p>
+<p class="paragraph body-text">The currently known website environment uses Nginx and Astro on a Linux VPS. The precise build and deployment mechanism must be inspected before implementing website publication.</p>
+<h3>3.1 Logical components</h3>
+<p class="paragraph body-text">Event Ingestion: Receives GitHub webhooks and scheduled scan results.</p>
+<p class="paragraph body-text">Evidence Collector: Retrieves relevant public development activity and test evidence.</p>
+<p class="paragraph body-text">Project Registry: Stores project identity, status, repository mappings, and publication policies.</p>
+<p class="paragraph body-text">Evidence Ledger: Records the source and timestamp of information supporting a potential post.</p>
+<p class="paragraph body-text">Content Generator: Produces a project-aware draft using an LLM.</p>
+<p class="paragraph body-text">Validation Engine: Checks claims, evidence, privacy, status, and publishing rules.</p>
+<p class="paragraph body-text">Publication Manager: Sends validated posts to configured destinations.</p>
+<p class="paragraph body-text">Persistence Layer: Stores events, drafts, evidence references, publication attempts, and outcomes.</p>
+<p class="paragraph body-text">Monitoring and Recovery: Records failures, retries recoverable operations, and supports service recovery.</p>
+<h2>4. Functional requirements</h2>
+<p class="paragraph body-text">Priority levels:</p>
+<p class="paragraph body-text">MUST: Required for the initial release.</p>
+<p class="paragraph body-text">SHOULD: Strongly recommended.</p>
+<p class="paragraph body-text">LATER: Planned extension.</p>
+<h3>FR-001 — Project registration</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall maintain a registry of projects eligible for development reporting.</p>
+<p class="paragraph body-text">Each project record shall support:</p>
+<p class="paragraph body-text">Unique project identifier.</p>
+<p class="paragraph body-text">Display name.</p>
+<p class="paragraph body-text">Public repository URL or repository identifier.</p>
+<p class="paragraph body-text">Short project description.</p>
+<p class="paragraph body-text">Public development status.</p>
+<p class="paragraph body-text">Enabled evidence sources.</p>
+<p class="paragraph body-text">Enabled publication destinations.</p>
+<p class="paragraph body-text">Publishing frequency limits.</p>
+<p class="paragraph body-text">Project-specific writing instructions.</p>
+<p class="paragraph body-text">Automatic publishing enablement.</p>
+<p class="paragraph body-text">Project-specific claim restrictions.</p>
+<p class="paragraph body-text">Each project shall be independently configurable and disableable without stopping other projects.</p>
+<p class="paragraph body-text">Acceptance criteria:</p>
+<p class="paragraph body-text">A registered project can be monitored and published independently.</p>
+<p class="paragraph body-text">An unknown repository cannot automatically become an authorized publishing project.</p>
+<p class="paragraph body-text">Disabling a project prevents new publication jobs for that project.</p>
+<p class="paragraph body-text">Missing project configuration defaults to no publication.</p>
+<h3>FR-002 — Development event ingestion</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall ingest supported GitHub webhook events and scheduled repository scan results.</p>
+<p class="paragraph body-text">Initially supported events should include:</p>
+<p class="paragraph body-text">Pushes to configured branches.</p>
+<p class="paragraph body-text">Pull requests being merged.</p>
+<p class="paragraph body-text">Releases being published, when release announcements are enabled.</p>
+<p class="paragraph body-text">Completed CI workflows and their actual conclusions, when the workflow is accessible.</p>
+<p class="paragraph body-text">The system shall validate webhook signatures and reject invalid requests.</p>
+<p class="paragraph body-text">It shall record the provider, repository, event identifier, event type, timestamp, and processing state.</p>
+<p class="paragraph body-text">Acceptance criteria:</p>
+<p class="paragraph body-text">Valid configured events enter the processing pipeline.</p>
+<p class="paragraph body-text">Invalid signatures are rejected.</p>
+<p class="paragraph body-text">Repeated delivery of the same event does not create duplicate processing or posts.</p>
+<p class="paragraph body-text">Unconfigured repositories cannot trigger publication.</p>
+<h3>FR-003 — Scheduled reconciliation</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall periodically inspect configured repositories to recover from missed, delayed, or failed webhook deliveries.</p>
+<p class="paragraph body-text">The reconciliation process shall:</p>
+<p class="paragraph body-text">Retrieve activity since the previous successful checkpoint.</p>
+<p class="paragraph body-text">Detect previously unseen events.</p>
+<p class="paragraph body-text">Avoid duplicating previously processed activity.</p>
+<p class="paragraph body-text">Persist the checkpoint only after successful processing.</p>
+<p class="paragraph body-text">Retry recoverable failures without discarding unprocessed work.</p>
+<p class="paragraph body-text">The reconciliation interval shall be configurable.</p>
+<h3>FR-004 — Evidence collection</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall collect verifiable information supporting development updates.</p>
+<p class="paragraph body-text">Evidence may include:</p>
+<p class="paragraph body-text">Commit identifiers and public commit summaries.</p>
+<p class="paragraph body-text">Merged pull request titles and public descriptions.</p>
+<p class="paragraph body-text">Public release metadata.</p>
+<p class="paragraph body-text">Actual CI workflow results.</p>
+<p class="paragraph body-text">Explicitly configured, machine-readable test reports.</p>
+<p class="paragraph body-text">Public documentation changes.</p>
+<p class="paragraph body-text">Public project metadata.</p>
+<p class="paragraph body-text">Every evidence record shall include its source, associated project, relevant identifier or URL, observation time, and available status information.</p>
+<p class="paragraph body-text">The system shall distinguish between evidence that exists, evidence that was retrieved successfully, and evidence that supports a particular claim.</p>
+<p class="paragraph body-text">Acceptance criteria:</p>
+<p class="paragraph body-text">Every material factual claim in a generated post references supporting evidence.</p>
+<p class="paragraph body-text">An inaccessible test report cannot be treated as a successful test.</p>
+<p class="paragraph body-text">A commit message containing the word “fixed” does not independently prove that a bug was fixed.</p>
+<p class="paragraph body-text">Missing evidence is recorded as unknown, not as success.</p>
+<h3>FR-005 — Evidence ledger</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall maintain a persistent record of evidence used to generate and validate posts.</p>
+<p class="paragraph body-text">Each post shall retain references to its supporting evidence after publication.</p>
+<p class="paragraph body-text">The system shall support tracing a published statement back to the relevant development event or test result.</p>
+<p class="paragraph body-text">Evidence records shall not be silently rewritten to make a previous post appear better supported.</p>
+<h3>FR-006 — Content generation</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall generate human-readable development updates using a configured LLM.</p>
+<p class="paragraph body-text">Generated content shall be informed by:</p>
+<p class="paragraph body-text">The project&#x27;s registered description and public status.</p>
+<p class="paragraph body-text">Newly collected development activity.</p>
+<p class="paragraph body-text">Relevant evidence records.</p>
+<p class="paragraph body-text">Project-specific tone and terminology.</p>
+<p class="paragraph body-text">Publication destination constraints.</p>
+<p class="paragraph body-text">Required disclosure language.</p>
+<p class="paragraph body-text">The generator may summarize, reorganize, and explain supported facts. It shall not invent implementation details, test results, user feedback, performance improvements, or project milestones.</p>
+<p class="paragraph body-text">The generator shall produce structured output containing at least:</p>
+<p class="paragraph body-text">Proposed title or opening.</p>
+<p class="paragraph body-text">Proposed post body.</p>
+<p class="paragraph body-text">Project identifier.</p>
+<p class="paragraph body-text">Intended destinations.</p>
+<p class="paragraph body-text">Evidence references.</p>
+<p class="paragraph body-text">Claims requiring validation.</p>
+<p class="paragraph body-text">Draft creation timestamp.</p>
+<p class="paragraph body-text">Acceptance criteria:</p>
+<p class="paragraph body-text">The generated post accurately reflects the evidence supplied to the generator.</p>
+<p class="paragraph body-text">A generation failure does not cause an empty or fabricated post to be published.</p>
+<p class="paragraph body-text">Generated output is treated as untrusted until validated.</p>
+<h3>FR-007 — Claim validation</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall validate proposed publication content before it can be published.</p>
+<p class="paragraph body-text">Validation shall combine deterministic rules with structured claim-to-evidence checks. LLM evaluation may assist with review but shall not override mandatory rules.</p>
+<p class="paragraph body-text">The system shall reject or hold a post if:</p>
+<p class="paragraph body-text">A material factual claim has no supporting evidence.</p>
+<p class="paragraph body-text">A claim contradicts available evidence.</p>
+<p class="paragraph body-text">A test or benchmark result cannot be verified.</p>
+<p class="paragraph body-text">The post claims completion without authorized status evidence.</p>
+<p class="paragraph body-text">The post contains restricted information.</p>
+<p class="paragraph body-text">The post violates project or destination policies.</p>
+<p class="paragraph body-text">The validation process fails or returns an indeterminate result.</p>
+<p class="paragraph body-text">Claims shall be evaluated individually where practical. Unsupported claims may be removed and the remaining post revalidated; otherwise, the entire post shall be held.</p>
+<p class="paragraph body-text">Acceptance criteria:</p>
+<p class="paragraph body-text">A fabricated test result is not published.</p>
+<p class="paragraph body-text">An unsupported “fixed” or “completed” claim is rejected or removed.</p>
+<p class="paragraph body-text">A validation error fails closed.</p>
+<p class="paragraph body-text">Every rejection records a reason and relevant evidence references.</p>
+<h3>FR-008 — Project status enforcement</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">Every project shall have an explicit publication status.</p>
+<p class="paragraph body-text">Supported statuses shall include:</p>
+<p class="paragraph body-text">in_development</p>
+<p class="paragraph body-text">beta</p>
+<p class="paragraph body-text">released</p>
+<p class="paragraph body-text">maintenance</p>
+<p class="paragraph body-text">paused</p>
+<p class="paragraph body-text">archived</p>
+<p class="paragraph body-text">A newly registered project shall default to in_development.</p>
+<p class="paragraph body-text">Status transitions shall be governed by explicit project policy and authoritative evidence or an authorized configuration change.</p>
+<p class="paragraph body-text">A commit, merged pull request, successful test suite, generated post, or elapsed period of time shall not independently establish that a project is ready for general use.</p>
+<p class="paragraph body-text">The system shall include appropriate in-development disclosure when a project is unfinished.</p>
+<p class="paragraph body-text">Acceptance criteria:</p>
+<p class="paragraph body-text">CYN-X remains in_development until its status is explicitly and validly changed.</p>
+<p class="paragraph body-text">Passing tests does not automatically mark a project as released.</p>
+<p class="paragraph body-text">A post cannot describe an unfinished project as production-ready merely because the LLM chooses that wording.</p>
+<p class="paragraph body-text">Status changes are recorded with their source, timestamp, and authorization or evidence.</p>
+<h3>FR-009 — Automatic publication</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall automatically publish validated posts to enabled destinations.</p>
+<p class="paragraph body-text">For v0.1, the initial destination shall be the Barkly Labs website.</p>
+<p class="paragraph body-text">The implementation shall integrate with the existing website deployment workflow after that workflow has been inspected and confirmed.</p>
+<p class="paragraph body-text">Possible mechanisms include generating content files for an existing build-and-deploy pipeline or integrating with an existing authenticated publishing interface. The implementation shall select one based on the actual deployment architecture.</p>
+<p class="paragraph body-text">The system shall not expose an unrestricted public publishing endpoint.</p>
+<p class="paragraph body-text">Acceptance criteria:</p>
+<p class="paragraph body-text">A validated post can be published without manual drafting or approval.</p>
+<p class="paragraph body-text">A failed validation prevents publication.</p>
+<p class="paragraph body-text">A disabled destination receives no new posts.</p>
+<p class="paragraph body-text">Website publication failures are recorded and recoverable.</p>
+<p class="paragraph body-text">Existing website pages and deployment behavior remain intact.</p>
+<h3>FR-010 — Publication state tracking</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">Each publication job shall maintain a persistent state, including:</p>
+<p class="paragraph body-text">queued</p>
+<p class="paragraph body-text">generating</p>
+<p class="paragraph body-text">validating</p>
+<p class="paragraph body-text">ready</p>
+<p class="paragraph body-text">publishing</p>
+<p class="paragraph body-text">published</p>
+<p class="paragraph body-text">retry_pending</p>
+<p class="paragraph body-text">rejected</p>
+<p class="paragraph body-text">failed</p>
+<p class="paragraph body-text">The system shall record timestamps, destination, content version or hash, evidence references, attempt count, external publication identifier where available, and error details.</p>
+<p class="paragraph body-text">A job shall not be marked published until the destination reports success or the system independently confirms publication.</p>
+<h3>FR-011 — Duplicate prevention and idempotency</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall prevent duplicate posts caused by webhook retries, scheduled scans, service restarts, or publication retries.</p>
+<p class="paragraph body-text">It shall use stable event identifiers and publication idempotency keys where supported.</p>
+<p class="paragraph body-text">If a destination does not support idempotent publication, the system shall check the publication ledger and reconcile uncertain outcomes before retrying.</p>
+<h3>FR-012 — Retry and failure recovery</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall retry transient failures using configurable backoff and a maximum retry policy.</p>
+<p class="paragraph body-text">Permanent errors, repeated failures, and ambiguous publication outcomes shall be logged and isolated for recovery.</p>
+<p class="paragraph body-text">A worker restart shall not erase pending jobs or cause previously published posts to be published again.</p>
+<p class="paragraph body-text">Failed jobs shall remain inspectable.</p>
+<h3>FR-013 — Website content presentation</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The initial website integration shall provide a development update feed or equivalent public presentation within the existing Barkly Labs website.</p>
+<p class="paragraph body-text">Each post shall support:</p>
+<p class="paragraph body-text">Project name.</p>
+<p class="paragraph body-text">Publication date.</p>
+<p class="paragraph body-text">Title and body.</p>
+<p class="paragraph body-text">Project status or development disclosure.</p>
+<p class="paragraph body-text">Relevant public source links where appropriate.</p>
+<p class="paragraph body-text">The website integration shall follow the existing Astro site&#x27;s styling and accessibility conventions.</p>
+<p class="paragraph body-text">The implementation shall preserve valid HTML, responsive layout, semantic structure, and readable content.</p>
+<h3>FR-014 — Social media publishing</h3>
+<p class="paragraph body-text">Priority: LATER</p>
+<p class="paragraph body-text">The system shall support separate publishing adapters for selected social platforms.</p>
+<p class="paragraph body-text">Each adapter shall use authorized official APIs and comply with applicable platform rules.</p>
+<p class="paragraph body-text">Each platform shall have independent configuration, credentials, rate limits, content formatting, and publication records.</p>
+<p class="paragraph body-text">Failure on one platform shall not erase a successful publication to another destination.</p>
+<p class="paragraph body-text">Social publishing shall remain disabled until credentials, permissions, and platform integration have been configured and tested.</p>
+<h3>FR-015 — Project-specific writing rules</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall support project-specific language, disclosures, and content restrictions.</p>
+<p class="paragraph body-text">Examples include:</p>
+<p class="paragraph body-text">CYN-X must be described as under development while that status remains active.</p>
+<p class="paragraph body-text">A post may describe regression testing only when supporting evidence establishes that the work occurred.</p>
+<p class="paragraph body-text">A test fix shall not be represented as a fully resolved regression without supporting test evidence.</p>
+<p class="paragraph body-text">A release announcement shall require an actual release and permission under project policy.</p>
+<p class="paragraph body-text">Private or security-sensitive implementation details shall not be published.</p>
+<h3>FR-016 — Publication frequency and grouping</h3>
+<p class="paragraph body-text">Priority: SHOULD</p>
+<p class="paragraph body-text">The system should group related development events into meaningful updates instead of publishing an individual post for every minor commit.</p>
+<p class="paragraph body-text">The system shall support configurable limits on publication frequency and post size.</p>
+<p class="paragraph body-text">It should avoid low-value duplicate content and excessive publishing.</p>
+<p class="paragraph body-text">Rate limiting shall not silently discard important events. Events that cannot immediately be published shall remain queued or be recorded as intentionally suppressed under policy.</p>
+<h3>FR-017 — Configuration management</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall maintain explicit configuration for projects, evidence sources, generation settings, validation rules, and publication destinations.</p>
+<p class="paragraph body-text">Configuration shall be validated before activation.</p>
+<p class="paragraph body-text">Missing or invalid configuration shall disable the affected capability rather than bypass safeguards.</p>
+<p class="paragraph body-text">Secrets shall be supplied through a protected secret-management mechanism or restricted environment configuration, never embedded in source code or generated posts.</p>
+<h3>FR-018 — Logging and operational visibility</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall produce structured logs for:</p>
+<p class="paragraph body-text">Service startup and shutdown.</p>
+<p class="paragraph body-text">Event receipt and validation.</p>
+<p class="paragraph body-text">Evidence collection.</p>
+<p class="paragraph body-text">Draft generation.</p>
+<p class="paragraph body-text">Claim validation.</p>
+<p class="paragraph body-text">Publication attempts and outcomes.</p>
+<p class="paragraph body-text">Retry scheduling.</p>
+<p class="paragraph body-text">Rejections and failures.</p>
+<p class="paragraph body-text">Configuration errors.</p>
+<p class="paragraph body-text">Logs shall support troubleshooting without exposing credentials, secret values, or unnecessary private content.</p>
+<p class="paragraph body-text">The system should provide a way to determine why a particular post was or was not published.</p>
+<h3>FR-019 — Service operation</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">Barkly Broadcast shall run independently of the main Nginx/Astro web service.</p>
+<p class="paragraph body-text">The service shall:</p>
+<p class="paragraph body-text">Start automatically after system boot.</p>
+<p class="paragraph body-text">Restart after unexpected process failure.</p>
+<p class="paragraph body-text">Run under a dedicated restricted service account.</p>
+<p class="paragraph body-text">Use configurable CPU and memory limits.</p>
+<p class="paragraph body-text">Persist essential state outside ephemeral process memory.</p>
+<p class="paragraph body-text">Support graceful shutdown.</p>
+<p class="paragraph body-text">Avoid interfering with the existing website service.</p>
+<p class="paragraph body-text">A failure of Barkly Broadcast shall not directly stop the website.</p>
+<h3>FR-020 — Security and privacy</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Verify webhook signatures.</p>
+<p class="paragraph body-text">Accept events only from configured sources.</p>
+<p class="paragraph body-text">Restrict file-system and database permissions.</p>
+<p class="paragraph body-text">Protect API credentials.</p>
+<p class="paragraph body-text">Sanitize generated HTML and externally supplied content.</p>
+<p class="paragraph body-text">Prevent unauthorized publication requests.</p>
+<p class="paragraph body-text">Avoid exposing internal administration endpoints publicly.</p>
+<p class="paragraph body-text">Avoid publishing secrets, private logs, or sensitive personal information.</p>
+<p class="paragraph body-text">Keep an audit trail of configuration changes and publication outcomes.</p>
+<h3>FR-021 — Data retention and backups</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The system shall persist the evidence ledger, job queue, project configuration, and publication history in durable storage.</p>
+<p class="paragraph body-text">It shall support backups and recovery of critical state.</p>
+<p class="paragraph body-text">Retention policies shall be configurable, with enough history preserved to audit published content and investigate duplicate or incorrect posts.</p>
+<p class="paragraph body-text">Secrets shall not be included in ordinary database backups unless an explicitly protected secret-backup procedure is used.</p>
+<h3>FR-022 — Testing and verification</h3>
+<p class="paragraph body-text">Priority: MUST</p>
+<p class="paragraph body-text">The implementation shall include automated tests for core behavior.</p>
+<p class="paragraph body-text">At minimum, tests shall cover:</p>
+<p class="paragraph body-text">Valid and invalid webhook signatures.</p>
+<p class="paragraph body-text">Duplicate event processing.</p>
+<p class="paragraph body-text">Evidence-to-claim validation.</p>
+<p class="paragraph body-text">Project status enforcement.</p>
+<p class="paragraph body-text">Missing or contradictory evidence.</p>
+<p class="paragraph body-text">LLM failures and malformed output.</p>
+<p class="paragraph body-text">Privacy and content restrictions.</p>
+<p class="paragraph body-text">Duplicate publication prevention.</p>
+<p class="paragraph body-text">Transient destination errors and retry behavior.</p>
+<p class="paragraph body-text">Worker restarts and persistence.</p>
+<p class="paragraph body-text">Website publishing integration.</p>
+<p class="paragraph body-text">Configuration failures and fail-closed behavior.</p>
+<p class="paragraph body-text">A staging or test mode shall permit end-to-end verification without publishing to the live website.</p>
+<h2>5. Initial project configuration</h2>
+<p class="paragraph body-text">The initial deployment should register projects explicitly rather than monitor every repository accessible to the service.</p>
+<p class="paragraph body-text">Illustrative configuration:</p>
+<p class="paragraph preformatted-text">projects:</p>
+<p class="paragraph preformatted-text">- id: cyn-x</p>
+<p class="paragraph preformatted-text">display_name: CYN-X</p>
+<p class="paragraph preformatted-text">public_status: in_development</p>
+<p class="paragraph preformatted-text">enabled: true</p>
+<p class="paragraph preformatted-text">sources:</p>
+<p class="paragraph preformatted-text">commits: true</p>
+<p class="paragraph preformatted-text">merged_pull_requests: true</p>
+<p class="paragraph preformatted-text">ci_results: true</p>
+<p class="paragraph preformatted-text">releases: true</p>
+<p class="paragraph preformatted-text">publication:</p>
+<p class="paragraph preformatted-text">website: true</p>
+<p class="paragraph preformatted-text">social: false</p>
+<p class="paragraph preformatted-text">automatic: true</p>
+<p class="paragraph preformatted-text">rules:</p>
+<p class="paragraph preformatted-text">require_evidence_for_claims: true</p>
+<p class="paragraph preformatted-text">require_test_evidence_for_test_claims: true</p>
+<p class="paragraph preformatted-text">allow_release_announcements: false</p>
+<p class="paragraph preformatted-text">disclose_development_status: true</p>
+<p class="paragraph body-text">This is a proposed schema, not an existing configuration file. Repository identifiers, branch policies, evidence sources, and actual test-report availability must be confirmed before deployment.</p>
+<h2>6. High-level workflow</h2>
+<p class="paragraph body-text">A GitHub event arrives or a scheduled scan detects new activity.</p>
+<p class="paragraph body-text">The service authenticates and deduplicates the event.</p>
+<p class="paragraph body-text">Relevant development evidence is collected and persisted.</p>
+<p class="paragraph body-text">The service determines whether there is enough meaningful new activity to justify an update.</p>
+<p class="paragraph body-text">The LLM generates a structured draft from the evidence.</p>
+<p class="paragraph body-text">The validation engine checks claims, project status, privacy, and destination policy.</p>
+<p class="paragraph body-text">Invalid or uncertain content is rejected or held.</p>
+<p class="paragraph body-text">Valid content enters the publication queue.</p>
+<p class="paragraph body-text">The destination receives the post.</p>
+<p class="paragraph body-text">The service records the outcome and reconciles uncertain failures.</p>
+<p class="paragraph body-text">Monitoring makes failures and rejected posts inspectable.</p>
+<h2>7. Non-functional requirements</h2>
+<p class="paragraph body-text">Although this document focuses on functionality, the initial implementation shall also meet these operational expectations:</p>
+<p class="paragraph body-text">Reliability: Persistent jobs and recoverable failures.</p>
+<p class="paragraph body-text">Isolation: The publishing worker shall not be a single point of failure for the website.</p>
+<p class="paragraph body-text">Efficiency: Configurable resource limits appropriate for the existing VPS.</p>
+<p class="paragraph body-text">Security: Least-privilege execution and protected credentials.</p>
+<p class="paragraph body-text">Maintainability: Modular event providers, content generation, validation, and destination adapters.</p>
+<p class="paragraph body-text">Traceability: Published factual claims can be traced to supporting evidence.</p>
+<p class="paragraph body-text">Accessibility: Public posts remain readable and accessible on the website.</p>
+<p class="paragraph body-text">Portability: Configuration and core logic should not depend unnecessarily on a specific LLM provider.</p>
+<p class="paragraph body-text">No unverified uptime, performance, or scalability guarantee is implied by this specification.</p>
+<h2>8. Acceptance criteria for v0.1</h2>
+<p class="paragraph body-text">The first release is considered functionally complete when all of the following are demonstrated:</p>
+<p class="paragraph body-text">The worker runs as a separate service on the VPS.</p>
+<p class="paragraph body-text">A configured GitHub repository is monitored through webhooks and scheduled reconciliation.</p>
+<p class="paragraph body-text">New development activity is stored with traceable evidence.</p>
+<p class="paragraph body-text">A post is generated from real activity.</p>
+<p class="paragraph body-text">Unsupported claims and fabricated test results are rejected.</p>
+<p class="paragraph body-text">CYN-X remains marked as in development unless an authorized status change is made.</p>
+<p class="paragraph body-text">A valid post is automatically published to the Barkly Labs website.</p>
+<p class="paragraph body-text">Duplicate events do not produce duplicate posts.</p>
+<p class="paragraph body-text">Failed publication attempts can recover without losing job state.</p>
+<p class="paragraph body-text">Service restarts preserve pending work and publication history.</p>
+<p class="paragraph body-text">Website behavior remains intact when the worker is stopped or restarted.</p>
+<p class="paragraph body-text">Automated tests cover the principal security, validation, and recovery requirements.</p>
+<p class="paragraph body-text">Social media publishing is not required for v0.1.</p>
+<h2>9. Implementation dependencies and unresolved decisions</h2>
+<p class="paragraph body-text">The following must be verified before implementation:</p>
+<p class="paragraph body-text">The actual GitHub repository and deployment workflow for the Astro site.</p>
+<p class="paragraph body-text">Whether /srv/barkly/current is a source checkout, release directory, or built artifact.</p>
+<p class="paragraph body-text">Available VPS CPU, memory, disk, and existing service conventions.</p>
+<p class="paragraph body-text">Which GitHub events and test reports are accessible.</p>
+<p class="paragraph body-text">Whether an LLM will be called through a remote API or an existing reachable model endpoint.</p>
+<p class="paragraph body-text">The preferred website publication mechanism based on the current deployment.</p>
+<p class="paragraph body-text">The public feed route and design conventions.</p>
+<p class="paragraph body-text">Backup and log-retention requirements.</p>
+<p class="paragraph body-text">These are deployment discovery tasks, not reasons to weaken the functional requirements.</p>
+<h2>10. Future extensions</h2>
+<p class="paragraph body-text">Potential future versions may add:</p>
+<p class="paragraph body-text">Social publishing adapters.</p>
+<p class="paragraph body-text">A public development changelog.</p>
+<p class="paragraph body-text">An administrative dashboard.</p>
+<p class="paragraph body-text">Per-project publication calendars.</p>
+<p class="paragraph body-text">Image generation for project updates.</p>
+<p class="paragraph body-text">Release-note compilation.</p>
+<p class="paragraph body-text">Community engagement analytics.</p>
+<p class="paragraph body-text">More repository providers.</p>
+<p class="paragraph body-text">Contributor attribution and configurable author credits.</p>
+<p class="paragraph body-text">Content correction and retraction workflows.</p>
+<p class="paragraph body-text">Any future feature must preserve the same core principles of evidence-based communication, explicit project status, secure operation, and automatic publication only after validation.</p>
+<p class="paragraph body-text">End of document — Barkly Broadcast FRS v0.1</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
