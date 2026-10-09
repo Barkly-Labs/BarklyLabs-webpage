@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Open Substance Information Standard (OSIS) — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Open Substance Information Standard (OSIS)
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\opencart.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Open Substance Information Standard (OSIS)</h1>
+<h2>Functional Requirements Specification — Draft v0.1</h2>
+<p class="paragraph body-text">Project: Barkly Labs
+Status: Draft for community review
+Version: 0.1
+Purpose: Open, interoperable substance information and harm-reduction infrastructure</p>
+<h2>1. Purpose</h2>
+<p class="paragraph body-text">The Open Substance Information Standard (OSIS) defines a vendor-neutral framework for identifying substance-related products, associating products and samples with relevant information, and communicating drug-checking results and uncertainty to the public.</p>
+<p class="paragraph body-text">The system is intended to help people make more informed decisions by making relevant information easier to find, understand, and verify.</p>
+<p class="paragraph body-text">OSIS must distinguish between information supplied by a seller, manufacturer, or community member and information supported by independent testing.</p>
+<p class="paragraph body-text">Core principle: People should be able to access understandable, evidence-based information about substances without needing to trust an unverified label or disclose their identity.</p>
+<h2>2. Scope</h2>
+<p class="paragraph body-text">OSIS covers:</p>
+<p class="paragraph body-text">Product and sample identification.</p>
+<p class="paragraph body-text">Machine-readable identifiers, including QR codes and NFC tags.</p>
+<p class="paragraph body-text">Standardized substance information records.</p>
+<p class="paragraph body-text">Links to qualified drug-checking and laboratory results.</p>
+<p class="paragraph body-text">Reporting of detected substances and relevant testing limitations.</p>
+<p class="paragraph body-text">Community-submitted observations and alerts.</p>
+<p class="paragraph body-text">Provenance, timestamps, and verification status.</p>
+<p class="paragraph body-text">Privacy-preserving public access.</p>
+<p class="paragraph body-text">Interoperability between independent applications and services.</p>
+<p class="paragraph body-text">OSIS does not itself chemically identify substances, certify a product as safe, replace professional laboratory testing, or guarantee the accuracy of submitted records.</p>
+<h2>3. Definitions</h2>
+<p class="paragraph body-text">Product: An item represented as containing a substance or mixture.</p>
+<p class="paragraph body-text">Sample: A specific physical specimen submitted for analysis.</p>
+<p class="paragraph body-text">Batch: A group of products claimed to share a common production or supply origin.</p>
+<p class="paragraph body-text">Identifier: A machine-readable code associated with a product, sample, or record.</p>
+<p class="paragraph body-text">Claimed composition: Information about contents supplied by a manufacturer, seller, or other source that has not necessarily been independently verified.</p>
+<p class="paragraph body-text">Test result: Findings reported by a documented testing process, associated with a particular sample and method.</p>
+<p class="paragraph body-text">Verified record: A record whose source or integrity has been checked according to a documented verification procedure. This does not mean every claim in the record is independently confirmed.</p>
+<p class="paragraph body-text">Unknown: Information that is unavailable, untested, inconclusive, or otherwise not established.</p>
+<h2>4. Functional requirements</h2>
+<h3>FR-001 — Unique record identification</h3>
+<p class="paragraph body-text">The system MUST assign or recognize a unique identifier for each registered record.</p>
+<p class="paragraph body-text">The identifier MUST distinguish a product record from a specific sample&#x27;s testing record.</p>
+<p class="paragraph body-text">The system MUST NOT imply that two physical items have identical contents solely because they share a product or batch identifier.</p>
+<h3>FR-002 — Multiple identification methods</h3>
+<p class="paragraph body-text">Implementations MUST support a documented method of opening a record using a machine-readable identifier.</p>
+<p class="paragraph body-text">The standard SHOULD support QR codes and MAY support NFC tags or other compatible technologies.</p>
+<p class="paragraph body-text">A user MUST also be able to search for publicly available records without owning an NFC-compatible device.</p>
+<h3>FR-003 — Claimed contents</h3>
+<p class="paragraph body-text">A record MUST support the publication of claimed contents when such information is available.</p>
+<p class="paragraph body-text">Each claim MUST identify its source and indicate whether it has been independently confirmed.</p>
+<p class="paragraph body-text">The system MUST NOT automatically classify seller-provided or manufacturer-provided claims as laboratory findings.</p>
+<h3>FR-004 — Sample-specific test results</h3>
+<p class="paragraph body-text">The system MUST support test results associated with an individual sample.</p>
+<p class="paragraph body-text">A test-result record MUST identify, when available:</p>
+<p class="paragraph body-text">The testing organization or service.</p>
+<p class="paragraph body-text">The date of analysis.</p>
+<p class="paragraph body-text">The analytical method or method category.</p>
+<p class="paragraph body-text">The substances reported as detected.</p>
+<p class="paragraph body-text">Reported quantities or concentrations, when measured and provided.</p>
+<p class="paragraph body-text">Relevant limitations, uncertainty, and interpretive notes.</p>
+<p class="paragraph body-text">The sample identifier to which the findings apply.</p>
+<p class="paragraph body-text">Unavailable fields MUST be marked as unknown or not provided rather than fabricated.</p>
+<h3>FR-005 — Distinction between product and sample</h3>
+<p class="paragraph body-text">The system MUST clearly distinguish product-level information from sample-specific findings.</p>
+<p class="paragraph body-text">A result for one sample MUST NOT be presented as proof of the composition of every product sharing its name, packaging, or batch label.</p>
+<p class="paragraph body-text">When a result is associated with a batch, the record MUST explain the basis for that association and its limitations.</p>
+<h3>FR-006 — Testing limitations</h3>
+<p class="paragraph body-text">The system MUST display relevant limitations of each test result.</p>
+<p class="paragraph body-text">A substance not reported as detected MUST NOT automatically be described as absent.</p>
+<p class="paragraph body-text">The system MUST distinguish, where applicable, between:</p>
+<p class="paragraph body-text">Detected.</p>
+<p class="paragraph body-text">Not detected by the reported method.</p>
+<p class="paragraph body-text">Inconclusive.</p>
+<p class="paragraph body-text">Not tested.</p>
+<p class="paragraph body-text">Unknown.</p>
+<h3>FR-007 — Evidence provenance</h3>
+<p class="paragraph body-text">Every substantive claim or test result MUST retain its source information.</p>
+<p class="paragraph body-text">The system MUST record the source type, relevant timestamps, and verification status.</p>
+<p class="paragraph body-text">Records SHOULD preserve a history of material corrections and updates so that changes can be reviewed.</p>
+<h3>FR-008 — Community submissions</h3>
+<p class="paragraph body-text">Implementations MAY accept community-submitted reports, observations, and warnings.</p>
+<p class="paragraph body-text">Community submissions MUST be distinguishable from laboratory results and independently verified information.</p>
+<p class="paragraph body-text">The system SHOULD provide moderation, duplicate-report handling, correction requests, and procedures for flagging potentially misleading submissions.</p>
+<h3>FR-009 — Public warnings</h3>
+<p class="paragraph body-text">The system SHOULD support warnings concerning reported unexpected substances, contamination, or other relevant hazards.</p>
+<p class="paragraph body-text">Warnings MUST include the available evidence, source, publication date, and scope.</p>
+<p class="paragraph body-text">The system MUST NOT generalize a warning beyond the evidence supporting it.</p>
+<h3>FR-010 — Search and discovery</h3>
+<p class="paragraph body-text">Users MUST be able to search records using available identifiers and relevant descriptive fields.</p>
+<p class="paragraph body-text">Implementations SHOULD support searching by substance name, product name, sample identifier, testing organization, date, and location at an appropriately privacy-preserving level.</p>
+<p class="paragraph body-text">Search results MUST display enough context to prevent a result for one sample from being mistaken for a universal finding about a substance or product.</p>
+<h3>FR-011 — Understandable presentation</h3>
+<p class="paragraph body-text">The user interface MUST distinguish claimed information, community reports, and documented test results through clear labels.</p>
+<p class="paragraph body-text">The interface MUST explain important uncertainty in plain language.</p>
+<p class="paragraph body-text">The system MUST NOT display a generic “safe” status merely because a record exists, a product has been tested, or a particular substance was not detected.</p>
+<h3>FR-012 — Open interoperability</h3>
+<p class="paragraph body-text">The standard MUST document its data fields, permitted values, identifier rules, and versioning policy.</p>
+<p class="paragraph body-text">Independent developers MUST be able to implement compatible readers without requiring permission from a single commercial platform.</p>
+<p class="paragraph body-text">The standard SHOULD provide example records, a public schema, and conformance tests.</p>
+<h3>FR-013 — Offline and low-bandwidth access</h3>
+<p class="paragraph body-text">Basic identification MUST NOT require a paid account or a proprietary application.</p>
+<p class="paragraph body-text">Implementations SHOULD provide lightweight public records suitable for low-bandwidth devices.</p>
+<p class="paragraph body-text">Where offline records are supported, the interface MUST indicate when the information was last updated and whether it may be stale.</p>
+<h3>FR-014 — Privacy</h3>
+<p class="paragraph body-text">The system MUST NOT require a person&#x27;s identity merely to read public information.</p>
+<p class="paragraph body-text">Public records MUST NOT contain unnecessary personal information about people who use, possess, or submit samples.</p>
+<p class="paragraph body-text">Implementations MUST document data collection, retention, and sharing practices.</p>
+<p class="paragraph body-text">Location and submission metadata MUST be handled in a way that minimizes risks to contributors.</p>
+<h3>FR-015 — Security and record integrity</h3>
+<p class="paragraph body-text">Implementations MUST validate incoming records and handle malformed or unsupported data safely.</p>
+<p class="paragraph body-text">The standard SHOULD support authenticated publishers and tamper-evident records.</p>
+<p class="paragraph body-text">A valid identifier or digital signature MUST NOT be treated as proof that a substance&#x27;s composition is safe or accurate.</p>
+<h3>FR-016 — Corrections and disputes</h3>
+<p class="paragraph body-text">The system MUST provide a documented process for correcting inaccurate records.</p>
+<p class="paragraph body-text">Material corrections MUST preserve appropriate provenance and timestamps.</p>
+<p class="paragraph body-text">Disputed information MUST be identified as disputed while it is reviewed, where doing so is necessary to prevent misleading presentation.</p>
+<h3>FR-017 — Version compatibility</h3>
+<p class="paragraph body-text">Each record MUST identify the version of the data standard it uses.</p>
+<p class="paragraph body-text">Implementations MUST handle unsupported versions without silently misinterpreting their fields.</p>
+<p class="paragraph body-text">Changes to the standard MUST be documented, and compatibility expectations MUST be defined for each release.</p>
+<h3>FR-018 — Accessibility</h3>
+<p class="paragraph body-text">Public information MUST be presented in a format that supports accessible navigation and understandable text.</p>
+<p class="paragraph body-text">Implementations SHOULD support screen readers, keyboard navigation, mobile devices, and plain-language summaries.</p>
+<h2>5. Minimum information model</h2>
+<p class="paragraph body-text">A conforming implementation MUST support the following conceptual entities:</p>
+<p class="paragraph body-text">Product record: Describes a product and its declared information.</p>
+<p class="paragraph body-text">Sample record: Identifies a particular sample without implying that it represents all similar items.</p>
+<p class="paragraph body-text">Test record: Documents the testing process and its reported findings.</p>
+<p class="paragraph body-text">Substance record: Provides a consistent reference for a substance name or identifier.</p>
+<p class="paragraph body-text">Source record: Describes the origin of a claim or report.</p>
+<p class="paragraph body-text">Warning record: Communicates an evidence-backed warning and its scope.</p>
+<p class="paragraph body-text">Revision record: Documents relevant corrections and updates.</p>
+<p class="paragraph body-text">The exact serialization format and required field definitions will be established in a separate data-schema document.</p>
+<h2>6. Nonfunctional requirements</h2>
+<h3>NFR-001 — Reliability</h3>
+<p class="paragraph body-text">Implementations SHOULD provide predictable behavior for missing, malformed, duplicate, or conflicting records.</p>
+<h3>NFR-002 — Performance</h3>
+<p class="paragraph body-text">Basic public records SHOULD load promptly on ordinary mobile connections. Implementations SHOULD publish performance targets after measuring representative deployments.</p>
+<h3>NFR-003 — Maintainability</h3>
+<p class="paragraph body-text">The standard MUST have a public change history and documented process for proposing and reviewing revisions.</p>
+<h3>NFR-004 — Scalability</h3>
+<p class="paragraph body-text">The information model SHOULD support multiple independent data providers and growing record collections without requiring a single centralized database.</p>
+<h3>NFR-005 — Transparency</h3>
+<p class="paragraph body-text">The standard MUST document the difference between technical conformance, source verification, and the scientific reliability of a test result.</p>
+<h3>NFR-006 — Language</h3>
+<p class="paragraph body-text">Implementations SHOULD allow records and public explanations to be localized while preserving standardized field identifiers and original source information.</p>
+<h2>7. Acceptance criteria</h2>
+<p class="paragraph body-text">An initial conforming implementation MUST demonstrate that:</p>
+<p class="paragraph body-text">A user can open a public record using its supported identifier.</p>
+<p class="paragraph body-text">A record can display claimed contents separately from test results.</p>
+<p class="paragraph body-text">A sample-specific test result cannot silently become a universal product claim.</p>
+<p class="paragraph body-text">Unknown, inconclusive, and not-tested statuses remain distinguishable.</p>
+<p class="paragraph body-text">Test limitations and source information are accessible to the user.</p>
+<p class="paragraph body-text">Community reports are clearly separated from documented laboratory findings.</p>
+<p class="paragraph body-text">Corrections and material record changes can be traced.</p>
+<p class="paragraph body-text">Invalid records and unsupported schema versions are handled explicitly.</p>
+<p class="paragraph body-text">Basic public information can be accessed without a paid account.</p>
+<p class="paragraph body-text">Public browsing does not require unnecessary personal information.</p>
+<p class="paragraph body-text">Another developer can validate the same sample records using the published schema and test suite.</p>
+<h2>8. Out of scope for version 0.1</h2>
+<p class="paragraph body-text">The initial release will not:</p>
+<p class="paragraph body-text">Claim to identify a substance through NFC, QR codes, or packaging alone.</p>
+<p class="paragraph body-text">Guarantee the safety, purity, or authenticity of a product.</p>
+<p class="paragraph body-text">Treat unverified community reports as laboratory-confirmed findings.</p>
+<p class="paragraph body-text">Guarantee that a tested sample represents an entire batch.</p>
+<p class="paragraph body-text">Replace qualified analytical testing or professional interpretation.</p>
+<p class="paragraph body-text">Require a centralized commercial service for all records.</p>
+<h2>9. Development milestones</h2>
+<p class="paragraph body-text">Milestone 1 — Data model: Define the core entities, field names, source types, and uncertainty labels.</p>
+<p class="paragraph body-text">Milestone 2 — Public specification: Publish the normative requirements, example records, and machine-readable schema.</p>
+<p class="paragraph body-text">Milestone 3 — Reference implementation: Develop a basic record reader and validator using synthetic data.</p>
+<p class="paragraph body-text">Milestone 4 — Evidence and provenance: Add test-result records, source attribution, revision history, and verification metadata.</p>
+<p class="paragraph body-text">Milestone 5 — Community review: Seek feedback from harm-reduction organizations, qualified drug-checking services, analytical laboratories, accessibility advocates, and people with lived experience.</p>
+<p class="paragraph body-text">Milestone 6 — Pilot release: Evaluate usability, privacy, data quality, and interoperability before declaring a stable release.</p>
+<h2>10. Guiding principle</h2>
+<p class="paragraph body-text">OSIS exists to make reliable substance information easier to access, not to make unsupported assurances.</p>
+<p class="paragraph body-text">Every record should help a person understand what is known, how it is known, what remains uncertain, and where the evidence came from.</p>
+<p class="paragraph body-text">The standard should be open, transparent, privacy-preserving, and designed around the people who need the information most.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
