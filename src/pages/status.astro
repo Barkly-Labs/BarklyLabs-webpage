@@ -14,115 +14,72 @@ const home = import.meta.env.BASE_URL;
     <SEO title="Service Status | Barkly Labs" description="A human-centered status page for Barkly Labs services." />
   </head>
   <body>
-    <header class="nav-wrap">
-      <nav class="nav" aria-label="Main navigation">
-        <a href={home} class="brand" aria-label="Barkly Labs home">
-          <span class="brand-symbol" aria-hidden="true">◆</span><span>BARKLY LABS</span>
-        </a>
-        <div class="nav-links">
-          <a href={`${home}#principles`}>PHILOSOPHY</a>
-          <a href={`${home}#systems`}>SYSTEMS</a>
-          <a href={`${home}#lab`}>THE LAB</a>
-          <a href={`${home}#process`}>PROCESS</a>
-          <a href={`${home}#community`}>COMMUNITY</a>
-          <a href={`${home}#detroit`}>DETROIT</a>
-        </div>
-        <a href={`${home}#about`} class="nav-status"><span class="status-dot"></span> HUMAN-FIRST</a>
-      </nav>
-    </header>
-
+    <header class="nav-wrap"><nav class="nav" aria-label="Main navigation"><a class="brand" href={home}><span class="paw" aria-hidden="true">🐾</span>Barkly Labs</a><div class="nav-links"><a href={home}>Home</a><a href={`${home}#systems`}>Projects</a><a href={`${home}#lab`}>Research</a><a href={`${home}#community`}>Blog</a><a href={`${home}#about`}>About</a><a href={`${home}status/`} aria-current="page">Status</a></div><a class="github" href="https://github.com/" aria-label="GitHub" title="GitHub">⌘</a></nav></header>
     <main class="page-shell">
-      <div class="eyebrow"><span>STATUS / 01</span><span class="eyebrow-line"></span><span>THE LAB</span></div>
-      <section class="intro">
-        <p class="kicker">BARKLY LABS · SERVICE STATUS</p>
-        <h1>A LITTLE WINDOW<br /><span>INTO THE LAB.</span></h1>
-        <p class="lead">A live look at the small systems that keep the work moving. Clear signals, no panic, and people always come first.</p>
-      </section>
-
-      <section class="status-overview" aria-labelledby="overview-title">
-        <div class="overview-copy">
-          <span class="section-kicker">CURRENT OVERVIEW</span>
-          <h2 id="overview-title">Systems check</h2>
-          <p id="summary" aria-live="polite">Status has not been checked yet.</p>
-        </div>
-        <button id="refresh" class="button button-primary" type="button"><span aria-hidden="true">↻</span> CHECK AGAIN</button>
-      </section>
-
-      <section class="services" aria-label="Hosted services">
-        <article class="service-card" data-service="website" data-url={home} data-kind="page">
-          <div class="card-top"><span class="service-index">01 / PUBLIC</span><span class="service-mark" aria-hidden="true">↗</span></div>
-          <div class="service-icon" aria-hidden="true">◆</div>
-          <p class="service-type">ASTRO · MAIN SITE</p>
-          <h2>Barkly Labs Website</h2>
-          <p class="service-description">The public front door to our human-centered technology work.</p>
-          <div class="service-bottom"><span class="state-dot" aria-hidden="true"></span><span class="state-label" aria-live="polite">Not checked yet</span></div>
-          <a class="card-link" href={home} aria-label="Open Barkly Labs website">OPEN WEBSITE <span aria-hidden="true">↗</span></a>
-        </article>
-
-        <article class="service-card" data-service="worklog" data-url={`${home}worklog/health`} data-kind="health">
-          <div class="card-top"><span class="service-index">02 / WORKSPACE</span><span class="service-mark" aria-hidden="true">⌘</span></div>
-          <div class="service-icon terminal-icon" aria-hidden="true">&gt;_</div>
-          <p class="service-type">Barkly WORK LOGGER</p>
-          <h2>Independent Work Log</h2>
-          <p class="service-description">A Time recored of My Work hours.</p>
-          <div class="service-bottom"><span class="state-dot" aria-hidden="true"></span><span class="state-label" aria-live="polite">Not checked yet</span></div>
-          <a class="card-link" href={`${home}worklog/`} aria-label="Open Independent Work Log">OPEN WORK LOG <span aria-hidden="true">↗</span></a>
-        </article>
-      </section>
-
-      <section class="human-note">
-        <span class="note-mark" aria-hidden="true">✳</span>
-        <div><p class="section-kicker">A HUMAN-FIRST SYSTEM</p><h2>People are people, not numbers.</h2><p>Status checks should make systems easier to understand—not make people feel like they have to understand everything at once.</p></div>
-      </section>
-      <p class="last-checked" id="last-checked">No checks run yet.</p>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-main"><div class="footer-brand"><div class="footer-logo">BARKLY</div><div class="footer-labs">LABS</div></div><div class="footer-tagline">WHERE IMAGINATION<br />BECOMES ENGINEERING.</div></div>
-      <div class="footer-bottom"><span>© {year} BARKLY LABS</span><span>TECHNOLOGY SHOULD ADAPT TO HUMANS.</span><a href={home}>BACK TO MAIN SITE ↑</a></div>
-    </footer>
+      <section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="kicker">SERVICE STATUS</p><h1 id="hero-title">Checking systems…</h1><p class="lead">Barkly Labs service health at a glance. We’ll show verified results here as checks complete.</p><div class="hero-meta"><div><span aria-hidden="true">▣</span><div>Last checked<strong id="last-checked">Not checked yet</strong></div></div><div><span aria-hidden="true">⌁</span><div>Overall status<strong id="overall-status">Unknown</strong></div></div></div></div><img class="mascot" src={`${home}assets/puppygirl-reference.png`} alt="Cheerful blonde puppy-girl mascot with black glasses holding a systems check sign" width="500" height="486" /></section>
+      <section class="status-overview" aria-labelledby="overview-title"><div><h2 id="overview-title">Service status</h2><p id="summary" aria-live="polite">Status has not been checked yet.</p></div><button id="refresh" type="button">↻ Check Again</button></section>
+      <section class="services" aria-label="Hosted services"><article class="service-card" data-service="website" data-url={home} data-kind="page"><div class="service-icon" aria-hidden="true">◇</div><div class="service-info"><h3>Barkly Labs Website</h3><p>Astro · Public website</p><p>The public front door to Barkly Labs' human-centered technology work.</p><a href={home}>Open website ↗</a></div><div class="service-state"><span class="state-dot" aria-hidden="true"></span><span class="state-label" aria-live="polite">Unknown</span></div></article>
+      <article class="service-card" data-service="worklog" data-kind="unverified"><div class="service-icon" aria-hidden="true">▤</div><div class="service-info"><h3>Independent Work Log</h3><p>FastAPI · Work activity</p><p>Independent development time, progress, and notes.</p><a href={`${home}worklog/`}>Open work log ↗</a></div><div class="service-state"><span class="state-dot" aria-hidden="true"></span><span class="state-label" aria-live="polite">Unknown</span></div></article></section>
+      <section class="detroit"><div class="detroit-art"><img src={`${home}assets/detroit-reference.png`} alt="" aria-hidden="true" /></div><aside class="detroit-card"><span aria-hidden="true">♥</span><h2>Built in Detroit</h2><p>Independent technology for a more humane, private, and open internet.</p></aside></section>
+      <section class="human-note"><h2>People are people, not numbers.</h2><p>Status checks should make systems easier to understand—not make people feel like they have to understand everything at once.</p></section>
+    </main><footer class="footer">© {year} Barkly Labs · Technology should adapt to humans.</footer>
 
     <script>
       const refreshButton = document.querySelector<HTMLButtonElement>("#refresh");
       const summary = document.querySelector<HTMLElement>("#summary");
       const lastChecked = document.querySelector<HTMLElement>("#last-checked");
+      const overallStatus = document.querySelector<HTMLElement>("#overall-status");
+      const heroTitle = document.querySelector<HTMLElement>("#hero-title");
       const cards = Array.from(document.querySelectorAll<HTMLElement>(".service-card"));
 
-      function setState(card: HTMLElement, state: "online" | "offline" | "unknown", label: string) {
+      type ServiceState = "online" | "degraded" | "offline" | "unknown";
+      function setState(card: HTMLElement, state: ServiceState, label: string) {
         card.dataset.state = state;
-        const stateLabel = card.querySelector<HTMLElement>(".state-label");
-        if (stateLabel) stateLabel.textContent = label;
+        const target = card.querySelector<HTMLElement>(".state-label");
+        if (target) target.textContent = label;
       }
 
-      async function checkService(card: HTMLElement) {
+      async function checkService(card: HTMLElement): Promise<ServiceState> {
+        // The work-log health endpoint is not verified in this repository.
+        // Do not invent a URL or interpret a login page as a successful health check.
+        if (card.dataset.kind === "unverified") {
+          setState(card, "unknown", "Health endpoint not configured");
+          return "unknown";
+        }
         const url = card.dataset.url;
-        const kind = card.dataset.kind;
-        if (!url) return "unknown" as const;
+        if (!url) { setState(card, "unknown", "No check URL"); return "unknown"; }
         setState(card, "unknown", "Checking…");
         const controller = new AbortController();
         const timeout = window.setTimeout(() => controller.abort(), 4500);
         try {
-          const response = await fetch(url, { method: kind === "page" ? "HEAD" : "GET", cache: "no-store", signal: controller.signal });
-          // A 401/403 still proves the service answered; it may simply require authentication.
-          const healthy = response.ok || response.status === 401 || response.status === 403;
-          setState(card, healthy ? "online" : "offline", healthy ? "Responding" : `HTTP ${response.status}`);
-          return healthy ? "online" as const : "offline" as const;
+          const response = await fetch(url, { method: "GET", cache: "no-store", signal: controller.signal, redirect: "follow" });
+          if (response.ok && response.headers.get("content-type")?.includes("text/html")) {
+            setState(card, "online", "Website responded successfully");
+            return "online";
+          }
+          if (response.ok) { setState(card, "unknown", "Unexpected response format"); return "unknown"; }
+          if (response.status >= 500) { setState(card, "degraded", `Server returned HTTP ${response.status}`); return "degraded"; }
+          setState(card, "unknown", `HTTP ${response.status} — health unconfirmed`);
+          return "unknown";
         } catch {
-          setState(card, "offline", "Could not reach service");
-          return "offline" as const;
-        } finally {
-          window.clearTimeout(timeout);
-        }
+          // Fetch failures may reflect browser policy, transient networking or timeout.
+          setState(card, "unknown", "Could not verify from this browser");
+          return "unknown";
+        } finally { window.clearTimeout(timeout); }
       }
 
       async function checkAll() {
-        if (refreshButton) refreshButton.setAttribute("disabled", "true");
-        if (summary) summary.textContent = "Checking the two services…";
-        const results = await Promise.all(cards.map(checkService));
-        const online = results.filter((result) => result === "online").length;
-        if (summary) summary.textContent = online === results.length ? "Both services are responding." : `${online} of ${results.length} services are responding.`;
-        if (lastChecked) lastChecked.textContent = `LAST CHECKED · ${new Date().toLocaleString()}`;
-        if (refreshButton) refreshButton.removeAttribute("disabled");
+        if (refreshButton) refreshButton.disabled = true;
+        if (summary) summary.textContent = "Checking available service signals…";
+        try {
+          const results = await Promise.all(cards.map(checkService));
+          const online = results.filter((r) => r === "online").length;
+          const uncertain = results.filter((r) => r === "unknown").length;
+          if (summary) summary.textContent = `${online} of ${results.length} services confirmed responding. ${uncertain ? `${uncertain} unverified.` : ""}`;
+          if (overallStatus) overallStatus.textContent = results.every(r => r === "online") ? "Operational" : results.some(r => r === "offline") ? "Issue detected" : "Partially verified";
+          if (heroTitle) heroTitle.textContent = results.every(r => r === "online") ? "All systems operational" : results.some(r => r === "offline") ? "Service interruption" : "System status at a glance";
+          if (lastChecked) lastChecked.textContent = new Date().toLocaleString();
+        } finally { if (refreshButton) refreshButton.disabled = false; }
       }
 
       refreshButton?.addEventListener("click", checkAll);
@@ -132,66 +89,22 @@ const home = import.meta.env.BASE_URL;
 </html>
 
 <style>
-  :global(*) { box-sizing: border-box; }
-  :global(html) { background: #050505; scroll-behavior: smooth; }
-  :global(body) { margin: 0; background: #050505; color: #f2f2f2; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-  :global(a) { color: inherit; text-decoration: none; }
-  :global(a:focus-visible), :global(button:focus-visible) { outline: 2px solid #ff4fa3; outline-offset: 4px; }
-  .nav-wrap { position: sticky; top: 0; z-index: 10; background: rgba(5,5,5,.94); backdrop-filter: blur(14px); }
-  .nav { display:flex; align-items:center; justify-content:space-between; gap:24px; width:100%; padding:24px 5vw; border-bottom:1px solid rgba(255,255,255,.08); }
-  .brand { display:flex; align-items:center; gap:10px; white-space:nowrap; font-family:"Courier New",monospace; font-size:11px; font-weight:700; letter-spacing:.18em; }
-  .brand-symbol { color:#ff4fa3; font-size:14px; }
-  .nav-links { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:clamp(12px, 1.8vw, 28px); }
-  .nav-links a, .nav-status { color:rgba(255,255,255,.54); font-family:"Courier New",monospace; font-size:9px; letter-spacing:.12em; transition:color .2s; }
-  .nav-links a:hover, .nav-status:hover { color:#ff4fa3; }
-  .nav-status { display:flex; align-items:center; gap:8px; white-space:nowrap; }
-  .status-dot { width:6px; height:6px; border-radius:50%; background:#ff4fa3; box-shadow:0 0 12px rgba(255,79,163,.7); }
-  .page-shell { width:min(1120px, 90vw); margin:0 auto; padding:76px 0 90px; }
-  .eyebrow { display:flex; align-items:center; gap:14px; color:#ff4fa3; font:10px "Courier New",monospace; letter-spacing:.16em; }
-  .eyebrow-line { height:1px; width:52px; background:#ff4fa3; opacity:.7; }
-  .intro { max-width:800px; padding:54px 0 48px; }
-  .kicker, .section-kicker { color:#ff4fa3; font:10px "Courier New",monospace; letter-spacing:.16em; }
-  h1 { margin:18px 0 20px; font-size:clamp(42px, 7vw, 82px); line-height:.98; letter-spacing:-.065em; font-weight:650; }
-  h1 span { color:#ff4fa3; }
-  .lead { max-width:610px; color:#a5a5aa; font-size:clamp(15px, 1.6vw, 18px); line-height:1.8; }
-  .status-overview { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:22px 0; border-top:1px solid #262626; border-bottom:1px solid #262626; }
-  .status-overview h2 { margin:8px 0 5px; font-size:22px; font-weight:550; }
-  .status-overview p { margin:0; color:#a5a5aa; font-size:13px; }
-  .button { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:42px; padding:0 17px; border:1px solid #ff4fa3; font:10px "Courier New",monospace; letter-spacing:.1em; }
-  .button-primary { background:#ff4fa3; color:#050505; transition:background .2s, color .2s; }
-  .button-primary:hover { background:transparent; color:#ff4fa3; }
-  .button:disabled { opacity:.55; cursor:wait; }
-  .services { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; padding-top:26px; }
-  .service-card { position:relative; display:flex; flex-direction:column; min-height:340px; padding:24px; border:1px solid #2a2a2d; background:linear-gradient(145deg, #101012, #080809); transition:border-color .2s, transform .2s; }
-  .service-card:hover { border-color:rgba(255,79,163,.55); transform:translateY(-2px); }
-  .card-top { display:flex; justify-content:space-between; align-items:center; }
-  .service-index, .service-type { color:#8d8d95; font:9px "Courier New",monospace; letter-spacing:.13em; }
-  .service-mark { color:#ff4fa3; font-size:18px; }
-  .service-icon { display:flex; align-items:center; justify-content:center; width:48px; height:48px; margin:27px 0 20px; border:1px solid rgba(255,79,163,.4); color:#ff4fa3; font-size:20px; }
-  .terminal-icon { font:16px "Courier New",monospace; }
-  .service-type { margin:0 0 8px; }
-  .service-card h2 { margin:0 0 10px; font-size:23px; font-weight:550; letter-spacing:-.035em; }
-  .service-description { margin:0; max-width:430px; color:#a5a5aa; font-size:13px; line-height:1.7; }
-  .service-bottom { display:flex; align-items:center; gap:9px; margin-top:auto; padding:25px 0 17px; color:#d4d4d8; font:10px "Courier New",monospace; letter-spacing:.05em; }
-  .state-dot { width:7px; height:7px; border-radius:50%; background:#858585; }
-  .service-card[data-state="online"] .state-dot { background:#62c995; box-shadow:0 0 10px rgba(98,201,149,.35); }
-  .service-card[data-state="offline"] .state-dot { background:#d7a04b; }
-  .service-card[data-state="unknown"] .state-dot { background:#858585; }
-  .card-link { display:flex; justify-content:space-between; align-items:center; padding-top:15px; border-top:1px solid #29292c; color:#ff4fa3; font:10px "Courier New",monospace; letter-spacing:.12em; }
-  .card-link:hover { color:#fff; }
-  .human-note { display:flex; gap:20px; align-items:flex-start; margin-top:64px; padding:28px; border:1px solid #29292c; background:#0b0b0d; }
-  .note-mark { color:#ff4fa3; font-size:26px; }
-  .human-note h2 { margin:8px 0; font-size:clamp(20px, 3vw, 30px); letter-spacing:-.04em; }
-  .human-note p:last-child { max-width:650px; margin-bottom:0; color:#a5a5aa; font-size:13px; line-height:1.8; }
-  .last-checked { margin-top:24px; color:#77777f; text-align:right; font:9px "Courier New",monospace; letter-spacing:.1em; }
-  .footer { padding:40px 5vw 22px; border-top:1px solid rgba(255,255,255,.08); }
-  .footer-main { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding-bottom:32px; }
-  .footer-logo { font-size:32px; font-weight:800; letter-spacing:-.07em; }
-  .footer-labs { color:#ff4fa3; font:10px "Courier New",monospace; letter-spacing:.35em; }
-  .footer-tagline { color:#aaa; font:12px/1.7 "Courier New",monospace; letter-spacing:.12em; text-align:right; }
-  .footer-bottom { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; padding-top:18px; border-top:1px solid #242424; color:#777; font:9px "Courier New",monospace; letter-spacing:.08em; }
-  .footer-bottom a:hover { color:#ff4fa3; }
-  @media (max-width: 900px) { .nav { align-items:flex-start; flex-wrap:wrap; } .nav-links { order:3; width:100%; justify-content:flex-start; } .nav-status { margin-left:auto; } }
-  @media (max-width: 620px) { .page-shell { padding-top:48px; } .nav { padding:18px 5vw; } .nav-links { gap:12px 16px; } .nav-links a { font-size:8px; } .nav-status { font-size:8px; } .status-overview { align-items:flex-start; flex-direction:column; } .services { grid-template-columns:1fr; } .service-card { min-height:310px; } .human-note { padding:20px; } .footer-main { align-items:flex-start; flex-direction:column; } .footer-tagline { text-align:left; } }
-  @media (prefers-reduced-motion: reduce) { :global(html) { scroll-behavior:auto; } *, *::before, *::after { transition:none !important; } }
+:global(*){box-sizing:border-box} :global(html){background:#080808} :global(body){margin:0;color:#f3f3f3;background:radial-gradient(ellipse at 65% 15%,#151315 0%,#080808 53%);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif} :global(a){color:inherit;text-decoration:none} :global(a:focus-visible),:global(button:focus-visible){outline:2px solid #ff4fa3;outline-offset:4px}
+.nav-wrap{border-bottom:1px solid #29272a}.nav{max-width:1460px;margin:auto;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-size:clamp(21px,2.3vw,32px);font-weight:750;letter-spacing:-.05em;white-space:nowrap;display:flex;align-items:center;gap:12px}.paw{font-size:36px;color:#ff4fa3}.nav-links{display:flex;align-items:center;gap:clamp(16px,3.5vw,54px)}.nav-links a{font-size:15px;padding:14px 0}.nav-links a:hover,.nav-links a[aria-current]{color:#ff4fa3}.nav-links a[aria-current]{border-bottom:3px solid #ff4fa3}.github{font-size:25px}
+.page-shell{max-width:1460px;margin:auto;padding:0 5%}.hero{min-height:425px;display:grid;grid-template-columns:minmax(0,1.9fr) minmax(260px,1fr);position:relative;align-items:center;overflow:hidden}.hero-copy{position:relative;z-index:1;padding:55px 0 38px}.kicker{color:#ff4fa3;font-size:12px;font-weight:750;letter-spacing:.28em}.hero h1{font-size:clamp(42px,5.6vw,82px);letter-spacing:-.055em;line-height:1.07;margin:18px 0;font-weight:790}.lead{font-size:clamp(16px,1.65vw,23px);color:#b5b1bc;line-height:1.5;max-width:760px}.mascot{width:100%;max-height:450px;object-fit:contain;object-position:center bottom;align-self:end;filter:drop-shadow(0 0 20px #050505)}.hero-meta{display:flex;gap:42px;margin-top:34px}.hero-meta>div{display:flex;gap:16px;align-items:center;color:#b5b1bc;font-size:14px}.hero-meta>div+div{border-left:1px solid #39373a;padding-left:32px}.hero-meta span{font-size:28px}.hero-meta strong{display:block;color:#e7e7e7;font-size:14px;margin-top:4px;font-weight:550}#overall-status{color:#ffb3d5}
+.status-overview{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:12px}.status-overview h2{font-size:27px;letter-spacing:-.04em;margin:0 0 3px}.status-overview p{margin:0;color:#a9a5af;font-size:14px}#refresh{border:1px solid #5a4b55;background:#171115;color:#ff8bbb;border-radius:6px;padding:10px 15px;cursor:pointer}#refresh:hover{border-color:#ff4fa3}#refresh:disabled{opacity:.5;cursor:wait}
+.services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:20px}.service-card{position:relative;display:flex;gap:18px;min-height:170px;padding:23px;border:1px solid #39373b;border-radius:12px;background:linear-gradient(130deg,#151315,#0a0a0b)}.service-card:hover{border-color:#ff4fa3}.service-icon{border:1px solid #696670;border-radius:12px;flex:none;width:62px;height:62px;display:grid;place-items:center;font-size:34px}.service-info{padding-right:110px}.service-info h3{font-size:20px;letter-spacing:-.035em;margin:6px 0 12px}.service-info p{font-size:13px;color:#aaa7b0;line-height:1.45;margin:3px 0}.service-info a{display:inline-block;color:#ff79b4;font-size:13px;margin-top:10px}.service-state{position:absolute;right:18px;top:32px;display:flex;align-items:center;gap:9px;font-size:12px;color:#b9b9b9;max-width:120px}.state-dot{flex:none;width:11px;height:11px;border-radius:50%;background:#999}.service-card[data-state="online"] .state-dot{background:#59d77b;box-shadow:0 0 9px #59d77b88}.service-card[data-state="degraded"] .state-dot{background:#ffb65c}.service-card[data-state="offline"] .state-dot{background:#ed5d67}
+.detroit{display:grid;grid-template-columns:minmax(0,1fr) 250px;align-items:end;gap:30px;margin-top:35px}.detroit-art{position:relative;min-width:0}.detroit-art img{display:block;width:100%;height:205px;object-fit:fill;filter:drop-shadow(0 0 8px #ff4fa345)}.detroit-script{position:absolute;right:8%;top:14%;color:#ff4fa3;font-size:30px;font-family:cursive;transform:rotate(-10deg)}.detroit-card{border:1px solid #3a3038;border-top:2px solid #ff4fa3;border-radius:12px;padding:22px;background:#0c0c0d;min-height:158px}.detroit-card span{font-size:26px;color:#ff4fa3}.detroit-card h2{font-size:17px;margin:5px 0}.detroit-card p{color:#aba7b1;font-size:13px;line-height:1.55;margin:8px 0 0}.human-note{margin:32px 0 60px;border-top:1px solid #30252d;padding-top:24px}.human-note h2{font-size:20px}.human-note p{font-size:14px;color:#a9a5af}.footer{padding:25px 5%;border-top:1px solid #32232b;color:#999;font-size:12px;text-align:center}
+@media(max-width:1000px){.nav-links{gap:16px}.hero{grid-template-columns:1.4fr 1fr}.service-info{padding-right:0}.service-state{position:static;align-self:flex-start;margin-left:auto;max-width:110px}.service-card{flex-wrap:wrap}.service-info{flex:1;min-width:170px}}
+@media(max-width:680px){.nav{flex-wrap:wrap}.nav-links{order:3;width:100%;overflow-x:auto;justify-content:space-between}.nav-links a{white-space:nowrap;font-size:12px}.hero{display:flex;flex-direction:column;align-items:stretch}.hero-copy{padding:35px 0 0}.hero h1{font-size:clamp(39px,10vw,60px)}.mascot{max-height:310px;max-width:340px;align-self:center}.hero-meta{gap:18px}.hero-meta>div+div{padding-left:18px}.services{grid-template-columns:1fr}.detroit{grid-template-columns:1fr}.detroit-card{min-height:unset}.status-overview{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+
+<style>
+:global(body){background:#090909!important;color:#f4f4f4!important}
+.nav-wrap{background:#0b0b0b}.nav{max-width:1536px;padding:15px 5%;min-height:80px}.nav-links{gap:clamp(20px,3.7vw,58px)}.nav-links a{font-size:16px}.brand{font-size:32px}.paw{font-size:30px}
+.page-shell{max-width:1536px;padding:0 5%}.hero{min-height:400px;grid-template-columns:minmax(0,2fr) minmax(300px,.98fr);overflow:visible}.hero-copy{padding:45px 0 34px}.kicker{font-size:13px;letter-spacing:.28em}.hero h1{font-size:clamp(45px,5.3vw,79px);letter-spacing:-.055em;line-height:1.06;white-space:normal;max-width:1000px;margin:21px 0 18px}.lead{font-size:clamp(17px,1.7vw,24px);max-width:780px;line-height:1.5}.mascot{width:100%;max-width:500px;max-height:475px;object-fit:contain;align-self:end;object-position:center bottom;filter:none;mix-blend-mode:lighten}.hero-meta{margin-top:34px}.hero-meta strong{font-size:16px}
+.status-overview{margin-top:10px}.status-overview h2{font-size:30px}.status-overview p{font-size:16px}.services{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:17px}.service-card{min-height:164px;border-radius:12px;background:#0d0d0e;padding:24px}.service-info h3{font-size:21px}.service-info p{font-size:15px}.service-state{font-size:13px}.detroit{margin-top:15px;grid-template-columns:minmax(0,1fr) 255px;gap:0;align-items:end}.detroit-art{margin-left:-5.5vw;margin-right:0}.detroit-art img{height:269px;object-fit:fill;filter:none}.detroit-card{margin-bottom:38px;min-height:174px;background:#0d0d0e}.human-note{margin-top:0}
+@media(max-width:1000px){.hero h1{font-size:clamp(43px,6vw,65px)}.mascot{max-height:390px}.service-info{padding-right:0}.detroit-art img{height:210px}}
+@media(max-width:680px){.nav{padding:15px 5%}.brand{font-size:26px}.hero{min-height:0;display:flex;flex-direction:column}.hero h1{font-size:clamp(40px,10vw,62px)}.hero-copy{padding:36px 0 0}.mascot{width:min(100%,370px);max-height:350px}.services{grid-template-columns:1fr}.detroit{grid-template-columns:1fr}.detroit-art{margin:0 -5.5vw}.detroit-art img{height:auto;min-height:130px}.detroit-card{margin:0 0 20px}.human-note{margin-top:15px}}
 </style>
