@@ -760,8 +760,34 @@ const lastUpdated =
       )}
 
       <!-- PROJECT CARDS -->
-      {repositories.length > 0 ? (
-        <div class="project-grid">
+      <div class="project-grid">
+          <a
+            class="project-card"
+            href={`${import.meta.env.BASE_URL}status/`}
+            aria-label="View Barkly Labs Service Status page"
+          >
+            <div class="project-top">
+              <span class="project-number" aria-hidden="true">↗</span>
+              <span class="status unknown">SERVICE DASHBOARD</span>
+            </div>
+            <div class="project-type">BARKLY LABS / SERVICE HEALTH</div>
+            <h3>Service Status</h3>
+            <p class="project-description">
+              Check the status of Barkly Labs services and infrastructure.
+              Here's where you can see how the little systems keeping our lab running are doing.
+            </p>
+            <div class="project-meta">
+              <div><span>TYPE</span><strong>STATUS PAGE</strong></div>
+              <div><span>UPDATES</span><strong>ON DEMAND</strong></div>
+            </div>
+            <div class="commit-info">
+              <span>LIVE SERVICE HEALTH, AVAILABILITY, AND UPDATES</span>
+            </div>
+            <div class="project-link">
+              <span>VIEW SERVICE STATUS</span>
+              <span class="project-link-arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
           {repositories.map((project, index) => (
             <a
               class="project-card"
@@ -878,7 +904,7 @@ const lastUpdated =
             </a>
           ))}
         </div>
-      ) : (
+      {repositories.length === 0 && (
         <div class="empty">
           <div class="empty-mark">
             [ ! ]

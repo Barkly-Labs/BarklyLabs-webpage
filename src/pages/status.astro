@@ -14,15 +14,27 @@ const home = import.meta.env.BASE_URL;
     <SEO title="Service Status | Barkly Labs" description="A human-centered status page for Barkly Labs services." />
   </head>
   <body>
-    <header class="nav-wrap"><nav class="nav" aria-label="Main navigation"><a class="brand" href={home}><span class="paw" aria-hidden="true">🐾</span>Barkly Labs</a><div class="nav-links"><a href={home}>Home</a><a href={`${home}#systems`}>Projects</a><a href={`${home}#lab`}>Research</a><a href={`${home}#community`}>Blog</a><a href={`${home}#about`}>About</a><a href={`${home}status/`} aria-current="page">Status</a></div><a class="github" href="https://github.com/" aria-label="GitHub" title="GitHub">⌘</a></nav></header>
+    <header class="nav-wrap">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href={home} aria-label="Barkly Labs homepage"><span class="paw" aria-hidden="true">🐾</span>Barkly Labs</a>
+        <div class="nav-links">
+          <a href='/'>Home</a>
+          <a href=/projects>Projects</a>
+          <a href={`${home}#lab`}>Research</a>
+          <a href={`${home}#about`}>About</a>
+          <a href={`${home}status/`} aria-current="page">Status</a>
+        </div>
+        <a class="github" href="https://github.com/barkly-labs" aria-label="Barkly Labs on GitHub" title="GitHub">↗</a>
+      </nav>
+    </header>
     <main class="page-shell">
-      <section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="kicker">SERVICE STATUS</p><h1 id="hero-title">Checking systems…</h1><p class="lead">Barkly Labs service health at a glance. We’ll show verified results here as checks complete.</p><div class="hero-meta"><div><span aria-hidden="true">▣</span><div>Last checked<strong id="last-checked">Not checked yet</strong></div></div><div><span aria-hidden="true">⌁</span><div>Overall status<strong id="overall-status">Unknown</strong></div></div></div></div><img class="mascot" src={`${home}assets/puppygirl-reference.png`} alt="Cheerful blonde puppy-girl mascot with black glasses holding a systems check sign" width="500" height="486" /></section>
-      <section class="status-overview" aria-labelledby="overview-title"><div><h2 id="overview-title">Service status</h2><p id="summary" aria-live="polite">Status has not been checked yet.</p></div><button id="refresh" type="button">↻ Check Again</button></section>
-      <section class="services" aria-label="Hosted services"><article class="service-card" data-service="website" data-url={home} data-kind="page"><div class="service-icon" aria-hidden="true">◇</div><div class="service-info"><h3>Barkly Labs Website</h3><p>Astro · Public website</p><p>The public front door to Barkly Labs' human-centered technology work.</p><a href={home}>Open website ↗</a></div><div class="service-state"><span class="state-dot" aria-hidden="true"></span><span class="state-label" aria-live="polite">Unknown</span></div></article>
-      <article class="service-card" data-service="worklog" data-kind="unverified"><div class="service-icon" aria-hidden="true">▤</div><div class="service-info"><h3>Independent Work Log</h3><p>FastAPI · Work activity</p><p>Independent development time, progress, and notes.</p><a href={`${home}worklog/`}>Open work log ↗</a></div><div class="service-state"><span class="state-dot" aria-hidden="true"></span><span class="state-label" aria-live="polite">Unknown</span></div></article></section>
-      <section class="detroit"><div class="detroit-art"><img src={`${home}assets/detroit-reference.png`} alt="" aria-hidden="true" /></div><aside class="detroit-card"><span aria-hidden="true">♥</span><h2>Built in Detroit</h2><p>Independent technology for a more humane, private, and open internet.</p></aside></section>
+      <section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="kicker">A LITTLE WINDOW INTO THE LAB ♡</p><h1 id="hero-title">Checking systems…</h1><p class="lead">A cozy little peek at what keeps the lab running. Clear signals, no panic — people always come first. ♡</p><div class="hero-meta"><div><span aria-hidden="true">▣</span><div>Last checked<strong id="last-checked">Not checked yet</strong></div></div><div><span aria-hidden="true">⌁</span><div>Overall status<strong id="overall-status">Unknown</strong></div></div></div></div><img class="mascot" src={`${home}assets/puppygirl-reference.png`} alt="Cheerful blonde puppy-girl mascot with black glasses holding a systems check sign" width="500" height="486" /></section>
+      <section class="status-overview" aria-labelledby="overview-title"><div><h2 id="overview-title">How the lab is doing ♡</h2><p id="summary" aria-live="polite">Status has not been checked yet.</p></div><button id="refresh" type="button">↻ Check again ♡</button></section>
+      <section class="services" aria-label="Barkly Labs services"><article class="service-card" data-service="website" data-url={home} data-kind="page"><div class="service-icon" aria-hidden="true">◇</div><div class="service-info"><h3>Barkly Labs Website</h3><p>Astro · Public website</p><p>The public front door to Barkly Labs' human-centered technology work.</p><a href={home}>Visit the lab ↗</a></div><div class="service-state"><span class="state-dot" aria-hidden="true"></span><span class="state-label" aria-live="polite">Unknown</span></div></article>
+      <article class="service-card" data-service="worklog" data-kind="unverified"><div class="service-icon" aria-hidden="true">▤</div><div class="service-info"><h3>Independent Work Log</h3><p>FastAPI · Work activity</p><p>Independent development time, progress, and notes.</p><a href={`${home}worklog/`}>Peek at the work log ↗</a></div><div class="service-state"><span class="state-dot" aria-hidden="true"></span><span class="state-label" aria-live="polite">Unknown</span></div></article></section>
+      <section class="detroit"><div class="detroit-art"><img src={`${home}assets/detroit-reference.png`} alt="" aria-hidden="true" /></div><aside class="detroit-card"><span aria-hidden="true">♥</span><h2>Made with heart in Detroit ♡</h2><p>A little independent lab making technology kinder, more private, and more human.</p></aside></section>
       <section class="human-note"><h2>People are people, not numbers.</h2><p>Status checks should make systems easier to understand—not make people feel like they have to understand everything at once.</p></section>
-    </main><footer class="footer">© {year} Barkly Labs · Technology should adapt to humans.</footer>
+    </main><footer class="footer">© {year} Barkly Labs · Made for humans, with heart. ♡</footer>
 
     <script>
       const refreshButton = document.querySelector<HTMLButtonElement>("#refresh");
@@ -107,4 +119,17 @@ const home = import.meta.env.BASE_URL;
 .status-overview{margin-top:10px}.status-overview h2{font-size:30px}.status-overview p{font-size:16px}.services{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:17px}.service-card{min-height:164px;border-radius:12px;background:#0d0d0e;padding:24px}.service-info h3{font-size:21px}.service-info p{font-size:15px}.service-state{font-size:13px}.detroit{margin-top:15px;grid-template-columns:minmax(0,1fr) 255px;gap:0;align-items:end}.detroit-art{margin-left:-5.5vw;margin-right:0}.detroit-art img{height:269px;object-fit:fill;filter:none}.detroit-card{margin-bottom:38px;min-height:174px;background:#0d0d0e}.human-note{margin-top:0}
 @media(max-width:1000px){.hero h1{font-size:clamp(43px,6vw,65px)}.mascot{max-height:390px}.service-info{padding-right:0}.detroit-art img{height:210px}}
 @media(max-width:680px){.nav{padding:15px 5%}.brand{font-size:26px}.hero{min-height:0;display:flex;flex-direction:column}.hero h1{font-size:clamp(40px,10vw,62px)}.hero-copy{padding:36px 0 0}.mascot{width:min(100%,370px);max-height:350px}.services{grid-template-columns:1fr}.detroit{grid-template-columns:1fr}.detroit-art{margin:0 -5.5vw}.detroit-art img{height:auto;min-height:130px}.detroit-card{margin:0 0 20px}.human-note{margin-top:15px}}
+</style>
+
+<style>
+/* Softer character without replacing the reference artwork or status semantics. */
+.nav-links a { transition: color .18s ease; }
+.nav-links a:hover { color: #ff83bf; }
+.kicker { color: #ff77b7; }
+.service-card { border-color: #45313e; background: linear-gradient(145deg,#151014,#0c0b0d); transition: border-color .18s ease, transform .18s ease; }
+.service-card:hover { border-color:#ff77b7; transform:translateY(-2px); }
+.service-icon { color:#ff90c4; border-color:#715064; }
+.detroit-card { border-color:#644056; border-top-color:#ff4fa3; }
+#refresh { border-radius:999px; }
+@media(prefers-reduced-motion:reduce) { .service-card { transition:none; } .service-card:hover { transform:none; } }
 </style>
