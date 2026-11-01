@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Labs Developer Community Automation — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Labs Developer Community Automation
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\barkly Devleoper COmmunity Automation.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Labs Developer Community Automation</h1>
+<h2>Functional Requirements Specification (FRS)</h2>
+<p class="paragraph body-text">Project: Barkly Labs Developer Community Automation
+Version: 1.0
+Status: Proposed
+Purpose: Automate community engagement and communication while accommodating the founder&#x27;s disabilities and development workflow.</p>
+<h2>1. Project Overview</h2>
+<p class="paragraph body-text">The Barkly Labs Developer Community Automation system is a locally hosted AI-powered tool designed to assist with community management, developer engagement, and project communications.</p>
+<p class="paragraph body-text">The system shall use a locally hosted Small Language Model (SLM) to generate authentic, founder-style community posts based on project activity, development progress, announcements, and configured community goals.</p>
+<p class="paragraph body-text">The primary objective is to reduce the administrative and executive-function burden associated with maintaining an active developer community while allowing the founder to focus on software development.</p>
+<h3>1.1 Design Principles</h3>
+<p class="paragraph body-text">Local-first processing and privacy.</p>
+<p class="paragraph body-text">Human oversight and control.</p>
+<p class="paragraph body-text">Accessibility and disability-inclusive operation.</p>
+<p class="paragraph body-text">Minimal administrative overhead.</p>
+<p class="paragraph body-text">Authentic founder voice preservation.</p>
+<p class="paragraph body-text">Modular and extensible architecture.</p>
+<p class="paragraph body-text">No requirement for continuous founder availability.</p>
+<h2>2. System Scope</h2>
+<h3>2.1 In Scope</h3>
+<p class="paragraph body-text">The system shall support:</p>
+<p class="paragraph body-text">Local LLM integration through Ollama.</p>
+<p class="paragraph body-text">Founder writing-style configuration.</p>
+<p class="paragraph body-text">Project activity ingestion.</p>
+<p class="paragraph body-text">Context-aware community post generation.</p>
+<p class="paragraph body-text">Draft storage and management.</p>
+<p class="paragraph body-text">Human review and approval.</p>
+<p class="paragraph body-text">Scheduled publishing.</p>
+<p class="paragraph body-text">Community platform integration.</p>
+<p class="paragraph body-text">Generation history and audit logging.</p>
+<p class="paragraph body-text">Configurable automation policies.</p>
+<h3>2.2 Out of Scope for Initial Release</h3>
+<p class="paragraph body-text">Fully autonomous conversations with community members.</p>
+<p class="paragraph body-text">Autonomous moderation or member bans.</p>
+<p class="paragraph body-text">Autonomous financial transactions.</p>
+<p class="paragraph body-text">Publishing without configured authorization.</p>
+<p class="paragraph body-text">Training or fine-tuning a model without user approval.</p>
+<p class="paragraph body-text">Managing unrelated personal social media accounts.</p>
+<h2>3. Functional Requirements</h2>
+<h3>FR-001: Local Language Model Integration</h3>
+<p class="paragraph body-text">The system shall integrate with a locally hosted LLM through the Ollama API.</p>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Allow configuration of the Ollama endpoint.</p>
+<p class="paragraph body-text">Allow selection of an installed model.</p>
+<p class="paragraph body-text">Verify model availability before generation.</p>
+<p class="paragraph body-text">Support configurable inference parameters.</p>
+<p class="paragraph body-text">Handle unavailable models and connection failures gracefully.</p>
+<p class="paragraph body-text">Permit model replacement without requiring application redesign.</p>
+<h3>FR-002: Founder Voice Configuration</h3>
+<p class="paragraph body-text">The system shall maintain a configurable founder voice profile.</p>
+<p class="paragraph body-text">The profile shall include:</p>
+<p class="paragraph body-text">Preferred vocabulary and expressions.</p>
+<p class="paragraph body-text">Typical capitalization and punctuation.</p>
+<p class="paragraph body-text">Sentence length and writing patterns.</p>
+<p class="paragraph body-text">Emotional tone and enthusiasm.</p>
+<p class="paragraph body-text">Technical communication preferences.</p>
+<p class="paragraph body-text">Accessibility and community values.</p>
+<p class="paragraph body-text">Examples of previously written posts.</p>
+<p class="paragraph body-text">The system shall use the profile and approved writing samples as generation context.</p>
+<p class="paragraph body-text">The system shall not claim that a model has learned or permanently memorized the founder&#x27;s writing style unless actual model training has occurred.</p>
+<h3>FR-003: Project Context Management</h3>
+<p class="paragraph body-text">The system shall maintain information about Barkly Labs projects.</p>
+<p class="paragraph body-text">Each project record shall support:</p>
+<p class="paragraph body-text">Project name.</p>
+<p class="paragraph body-text">Description.</p>
+<p class="paragraph body-text">Repository or documentation URL.</p>
+<p class="paragraph body-text">Current development status.</p>
+<p class="paragraph body-text">Recent changes.</p>
+<p class="paragraph body-text">Milestones.</p>
+<p class="paragraph body-text">Known challenges.</p>
+<p class="paragraph body-text">Public-facing information.</p>
+<p class="paragraph body-text">Visibility and disclosure restrictions.</p>
+<p class="paragraph body-text">The system shall allow manual context entry and configurable integrations for retrieving project activity.</p>
+<h3>FR-004: Development Activity Ingestion</h3>
+<p class="paragraph body-text">The system shall be capable of collecting development activity from configured sources.</p>
+<p class="paragraph body-text">Potential sources include:</p>
+<p class="paragraph body-text">Git repository commits.</p>
+<p class="paragraph body-text">GitHub issues and pull requests.</p>
+<p class="paragraph body-text">Project changelogs.</p>
+<p class="paragraph body-text">Development notes.</p>
+<p class="paragraph body-text">Markdown documentation.</p>
+<p class="paragraph body-text">Manually entered progress updates.</p>
+<p class="paragraph body-text">The system shall normalize collected information into a structured project activity record.</p>
+<p class="paragraph body-text">The system shall exclude secrets, credentials, private user data, and explicitly restricted information from generation context.</p>
+<h3>FR-005: Context-Aware Post Generation</h3>
+<p class="paragraph body-text">The system shall generate community posts using:</p>
+<p class="paragraph body-text">Founder voice profile.</p>
+<p class="paragraph body-text">Project information.</p>
+<p class="paragraph body-text">Recent development activity.</p>
+<p class="paragraph body-text">Selected community platform.</p>
+<p class="paragraph body-text">Post type.</p>
+<p class="paragraph body-text">Desired communication objective.</p>
+<p class="paragraph body-text">Relevant community context.</p>
+<p class="paragraph body-text">Supported initial post types shall include:</p>
+<p class="paragraph body-text">Development progress updates.</p>
+<p class="paragraph body-text">Project announcements.</p>
+<p class="paragraph body-text">Feature demonstrations.</p>
+<p class="paragraph body-text">Community questions.</p>
+<p class="paragraph body-text">Technical explanations.</p>
+<p class="paragraph body-text">Calls for contributors.</p>
+<p class="paragraph body-text">Milestone celebrations.</p>
+<p class="paragraph body-text">Project roadmaps.</p>
+<p class="paragraph body-text">The system shall generate one or more candidate drafts when requested.</p>
+<h3>FR-006: Draft Management</h3>
+<p class="paragraph body-text">The system shall save generated posts as drafts before publication.</p>
+<p class="paragraph body-text">Each draft shall contain:</p>
+<p class="paragraph body-text">Unique identifier.</p>
+<p class="paragraph body-text">Generated content.</p>
+<p class="paragraph body-text">Associated project.</p>
+<p class="paragraph body-text">Target platform.</p>
+<p class="paragraph body-text">Generation timestamp.</p>
+<p class="paragraph body-text">Source activity references.</p>
+<p class="paragraph body-text">Model identifier.</p>
+<p class="paragraph body-text">Approval status.</p>
+<p class="paragraph body-text">Revision history.</p>
+<p class="paragraph body-text">The system shall allow the founder to edit, regenerate, approve, reject, archive, and delete drafts.</p>
+<h3>FR-007: Human Approval Workflow</h3>
+<p class="paragraph body-text">The system shall provide a human approval workflow.</p>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Require explicit approval before publishing by default.</p>
+<p class="paragraph body-text">Allow editing before approval.</p>
+<p class="paragraph body-text">Allow regeneration with additional instructions.</p>
+<p class="paragraph body-text">Display the intended destination before publication.</p>
+<p class="paragraph body-text">Record approval and publication timestamps.</p>
+<p class="paragraph body-text">Prevent rejected drafts from being published.</p>
+<p class="paragraph body-text">Support configurable automation policies for specific low-risk content categories.</p>
+<h3>FR-008: Scheduled Publishing</h3>
+<p class="paragraph body-text">The system shall allow approved posts to be scheduled for future publication.</p>
+<p class="paragraph body-text">The system shall support:</p>
+<p class="paragraph body-text">Configurable date and time.</p>
+<p class="paragraph body-text">Time zone selection.</p>
+<p class="paragraph body-text">Draft cancellation.</p>
+<p class="paragraph body-text">Schedule modification.</p>
+<p class="paragraph body-text">Publication status tracking.</p>
+<p class="paragraph body-text">Retry policies for transient failures.</p>
+<p class="paragraph body-text">Duplicate-publication prevention.</p>
+<p class="paragraph body-text">The system shall not publish a post that has not satisfied its configured approval requirements.</p>
+<h3>FR-009: Community Platform Integration</h3>
+<p class="paragraph body-text">The system shall provide a modular integration layer for community platforms.</p>
+<p class="paragraph body-text">The initial implementation shall prioritize Discord.</p>
+<p class="paragraph body-text">The integration shall support, where permitted by platform APIs:</p>
+<p class="paragraph body-text">Destination selection.</p>
+<p class="paragraph body-text">Message publishing.</p>
+<p class="paragraph body-text">Publication result tracking.</p>
+<p class="paragraph body-text">Authentication management.</p>
+<p class="paragraph body-text">Connection verification.</p>
+<p class="paragraph body-text">API error handling.</p>
+<p class="paragraph body-text">Additional platforms shall be supported through modular adapters without requiring changes to the core generation system.</p>
+<h3>FR-010: Background Processing</h3>
+<p class="paragraph body-text">The system shall support asynchronous processing for:</p>
+<p class="paragraph body-text">Project activity collection.</p>
+<p class="paragraph body-text">Context updates.</p>
+<p class="paragraph body-text">Post generation.</p>
+<p class="paragraph body-text">Scheduled publishing.</p>
+<p class="paragraph body-text">Retry operations.</p>
+<p class="paragraph body-text">Background tasks shall not require the founder to keep the user interface open.</p>
+<p class="paragraph body-text">The system shall expose task status, including queued, processing, completed, failed, and cancelled.</p>
+<h3>FR-011: Founder Dashboard</h3>
+<p class="paragraph body-text">The system shall provide a dashboard displaying:</p>
+<p class="paragraph body-text">Active projects.</p>
+<p class="paragraph body-text">Recent development activity.</p>
+<p class="paragraph body-text">Generated drafts.</p>
+<p class="paragraph body-text">Pending approvals.</p>
+<p class="paragraph body-text">Scheduled posts.</p>
+<p class="paragraph body-text">Recently published posts.</p>
+<p class="paragraph body-text">Failed tasks.</p>
+<p class="paragraph body-text">Model and integration health.</p>
+<p class="paragraph body-text">The interface shall minimize unnecessary navigation and cognitive overhead.</p>
+<h3>FR-012: Generation Controls</h3>
+<p class="paragraph body-text">The system shall allow the founder to configure:</p>
+<p class="paragraph body-text">Post length.</p>
+<p class="paragraph body-text">Tone and enthusiasm.</p>
+<p class="paragraph body-text">Technical detail.</p>
+<p class="paragraph body-text">Audience.</p>
+<p class="paragraph body-text">Post type.</p>
+<p class="paragraph body-text">Number of draft candidates.</p>
+<p class="paragraph body-text">Relevant project context.</p>
+<p class="paragraph body-text">Additional generation instructions.</p>
+<p class="paragraph body-text">The system shall support simple presets to reduce configuration requirements.</p>
+<h3>FR-013: Privacy and Security</h3>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Store configuration and project data locally by default.</p>
+<p class="paragraph body-text">Use local inference unless an external model provider is explicitly configured.</p>
+<p class="paragraph body-text">Protect integration credentials.</p>
+<p class="paragraph body-text">Avoid logging secrets or sensitive content.</p>
+<p class="paragraph body-text">Provide configurable retention policies.</p>
+<p class="paragraph body-text">Allow deletion of drafts and generation history.</p>
+<p class="paragraph body-text">Restrict publishing actions to authorized users.</p>
+<p class="paragraph body-text">Clearly identify any information sent to external services.</p>
+<h3>FR-014: Accessibility and Disability Accommodation</h3>
+<p class="paragraph body-text">The system shall be designed to accommodate users with disabilities, including executive-function and energy-limiting disabilities.</p>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Support asynchronous workflows.</p>
+<p class="paragraph body-text">Avoid requiring daily interaction.</p>
+<p class="paragraph body-text">Preserve unfinished work.</p>
+<p class="paragraph body-text">Provide clear, low-complexity navigation.</p>
+<p class="paragraph body-text">Support keyboard accessibility.</p>
+<p class="paragraph body-text">Use understandable status indicators.</p>
+<p class="paragraph body-text">Allow flexible schedules.</p>
+<p class="paragraph body-text">Avoid punitive reminders or streak-based engagement.</p>
+<p class="paragraph body-text">Permit extended periods of inactivity without loss of data.</p>
+<h3>FR-015: Logging and Auditability</h3>
+<p class="paragraph body-text">The system shall maintain an audit trail of:</p>
+<p class="paragraph body-text">Activity ingestion.</p>
+<p class="paragraph body-text">Draft generation.</p>
+<p class="paragraph body-text">Draft modification.</p>
+<p class="paragraph body-text">Approval and rejection.</p>
+<p class="paragraph body-text">Scheduling.</p>
+<p class="paragraph body-text">Publication attempts.</p>
+<p class="paragraph body-text">Publication results.</p>
+<p class="paragraph body-text">Configuration changes.</p>
+<p class="paragraph body-text">Logs shall support troubleshooting without unnecessarily retaining sensitive information.</p>
+<h2>4. Nonfunctional Requirements</h2>
+<h3>NFR-001: Performance</h3>
+<p class="paragraph body-text">The system shall provide a responsive interface while generation and background tasks execute asynchronously.</p>
+<p class="paragraph body-text">Generation latency shall be dependent on the configured local model and hardware.</p>
+<h3>NFR-002: Reliability</h3>
+<p class="paragraph body-text">The system shall preserve drafts and task state across application restarts.</p>
+<p class="paragraph body-text">Failed background operations shall not result in data loss or duplicate publications.</p>
+<h3>NFR-003: Maintainability</h3>
+<p class="paragraph body-text">The architecture shall separate:</p>
+<p class="paragraph body-text">API and user interface.</p>
+<p class="paragraph body-text">Generation orchestration.</p>
+<p class="paragraph body-text">LLM provider interface.</p>
+<p class="paragraph body-text">Project context management.</p>
+<p class="paragraph body-text">Background task processing.</p>
+<p class="paragraph body-text">Platform integrations.</p>
+<p class="paragraph body-text">Persistent storage.</p>
+<h3>NFR-004: Resource Efficiency</h3>
+<p class="paragraph body-text">The system shall support deployment on hardware capable of running the selected Ollama model.</p>
+<p class="paragraph body-text">It shall avoid unnecessary concurrent inference jobs and permit configurable generation limits.</p>
+<h3>NFR-005: Data Portability</h3>
+<p class="paragraph body-text">The system shall store project context, drafts, and configuration in documented, exportable formats where practical.</p>
+<h2>5. Proposed Technical Architecture</h2>
+<h3>Backend</h3>
+<p class="paragraph body-text">Python</p>
+<p class="paragraph body-text">FastAPI</p>
+<p class="paragraph body-text">Pydantic</p>
+<p class="paragraph body-text">SQLAlchemy</p>
+<h3>AI Inference</h3>
+<p class="paragraph body-text">Ollama</p>
+<p class="paragraph body-text">Locally hosted SLM</p>
+<p class="paragraph body-text">Configurable system prompts</p>
+<p class="paragraph body-text">Retrieval of relevant project context and writing samples</p>
+<h3>Database</h3>
+<p class="paragraph body-text">SQLite for initial deployment</p>
+<p class="paragraph body-text">Optional PostgreSQL for multi-user or expanded deployments</p>
+<h3>Background Processing</h3>
+<p class="paragraph body-text">APScheduler for initial scheduling</p>
+<p class="paragraph body-text">Persistent task records</p>
+<p class="paragraph body-text">Optional Redis and Celery for future scaling</p>
+<h3>Frontend</h3>
+<p class="paragraph body-text">Existing Barkly Labs web stack</p>
+<p class="paragraph body-text">Responsive dashboard</p>
+<p class="paragraph body-text">Draft editor</p>
+<p class="paragraph body-text">Approval and scheduling interface</p>
+<h3>Integrations</h3>
+<p class="paragraph body-text">GitHub API</p>
+<p class="paragraph body-text">Discord API</p>
+<p class="paragraph body-text">Modular connector interface for future platforms</p>
+<h2>6. Initial MVP Acceptance Criteria</h2>
+<p class="paragraph body-text">The MVP shall be considered functional when:</p>
+<p class="paragraph body-text">The founder can configure and connect a local Ollama model.</p>
+<p class="paragraph body-text">The founder can create and save a writing-style profile.</p>
+<p class="paragraph body-text">The founder can register a Barkly Labs project.</p>
+<p class="paragraph body-text">The system can ingest or accept project activity.</p>
+<p class="paragraph body-text">The system can generate a community post from that activity.</p>
+<p class="paragraph body-text">The generated post reflects the configured founder voice.</p>
+<p class="paragraph body-text">The draft is saved and can be edited.</p>
+<p class="paragraph body-text">The founder can explicitly approve or reject it.</p>
+<p class="paragraph body-text">An approved post can be scheduled.</p>
+<p class="paragraph body-text">The system can publish to a configured Discord destination.</p>
+<p class="paragraph body-text">Publication status and history are visible.</p>
+<p class="paragraph body-text">The system can restart without losing drafts or schedules.</p>
+<p class="paragraph body-text">No post is published without satisfying its configured authorization policy.</p>
+<p class="paragraph body-text">The entire workflow can operate using local inference.</p>
+<h2>7. Future Enhancements</h2>
+<p class="paragraph body-text">Automatic weekly development summaries.</p>
+<p class="paragraph body-text">Community activity and engagement analytics.</p>
+<p class="paragraph body-text">Multiple founder or project voice profiles.</p>
+<p class="paragraph body-text">Additional community platform integrations.</p>
+<p class="paragraph body-text">Automatic changelog-to-post conversion.</p>
+<p class="paragraph body-text">Optional local speech-to-text for voice notes.</p>
+<p class="paragraph body-text">AI-assisted responses to community questions with mandatory review.</p>
+<p class="paragraph body-text">Multi-user collaboration and role-based access control.</p>
+<p class="paragraph body-text">Semantic retrieval over project documentation.</p>
+<p class="paragraph body-text">Configurable autonomous generation of low-risk drafts.</p>
+<h2>8. Guiding Principle</h2>
+<p class="paragraph body-text">Barkly Labs Developer Community Automation exists to reduce the burden of community management, not to create another obligation for its founder.</p>
+<p class="paragraph body-text">The system shall adapt to the founder&#x27;s workflow, energy, and accessibility needs while preserving human agency, authenticity, privacy, and control over public communication.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
