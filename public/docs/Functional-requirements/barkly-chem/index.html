@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Chem — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Chem
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barkly Chem.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Chem</h1>
+<h2>Functional Requirements Specification (FRS)</h2>
+<p class="paragraph body-text">Parent Organization: Barkly Labs
+Project: Barkly Chem
+Version: 1.0
+Status: Proposed</p>
+<h2>1. Purpose</h2>
+<p class="paragraph body-text">Barkly Chem is a scientific education and harm-reduction initiative within Barkly Labs. Its purpose is to provide accessible, evidence-based, nonjudgmental information about chemistry, pharmacology, psychoactive substances, drug interactions, and substance-related safety.</p>
+<p class="paragraph body-text">The initiative will publish educational articles, scientific explainers, and visual informational posters to help individuals make informed decisions about their health and safety.</p>
+<h2>2. Mission</h2>
+<p class="paragraph body-text">To make scientific and pharmacological information accessible, understandable, and useful to the public while promoting dignity, informed decision-making, and harm reduction.</p>
+<h2>3. Functional Requirements</h2>
+<h3>FR-001: Dedicated Website Section</h3>
+<p class="paragraph body-text">The system SHALL provide a dedicated Barkly Chem section accessible through the existing Barkly Labs website.</p>
+<h3>FR-002: Independent Branding</h3>
+<p class="paragraph body-text">The system SHALL support Barkly Chem branding, including its own logo, color palette, typography, and visual identity while retaining attribution to Barkly Labs.</p>
+<h3>FR-003: Educational Content</h3>
+<p class="paragraph body-text">The system SHALL support publishing educational materials covering:</p>
+<p class="paragraph body-text">Pharmacology and mechanisms of action</p>
+<p class="paragraph body-text">Psychoactive substances and their effects</p>
+<p class="paragraph body-text">Drug interactions and contraindications</p>
+<p class="paragraph body-text">Toxicity, overdose, and adverse effects</p>
+<p class="paragraph body-text">Harm reduction and safety education</p>
+<p class="paragraph body-text">Chemistry fundamentals and scientific concepts</p>
+<h3>FR-004: Educational Posters</h3>
+<p class="paragraph body-text">The system SHALL provide a dedicated gallery for scientific and harm-reduction posters.</p>
+<p class="paragraph body-text">Each poster SHALL support:</p>
+<p class="paragraph body-text">A title and description</p>
+<p class="paragraph body-text">An accessible image display</p>
+<p class="paragraph body-text">Publication date</p>
+<p class="paragraph body-text">Author or contributor attribution</p>
+<p class="paragraph body-text">References and scientific sources</p>
+<p class="paragraph body-text">A disclaimer when applicable</p>
+<h3>FR-005: Individual Content Pages</h3>
+<p class="paragraph body-text">The system SHALL allow each educational resource to have its own dedicated page and shareable URL.</p>
+<h3>FR-006: Search and Discovery</h3>
+<p class="paragraph body-text">The system SHOULD provide search and categorization functionality to help visitors find information by substance, topic, or content type.</p>
+<h3>FR-007: Scientific References</h3>
+<p class="paragraph body-text">Educational content SHALL include citations to reputable scientific literature, clinical references, or authoritative public-health sources when factual medical or pharmacological claims are made.</p>
+<h3>FR-008: Content Review</h3>
+<p class="paragraph body-text">The system SHOULD support a review workflow before publication to help ensure scientific accuracy, clarity, and safety.</p>
+<h3>FR-009: Harm-Reduction Standards</h3>
+<p class="paragraph body-text">Content SHALL be nonjudgmental and SHALL NOT shame, stigmatize, or discriminate against people who use substances.</p>
+<h3>FR-010: Accessibility</h3>
+<p class="paragraph body-text">The system SHALL follow WCAG accessibility guidelines, including:</p>
+<p class="paragraph body-text">Alternative text for images</p>
+<p class="paragraph body-text">Readable typography and contrast</p>
+<p class="paragraph body-text">Keyboard navigation</p>
+<p class="paragraph body-text">Screen-reader compatibility</p>
+<p class="paragraph body-text">Responsive layouts</p>
+<p class="paragraph body-text">Accessible descriptions of scientific graphs</p>
+<h3>FR-011: Responsive Design</h3>
+<p class="paragraph body-text">The system SHALL support desktop, tablet, and mobile devices.</p>
+<h3>FR-012: Content Management</h3>
+<p class="paragraph body-text">The system SHOULD support creating, editing, updating, and removing educational materials without requiring extensive manual website development for each publication.</p>
+<h3>FR-013: Safety Information</h3>
+<p class="paragraph body-text">Relevant educational pages SHALL include appropriate safety information, warning signs, and guidance on seeking professional or emergency assistance.</p>
+<h3>FR-014: Educational Disclaimers</h3>
+<p class="paragraph body-text">The system SHALL clearly distinguish educational information from individualized medical advice, diagnosis, or treatment recommendations.</p>
+<h3>FR-015: Content Versioning</h3>
+<p class="paragraph body-text">The system SHOULD maintain publication dates and revision history for scientific resources to support corrections and updates.</p>
+<h2>4. Nonfunctional Requirements</h2>
+<h3>NFR-001: Performance</h3>
+<p class="paragraph body-text">Pages SHOULD load efficiently, including on slower internet connections.</p>
+<h3>NFR-002: Privacy</h3>
+<p class="paragraph body-text">The system SHALL minimize collection of visitor data and SHALL NOT require accounts to access educational resources.</p>
+<h3>NFR-003: Security</h3>
+<p class="paragraph body-text">The system SHALL use HTTPS and follow secure development practices.</p>
+<h3>NFR-004: Maintainability</h3>
+<p class="paragraph body-text">The implementation SHOULD use reusable components and a modular architecture consistent with the existing Barkly Labs website.</p>
+<h3>NFR-005: Reliability</h3>
+<p class="paragraph body-text">Published educational resources SHOULD remain accessible through stable URLs.</p>
+<h3>NFR-006: Low Maintenance</h3>
+<p class="paragraph body-text">The system SHOULD minimize ongoing administrative and technical work for maintainers.</p>
+<h2>5. Initial Release Scope (MVP)</h2>
+<p class="paragraph body-text">The first release SHOULD include:</p>
+<p class="paragraph body-text">Barkly Chem landing page</p>
+<p class="paragraph body-text">Mission and editorial standards</p>
+<p class="paragraph body-text">Educational poster gallery</p>
+<p class="paragraph body-text">Individual poster pages</p>
+<p class="paragraph body-text">Scientific references and disclaimers</p>
+<p class="paragraph body-text">Responsive and accessible design</p>
+<p class="paragraph body-text">Integration with the existing Barkly Labs navigation and branding</p>
+<p class="paragraph body-text">Search, advanced content management, and automated scientific review may be introduced in later releases.</p>
+<h2>6. Guiding Principle</h2>
+<p class="paragraph body-text">People are people, not numbers.</p>
+<p class="paragraph body-text">Barkly Chem exists to make scientific knowledge more accessible and to support people through education, dignity, and evidence-based harm reduction.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
