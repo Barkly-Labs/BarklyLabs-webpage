@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>The Barkly Model — Barkly Docs</title>
+<meta name="copyright" content="© 2026 Barkly-Labs. All rights reserved.">
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            The Barkly Model
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barkly Modle.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>The Barkly Model</h1>
+<h2>A Replicable Framework for Compassionate, Sustainable, Human-Centered Organizations</h2>
+<p class="paragraph body-text">Version: 0.1 — Initial Concept
+Originating Organization: Barkly Labs
+Founder: Piper
+Core Principle: People are people, not numbers.</p>
+<h1>1. Definition</h1>
+<p class="paragraph body-text">The Barkly Model is an organizational framework for designing, operating, and evaluating enterprises and institutions that seek to combine economic sustainability with meaningful human, animal, and community well-being.</p>
+<p class="paragraph body-text">It proposes that organizations can be designed to create economic value while simultaneously improving the conditions in which people live, work, participate, and thrive.</p>
+<p class="paragraph body-text">The model is intended to be:</p>
+<p class="paragraph body-text">Modular: Adaptable to different industries and organizational types.</p>
+<p class="paragraph body-text">Replicable: Implementable by independent organizations.</p>
+<p class="paragraph body-text">Measurable: Evaluated through economic, social, and operational outcomes.</p>
+<p class="paragraph body-text">Evolvable: Improved through evidence, experience, and community feedback.</p>
+<p class="paragraph body-text">Accessible: Designed with diverse human needs and abilities in mind.</p>
+<p class="paragraph body-text">Transparent: Open to scrutiny, evaluation, and responsible criticism.</p>
+<p class="paragraph body-text">Sustainable: Designed for long-term viability rather than short-term gains.</p>
+<p class="paragraph body-text">The Barkly Model is not a requirement to create a particular corporate structure. It is a framework for how organizations can be designed and operated.</p>
+<h1>2. The Seven Foundational Principles</h1>
+<h2>Principle I — Human Dignity</h2>
+<p class="paragraph body-text">Every person possesses inherent worth independent of economic productivity, employment, disability, income, or social status.</p>
+<p class="paragraph body-text">Organizations should treat people as individuals rather than merely as labor, customers, statistics, or financial resources.</p>
+<p class="paragraph body-text">Implementation:</p>
+<p class="paragraph body-text">Respect individual autonomy and dignity.</p>
+<p class="paragraph body-text">Avoid unnecessarily discriminatory or exclusionary practices.</p>
+<p class="paragraph body-text">Recognize diverse needs and circumstances.</p>
+<p class="paragraph body-text">Ensure people have meaningful opportunities to participate.</p>
+<p class="paragraph body-text">Treat employees, customers, and community members with respect.</p>
+<h2>Principle II — Adaptive Accessibility</h2>
+<p class="paragraph body-text">Organizations should adapt their systems to accommodate the people interacting with them.</p>
+<p class="paragraph body-text">Accessibility is a fundamental design consideration, not an optional accommodation added after exclusion has occurred.</p>
+<p class="paragraph body-text">Implementation:</p>
+<p class="paragraph body-text">Integrate accessibility into products, services, and workplaces.</p>
+<p class="paragraph body-text">Accommodate diverse physical, cognitive, sensory, and psychological needs.</p>
+<p class="paragraph body-text">Identify and reduce unnecessary barriers.</p>
+<p class="paragraph body-text">Provide multiple ways to access services and participate.</p>
+<p class="paragraph body-text">Evaluate accessibility continuously.</p>
+<h2>Principle III — Compassionate Economics</h2>
+<p class="paragraph body-text">Financial sustainability and human well-being should be treated as interconnected organizational objectives.</p>
+<p class="paragraph body-text">The model encourages organizations to investigate how ethical treatment, accessibility, trust, and long-term investment in people can contribute to economic performance.</p>
+<p class="paragraph body-text">Implementation:</p>
+<p class="paragraph body-text">Evaluate long-term consequences alongside immediate financial returns.</p>
+<p class="paragraph body-text">Invest in employee well-being and development.</p>
+<p class="paragraph body-text">Avoid unnecessary exploitation.</p>
+<p class="paragraph body-text">Pursue financially sustainable operations.</p>
+<p class="paragraph body-text">Measure economic performance alongside social outcomes.</p>
+<h2>Principle IV — Community Integration</h2>
+<p class="paragraph body-text">Organizations should recognize that they exist within communities and have relationships with the people affected by their operations.</p>
+<p class="paragraph body-text">Implementation:</p>
+<p class="paragraph body-text">Engage with affected communities.</p>
+<p class="paragraph body-text">Encourage meaningful participation.</p>
+<p class="paragraph body-text">Build mutually beneficial partnerships.</p>
+<p class="paragraph body-text">Support community resilience where appropriate.</p>
+<p class="paragraph body-text">Consider community needs in organizational decision-making.</p>
+<h2>Principle V — Individual Autonomy</h2>
+<p class="paragraph body-text">Support should enable people to make decisions about their own lives.</p>
+<p class="paragraph body-text">Organizations should avoid unnecessary paternalism, coercion, and restrictions on individual choice.</p>
+<p class="paragraph body-text">Implementation:</p>
+<p class="paragraph body-text">Respect informed decision-making.</p>
+<p class="paragraph body-text">Offer choices whenever reasonably possible.</p>
+<p class="paragraph body-text">Provide support without unnecessary control.</p>
+<p class="paragraph body-text">Protect privacy and personal information.</p>
+<p class="paragraph body-text">Recognize different definitions of independence and success.</p>
+<h2>Principle VI — Responsible Innovation</h2>
+<p class="paragraph body-text">Innovation should be evaluated according to both its capabilities and its consequences.</p>
+<p class="paragraph body-text">Implementation:</p>
+<p class="paragraph body-text">Consider potential harms and unintended consequences.</p>
+<p class="paragraph body-text">Prioritize safety, accessibility, and privacy.</p>
+<p class="paragraph body-text">Use evidence to guide development.</p>
+<p class="paragraph body-text">Seek meaningful public benefit where appropriate.</p>
+<p class="paragraph body-text">Maintain accountability for organizational decisions.</p>
+<h2>Principle VII — Long-Term Sustainability</h2>
+<p class="paragraph body-text">Organizations should be designed to endure and remain capable of fulfilling their purpose over time.</p>
+<p class="paragraph body-text">Implementation:</p>
+<p class="paragraph body-text">Develop sustainable revenue and funding.</p>
+<p class="paragraph body-text">Maintain appropriate financial reserves.</p>
+<p class="paragraph body-text">Invest in infrastructure and organizational capacity.</p>
+<p class="paragraph body-text">Reduce dependence on single points of failure.</p>
+<p class="paragraph body-text">Plan for leadership transitions and continuity.</p>
+<p class="paragraph body-text">Balance growth with organizational stability.</p>
+<h1>3. The Five-Layer Organizational Framework</h1>
+<p class="paragraph body-text">The Barkly Model organizes organizational design into five interconnected layers.</p>
+<h2>Layer 1 — Purpose</h2>
+<p class="paragraph body-text">Defines why the organization exists and whom it seeks to serve.</p>
+<p class="paragraph body-text">Questions:</p>
+<p class="paragraph body-text">What problem are we addressing?</p>
+<p class="paragraph body-text">Who experiences this problem?</p>
+<p class="paragraph body-text">Why does it matter?</p>
+<p class="paragraph body-text">What values guide our decisions?</p>
+<p class="paragraph body-text">What would meaningful success look like?</p>
+<p class="paragraph body-text">Deliverable: A documented mission, vision, and set of foundational principles.</p>
+<h2>Layer 2 — People</h2>
+<p class="paragraph body-text">Defines how the organization interacts with employees, customers, participants, and communities.</p>
+<p class="paragraph body-text">Questions:</p>
+<p class="paragraph body-text">Who interacts with the organization?</p>
+<p class="paragraph body-text">What needs and barriers do they experience?</p>
+<p class="paragraph body-text">How can their dignity and autonomy be protected?</p>
+<p class="paragraph body-text">How can they meaningfully participate?</p>
+<p class="paragraph body-text">What support and accommodations are necessary?</p>
+<p class="paragraph body-text">Deliverable: A human-centered operational and accessibility framework.</p>
+<h2>Layer 3 — Operations</h2>
+<p class="paragraph body-text">Defines how the organization actually functions.</p>
+<p class="paragraph body-text">Questions:</p>
+<p class="paragraph body-text">What products or services does it provide?</p>
+<p class="paragraph body-text">How are decisions made?</p>
+<p class="paragraph body-text">What processes are necessary?</p>
+<p class="paragraph body-text">How are resources allocated?</p>
+<p class="paragraph body-text">How are safety, quality, and accountability maintained?</p>
+<p class="paragraph body-text">Deliverable: A documented operational system.</p>
+<h2>Layer 4 — Economics</h2>
+<p class="paragraph body-text">Defines how the organization sustains itself financially.</p>
+<p class="paragraph body-text">Questions:</p>
+<p class="paragraph body-text">How does it generate or obtain revenue?</p>
+<p class="paragraph body-text">What are its costs and financial risks?</p>
+<p class="paragraph body-text">How does it compensate people?</p>
+<p class="paragraph body-text">How does it reinvest?</p>
+<p class="paragraph body-text">How does it maintain financial stability?</p>
+<p class="paragraph body-text">What resources can support its mission?</p>
+<p class="paragraph body-text">Deliverable: A sustainable financial and resource-allocation model.</p>
+<h2>Layer 5 — Impact</h2>
+<p class="paragraph body-text">Defines how the organization evaluates its effects on people, communities, and the environment.</p>
+<p class="paragraph body-text">Questions:</p>
+<p class="paragraph body-text">Are people&#x27;s lives meaningfully improving?</p>
+<p class="paragraph body-text">Are the organization&#x27;s economic objectives being achieved?</p>
+<p class="paragraph body-text">Are unintended harms occurring?</p>
+<p class="paragraph body-text">Are outcomes equitable and accessible?</p>
+<p class="paragraph body-text">What should change based on the evidence?</p>
+<p class="paragraph body-text">Deliverable: An impact measurement and continuous-improvement framework.</p>
+<h1>4. The Barkly Organizational Cycle</h1>
+<p class="paragraph body-text">The Barkly Model uses a continuous improvement cycle.</p>
+<h3>Step 1 — Identify</h3>
+<p class="paragraph body-text">Identify a meaningful problem experienced by people or communities.</p>
+<h3>Step 2 — Understand</h3>
+<p class="paragraph body-text">Research the problem, affected individuals, existing solutions, and underlying causes.</p>
+<h3>Step 3 — Design</h3>
+<p class="paragraph body-text">Develop an accessible, ethical, and practical organizational solution.</p>
+<h3>Step 4 — Implement</h3>
+<p class="paragraph body-text">Introduce the solution through a pilot, service, enterprise, or program.</p>
+<h3>Step 5 — Measure</h3>
+<p class="paragraph body-text">Evaluate financial performance, operational effectiveness, and human outcomes.</p>
+<h3>Step 6 — Learn</h3>
+<p class="paragraph body-text">Identify successes, failures, limitations, and unexpected consequences.</p>
+<h3>Step 7 — Improve</h3>
+<p class="paragraph body-text">Modify the organization based on evidence and feedback.</p>
+<h3>Step 8 — Share</h3>
+<p class="paragraph body-text">Publish appropriate findings, documentation, and lessons so others can learn.</p>
+<p class="paragraph body-text">Then repeat the cycle.</p>
+<h1>5. The Barkly Dual-Outcome Standard</h1>
+<p class="paragraph body-text">Organizations adopting the Barkly Model should evaluate two primary categories of outcomes.</p>
+<h2>A. Economic Performance</h2>
+<p class="paragraph body-text">Depending on the organization:</p>
+<p class="paragraph body-text">Revenue and revenue growth.</p>
+<p class="paragraph body-text">Profitability and operating margins.</p>
+<p class="paragraph body-text">Operating costs and efficiency.</p>
+<p class="paragraph body-text">Financial reserves and stability.</p>
+<p class="paragraph body-text">Employee retention.</p>
+<p class="paragraph body-text">Customer satisfaction.</p>
+<p class="paragraph body-text">Innovation and competitiveness.</p>
+<p class="paragraph body-text">Long-term viability.</p>
+<h2>B. Human and Community Outcomes</h2>
+<p class="paragraph body-text">Depending on the organization:</p>
+<p class="paragraph body-text">Accessibility and inclusion.</p>
+<p class="paragraph body-text">Employee well-being.</p>
+<p class="paragraph body-text">Customer and participant satisfaction.</p>
+<p class="paragraph body-text">Quality of life.</p>
+<p class="paragraph body-text">Community trust.</p>
+<p class="paragraph body-text">Autonomy and dignity.</p>
+<p class="paragraph body-text">Opportunities for participation.</p>
+<p class="paragraph body-text">Improvements in the problem the organization seeks to address.</p>
+<p class="paragraph body-text">Neither category should automatically substitute for the other.</p>
+<p class="paragraph body-text">An organization should not claim success solely because it is profitable, nor claim financial sustainability solely because its mission is beneficial.</p>
+<p class="paragraph body-text">The model encourages transparent reporting of both.</p>
+<h1>6. The Barkly Replication Framework</h1>
+<p class="paragraph body-text">The Barkly Model is intended to be adopted beyond organizations owned or operated by Barkly itself.</p>
+<h2>Adoption</h2>
+<p class="paragraph body-text">An organization may adopt the model by:</p>
+<p class="paragraph body-text">Reviewing the foundational principles.</p>
+<p class="paragraph body-text">Evaluating its existing organizational practices.</p>
+<p class="paragraph body-text">Identifying areas of alignment and improvement.</p>
+<p class="paragraph body-text">Developing an implementation plan.</p>
+<p class="paragraph body-text">Establishing measurable objectives.</p>
+<p class="paragraph body-text">Evaluating outcomes over time.</p>
+<h2>Adaptation</h2>
+<p class="paragraph body-text">The model should not require every organization to operate identically.</p>
+<p class="paragraph body-text">A scientific laboratory, housing organization, automotive enterprise, and community food program have different requirements.</p>
+<p class="paragraph body-text">Organizations may adapt the operational components while documenting how they interpret and implement the foundational principles.</p>
+<h2>Documentation</h2>
+<p class="paragraph body-text">Participating organizations are encouraged to publish:</p>
+<p class="paragraph body-text">Their implementation approach.</p>
+<p class="paragraph body-text">Organizational policies and practices.</p>
+<p class="paragraph body-text">Relevant economic outcomes.</p>
+<p class="paragraph body-text">Human and community impact.</p>
+<p class="paragraph body-text">Challenges and failures.</p>
+<p class="paragraph body-text">Lessons learned.</p>
+<p class="paragraph body-text">Proposed improvements to the framework.</p>
+<h2>Independence</h2>
+<p class="paragraph body-text">Organizations adopting the model do not automatically become owned by, controlled by, or legally affiliated with Barkly Labs.</p>
+<p class="paragraph body-text">The framework should be capable of spreading independently.</p>
+<h1>7. The Barkly Evidence Standard</h1>
+<p class="paragraph body-text">The Barkly Model&#x27;s claims should be supported by evidence rather than assumption.</p>
+<h2>Research objectives</h2>
+<p class="paragraph body-text">Investigate whether and how human-centered organizational practices influence:</p>
+<p class="paragraph body-text">Financial performance.</p>
+<p class="paragraph body-text">Employee well-being and retention.</p>
+<p class="paragraph body-text">Operational efficiency.</p>
+<p class="paragraph body-text">Customer relationships.</p>
+<p class="paragraph body-text">Innovation.</p>
+<p class="paragraph body-text">Community outcomes.</p>
+<p class="paragraph body-text">Organizational resilience.</p>
+<h2>Research methods</h2>
+<p class="paragraph body-text">Depending on the context:</p>
+<p class="paragraph body-text">Longitudinal studies.</p>
+<p class="paragraph body-text">Comparative organizational analysis.</p>
+<p class="paragraph body-text">Employee and participant surveys.</p>
+<p class="paragraph body-text">Financial performance analysis.</p>
+<p class="paragraph body-text">Qualitative interviews.</p>
+<p class="paragraph body-text">Independent evaluations.</p>
+<p class="paragraph body-text">Published case studies.</p>
+<h2>Transparency</h2>
+<p class="paragraph body-text">Reports should distinguish between:</p>
+<p class="paragraph body-text">Demonstrated results.</p>
+<p class="paragraph body-text">Preliminary findings.</p>
+<p class="paragraph body-text">Correlations.</p>
+<p class="paragraph body-text">Causal evidence.</p>
+<p class="paragraph body-text">Unverified hypotheses.</p>
+<p class="paragraph body-text">Limitations and uncertainty.</p>
+<p class="paragraph body-text">The objective is to build credible evidence that others can independently evaluate.</p>
+<h1>8. The Barkly Ecosystem as an Implementation</h1>
+<p class="paragraph body-text">The Barkly organizations serve as practical implementations of the model.</p>
+<div class="table-wrap">
+<table>
+<tr>
+<th>Organization</th>
+<th>Primary application</th>
+</tr>
+<tr>
+<td>Barkly Labs</td>
+<td>Accessible, human-centered technology and AI</td>
+</tr>
+<tr>
+<td>Barkly Chem</td>
+<td>Responsible scientific innovation</td>
+</tr>
+<tr>
+<td>Barkly Automotive</td>
+<td>Accessible mobility and sustainable enterprise</td>
+</tr>
+<tr>
+<td>Barkly Housing</td>
+<td>Housing stability, accessibility, and autonomy</td>
+</tr>
+<tr>
+<td>Barkly Food</td>
+<td>Food security and community resilience</td>
+</tr>
+<tr>
+<td>Barkly Political</td>
+<td>Civic participation and public-interest advocacy</td>
+</tr>
+<tr>
+<td>Barkly Animal</td>
+<td>Animal protection and responsible human rehabilitation</td>
+</tr>
+<tr>
+<td>Barkly International</td>
+<td>Community-led global development and cooperation</td>
+</tr>
+</table>
+</div>
+<p class="paragraph body-text">Each organization can develop its own specialized implementation documentation while sharing a common foundational framework.</p>
+<h1>9. The Barkly Model as an Open Framework</h1>
+<p class="paragraph body-text">The framework should evolve through a structured process.</p>
+<h2>Versioning</h2>
+<p class="paragraph body-text">v0.1: Foundational principles and initial concept.</p>
+<p class="paragraph body-text">v0.2: Organizational design and operational guidelines.</p>
+<p class="paragraph body-text">v0.3: Measurement and evaluation standards.</p>
+<p class="paragraph body-text">v0.4: Pilot implementation and documented case studies.</p>
+<p class="paragraph body-text">v1.0: Initial mature, publicly documented framework.</p>
+<p class="paragraph body-text">v1.x: Iterative improvements and refinements.</p>
+<p class="paragraph body-text">v2.0: Major revisions supported by accumulated research and experience.</p>
+<h2>Community contributions</h2>
+<p class="paragraph body-text">Future contributors may:</p>
+<p class="paragraph body-text">Propose revisions.</p>
+<p class="paragraph body-text">Submit implementation case studies.</p>
+<p class="paragraph body-text">Identify problems and contradictions.</p>
+<p class="paragraph body-text">Suggest accessibility improvements.</p>
+<p class="paragraph body-text">Develop industry-specific modules.</p>
+<p class="paragraph body-text">Contribute research and evaluation.</p>
+<p class="paragraph body-text">Document alternative approaches.</p>
+<h2>Governance</h2>
+<p class="paragraph body-text">As the framework develops, Barkly should establish transparent processes for reviewing contributions, evaluating proposed changes, resolving disagreements, and maintaining the integrity of its foundational principles.</p>
+<h1>10. The Ultimate Objective</h1>
+<p class="paragraph body-text">The Barkly Model seeks to demonstrate that a different approach to organizational design is possible.</p>
+<p class="paragraph body-text">It aims to establish that organizations can pursue financial sustainability and competitive performance while recognizing human dignity, accessibility, community well-being, and ethical responsibility as fundamental considerations.</p>
+<p class="paragraph body-text">Its success would extend beyond Barkly&#x27;s own organizations.</p>
+<p class="paragraph body-text">If other enterprises independently adopt, adapt, and improve the model, the underlying principles could influence organizational practices across industries and countries.</p>
+<p class="paragraph body-text">The ultimate goal is not for every organization to become Barkly.</p>
+<p class="paragraph body-text">The goal is for organizations everywhere to become better at serving the people whose lives they affect.</p>
+<h1>Foundational Statement</h1>
+<p class="paragraph body-text">The Barkly Model is a framework for designing organizations that pursue economic sustainability while prioritizing human dignity, accessibility, autonomy, community well-being, and responsible innovation.</p>
+<p class="paragraph body-text">We seek to demonstrate, measure, and share the possibility of a more compassionate approach to organizational design.</p>
+<p class="paragraph body-text">We believe that better systems can produce better outcomes.</p>
+<p class="paragraph body-text">We believe that innovation should serve people.</p>
+<p class="paragraph body-text">We believe that economic activity can contribute to a healthier society.</p>
+<p class="paragraph body-text">We believe that organizational practices can evolve through evidence, collaboration, and shared learning.</p>
+<p class="paragraph body-text">And we believe that the principles of a better world should be reflected in the systems we build today.</p>
+<p class="paragraph body-text">People are people, not numbers.</p>
+
+        <aside class="copyright-notice" aria-label="Copyright information"><strong>Copyright and usage</strong><p>© 2026 Barkly-Labs. All rights reserved.</p><p>Unauthorized copying, reproduction, or redistribution of this copyrighted document is prohibited except as permitted by law or with the copyright owner’s permission.</p></aside>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>

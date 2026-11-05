@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barkly Animal — Barkly Docs</title>
+<meta name="copyright" content="© 2026 Barkly-Labs. All rights reserved.">
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            Barkly Animal
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\Barkly Animal.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>Barkly Animal</h1>
+<h3>Human Rehabilitation, Animal Welfare &amp; Protection</h3>
+<h2>1. Mission</h2>
+<p class="paragraph body-text">Barkly Animal seeks to protect animal welfare while helping people develop healthier, safer, and more compassionate relationships with animals.</p>
+<p class="paragraph body-text">We recognize that preventing animal cruelty requires addressing both the needs of animals and the circumstances, behaviors, and challenges of the humans responsible for their care.</p>
+<h2>2. Core Objectives</h2>
+<p class="paragraph body-text">Protect animals from cruelty, neglect, exploitation, and preventable suffering.</p>
+<p class="paragraph body-text">Help individuals understand the psychological, behavioral, and situational factors contributing to harmful behavior toward animals.</p>
+<p class="paragraph body-text">Support accountability, personal growth, and behavioral change.</p>
+<p class="paragraph body-text">Provide education on animal behavior, welfare, boundaries, and responsible care.</p>
+<p class="paragraph body-text">Help individuals develop the skills necessary for safe and humane animal guardianship.</p>
+<p class="paragraph body-text">Support successful, responsible animal ownership when appropriate.</p>
+<p class="paragraph body-text">Prioritize the safety and welfare of animals throughout every intervention.</p>
+<h2>3. Human Support &amp; Rehabilitation</h2>
+<p class="paragraph body-text">Barkly Animal aims to collaborate with qualified professionals and relevant organizations to provide:</p>
+<p class="paragraph body-text">Behavioral education and animal welfare awareness.</p>
+<p class="paragraph body-text">Referrals to appropriate mental health and behavioral support.</p>
+<p class="paragraph body-text">Compassionate, nonjudgmental opportunities for individuals to discuss harmful behaviors.</p>
+<p class="paragraph body-text">Support for developing empathy, emotional regulation, and appropriate coping strategies.</p>
+<p class="paragraph body-text">Structured rehabilitation and accountability programs.</p>
+<p class="paragraph body-text">Individualized assessments of readiness for animal care.</p>
+<h2>4. Animal Welfare &amp; Safety</h2>
+<p class="paragraph body-text">The welfare of animals remains central to all activities.</p>
+<p class="paragraph body-text">Barkly Animal will work toward:</p>
+<p class="paragraph body-text">Appropriate veterinary assessment and care.</p>
+<p class="paragraph body-text">Safe environments for animals.</p>
+<p class="paragraph body-text">Individualized animal welfare evaluations.</p>
+<p class="paragraph body-text">Humane, evidence-informed handling and care practices.</p>
+<p class="paragraph body-text">Safeguarding animals from further harm.</p>
+<p class="paragraph body-text">Collaboration with qualified veterinarians, behaviorists, and animal welfare professionals.</p>
+<p class="paragraph body-text">Human rehabilitation must never come at the expense of animal safety.</p>
+<h2>5. Responsible Animal Guardianship</h2>
+<p class="paragraph body-text">When appropriate, Barkly Animal may help individuals progress toward responsible animal ownership through:</p>
+<p class="paragraph body-text">Animal care education and practical training.</p>
+<p class="paragraph body-text">Demonstrations of safe, humane handling.</p>
+<p class="paragraph body-text">Supervised experiences with animals.</p>
+<p class="paragraph body-text">Evaluations of readiness and capability.</p>
+<p class="paragraph body-text">Assistance accessing appropriate supplies and veterinary services.</p>
+<p class="paragraph body-text">Ongoing support and follow-up.</p>
+<p class="paragraph body-text">Animal placement will always prioritize the animal&#x27;s individual welfare and safety.</p>
+<h2>6. Guiding Philosophy</h2>
+<p class="paragraph body-text">Barkly Animal believes that preventing harm requires more than punishment alone.</p>
+<p class="paragraph body-text">We seek to understand why harmful behavior occurs, provide opportunities for meaningful change, and protect those who are vulnerable.</p>
+<p class="paragraph body-text">We believe people should have opportunities to improve while recognizing that accountability, boundaries, and animal safety are essential.</p>
+<p class="paragraph body-text">Compassion for humans and protection for animals are not opposing values. They must work together.</p>
+
+        <aside class="copyright-notice" aria-label="Copyright information"><strong>Copyright and usage</strong><p>© 2026 Barkly-Labs. All rights reserved.</p><p>Unauthorized copying, reproduction, or redistribution of this copyrighted document is prohibited except as permitted by law or with the copyright owner’s permission.</p></aside>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
