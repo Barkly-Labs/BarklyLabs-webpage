@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>PAW OS — Functional Requirements Specification — Barkly Docs</title>
+
+<style>
+
+:root {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    line-height: 1.7;
+}
+
+a {
+    color: var(--accent);
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 28px;
+
+    background: rgba(9, 9, 9, 0.92);
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+.brand-symbol {
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 100px 28px 70px;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 79, 163, 0.04) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+}
+
+.hero-inner {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.kicker {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 18px 0;
+
+    font-size: clamp(42px, 8vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.hero p {
+    max-width: 700px;
+
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.source {
+    margin-top: 28px;
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.document {
+    width: min(1000px, calc(100% - 40px));
+
+    margin: 50px auto 100px;
+}
+
+.document-card {
+    padding: clamp(28px, 5vw, 60px);
+
+    background: var(--panel);
+
+    border: 1px solid var(--line);
+}
+
+.document-card h1,
+.document-card h2,
+.document-card h3,
+.document-card h4 {
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.document-card h1 {
+    margin-top: 55px;
+    font-size: clamp(30px, 5vw, 48px);
+}
+
+.document-card h2 {
+    margin-top: 48px;
+    font-size: clamp(24px, 4vw, 36px);
+}
+
+.document-card h3 {
+    margin-top: 36px;
+    font-size: 25px;
+}
+
+.document-card h4 {
+    margin-top: 28px;
+    font-size: 20px;
+}
+
+.document-card p {
+    max-width: 850px;
+    color: #c8c8c8;
+}
+
+.document-card ul,
+.document-card ol {
+    max-width: 850px;
+    padding-left: 25px;
+    color: #c8c8c8;
+}
+
+.document-card li {
+    margin: 8px 0;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    min-width: 500px;
+
+    border-collapse: collapse;
+
+    background: var(--panel-2);
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+    vertical-align: top;
+
+    border: 1px solid var(--line);
+}
+
+th {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+td {
+    color: #c8c8c8;
+}
+
+footer {
+    padding: 30px 28px;
+
+    border-top: 1px solid var(--line);
+
+    color: #666;
+    font-family: monospace;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding: 70px 20px 50px;
+    }
+
+    .document {
+        width: calc(100% - 24px);
+        margin-top: 25px;
+    }
+
+    .document-card {
+        padding: 24px 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a class="brand" href="/">
+        <span class="brand-symbol">◆</span>
+        BARKLY LABS
+    </a>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        DOCUMENTATION
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-inner">
+
+        <div class="kicker">
+            BARKLY / KNOWLEDGE
+        </div>
+
+        <h1>
+            PAW OS — Functional Requirements Specification
+        </h1>
+
+        <p>
+            Generated documentation produced by Barkly Docs.
+        </p>
+
+        <div class="source">
+            SOURCE: C:\Users\nickk\Documents\Funcitonal-Requiremnts\paw os.docx
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="document">
+
+    <article class="document-card">
+
+        <h1>PAW OS — Functional Requirements Specification</h1>
+<p class="paragraph body-text">Document: PAW-FRS-001
+Version: 0.1
+Platform: Commodore 64
+Processor: MOS 6510
+Implementation language: C (cc65), with 6502 assembly where necessary
+Target environment: Original Commodore 64 and VICE emulator
+Project: Barkly Labs</p>
+<h2>1. Project Purpose</h2>
+<p class="paragraph body-text">PAW OS is a text-based operating environment designed for the Commodore 64.</p>
+<p class="paragraph body-text">Its purpose is to provide a unified, command-driven computing experience with integrated applications, file management, disk access, sound generation, and hardware interaction.</p>
+<p class="paragraph body-text">PAW OS should make the Commodore 64 feel like a complete personal computer rather than a machine that only launches individual programs.</p>
+<h2>2. Core Design Principles</h2>
+<p class="paragraph body-text">Text-first: The primary interface must be usable entirely through text.</p>
+<p class="paragraph body-text">Modular: Applications and system services should be separated into maintainable modules.</p>
+<p class="paragraph body-text">Hardware-native: Software must operate within the actual limitations of the Commodore 64.</p>
+<p class="paragraph body-text">Consistent: Commands should follow predictable syntax and behavior.</p>
+<p class="paragraph body-text">Recoverable: Applications should return control to the terminal whenever possible.</p>
+<p class="paragraph body-text">Expandable: New applications must be possible without rewriting the core environment.</p>
+<p class="paragraph body-text">Resource-conscious: Memory, processor time, and storage must be managed carefully.</p>
+<p class="paragraph body-text">Backward-compatible: Existing working features must not be removed without an intentional design decision.</p>
+<h2>3. Functional Requirements</h2>
+<h3>FR-001: System Startup</h3>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Initialize the display.</p>
+<p class="paragraph body-text">Initialize required hardware and software modules.</p>
+<p class="paragraph body-text">Display the PAW OS startup screen.</p>
+<p class="paragraph body-text">Initialize the command interpreter.</p>
+<p class="paragraph body-text">Display the terminal prompt.</p>
+<p class="paragraph body-text">Acceptance criteria: PAW OS reaches an interactive terminal after startup without requiring user intervention.</p>
+<h3>FR-002: Command Interpreter</h3>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Accept keyboard input.</p>
+<p class="paragraph body-text">Parse user-entered commands.</p>
+<p class="paragraph body-text">Support command arguments.</p>
+<p class="paragraph body-text">Execute recognized commands.</p>
+<p class="paragraph body-text">Display meaningful errors for unknown commands.</p>
+<p class="paragraph body-text">Return to the prompt after command completion.</p>
+<p class="paragraph body-text">Acceptance criteria: A user can execute multiple commands consecutively without restarting PAW OS.</p>
+<h3>FR-003: Terminal</h3>
+<p class="paragraph body-text">The terminal shall:</p>
+<p class="paragraph body-text">Display command output.</p>
+<p class="paragraph body-text">Display a recognizable system prompt.</p>
+<p class="paragraph body-text">Support command input.</p>
+<p class="paragraph body-text">Provide a consistent visual presentation.</p>
+<p class="paragraph body-text">Allow applications to return to the terminal.</p>
+<h3>FR-004: Help System</h3>
+<p class="paragraph body-text">The system shall provide:</p>
+<p class="paragraph body-text">HELP — general help.</p>
+<p class="paragraph body-text">COMMANDS — available commands.</p>
+<p class="paragraph body-text">Command-specific usage information where available.</p>
+<p class="paragraph body-text">Acceptance criteria: A user can discover available functionality without consulting external documentation.</p>
+<h3>FR-005: Disk Management</h3>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Support Commodore-compatible disk devices.</p>
+<p class="paragraph body-text">Use device 8 as the default device.</p>
+<p class="paragraph body-text">Allow device selection through commands such as DISK 9.</p>
+<p class="paragraph body-text">Read disk directory listings.</p>
+<p class="paragraph body-text">Display disk status and errors.</p>
+<p class="paragraph body-text">Support compatible storage devices such as 1541, 1571, 1581 and SD2IEC where hardware and firmware permit.</p>
+<h3>FR-006: File Management</h3>
+<p class="paragraph body-text">The file management subsystem shall provide:</p>
+<p class="paragraph body-text">DIR — display directory contents.</p>
+<p class="paragraph body-text">FILES — open the file manager.</p>
+<p class="paragraph body-text">TYPE — display text file contents.</p>
+<p class="paragraph body-text">LOAD — load a compatible program.</p>
+<p class="paragraph body-text">RUN — execute a loaded program.</p>
+<p class="paragraph body-text">SAVE — save supported data.</p>
+<p class="paragraph body-text">DELETE — delete a file.</p>
+<p class="paragraph body-text">RENAME — rename a file.</p>
+<p class="paragraph body-text">COPY — copy files where supported by the storage device and available memory.</p>
+<p class="paragraph body-text">The file manager shall clearly communicate unsupported operations and disk errors.</p>
+<h3>FR-007: PAW Synth</h3>
+<p class="paragraph body-text">The system shall provide an integrated SID synthesizer application.</p>
+<p class="paragraph body-text">It shall:</p>
+<p class="paragraph body-text">Use the Commodore 64 SID sound chip.</p>
+<p class="paragraph body-text">Provide access to the three SID voices.</p>
+<p class="paragraph body-text">Support keyboard-based note input.</p>
+<p class="paragraph body-text">Support octave adjustment.</p>
+<p class="paragraph body-text">Provide sound and voice controls.</p>
+<p class="paragraph body-text">Allow the user to stop playback.</p>
+<p class="paragraph body-text">Return to the terminal when exited.</p>
+<h3>FR-008: Sound Services</h3>
+<p class="paragraph body-text">The system shall provide reusable sound functionality.</p>
+<p class="paragraph body-text">Applications should be able to use the SID subsystem without duplicating hardware initialization code.</p>
+<h3>FR-009: PHONE and DTMF</h3>
+<p class="paragraph body-text">The existing PHONE and DTMF modules shall remain part of the project.</p>
+<p class="paragraph body-text">Their existing functionality must be preserved during development of unrelated subsystems.</p>
+<h3>FR-010: Memory Management</h3>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Track available application memory where possible.</p>
+<p class="paragraph body-text">Avoid unnecessary memory allocations.</p>
+<p class="paragraph body-text">Detect allocation failures.</p>
+<p class="paragraph body-text">Avoid overwriting reserved hardware memory.</p>
+<p class="paragraph body-text">Release resources when applications exit where applicable.</p>
+<h3>FR-011: Application Lifecycle</h3>
+<p class="paragraph body-text">Applications shall follow a consistent lifecycle:</p>
+<p class="paragraph body-text">Receive control from the terminal.</p>
+<p class="paragraph body-text">Initialize application resources.</p>
+<p class="paragraph body-text">Execute application functionality.</p>
+<p class="paragraph body-text">Release or restore application resources.</p>
+<p class="paragraph body-text">Return control to the terminal.</p>
+<h3>FR-012: Error Handling</h3>
+<p class="paragraph body-text">The system shall:</p>
+<p class="paragraph body-text">Display understandable error messages.</p>
+<p class="paragraph body-text">Handle invalid commands.</p>
+<p class="paragraph body-text">Report disk communication failures.</p>
+<p class="paragraph body-text">Handle unavailable memory.</p>
+<p class="paragraph body-text">Avoid crashing the entire environment when an individual application encounters a recoverable error.</p>
+<h3>FR-013: Hardware Compatibility</h3>
+<p class="paragraph body-text">The system shall target:</p>
+<p class="paragraph body-text">MOS 6510 processor.</p>
+<p class="paragraph body-text">64 KB system memory.</p>
+<p class="paragraph body-text">VIC-II display hardware.</p>
+<p class="paragraph body-text">SID sound hardware.</p>
+<p class="paragraph body-text">Commodore keyboard input.</p>
+<p class="paragraph body-text">IEC-compatible disk peripherals.</p>
+<p class="paragraph body-text">Hardware-specific functionality must be tested against real hardware or an appropriately configured emulator.</p>
+<h2>4. Non-Functional Requirements</h2>
+<div class="table-wrap">
+<table>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+</tr>
+<tr>
+<td>NFR-001</td>
+<td>Compatible with cc65</td>
+</tr>
+<tr>
+<td>NFR-002</td>
+<td>Compiled code must execute on a 6510</td>
+</tr>
+<tr>
+<td>NFR-003</td>
+<td>Must respect the C64 memory map</td>
+</tr>
+<tr>
+<td>NFR-004</td>
+<td>Text interface must fit the 40-column display</td>
+</tr>
+<tr>
+<td>NFR-005</td>
+<td>Applications should be modular</td>
+</tr>
+<tr>
+<td>NFR-006</td>
+<td>Existing functionality must be protected</td>
+</tr>
+<tr>
+<td>NFR-007</td>
+<td>Errors should be understandable</td>
+</tr>
+<tr>
+<td>NFR-008</td>
+<td>System should remain usable without a graphical interface</td>
+</tr>
+</table>
+</div>
+<h2>5. Command Interface Standard</h2>
+<p class="paragraph body-text">Commands should follow a predictable structure:</p>
+<p class="paragraph body-text">COMMAND [ARGUMENTS]</p>
+<p class="paragraph body-text">Examples:</p>
+<p class="paragraph preformatted-text">HELP</p>
+<p class="paragraph preformatted-text">COMMANDS</p>
+<p class="paragraph preformatted-text">DIR</p>
+<p class="paragraph preformatted-text">FILES</p>
+<p class="paragraph preformatted-text">DISK 9</p>
+<p class="paragraph preformatted-text">TYPE README</p>
+<p class="paragraph preformatted-text">SYNTH</p>
+<p class="paragraph body-text">Command names should be case-insensitive where practical.</p>
+<p class="paragraph body-text">Invalid arguments should produce usage instructions rather than silently failing.</p>
+<h2>6. Development and Testing Requirements</h2>
+<p class="paragraph body-text">Each subsystem must have:</p>
+<p class="paragraph body-text">Defined responsibilities.</p>
+<p class="paragraph body-text">Documented public interfaces.</p>
+<p class="paragraph body-text">Build integration.</p>
+<p class="paragraph body-text">Basic functional tests.</p>
+<p class="paragraph body-text">Error-handling tests.</p>
+<p class="paragraph body-text">Hardware or emulator verification.</p>
+<p class="paragraph body-text">A feature is not considered complete merely because it compiles.</p>
+<p class="paragraph body-text">It must also demonstrate its expected behavior.</p>
+<h2>7. Initial Development Priorities</h2>
+<p class="paragraph body-text">Stabilize the command interpreter.</p>
+<p class="paragraph body-text">Establish command and help standards.</p>
+<p class="paragraph body-text">Stabilize disk communication.</p>
+<p class="paragraph body-text">Complete directory and file management.</p>
+<p class="paragraph body-text">Integrate PAW Synth.</p>
+<p class="paragraph body-text">Verify application entry and exit behavior.</p>
+<p class="paragraph body-text">Test memory and hardware compatibility.</p>
+<p class="paragraph body-text">Document the complete system.</p>
+<h2>8. Definition of Done</h2>
+<p class="paragraph body-text">PAW OS v0.1 is considered functionally complete when:</p>
+<p class="paragraph body-text">The system starts reliably.</p>
+<p class="paragraph body-text">The terminal accepts and executes commands.</p>
+<p class="paragraph body-text">Help and command discovery work.</p>
+<p class="paragraph body-text">Disk operations work on supported devices.</p>
+<p class="paragraph body-text">File management works within documented limitations.</p>
+<p class="paragraph body-text">PAW Synth operates through the SID.</p>
+<p class="paragraph body-text">Existing PHONE and DTMF functionality remains intact.</p>
+<p class="paragraph body-text">Applications can return to the terminal.</p>
+<p class="paragraph body-text">Recoverable errors do not unnecessarily terminate the system.</p>
+<p class="paragraph body-text">The project builds successfully using cc65.</p>
+<p class="paragraph body-text">The system has been tested in VICE.</p>
+<p class="paragraph body-text">Document status: Proposed requirements baseline.
+Implementation status: Individual requirements must be verified against the existing source code before being marked complete.</p>
+
+    </article>
+
+</main>
+
+
+<footer>
+    BARKLY DOCS · DOCUMENTATION IS INFRASTRUCTURE.
+</footer>
+
+</body>
+</html>
