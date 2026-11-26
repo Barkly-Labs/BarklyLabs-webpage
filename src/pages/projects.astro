@@ -585,6 +585,10 @@ const lastUpdated =
           <a href="#registry">
             EXPLORE PROJECTS ↓
           </a>
+
+          <a href={`${import.meta.env.BASE_URL}minecraft/`}>
+            MINECRAFT CREATIONS ↗
+          </a>
         </div>
       </div>
 
@@ -761,6 +765,33 @@ const lastUpdated =
 
       <!-- PROJECT CARDS -->
       <div class="project-grid">
+          <a
+            class="project-card"
+            href={`${import.meta.env.BASE_URL}minecraft/`}
+            aria-label="Explore Barkly Labs Minecraft projects, featuring Barkly Chem Lab"
+          >
+            <div class="project-top">
+              <span class="project-number" aria-hidden="true">MC</span>
+              <span class="status unknown">CREATIVE TECHNOLOGY</span>
+            </div>
+            <div class="project-type">BARKLY LABS / MINECRAFT</div>
+            <h3>Minecraft Creations</h3>
+            <p class="project-description">
+              Modpacks and interactive experiments developed through creative
+              technology. Explore Barkly Chem Lab and future Minecraft work.
+            </p>
+            <div class="project-meta">
+              <div><span>FEATURED</span><strong>BARKLY CHEM LAB</strong></div>
+              <div><span>TYPE</span><strong>MODPACKS &amp; CREATIONS</strong></div>
+            </div>
+            <div class="commit-info">
+              <span>CREATIVE COMPUTING / MINECRAFT</span>
+            </div>
+            <div class="project-link">
+              <span>EXPLORE MINECRAFT PROJECTS</span>
+              <span class="project-link-arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
           <a
             class="project-card"
             href={`${import.meta.env.BASE_URL}status/`}
