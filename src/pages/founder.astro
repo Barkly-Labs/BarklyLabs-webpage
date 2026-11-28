@@ -1,0 +1,136 @@
+---
+const projects = [
+  { name: 'CYN-X', tag: 'INTELLIGENT SYSTEMS', desc: 'A personal AI ecosystem exploring models, interfaces, services, software and connected devices.', href: '/cyn-x/' },
+  { name: 'Barkly Chem Lab', tag: 'GAMES & CREATIVE PROJECTS', desc: 'A modded Minecraft playground for experimentation, progression, farming, technology, space and a little chaos.', href: 'https://www.curseforge.com/minecraft/modpacks/barkly-chem-lab' },
+  { name: 'PawBoard', tag: 'HARDWARE & ACCESSIBILITY', desc: 'Exploring modular hardware and computing ideas with people-centered design in mind.', href: '/pawboard/' },
+];
+---
+
+<title>Founder | Barkly Labs</title>
+<meta name="description" content="Meet Piper, the independent founder behind Barkly Labs." />
+
+<main class="founder-page">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">BARKLY LABS</a><span aria-hidden="true">/</span><span>FOUNDER</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="kicker"><span class="status-dot"></span> INDEPENDENT LAB / DETROIT, MI</p>
+      <p class="section-number">PERSON / 001</p>
+      <h1>Hi, I'm<br /><span>Piper.</span></h1>
+      <p class="hero-lead">I'm the person behind Barkly Labs.</p>
+      <p class="hero-copy">An independent software engineer and creator building projects, experimenting with ideas, and trying to make technology a little more human.</p>
+      <div class="hero-stamp"><span class="stamp-mark">B</span><span>FOUNDER<br />INDEPENDENTLY BUILT<br />NOT A CORPORATION</span></div>
+    </div>
+  </header>
+
+  <section class="section about" aria-labelledby="about-heading">
+    <div class="section-label"><span>01</span> / A LITTLE ABOUT ME</div>
+    <div class="section-layout">
+      <h2 id="about-heading">Curiosity is what<br />gets me <span>building.</span></h2>
+      <div class="section-copy">
+        <p>Barkly Labs is an independent project founded and built by me. It's where I bring together software engineering, AI, hardware, creative projects, games and ideas I want to explore.</p>
+        <p>I learn by doing: trying things, making prototypes, breaking them, fixing them, documenting what I learn and sharing the things that grow out of those experiments. Not every idea starts polished. That's part of the process.</p>
+        <p>I want this lab to be a place where curiosity is welcome, accessibility is taken seriously, and technology is built to support people—not make them feel like they have to fit into it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section principles" aria-labelledby="principles-heading">
+    <div class="section-label"><span>02</span> / WHAT I BELIEVE</div>
+    <h2 id="principles-heading">The ideas behind<br />the work.</h2>
+    <div class="principle-grid">
+      <article><span class="card-index">01 / DIGNITY</span><h3>People are people, not numbers.</h3><p>People deserve to be treated with dignity, not reduced to metrics or assumptions.</p></article>
+      <article><span class="card-index">02 / ACCESS</span><h3>Technology should adapt.</h3><p>Tools should meet people where they are and make room for different needs and ways of working.</p></article>
+      <article><span class="card-index">03 / CURIOSITY</span><h3>Curiosity belongs here.</h3><p>Experimentation, learning, creativity and mistakes are part of building something meaningful.</p></article>
+      <article><span class="card-index">04 / PRACTICE</span><h3>Build openly and thoughtfully.</h3><p>Document the work, be honest about what's in progress, and keep learning from others.</p></article>
+    </div>
+  </section>
+
+  <section class="section projects" aria-labelledby="projects-heading">
+    <div class="section-label"><span>03</span> / THINGS I'M BUILDING</div>
+    <h2 id="projects-heading">Ideas in<br /><span>the lab.</span></h2>
+    <p class="section-lead">A few projects and directions I'm exploring through Barkly Labs.</p>
+    <div class="project-grid">
+      {projects.map((project, i) => (
+        <article class="project-card">
+          <div class="project-top"><span>PROJECT / 0{i + 1}</span><span class="project-tag">{project.tag}</span></div>
+          <h3>{project.name}</h3>
+          <p>{project.desc}</p>
+          <a href={project.href} class="project-link">EXPLORE <span aria-hidden="true">↗</span></a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="section-label"><span>04</span> / WHY BARKLY</div>
+    <h2>Where ideas<br />meet <span>care.</span></h2>
+    <p>Barkly Labs is still growing. I'm building it one experiment, one project and one idea at a time. Thanks for being here and taking a look at what I'm making.</p>
+    <a class="button-link" href="/">RETURN TO BARKLY LABS <span aria-hidden="true">↗</span></a>
+  </section>
+
+  <footer class="page-footer"><span>BARKLY LABS / FOUNDER</span><span>INDEPENDENTLY BUILT · DETROIT, MI</span></footer>
+</main>
+
+<style>
+  :global(html) { scroll-behavior: smooth; }
+  .founder-page {
+    --bg: #090909;
+    --panel: #111111;
+    --panel-2: #151515;
+    --text: #f2f2f2;
+    --muted: #8d8d8d;
+    --line: #292929;
+    --accent: #ff4fa3;
+    --accent-soft: rgba(255, 79, 163, 0.12);
+    position: relative; overflow: hidden; isolation: isolate;
+    background: var(--bg); color: var(--text); padding: clamp(1.2rem,4vw,3rem);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.7;
+  }
+  .founder-page * { box-sizing: border-box; }
+  .crumbs { display:flex; gap:.8rem; align-items:center; font-size:11px; letter-spacing:.16em; color:var(--muted); padding-bottom:2rem; }
+  .crumbs a { color:var(--text); text-decoration:none; font-weight:800; }
+  .crumbs a:hover,.project-link:hover { color:var(--accent); }
+  .hero { position:relative; overflow:hidden; padding:clamp(4rem,10vw,7rem) 1rem 4rem; border-bottom:1px solid var(--line); }
+  .hero-grid { position:absolute; inset:0; pointer-events:none; opacity:.5; background:linear-gradient(rgba(255,79,163,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,79,163,.04) 1px,transparent 1px); background-size:40px 40px; mask-image:linear-gradient(to bottom,black,transparent); }
+  .hero-inner { position:relative; width:min(1100px,100%); margin:auto; }
+  .kicker,.section-label,.section-number,.project-top,.page-footer,.hero-stamp { font-size:11px; letter-spacing:.16em; color:var(--muted); }
+  .kicker { color:var(--accent); display:flex; align-items:center; gap:.7rem; font-weight:800; }
+  .status-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); display:inline-block; }
+  .section-number { margin-top:3.5rem; color:#666; font-family:monospace; }
+  h1 { font-size:clamp(4rem,10vw,8.8rem); line-height:.92; letter-spacing:-.065em; margin:1rem 0 2rem; font-weight:800; }
+  h1 span,h2 span { color:var(--accent); }
+  .hero-lead { color:var(--text); font-size:clamp(1.3rem,2.5vw,1.7rem); margin:0 0 .6rem; }
+  .hero-copy { max-width:680px; color:var(--muted); font-size:17px; }
+  .hero-stamp { position:absolute; right:2%; bottom:8%; width:180px; height:180px; border:1px solid var(--line); border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:radial-gradient(circle,var(--accent-soft),transparent 72%); transform:rotate(8deg); font-size:9px; line-height:1.7; }
+  .stamp-mark { font-size:4.6rem; line-height:1; font-weight:800; color:var(--accent); }
+  .section { max-width:1100px; margin:0 auto; padding:5rem 0; border-bottom:1px solid var(--line); }
+  .section-label { color:var(--accent); margin-bottom:2rem; font-weight:800; }
+  .section-label span { color:#666; }
+  .section-layout { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
+  h2 { font-size:clamp(2.4rem,6vw,5rem); line-height:1.03; letter-spacing:-.04em; margin:0 0 2.5rem; }
+  .section-copy { max-width:760px; font-size:1.05rem; color:#c8c8c8; }
+  .section-copy p + p { margin-top:1.2rem; }
+  .principle-grid,.project-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+  .principle-grid article,.project-card { background:var(--panel); border:1px solid var(--line); padding:clamp(1.3rem,3vw,2rem); min-height:210px; }
+  .card-index { color:var(--accent); font-family:monospace; font-size:11px; letter-spacing:.15em; }
+  h3 { font-size:1.35rem; margin:1rem 0 .75rem; letter-spacing:-.02em; line-height:1.3; }
+  .principle-grid p,.project-card p,.section-lead { color:#c8c8c8; line-height:1.7; }
+  .section-lead { max-width:680px; margin:-1.4rem 0 2rem; }
+  .project-top { display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; color:#666; font-family:monospace; font-size:10px; }
+  .project-tag { color:var(--accent); text-align:right; }
+  .project-card h3 { font-size:1.8rem; margin-top:1.8rem; }
+  .project-link { display:inline-flex; gap:.7rem; color:var(--accent); text-decoration:none; font-size:11px; font-weight:800; letter-spacing:.15em; margin-top:1.3rem; }
+  .closing { max-width:1100px; margin:0 auto; padding:5rem 0 4rem; }
+  .closing h2 { font-size:clamp(3rem,7vw,6rem); }
+  .closing>p:not(.section-label) { max-width:650px; color:#c8c8c8; line-height:1.8; font-size:1.05rem; }
+  .button-link { display:inline-flex; gap:1rem; margin-top:2rem; padding:1rem 1.4rem; border:1px solid var(--accent); color:var(--text); text-decoration:none; letter-spacing:.12em; font-size:11px; font-weight:800; background:var(--accent-soft); }
+  .button-link:hover { background:rgba(255,79,163,.2); }
+  .page-footer { max-width:1100px; margin:0 auto; padding-top:1.5rem; border-top:1px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-family:monospace; font-size:10px; }
+  @media(max-width:760px) { .hero-stamp { position:relative; right:auto; bottom:auto; margin:3rem 0 0 auto; width:145px; height:145px; } .principle-grid,.project-grid,.section-layout { grid-template-columns:1fr; } .hero { padding-top:3rem; } }
+  @media(prefers-reduced-motion:reduce) { :global(html) { scroll-behavior:auto; } }
+</style>
